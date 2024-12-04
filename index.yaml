@@ -11,4 +11,15 @@ entries:
     urls:
     - example-0.1.0.tgz
     version: 0.1.0
-generated: "2024-12-04T14:35:22.549839839Z"
+  nginx:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2024-12-04T14:50:07.848552149Z"
+    description: A Helm chart for Kubernetes
+    digest: 3d71cd6fd76b5913bf4d9bb46ac4bac9d1bce627c9d2ad9df578527b471004b1
+    name: nginx
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/nginx-0.1.0/nginx-0.1.0.tgz
+    version: 0.1.0
+generated: "2024-12-04T14:50:07.848596822Z"
