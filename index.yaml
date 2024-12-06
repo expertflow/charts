@@ -253,6 +253,24 @@ entries:
   cx-reporting-scheduler:
   - apiVersion: v2
     appVersion: 4.6.0
+    created: "2024-12-06T14:41:14.806149886Z"
+    description: Expertflow CX Solution Cisco Integrations
+    digest: 71288d15dfed403974e4d6e74780f140446c185031940d64773adff0bd43197a
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: cx-reporting-scheduler
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/cx-reporting-scheduler-1.0.14/cx-reporting-scheduler-1.0.14.tgz
+    version: 1.0.14
+  - apiVersion: v2
+    appVersion: 4.6.0
     created: "2024-12-06T14:06:59.70359095Z"
     description: Expertflow CX Solution Cisco Integrations
     digest: 1c9a940276c689c88f0086d715a0153b9201045515cd269387c7ca80f44b7b3c
@@ -699,4 +717,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/nginx-0.1.0/nginx-0.1.0.tgz
     version: 0.1.0
-generated: "2024-12-06T14:06:59.703628371Z"
+generated: "2024-12-06T14:41:14.806187777Z"
