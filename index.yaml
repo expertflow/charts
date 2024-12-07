@@ -31,6 +31,33 @@ entries:
   campaigns:
   - apiVersion: v2
     appVersion: 4.6.0
+    created: "2024-12-07T11:32:13.650721576Z"
+    dependencies:
+    - condition: campaigns-backend.enabled
+      name: campaigns-backend
+      repository: file://charts/campaigns-backend
+      version: 1.0.0
+    - condition: campaign-studio.enabled
+      name: campaign-studio
+      repository: file://charts/campaign-studio
+      version: 1.0.0
+    description: Expertflow CX Solution Campaigns
+    digest: b97c489648358db9c6c0f04c18a6b54e8f0ffdbe8b54739fd54f2461caba083d
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: campaigns
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/campaigns-1.0.14/campaigns-1.0.14.tgz
+    version: 1.0.14
+  - apiVersion: v2
+    appVersion: 4.6.0
     created: "2024-12-07T10:44:54.106155794Z"
     dependencies:
     - condition: campaigns-backend.enabled
@@ -1052,4 +1079,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.13/web-channels-1.0.13.tgz
     version: 1.0.13
-generated: "2024-12-07T10:44:55.230370467Z"
+generated: "2024-12-07T11:32:13.650747685Z"
