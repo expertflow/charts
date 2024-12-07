@@ -28,7 +28,7 @@ global:
   ##    nginx.ingress.kubernetes.io/use-regex: "true"
   imageRegistry: "gitimages.expertflow.com"
   imagePullSecrets: 
-   - ef-gitlab-secret-surveys
+   - ef-gitlab-secret
 
 
 
