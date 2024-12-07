@@ -266,7 +266,7 @@ grafana:
 #        - name: GF_SECURITY_ALLOW_EMBEDDING
 #          value: 'true'
   ingress:
-    enabled: false
+    enabled: true
     className: "nginx"
     pathType: Prefix
     hostname: "{{ .Values.global.ingressRouter }}"
