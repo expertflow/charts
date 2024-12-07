@@ -77,10 +77,10 @@ efConnectionVars:
     ACTIVEMQ_MAX_RECONNECT_ATTEMPTS: "-1"
     ACTIVEMQ_OPEN_WIRE_PORT: "61616"
     ACTIVEMQ_PASSWORD: password
-    ACTIVEMQ_PRIMARY_URL: ef-amq-svc.ef-external.svc
+    ACTIVEMQ_PRIMARY_URL: activemq.ef-external.svc
     ACTIVEMQ_PRIORITY_BACKUP: "true"
     ACTIVEMQ_RANDOMIZE: "false"
-    ACTIVEMQ_SECONDARY_URL: ef-amq-svc.ef-external.svc
+    ACTIVEMQ_SECONDARY_URL: activemq.ef-external.svc
     ACTIVEMQ_STOMP_PORT: "61613"
     ACTIVEMQ_TIMEOUT: "5000"
     ACTIVEMQ_TRANSPORT: tcp
