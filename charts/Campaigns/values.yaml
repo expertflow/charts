@@ -49,8 +49,8 @@ campaigns-backend:
    enabled: true
    image:       
       repository: cim/campaigns/build
-      tag: develop-c996e2e35173a313d073f2cc2f837d665db1b5b0 
-   efConnectionVars: true
+      tag: 4.5.4_f-CIM-11699
+   efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
       - name: "http-cp-3000"
@@ -104,7 +104,7 @@ campaign-studio:
    image:       
       repository: cim/conversation-studio
       tag: 4.5.4_f-CIM-11699
-   efConnectionVars: true
+   efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
       - name: "http-sb-1880"

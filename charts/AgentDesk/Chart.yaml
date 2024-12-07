@@ -1,5 +1,5 @@
 apiVersion: v2
-name: cx-agent-desk
+name: agent-desk
 description: Expertflow CX Solution AgentDesk
 home: https://expertflow.com
 icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png

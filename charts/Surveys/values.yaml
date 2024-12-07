@@ -58,7 +58,7 @@ survey-backend:
    image:       
       repository: cim/survey-backend
       tag: 4.5.4_f-CIM-12709
-   efConnectionVars: true
+   efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
       - name: "http-su-ba-3000"
@@ -96,7 +96,7 @@ survey-studio:
    image:       
       repository: cim/survey-nodes
       tag: 4.5.4_f-CIM-12709
-   efConnectionVars: true
+   efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
       - name: "http-su-st-1880"
