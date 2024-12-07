@@ -48,7 +48,7 @@ clusterDomain: cluster.local
 campaigns-backend:
    enabled: true
    image:       
-      repository: cim/campaigns/build
+      repository: cim/campaigns
       tag: 4.5.4_f-CIM-11699
    efConnectionVars: false
    efEnvironmentVars: false
