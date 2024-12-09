@@ -94,6 +94,8 @@ connect360:
    ingress:
       enabled: true
       annotations:
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
         nginx.ingress.kubernetes.io/rewrite-target: /$2
         nginx.ingress.kubernetes.io/use-regex: "true"
       path: /360-connector(/|$)(.*)
@@ -139,6 +141,8 @@ facebook-connector:
    ingress: 
       enabled: true 
       annotations:
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
          nginx.ingress.kubernetes.io/rewrite-target: /$2
          nginx.ingress.kubernetes.io/use-regex: "true"
       path: /facebook-connector(/|$)(.*)
@@ -186,6 +190,8 @@ instagram-connector:
       annotations:
          nginx.ingress.kubernetes.io/rewrite-target: /$2
          nginx.ingress.kubernetes.io/use-regex: "true"
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
       path: /instagram-connector(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:
@@ -233,6 +239,8 @@ smpp-connector:
       annotations:
          nginx.ingress.kubernetes.io/rewrite-target: /$2
          nginx.ingress.kubernetes.io/use-regex: "true"
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
       path: /smppconnector(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:
@@ -278,6 +286,8 @@ telegram-connector:
       annotations:
          nginx.ingress.kubernetes.io/rewrite-target: /$2
          nginx.ingress.kubernetes.io/use-regex: "true"
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
       path: /telegram-connector(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:
@@ -322,6 +332,8 @@ twilio-connector:
       annotations:
          nginx.ingress.kubernetes.io/rewrite-target: /$2
          nginx.ingress.kubernetes.io/use-regex: "true"
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
       path: /twilio-connector(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:
@@ -362,6 +374,9 @@ twitter-connector:
       annotations:
          nginx.ingress.kubernetes.io/rewrite-target: /$2
          nginx.ingress.kubernetes.io/use-regex: "true"
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+
       path: /twitter-connector(/|$)(.*)
       pathType: ImplementationSpecific
 
@@ -399,6 +414,8 @@ viber-connector:
       annotations:
          nginx.ingress.kubernetes.io/rewrite-target: /$2
          nginx.ingress.kubernetes.io/use-regex: "true"
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
       path:  /viber-connector(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:

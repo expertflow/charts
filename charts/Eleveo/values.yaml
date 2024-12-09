@@ -85,6 +85,8 @@ eleveo-api:
    ingress: 
       enabled: true 
       annotations:
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
         nginx.ingress.kubernetes.io/rewrite-target: /$2
         nginx.ingress.kubernetes.io/use-regex: "true"
       path: /eleveo-connector-api(/|$)(.*)
@@ -120,6 +122,8 @@ eleveo-runner:
    ingress:
       enabled: true
       annotations:
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
         nginx.ingress.kubernetes.io/rewrite-target: /$2
         nginx.ingress.kubernetes.io/use-regex: "true"
       path: /eleveo-recording-runner(/|$)(.*)

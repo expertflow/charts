@@ -78,6 +78,8 @@ survey-backend:
    ingress: 
       enabled: true 
       annotations:
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
         nginx.ingress.kubernetes.io/rewrite-target: /$2
         nginx.ingress.kubernetes.io/use-regex: "true"
       path: /survey-backend(/|$)(.*)
@@ -114,6 +116,8 @@ survey-studio:
    ingress: 
       enabled: true 
       annotations:
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
         nginx.ingress.kubernetes.io/use-regex: "true"
         nginx.ingress.kubernetes.io/configuration-snippet: |
            more_set_headers "Access-Control-Allow-Origin: $http_origin";

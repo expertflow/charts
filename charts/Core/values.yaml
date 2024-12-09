@@ -194,6 +194,8 @@ agent-manager:
       annotations:
         nginx.ingress.kubernetes.io/rewrite-target: /$2
         nginx.ingress.kubernetes.io/use-regex: "true"
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
       path: /agent-manager(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:
@@ -264,6 +266,8 @@ bot-framework:
       annotations:
         nginx.ingress.kubernetes.io/rewrite-target: /$2
         nginx.ingress.kubernetes.io/use-regex: "true"
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
       path: /bot-framework(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:
@@ -330,6 +334,8 @@ ccm:
       annotations:
         nginx.ingress.kubernetes.io/rewrite-target: /$2
         nginx.ingress.kubernetes.io/use-regex: "true"
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
       path: /ccm(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:
@@ -380,6 +386,8 @@ cim-customer:
       annotations:
         nginx.ingress.kubernetes.io/rewrite-target: /$2
         nginx.ingress.kubernetes.io/use-regex: "true"
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
       path: /cim-customer(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:
@@ -459,6 +467,8 @@ conversation-manager:
       annotations:
         nginx.ingress.kubernetes.io/rewrite-target: /$2
         nginx.ingress.kubernetes.io/use-regex: "true"
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
       path: /conversation-manager(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:
@@ -585,6 +595,8 @@ conversation-monitor:
       annotations:
         nginx.ingress.kubernetes.io/rewrite-target: /$2
         nginx.ingress.kubernetes.io/use-regex: "true"
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
       path: /conversation-monitor(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:
@@ -649,8 +661,10 @@ customer-widget:
    ingress: 
       enabled: true
       annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
+        nginx.ingress.kubernetes.io/rewrite-target: /$2
+        nginx.ingress.kubernetes.io/use-regex: "true"
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
       path: /customer-widget(/|$)(.*)
       pathType: ImplementationSpecific
       ingressAssetsAnnotations:
@@ -744,6 +758,9 @@ file-engine:
          nginx.ingress.kubernetes.io/rewrite-target: /$2
          nginx.ingress.kubernetes.io/use-regex: "true"
          nginx.ingress.kubernetes.io/proxy-body-size: 8m
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+
       path: /file-engine(/|$)(.*)
       pathType: ImplementationSpecific
 
@@ -780,6 +797,9 @@ historical-reports:
       annotations:
          nginx.ingress.kubernetes.io/rewrite-target: /$2
          nginx.ingress.kubernetes.io/use-regex: "true"
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+
       path: /historical-reports(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:
@@ -829,6 +849,9 @@ license-manager:
       annotations:
          nginx.ingress.kubernetes.io/rewrite-target: /$2
          nginx.ingress.kubernetes.io/use-regex: "true"
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+
       path: /license-manager(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:
@@ -885,6 +908,8 @@ realtime-reports:
       annotations:
          nginx.ingress.kubernetes.io/rewrite-target: /$2
          nginx.ingress.kubernetes.io/use-regex: "true"
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
       path: /realtime-reports(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:
@@ -940,6 +965,8 @@ routing-engine:
       annotations:
          nginx.ingress.kubernetes.io/rewrite-target: /$2
          nginx.ingress.kubernetes.io/use-regex: "true"
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
       path: /routing-engine(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:
@@ -998,6 +1025,8 @@ scheduled-activities:
       annotations:
          nginx.ingress.kubernetes.io/rewrite-target: /$2
          nginx.ingress.kubernetes.io/use-regex: "true"
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
       path: /scheduler(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:
@@ -1082,6 +1111,8 @@ team-announcement:
       annotations:
          nginx.ingress.kubernetes.io/rewrite-target: /$2
          nginx.ingress.kubernetes.io/use-regex: "true"
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
       path: /team-announcement(/|$)(.*)
       pathType: ImplementationSpecific
    extraVolumes:
@@ -1192,6 +1223,8 @@ unified-admin:
       enabled: true 
       ingressDefault: true
       annotations:
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
          nginx.ingress.kubernetes.io/rewrite-target: /$2
          nginx.ingress.kubernetes.io/use-regex: "true"
          nginx.ingress.kubernetes.io/configuration-snippet: 'more_set_headers "Access-Control-Allow-Origin: $http_origin";'
@@ -1246,5 +1279,8 @@ web-channel-manager:
       annotations:
          nginx.ingress.kubernetes.io/rewrite-target: /$2
          nginx.ingress.kubernetes.io/use-regex: "true"
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+
       path: /web-channel-manager(/|$)(.*)
       pathType: ImplementationSpecific
