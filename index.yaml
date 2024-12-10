@@ -1602,6 +1602,36 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 7.0.5
+    created: "2024-12-10T15:16:44.504989558Z"
+    dependencies:
+    - name: common
+      repository: oci://registry-1.docker.io/bitnamicharts
+      tags:
+      - bitnami-common
+      version: 2.0.3
+    description: Redis(R) is an open source, advanced key-value store. It is often
+      referred to as a data structure server since keys can contain strings, hashes,
+      lists, sets and sorted sets.
+    digest: a65639569ee3c433e7e894548f4ff2a648095e8a816635713caa6743a3110b39
+    home: https://github.com/bitnami/charts/tree/master/bitnami/redis
+    icon: https://bitnami.com/assets/stacks/redis/img/redis-stack-220x234.png
+    keywords:
+    - redis
+    - keyvalue
+    - database
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: redis
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/redis
+    urls:
+    - https://github.com/expertflow/charts/releases/download/redis-17.3.3/redis-17.3.3.tgz
+    version: 17.3.3
+  - annotations:
+      category: Database
+    apiVersion: v2
+    appVersion: 7.0.5
     created: "2024-12-08T04:46:46.443982857Z"
     dependencies:
     - name: common
@@ -1841,4 +1871,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.13/web-channels-1.0.13.tgz
     version: 1.0.13
-generated: "2024-12-10T10:30:27.081780731Z"
+generated: "2024-12-10T15:16:44.505093343Z"
