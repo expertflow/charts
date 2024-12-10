@@ -543,8 +543,8 @@ service:
   enabled: true
   type: ClusterIP
   port: "8182"
-  targetPort: "amq8162"
-  portName: "ams-svc-8162"
+  targetPort: "tcp-amq8162"
+  portName: "amq-svc-8162"
   protocol: TCP
   ## @param service.nodePort Valid if the type is set to NodePort -- range 30000 to 32676
   ## NOTE: if 
@@ -565,7 +565,7 @@ service:
     - name: "amq-svc-61613"
       port: 61613
       protocol: TCP
-      targetPort: "tcp-amq61614"
+      targetPort: "tcp-amq61613"
     - name: "amq-svc-61614"
       port: 61614
       protocol: TCP

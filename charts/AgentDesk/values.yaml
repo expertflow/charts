@@ -252,12 +252,12 @@ grafana:
   datasources:
     secretName: "{{ .Values.global.efGrafanaDatasourceSecret }}"
   admin:
-    user: "admin"
-    password: "expertflow123"
+    user: admin
+    password: expertflow123
   config:
     useGrafanaIniFile: true
     grafanaIniConfigMap: "{{ .Values.global.efGrafanaIniCM }}"
-#  grafana:
+
 #     extraEnvVars:
 #        - name: GF_SERVER_DOMAIN 
 #          value: '{{ .Values.global.ingressRouter }}'
