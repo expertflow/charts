@@ -3,6 +3,24 @@ entries:
   activemq:
   - apiVersion: v2
     appVersion: 4.6.0
+    created: "2024-12-10T08:03:56.101477874Z"
+    description: Expertflow CX Solution ActiveMQ
+    digest: 016ef07507a18a5a36119ab6e47e21b25b47d18dc098367d715c0470cc61ed00
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: activemq
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/activemq-1.0.18/activemq-1.0.18.tgz
+    version: 1.0.18
+  - apiVersion: v2
+    appVersion: 4.6.0
     created: "2024-12-09T14:52:48.264458315Z"
     description: Expertflow CX Solution ActiveMQ
     digest: 951c92cf07c14667ae09be649045b5343f3d2d4a1e134afd450b2d05932ce02e
@@ -1673,4 +1691,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.13/web-channels-1.0.13.tgz
     version: 1.0.13
-generated: "2024-12-09T14:52:50.123537398Z"
+generated: "2024-12-10T08:03:56.101557834Z"
