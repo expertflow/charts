@@ -1158,7 +1158,7 @@ team-announcement:
           value: '{{ .Values.global.efCommonVars_TZ }}' 
       resourcesPreset: "none"
       resources: {}
-      extraVolumeMount: []
+      extraVolumeMounts: []
       extraVolumes: []
 
 ##############################unified-admin##############################

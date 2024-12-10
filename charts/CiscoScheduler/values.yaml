@@ -70,6 +70,6 @@ ciscoTeamSynchronizerCronJob:
        value: "3002"
    resourcesPreset: "none"
    resources: {}
-   extraVolumeMount: []
+   extraVolumeMounts: []
    extraVolumes: []
 

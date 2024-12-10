@@ -43,7 +43,7 @@ reportingConnectorCronJob:
    extraEnvVars: []
    resourcesPreset: "none"
    resources: {}
-   extraVolumeMount: 
+   extraVolumeMounts: 
       - name: reporting-connector-config
         mountPath: /root/config/reporting-connector.conf
         subPath: reporting-connector.conf
