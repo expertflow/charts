@@ -1452,6 +1452,40 @@ entries:
       category: DeveloperTools
     apiVersion: v2
     appVersion: 19.0.2
+    created: "2024-12-10T15:31:11.951492474Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 11.9.6
+    - name: common
+      repository: oci://registry-1.docker.io/bitnamicharts
+      tags:
+      - bitnami-common
+      version: 2.0.3
+    description: Keycloak is a high performance Java-based identity and access management
+      solution. It lets developers add an authentication layer to their applications
+      with minimum effort.
+    digest: 1bddbe6311890180a00539bb4a91b4fe4e41d422ac6578bcad8f0f5c2fdc2d26
+    home: https://www.keycloak.org
+    icon: https://bitnami.com/assets/stacks/keycloak/img/keycloak-stack-220x234.png
+    keywords:
+    - keycloak
+    - access-management
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: keycloak
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/keycloak
+    - https://github.com/keycloak/keycloak
+    urls:
+    - https://github.com/expertflow/charts/releases/download/keycloak-10.1.5/keycloak-10.1.5.tgz
+    version: 10.1.5
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 19.0.2
     created: "2024-12-08T04:46:45.934007922Z"
     dependencies:
     - condition: postgresql.enabled
@@ -1521,6 +1555,40 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 6.0.2
+    created: "2024-12-10T15:31:12.084609326Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: MongoDB(R) is a relational open source NoSQL database. Easy to use,
+      it stores data in JSON-like documents. Automated scalability and high-performance.
+      Ideal for developing cloud native applications.
+    digest: 0e81cfeba61a74cf851fb2fd68589d232cd5963bf108110e842e50de51d1dab3
+    home: https://github.com/bitnami/charts/tree/master/bitnami/mongodb
+    icon: https://bitnami.com/assets/stacks/mongodb/img/mongodb-stack-220x234.png
+    keywords:
+    - mongodb
+    - database
+    - nosql
+    - cluster
+    - replicaset
+    - replication
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: mongodb
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/mongodb
+    - https://mongodb.org
+    urls:
+    - https://github.com/expertflow/charts/releases/download/mongodb-13.1.8/mongodb-13.1.8.tgz
+    version: 13.1.8
+  - annotations:
+      category: Database
+    apiVersion: v2
+    appVersion: 6.0.2
     created: "2024-12-08T04:46:46.213821801Z"
     dependencies:
     - name: common
@@ -1563,6 +1631,40 @@ entries:
     - https://github.com/expertflow/charts/releases/download/nginx-0.1.0/nginx-0.1.0.tgz
     version: 0.1.0
   postgresql:
+  - annotations:
+      category: Database
+    apiVersion: v2
+    appVersion: 14.5.0
+    created: "2024-12-10T15:31:12.255449761Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: PostgreSQL (Postgres) is an open source object-relational database
+      known for reliability and data integrity. ACID-compliant, it supports foreign
+      keys, joins, views, triggers and stored procedures.
+    digest: e7c9fcfad1a3c091b3f8bec076890458add96ea341585d384bfc8dfc50256a60
+    home: https://github.com/bitnami/charts/tree/master/bitnami/postgresql
+    icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    - cluster
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: postgresql
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/postgresql
+    - https://www.postgresql.org/
+    urls:
+    - https://github.com/expertflow/charts/releases/download/postgresql-11.9.8/postgresql-11.9.8.tgz
+    version: 11.9.8
   - annotations:
       category: Database
     apiVersion: v2
@@ -1871,4 +1973,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.13/web-channels-1.0.13.tgz
     version: 1.0.13
-generated: "2024-12-10T15:16:44.505093343Z"
+generated: "2024-12-10T15:31:12.255514662Z"
