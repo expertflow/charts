@@ -240,6 +240,24 @@ entries:
   cisco-scheduler:
   - apiVersion: v2
     appVersion: 4.6.0
+    created: "2024-12-10T10:30:26.720943361Z"
+    description: Expertflow CX Solution Cisco Integrations
+    digest: c33b703cb1baac77881b248ba62d97f2175727f36c9b2fc6594fefff0630909c
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: cisco-scheduler
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/cisco-scheduler-1.0.15/cisco-scheduler-1.0.15.tgz
+    version: 1.0.15
+  - apiVersion: v2
+    appVersion: 4.6.0
     created: "2024-12-09T14:52:48.901982281Z"
     description: Expertflow CX Solution Cisco Integrations
     digest: 305ec0d68bf66e81a4248596963c3e7d39166aaeed563445440978ff1f647e21
@@ -275,6 +293,93 @@ entries:
     - https://github.com/expertflow/charts/releases/download/cisco-scheduler-1.0.13/cisco-scheduler-1.0.13.tgz
     version: 1.0.13
   cx:
+  - apiVersion: v2
+    appVersion: 4.6.0
+    created: "2024-12-10T10:30:26.935062175Z"
+    dependencies:
+    - condition: agent-manager.enabled
+      name: agent-manager
+      repository: file://charts/agent-manager
+      version: 1.0.0
+    - condition: bot-framework.enabled
+      name: bot-framework
+      repository: file://charts/bot-framework
+      version: 1.0.0
+    - condition: ccm.enabled
+      name: ccm
+      repository: file://charts/ccm
+      version: 1.0.0
+    - condition: cim-customer.enabled
+      name: cim-customer
+      repository: file://charts/cim-customer
+      version: 1.0.0
+    - condition: conversation-manager.enabled
+      name: conversation-manager
+      repository: file://charts/conversation-manager
+      version: 1.0.0
+    - condition: conversation-monitor.enabled
+      name: conversation-monitor
+      repository: file://charts/conversation-monitor
+      version: 1.0.0
+    - condition: customer-widget.enabled
+      name: customer-widget
+      repository: file://charts/customer-widget
+      version: 1.0.0
+    - condition: file-engine.enabled
+      name: file-engine
+      repository: file://charts/file-engine
+      version: 1.0.0
+    - condition: historical-reports.enabled
+      name: historical-reports
+      repository: file://charts/historical-reports
+      version: 1.0.0
+    - condition: license-manager.enabled
+      name: license-manager
+      repository: file://charts/license-manager
+      version: 1.0.0
+    - condition: realtime-reports.enabled
+      name: realtime-reports
+      repository: file://charts/realtime-reports
+      version: 1.0.0
+    - condition: routing-engine.enabled
+      name: routing-engine
+      repository: file://charts/routing-engine
+      version: 1.0.0
+    - condition: scheduled-activities.enabled
+      name: scheduled-activities
+      repository: file://charts/scheduled-activities
+      version: 1.0.0
+    - condition: state-events-logger.enabled
+      name: state-events-logger
+      repository: file://charts/state-events-logger
+      version: 1.0.0
+    - condition: team-announcement.enabled
+      name: team-announcement
+      repository: file://charts/team-announcement
+      version: 1.0.0
+    - condition: unified-admin.enabled
+      name: unified-admin
+      repository: file://charts/unified-admin
+      version: 1.0.0
+    - condition: web-channel-manager.enabled
+      name: web-channel-manager
+      repository: file://charts/web-channel-manager
+      version: 1.0.0
+    description: Expertflow CX Solution
+    digest: f6af65b61489ac13a86fcc804acbd9f0c32a95a7830efb8743fca83fcc9e5d7c
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: cx
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/cx-1.0.17/cx-1.0.17.tgz
+    version: 1.0.17
   - apiVersion: v2
     appVersion: 4.6.0
     created: "2024-12-09T14:52:49.19441269Z"
@@ -1526,6 +1631,24 @@ entries:
   reporting:
   - apiVersion: v2
     appVersion: 4.6.0
+    created: "2024-12-10T10:30:27.081650507Z"
+    description: Expertflow CX Solution Reporting Synchronizer
+    digest: c776123c35363b73e80798b39f6fcb98077cfbcf5c304f57166a20331f255e42
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: reporting
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/reporting-1.0.18/reporting-1.0.18.tgz
+    version: 1.0.18
+  - apiVersion: v2
+    appVersion: 4.6.0
     created: "2024-12-09T14:52:49.591133479Z"
     description: Expertflow CX Solution Reporting Synchronizer
     digest: 238172a9dde0f861175f4a1582390c972a18fc4278ba4b4aa4df8f7a9e22dec7
@@ -1718,4 +1841,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.13/web-channels-1.0.13.tgz
     version: 1.0.13
-generated: "2024-12-10T09:10:31.085224262Z"
+generated: "2024-12-10T10:30:27.081780731Z"
