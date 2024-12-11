@@ -883,9 +883,9 @@ realtime-reports:
       - name: APPLICATION_LOG_LEVEL
         value: "INFO"
       - name: BOT_FRAMEWORK_URL
-        value: "http://{{ .Release.Name }}-bot-framework-svc.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}:8082"
+        value: "http://{{ .Release.Name }}-bot-framework-svc.{{ .Release.Namespace }}.svc:8082"
       - name: ROUTING_ENGINE_URL
-        value:  "http://{{ .Release.Name }}-routing-engine-svc.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}:8081"
+        value:  "http://{{ .Release.Name }}-routing-engine-svc.{{ .Release.Namespace }}.svc:8081"
       - name: DATASOURCE_CONNECTION_TYPE
         value:  "mysql"
       - name: DATASOURCE_URL
