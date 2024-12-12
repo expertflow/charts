@@ -215,6 +215,36 @@ entries:
       category: DeveloperTools
     apiVersion: v2
     appVersion: 19.0.2
+    created: "2024-12-12T08:39:55.730296359Z"
+    dependencies:
+    - name: common
+      repository: file://charts/common
+      tags:
+      - bitnami-common
+      version: 2.0.3
+    description: Keycloak is a high performance Java-based identity and access management
+      solution. It lets developers add an authentication layer to their applications
+      with minimum effort.
+    digest: 80d3f45fbeebc05ae2078df7180aa6c9bf4d8ab38ff6b8be4a7529128ce29e4e
+    home: https://www.keycloak.org
+    icon: https://bitnami.com/assets/stacks/keycloak/img/keycloak-stack-220x234.png
+    keywords:
+    - keycloak
+    - access-management
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: keycloak
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/keycloak
+    - https://github.com/keycloak/keycloak
+    urls:
+    - https://github.com/expertflow/charts/releases/download/keycloak-10.1.6/keycloak-10.1.6.tgz
+    version: 10.1.6
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 19.0.2
     created: "2024-12-12T08:24:03.105398312Z"
     dependencies:
     - condition: postgresql.enabled
@@ -250,6 +280,39 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 2022.10.5
+    created: "2024-12-12T08:39:55.883198977Z"
+    dependencies:
+    - name: common
+      repository: file://charts/common
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: MinIO(R) is an object storage server, compatible with Amazon S3 cloud
+      storage service, mainly used for storing unstructured data (such as photos,
+      videos, log files, etc.).
+    digest: bdcb94ca58e1a6f89301fea517db0d177d581d98cc37b0b88b96a163e7241cee
+    home: https://github.com/bitnami/charts/tree/master/bitnami/minio
+    icon: https://bitnami.com/assets/stacks/minio/img/minio-stack-220x234.png
+    keywords:
+    - minio
+    - storage
+    - object-storage
+    - s3
+    - cluster
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: minio
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/minio
+    - https://min.io
+    urls:
+    - https://github.com/expertflow/charts/releases/download/minio-11.10.6/minio-11.10.6.tgz
+    version: 11.10.6
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 2022.10.5
     created: "2024-12-12T08:24:03.227472055Z"
     dependencies:
     - name: common
@@ -280,6 +343,40 @@ entries:
     - https://github.com/expertflow/charts/releases/download/minio-11.10.5/minio-11.10.5.tgz
     version: 11.10.5
   mongodb:
+  - annotations:
+      category: Database
+    apiVersion: v2
+    appVersion: 6.0.2
+    created: "2024-12-12T08:39:56.019598003Z"
+    dependencies:
+    - name: common
+      repository: file://charts/common
+      tags:
+      - bitnami-common
+      version: 2.0.3
+    description: MongoDB(R) is a relational open source NoSQL database. Easy to use,
+      it stores data in JSON-like documents. Automated scalability and high-performance.
+      Ideal for developing cloud native applications.
+    digest: feb420d81626595895c7b2aa2afda04beeef2304f212231ee66e120f94e34c7c
+    home: https://github.com/bitnami/charts/tree/master/bitnami/mongodb
+    icon: https://bitnami.com/assets/stacks/mongodb/img/mongodb-stack-220x234.png
+    keywords:
+    - mongodb
+    - database
+    - nosql
+    - cluster
+    - replicaset
+    - replication
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: mongodb
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/mongodb
+    - https://mongodb.org
+    urls:
+    - https://github.com/expertflow/charts/releases/download/mongodb-13.1.8/mongodb-13.1.8.tgz
+    version: 13.1.8
   - annotations:
       category: Database
     apiVersion: v2
@@ -319,6 +416,40 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 14.5.0
+    created: "2024-12-12T08:39:56.122839177Z"
+    dependencies:
+    - name: common
+      repository: file://charts/common
+      tags:
+      - bitnami-common
+      version: 2.0.3
+    description: PostgreSQL (Postgres) is an open source object-relational database
+      known for reliability and data integrity. ACID-compliant, it supports foreign
+      keys, joins, views, triggers and stored procedures.
+    digest: 38c21d3a680ad543a79a263ce77af192f3e046da451397c9892428e7f5ca81f2
+    home: https://github.com/bitnami/charts/tree/master/bitnami/postgresql
+    icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    - cluster
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: postgresql
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/postgresql
+    - https://www.postgresql.org/
+    urls:
+    - https://github.com/expertflow/charts/releases/download/postgresql-11.9.8/postgresql-11.9.8.tgz
+    version: 11.9.8
+  - annotations:
+      category: Database
+    apiVersion: v2
+    appVersion: 14.5.0
     created: "2024-12-12T08:24:03.483649823Z"
     dependencies:
     - name: common
@@ -350,6 +481,36 @@ entries:
     - https://github.com/expertflow/charts/releases/download/postgresql-11.9.7-v1/postgresql-11.9.7-v1.tgz
     version: 11.9.7-v1
   redis:
+  - annotations:
+      category: Database
+    apiVersion: v2
+    appVersion: 7.0.5
+    created: "2024-12-12T08:39:56.25301719Z"
+    dependencies:
+    - name: common
+      repository: file://charts/common
+      tags:
+      - bitnami-common
+      version: 2.0.3
+    description: Redis(R) is an open source, advanced key-value store. It is often
+      referred to as a data structure server since keys can contain strings, hashes,
+      lists, sets and sorted sets.
+    digest: 9d50e072de29c726e62f082921ac7191592c5517d3e8fff7839f7bd4daf5454b
+    home: https://github.com/bitnami/charts/tree/master/bitnami/redis
+    icon: https://bitnami.com/assets/stacks/redis/img/redis-stack-220x234.png
+    keywords:
+    - redis
+    - keyvalue
+    - database
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: redis
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/redis
+    urls:
+    - https://github.com/expertflow/charts/releases/download/redis-17.3.3/redis-17.3.3.tgz
+    version: 17.3.3
   - annotations:
       category: Database
     apiVersion: v2
@@ -418,6 +579,45 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 1.2.0
+    created: "2024-12-12T08:39:56.392106045Z"
+    description: Ingress controller for Kubernetes using NGINX as a reverse proxy
+      and load balancer
+    digest: 648f2efd4841db9de8f30ce8bee3873476b6d92edf9b12dc03d1db1a967cbfc8
+    home: https://github.com/kubernetes/ingress-nginx
+    icon: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/500px-Nginx_logo.svg.png
+    keywords:
+    - ingress
+    - nginx
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - name: rikatz
+    - name: strongjz
+    - name: tao12345666333
+    name: rke2-ingress-nginx
+    sources:
+    - https://github.com/kubernetes/ingress-nginx
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/rke2-ingress-nginx-4.1.005/rke2-ingress-nginx-4.1.005.tgz
+    version: 4.1.005
+  - annotations:
+      artifacthub.io/changes: |
+        - "[8481](https://github.com/kubernetes/ingress-nginx/pull/8481) Fix log creation in chroot script"
+        - "[8479](https://github.com/kubernetes/ingress-nginx/pull/8479) changed nginx base img tag to img built with alpine3.14.6"
+        - "[8478](https://github.com/kubernetes/ingress-nginx/pull/8478) update base images and protobuf gomod"
+        - "[8468](https://github.com/kubernetes/ingress-nginx/pull/8468) Fallback to ngx.var.scheme for redirectScheme with use-forward-headers when X-Forwarded-Proto is empty"
+        - "[8456](https://github.com/kubernetes/ingress-nginx/pull/8456) Implement object deep inspector"
+        - "[8455](https://github.com/kubernetes/ingress-nginx/pull/8455) Update dependencies"
+        - "[8454](https://github.com/kubernetes/ingress-nginx/pull/8454) Update index.md"
+        - "[8447](https://github.com/kubernetes/ingress-nginx/pull/8447) typo fixing"
+        - "[8446](https://github.com/kubernetes/ingress-nginx/pull/8446) Fix suggested annotation-value-word-blocklist"
+        - "[8444](https://github.com/kubernetes/ingress-nginx/pull/8444) replace deprecated topology key in example with current one"
+        - "[8443](https://github.com/kubernetes/ingress-nginx/pull/8443) Add dependency review enforcement"
+        - "[8434](https://github.com/kubernetes/ingress-nginx/pull/8434) added new auth-tls-match-cn annotation"
+        - "[8426](https://github.com/kubernetes/ingress-nginx/pull/8426) Bump github.com/prometheus/common from 0.32.1 to 0.33.0"
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
+    appVersion: 1.2.0
     created: "2024-12-12T08:24:03.807482219Z"
     description: Ingress controller for Kubernetes using NGINX as a reverse proxy
       and load balancer
@@ -468,6 +668,31 @@ entries:
     - https://github.com/expertflow/charts/releases/download/surveys-1.0.14/surveys-1.0.14.tgz
     version: 1.0.14
   traefik:
+  - apiVersion: v2
+    appVersion: 2.9.1
+    created: "2024-12-12T08:39:56.498219067Z"
+    description: A Traefik based Kubernetes ingress controller
+    digest: 6c8b16372f8a1073195906bf4331c581afa05277fa0f089de0ec9495ebb20d31
+    home: https://traefik.io/
+    icon: https://raw.githubusercontent.com/traefik/traefik/v2.3/docs/content/assets/img/traefik.logo.png
+    keywords:
+    - traefik
+    - ingress
+    maintainers:
+    - email: emile@vauge.com
+      name: emilevauge
+    - email: daniel.tomcej@gmail.com
+      name: dtomcej
+    - email: ldez@traefik.io
+      name: ldez
+    name: traefik
+    sources:
+    - https://github.com/traefik/traefik
+    - https://github.com/traefik/traefik-helm-chart
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/traefik-16.0.1/traefik-16.0.1.tgz
+    version: 16.0.1
   - apiVersion: v2
     appVersion: 2.9.1
     created: "2024-12-12T08:24:04.118701466Z"
@@ -545,4 +770,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2024-12-12T08:24:04.283503151Z"
+generated: "2024-12-12T08:39:56.498245456Z"
