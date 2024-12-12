@@ -4,7 +4,7 @@ apiVersion: v2
 appVersion: 7.0.5
 dependencies:
 - name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: file://charts/common
   tags:
   - bitnami-common
   version: 2.0.3
@@ -21,4 +21,4 @@ maintainers:
 name: redis
 sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/redis
-version: 17.3.2-v1
+version: 17.3.3

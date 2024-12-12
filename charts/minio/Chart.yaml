@@ -4,7 +4,7 @@ apiVersion: v2
 appVersion: 2022.10.5
 dependencies:
 - name: common
-  repository: https://charts.bitnami.com/bitnami
+  repository: file://charts/common
   tags:
   - bitnami-common
   version: 2.x.x
@@ -26,4 +26,4 @@ name: minio
 sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/minio
 - https://min.io
-version: 11.10.5
+version: 11.10.6
