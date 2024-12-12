@@ -78,6 +78,24 @@ entries:
   cisco-scheduler:
   - apiVersion: v2
     appVersion: 4.6.0
+    created: "2024-12-12T11:47:06.801637851Z"
+    description: Expertflow CX Solution Cisco Integrations
+    digest: 1226907258d1389533aa328cbee0ddbdf4275fb8777cc349922976710333bbe9
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: cisco-scheduler
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/cisco-scheduler-1.0.16/cisco-scheduler-1.0.16.tgz
+    version: 1.0.16
+  - apiVersion: v2
+    appVersion: 4.6.0
     created: "2024-12-12T08:24:02.592941987Z"
     description: Expertflow CX Solution Cisco Integrations
     digest: d152ca41320288420f35f749494ea23bc625689e6513370e76f8c6980b8c1127
@@ -800,4 +818,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2024-12-12T11:18:10.627953924Z"
+generated: "2024-12-12T11:47:06.801673087Z"
