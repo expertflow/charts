@@ -1,0 +1,9 @@
+dependencies:
+- name: survey-studio
+  repository: file://charts/survey-studio
+  version: 1.0.0
+- name: survey-backend
+  repository: file://charts/survey-backend
+  version: 1.0.0
+digest: sha256:66ed7f44794029a5ce2d6e9637414452418970d787bad1fb051fc702f1ff7bfb
+generated: "2024-12-06T08:01:49.093275852Z"

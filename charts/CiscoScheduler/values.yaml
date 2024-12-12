@@ -1,0 +1,75 @@
+####################### Reporting Connector CronJob Definitions ######################
+ciscoTeamSynchronizerCronJob:
+   enabled: true
+   labels: {}
+   containerSecurityContext:
+     enabled: false
+     seLinuxOptions: {}
+     runAsUser: 1001
+     runAsGroup: 1001
+     runAsNonRoot: true
+     privileged: false
+     readOnlyRootFilesystem: true
+     allowPrivilegeEscalation: false
+     capabilities:
+       drop: ["ALL"]
+     seccompProfile:
+       type: "RuntimeDefault"
+   annotations: {}
+   schedule: "*/15 * * * *"
+   failedJobsHistoryLimit: 1
+   successfulJobsHistoryLimit: 5
+   startingDeadlineSeconds: 20
+   concurrencyPolicy: "Forbid"
+   backoffLimit: 0
+   restartPolicy: OnFailure
+   imagePullSecret: ef-gitlab-secret
+   image: gitimages.expertflow.com/cim/cisco-teams-synchronizer:4.4-SR1
+   extraEnvVars: 
+     - name: REALM
+       value: expertflow
+     - name: AUTH_SERVER_URL
+       value:  https://cim-dev2.expertflow.com/auth/
+     - name: SSL_REQUIRED
+       value: external
+     - name: RESOURCE
+       value: cim
+     - name: VERIFY_TOKEN_AUDIENCE
+       value: "false"
+     - name: SECRET
+       value: uWM2JQxFUnYntH6ReJCFkYLP3tMl2kgD 
+     - name: USE_RESOURCE_ROLE_MAPPINGS
+       value: "true"
+     - name: CONFIDETIAL_PORT
+       value: "0"
+     - name: CLIENT_ID
+       value: cim
+     - name: CLIENT_DB_ID
+       value:  uWM2JQxFUnYntH6ReJCFkYLP3tMl2kgD
+     - name: GRANT_TYPE
+       value:  password
+     - name: GRANT_TYPE_PAT
+       value: client_credentials
+     - name: USERNAME_ADMIN
+       value: admin
+     - name: PASSWORD_ADMIN
+       value: admin
+     - name: SCOPE_NAME
+       value:  Any default scope
+     - name: BEARER_ONLY
+       value: "true"
+     - name: GROUP
+       value: default
+     - name: FINESSE_USERNAME
+       value: administrator
+     - name: FINESSE_PASSWORD
+       value: Expertflow464
+     - name: FINESSE_URL
+       value: https://finesse12-5.ucce.ipcc
+     - name: PORT
+       value: "3002"
+   resourcesPreset: "none"
+   resources: {}
+   extraVolumeMounts: []
+   extraVolumes: []
+

@@ -1,0 +1,74 @@
+global:
+   ingressRouter: devops.ef.com
+   ingressTlsCertificateSecret: ef-ingress-tls-secret
+auth:
+  adminUser: admin
+  adminPassword: "admin"
+proxy: passthrough
+httpRelativePath: "/auth/"
+extraEnvVars: 
+   - name: KC_LOG_LEVEL
+     value: "DEBUG"
+   - name: ROOT_LOGLEVEL
+     value: "DEBUG"
+   - name: KEYCLOAK_JDBC_PARAMS
+     value: "sslmode=verify-ca&sslrootcert=/opt/keycloak/certs/ca.crt"
+   - name: KEYCLOAK_ADMIN_URL
+     value: https://{{ .Values.global.ingressRouter }}/auth/
+   - name: KEYCLOAK_EXTRA_ARGS
+     value: "-Dkeycloak.frontendUrl=https://{{ .Values.global.ingressRouter }}/auth/  -Dkeycloak.profile.feature.upload_scripts=enabled"
+   - name: KEYCLOAK_FRONTEND_URL
+     value:  https://{{ .Values.global.ingressRouter }}/auth/
+   - name: KEYCLOAK_LOGLEVEL
+     value: "DEBUG"
+   - name: KEYCLOAK_PASSWORD
+     value: admin
+   - name: KEYCLOAK_PROXY_ADDRESS_FORWARDING
+     value:  "true"
+   - name: KEYCLOAK_USER
+     value: admin
+   - name: NODE_ENV
+     value: development
+extraVolumes:
+  - name: ef-postgresql-crt
+    secret:
+      secretName: ef-postgresql-crt
+extraVolumeMounts:
+  - name: ef-postgresql-crt
+    mountPath: /opt/keycloak/certs/
+    readOnly: true
+service:
+  type: ClusterIP
+ingress:
+  enabled: true
+  ingressClassName: ""
+  pathType: ImplementationSpecific
+  apiVersion: ""
+  hostname: "{{ .Values.global.ingressRouter }}"
+  path: /auth
+  servicePort: http
+  annotations: 
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+    nginx.org/server-snippets: |
+      location / {
+        proxy_set_header X-Forwarded-For $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+      }
+  tls: false
+  selfSigned: false
+  extraTls: 
+   - hosts:
+       - "{{ .Values.global.ingressRouter }}"
+     secretName: "{{ .Values.global.ingressTlsCertificateSecret }}"
+postgresql:
+  enabled: false
+externalDatabase:
+  host: "ef-postgresql.ef-external.svc.cluster.local"
+  port: 5432
+  user: sa
+  database: keycloak_db
+  password: "Expertflow123"
+  existingSecret: ""
+  existingSecretPasswordKey: ""
+

@@ -1,0 +1,27 @@
+dependencies:
+- name: connect360
+  repository: file://charts/connect360
+  version: 1.0.0
+- name: facebook-connector
+  repository: file://charts/facebook-connector
+  version: 1.0.0
+- name: instagram-connector
+  repository: file://charts/instagram-connector
+  version: 1.0.0
+- name: smpp-connector
+  repository: file://charts/smpp-connector
+  version: 1.0.0
+- name: telegram-connector
+  repository: file://charts/telegram-connector
+  version: 1.0.0
+- name: twilio-connector
+  repository: file://charts/twilio-connector
+  version: 1.0.0
+- name: twitter-connector
+  repository: file://charts/twitter-connector
+  version: 1.0.0
+- name: viber-connector
+  repository: file://charts/viber-connector
+  version: 1.0.0
+digest: sha256:6764ab8b9baf7100f8ce47c02016162dd547aa6129f3fe1c11400ba1678b9457
+generated: "2024-12-06T07:57:59.604939517Z"

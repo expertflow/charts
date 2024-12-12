@@ -1,0 +1,132 @@
+# Default values for ef-cx.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+#
+# ███████ ██   ██ ██████  ███████ ██████  ████████ ███████ ██       ██████  ██     ██ 
+# ██       ██ ██  ██   ██ ██      ██   ██    ██    ██      ██      ██    ██ ██     ██ 
+# █████     ███   ██████  █████   ██████     ██    █████   ██      ██    ██ ██  █  ██ 
+# ██       ██ ██  ██      ██      ██   ██    ██    ██      ██      ██    ██ ██ ███ ██ 
+# ███████ ██   ██ ██      ███████ ██   ██    ██    ██      ███████  ██████   ███ ███  
+#
+# Globals Section:
+#
+# global.ingressRouter: Provides a central location for the FQDN that will be used \
+#                       across the EF CX solution
+# global.registry: when deploying solution with limited access to internet, \
+#                  changing this will cause all subsequent image pulls from this registry. \
+#                  Used as Variable in all sub-charts
+#
+
+
+global:
+  ingressRouter: "devops.ef.com"
+  ingressCertName: "ef-ingress-tls-secret"
+  ingressClassName: "nginx"
+  efCxReleaseName: "ef-cx"
+  commonIngressAnnotations: {}
+  ##    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  ##    nginx.ingress.kubernetes.io/use-regex: "true"
+  imageRegistry: "gitimages.expertflow.com"
+  imagePullSecrets: 
+   - ef-gitlab-secret
+
+
+
+# Change the below given paragraph when deploying an offline solution to pick the images from 
+#  -- Local Repo running inside the Kubernetes Engine
+#  -- Customer's own Repo requiring all images to be sorted locally 
+#
+# imageCredentials:
+# imageCredentials.registry: provides the registry URL
+# imageCredentials.username: username to use
+# imageCredentials.password: Password for the user
+# imageCredentials.email: an email address for the user
+#
+clusterDomain: cluster.local
+
+
+imageCredentials:
+  registry: gitimages.expertflow.com
+  username: efcx
+  password: RecRpsuH34yqp56YRFUb
+  email: devops@expertflow.com
+
+
+##############################360-connector##############################
+survey-backend:
+   enabled: true
+   image:       
+      repository: cim/survey-backend
+      tag: 4.5.4_f-CIM-12709
+   efConnectionVars: false
+   efEnvironmentVars: false
+   containerPorts:
+      - name: "http-su-ba-3000"
+        containerPort: 3000
+   extraEnvVars:
+      - name: NODERED_URI
+        value: http://{{.Release.Name}}-survey-studio-svc.{{ .Release.Namespace }}.svc:1880
+      - name: NODERED_USERNAME
+        value: admin
+      - name: NODERED_PASSWORD
+        value: admin
+   service:
+      enabled: true
+      port: 3000
+      portName: "http-su-ba-3000"
+      targetPort: "http-su-ba-3000"
+   ingress: 
+      enabled: true 
+      annotations:
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+        nginx.ingress.kubernetes.io/rewrite-target: /$2
+        nginx.ingress.kubernetes.io/use-regex: "true"
+      path: /survey-backend(/|$)(.*)
+      pathType: ImplementationSpecific
+   extraVolumes:
+      - name: mongo-mongodb-ca
+        secret:
+          secretName: mongo-mongodb-ca
+   extraVolumeMounts:
+      - name: mongo-mongodb-ca
+        mountPath: /mongo
+
+##############################360-connector##############################
+survey-studio:
+   enabled: true
+   image:       
+      repository: cim/survey-nodes
+      tag: 4.5.4_f-CIM-12709
+   efConnectionVars: false
+   efEnvironmentVars: false
+   containerPorts:
+      - name: "http-su-st-1880"
+        containerPort: 1880
+   extraEnvVars:
+      - name: TZ
+        value: Asia/Karachi
+      - name: FQDN
+        value: "{{ .Values.global.ingressRouter }}"
+   service:
+      enabled: true
+      port: 1880
+      portName: "http-su-st-1880"
+      targetPort: "http-su-st-1880"
+   ingress: 
+      enabled: true 
+      annotations:
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+        nginx.ingress.kubernetes.io/use-regex: "true"
+        nginx.ingress.kubernetes.io/configuration-snippet: |
+           more_set_headers "Access-Control-Allow-Origin: $http_origin";
+           if ($request_uri ~* "^/survey-studio$") {
+             return 301 $scheme://$host$request_uri/;
+           }
+        nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+        nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS, DELETE,PATCH
+        nginx.ingress.kubernetes.io/enable-cors: "true"
+        nginx.ingress.kubernetes.io/rewrite-target: /red/$2
+      path: /survey-studio(/|$)(.*)
+      pathType: ImplementationSpecific
