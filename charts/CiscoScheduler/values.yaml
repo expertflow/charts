@@ -1,3 +1,6 @@
+
+global:
+  ingressRouter: devops.ef.com
 ####################### Reporting Connector CronJob Definitions ######################
 ciscoTeamSynchronizerCronJob:
    enabled: true
@@ -26,6 +29,8 @@ ciscoTeamSynchronizerCronJob:
    imagePullSecret: ef-gitlab-secret
    image: gitimages.expertflow.com/cim/cisco-teams-synchronizer:4.4-SR1
    extraEnvVars: 
+     - name: AUTH_SERVER_URL
+       value: "{{ .Values.global.ingressRouter }}" 
      - name: REALM
        value: expertflow
      - name: AUTH_SERVER_URL
