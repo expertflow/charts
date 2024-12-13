@@ -55,10 +55,6 @@ dependencies:
     version: 1.0.0
     condition: routing-engine.enabled
     repository: file://charts/routing-engine
-  - name: scheduled-activities
-    version: 1.0.0
-    condition: scheduled-activities.enabled
-    repository: file://charts/scheduled-activities
   - name: state-events-logger
     version: 1.0.0
     condition: state-events-logger.enabled
