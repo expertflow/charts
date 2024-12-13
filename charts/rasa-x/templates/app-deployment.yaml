@@ -1,0 +1,83 @@
+{{- if .Values.app.install -}}
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: {{ .Release.Name }}-app
+  labels:
+    {{- include "rasa-x.labels" . | nindent 4 }}
+    app.kubernetes.io/component: app
+  annotations:
+    sidecar.jaegertracing.io/inject: "{{ $.Values.app.jaegerSidecar }}"
+spec:
+  progressDeadlineSeconds: {{ .Values.global.progressDeadlineSeconds }}
+  replicas: {{ default 1 .Values.app.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "rasa-x.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: app
+  template:
+    metadata:
+      labels:
+        {{- include "rasa-x.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: app
+        {{- if .Values.app.podLabels }}
+{{ toYaml .Values.app.podLabels | indent 8 }}
+        {{- end }}
+    spec:
+      automountServiceAccountToken: {{ .Values.app.automountServiceAccountToken }}
+      {{ include "rasa-x.spec" . }}
+      {{- if .Values.app.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.app.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.app.tolerations }}
+      tolerations:
+{{ toYaml .Values.app.tolerations | indent 6 }}
+      {{- end }}
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.app.name }}:{{ include "app.version" . }}"
+        imagePullPolicy: {{ .Values.images.pullPolicy }}
+        {{- if .Values.app.command }}
+        command:
+          {{- toYaml .Values.app.command | nindent 10 }}
+        {{- end }}
+        {{- if .Values.app.args }}
+        args:
+          {{- toYaml .Values.app.args | nindent 10 }}
+        {{- end }}
+        ports:
+        - name: "http"
+          containerPort: {{ template "rasa-x.custom-actions.port" . }}
+          protocol: "TCP"
+        {{- if or .Values.app.livenessProbe.enabled (not (hasKey .Values.app.livenessProbe "enabled")) }}
+        livenessProbe:
+          initialDelaySeconds: {{ .Values.app.livenessProbe.initialProbeDelay }}
+          httpGet:
+            path: "{{ .Values.app.endpoints.healthCheckUrl }}"
+            port: "http"
+            scheme: {{ default "HTTP" .Values.app.livenessProbe.scheme }}
+        {{- end }}
+        {{- if or .Values.app.livenessProbe.enabled (not (hasKey .Values.app.livenessProbe "enabled")) }}
+        readinessProbe:
+          initialDelaySeconds: {{ .Values.app.readinessProbe.initialProbeDelay }}
+          httpGet:
+            path: "{{ .Values.app.endpoints.healthCheckUrl }}"
+            port: "http"
+            scheme: {{ default "HTTP" .Values.app.readinessProbe.scheme }}
+        {{- end }}
+        {{- with .Values.app.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        env:
+          {{- toYaml .Values.app.extraEnvs | nindent 10 }}
+{{- if .Values.app.extraVolumeMounts }}
+        volumeMounts:
+{{ toYaml .Values.app.extraVolumeMounts | indent 8 }}
+{{- end }}
+{{- if .Values.app.extraVolumes }}
+      volumes:
+{{ toYaml .Values.app.extraVolumes | indent 6 }}
+{{- end }}
+{{- end }}

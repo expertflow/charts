@@ -135,6 +135,11 @@ efConnectionVars:
     REDIS_SENTINEL_MASTER: expertflow
     REDIS_SENTINEL_NODES: redis-ha-node-0.redis-ha-headless.ef-external.svc.cluster.local:26379,redis-ha-node-1.redis-ha-headless.ef-external.svc.cluster.local:26379,redis-ha-node-2.redis-ha-headless.ef-external.svc.cluster.local:26379
     REDIS_SENTINEL_PASSWORD: Expertflow123
+    IS_ENABLED_2FA: "false"
+    CHANNEL_2FA: "app"
+    TWILIO_SID: ""
+    TWILIO_VERIFY_SID: ""
+    TWILIO_AUTH_TOKEN: ""
 
 
 ##############################agent-manager##############################
@@ -143,13 +148,15 @@ agent-manager:
    replicaCount: 1
    image:       
       repository: cim/agent-manager
-      tag: 4.5.3    
+      tag: 4.6_f-CIM-8601-CXIM-116
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "http-ag-ma-3000"
         containerPort: 3000
    extraEnvVars:
+      - name: SOCKET_DISCONNECT_TIME
+        value:  "10000"  
       - name: IS_WRAP_UP_ENABLED
         value: '{{ .Values.global.efCommonVars_IS_WRAP_UP_ENABLED }}'
       - name: WRAPUP_TIME
@@ -225,7 +232,7 @@ bot-framework:
    replicaCount: 1
    image:       
       repository: cim/bot-framework
-      tag: 4.5.5_f-CIM-14675    
+      tag: 4.6_f-CIM-26684
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -295,7 +302,7 @@ ccm:
    replicaCount: 1
    image:       
       repository: cim/customer-channel-manager
-      tag: 4.5.5_f-CIM-14675    
+      tag: 4.6_f-CIM-26684
    efConnectionVars: true
    efEnvironmentVars: true 
    containerPorts:
@@ -363,7 +370,7 @@ cim-customer:
    replicaCount: 1
    image:       
       repository: cim/cim-backend
-      tag: 4.5.4_f-CIM-15802    
+      tag: 4.6
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -405,7 +412,7 @@ conversation-manager:
    replicaCount: 1
    image:       
       repository: cim/conversation-manager
-      tag: 4.5.5_f-CIM-14675    
+      tag: 4.6_b-CRM-32
    efConnectionVars: true
    efEnvironmentVars: false
    extraEnvVars:
@@ -554,7 +561,7 @@ conversation-monitor:
    replicaCount: 1
    image:       
       repository: cim/conversation-monitor
-      tag: 4.5.5_f-CIM-14675    
+      tag: 4.6_f-CIM-26684
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -620,7 +627,7 @@ customer-widget:
    replicaCount: 1
    image:       
       repository: efpublic/customer-widget
-      tag: 4.5.5-SR1-f-CIM-26383    
+      tag: 4.6_f-CIM-15619
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -770,7 +777,7 @@ historical-reports:
    replicaCount: 1
    image:       
       repository: cim/historical-reports-manager
-      tag: 4.5.5_f-CIM-14675    
+      tag: 4.6_f-CIM-26684
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -869,13 +876,15 @@ realtime-reports:
    replicaCount: 1
    image:       
       repository: cim/realtime-reports-manager
-      tag: 4.5.5_f-CIM-14675    
+      tag: 4.6_f-CIM-26684
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "http-re-rp-8080"
         containerPort: 8080
    extraEnvVars:
+      - name: UNIFIED_ADMIN_URL
+        value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
       - name: TZ
         value: '{{ .Values.global.efCommonVars_TZ }}'
       - name: ROOT_LOG_LEVEL
@@ -928,7 +937,7 @@ routing-engine:
    replicaCount: 1
    image:       
       repository: cim/media-routing-engine
-      tag: 4.5.5_f-CIM-14675    
+      tag: 4.6_f-CIM-26684
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -988,63 +997,13 @@ routing-engine:
         mountPath: /logback
 
 
-##############################scheduled-activities##############################
-scheduled-activities:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: campaign-manager/campaign-scheduler
-      tag: 4.5.5_f-CIM-14675    
-   efConnectionVars: true
-   efEnvironmentVars: false
-   containerPorts:
-      - name: "http-sc-ac-8894"
-        containerPort: 8894
-   extraEnvVars:
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: CHANNEL_MANAGER_BASE_URL
-        value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
-      - name: CONVERSATION_MANAGER_BASE_URL
-        value: "http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
-      - name: CACHED_OUTBOUND_MESSAGE_EXPIRY_IN_SECONDS
-        value: "86400"
-      - name: THIRD_PARTY_COMPONENTS_NEXT_RETRY_TIMEOUT_DURATION_IN_SECONDS
-        value: "600"
-      - name: THIRD_PARTY_COMPONENTS_RETRY_COUNT_ATTEMPTS_LIMIT
-        value: "5"
-      - name: LOG_LEVEL
-        value: "INFO"
-   service:
-      enabled: true
-      port: 8894
-      portName: "http-sc-ac-8894"
-      targetPort: "http-sc-ac-8894"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path: /scheduler(/|$)(.*)
-      pathType: ImplementationSpecific
-   extraVolumes:
-      - name: redis-crt
-        secret:
-          secretName: redis-crt
-   extraVolumeMounts:
-      - name: redis-crt
-        mountPath: /redis
-
-
 ##############################state-events-logger##############################
 state-events-logger:
    enabled: true
    replicaCount: 1
    image:       
       repository: cim/state-events-logger
-      tag: 4.5.5_f-CIM-14675    
+      tag: 4.6_f-CIM-26684
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts: []
@@ -1076,13 +1035,15 @@ team-announcement:
    replicaCount: 1
    image:       
       repository: cim/team-announcement
-      tag: 4.5.3    
+      tag: 4.6_f-CIM-8601
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "ef-team-a-8080"
         containerPort: 8080
    extraEnvVars:
+      - name: UNIFIED_ADMIN_URL
+        value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
       - name: TZ
         value: '{{ .Values.global.efCommonVars_TZ }}'
       - name: PORT
@@ -1167,7 +1128,7 @@ unified-admin:
    replicaCount: 1
    image:       
       repository: cim/unified-admin
-      tag: 4.5.6-SR1-b-CRM-25    
+      tag: 4.6_f-CIM-8601-CXIM-116
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -1250,7 +1211,7 @@ web-channel-manager:
    replicaCount: 1
    image:       
       repository: cim/web-channel-manager
-      tag: 4.5.5-SR1_f-CIM-26383    
+      tag: 4.6
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:

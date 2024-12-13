@@ -1,0 +1,29 @@
+{{- if .Values.app.install -}}
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: {{ include "rasa-x.fullname" . }}-app
+  labels:
+    {{- include "rasa-x.labels" . | nindent 4 }}
+    app.kubernetes.io/component: app
+{{- with .Values.app.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+{{- end }}
+spec:
+  ports:
+  - port: {{ template "rasa-x.custom-actions.port" . }}
+    targetPort: {{ template "rasa-x.custom-actions.port" . }}
+    protocol: "TCP"
+    name: "http"
+  {{- if .Values.nginx.enabled }}
+    # workaround for nginx which curls on port 80 to check availability
+  - port: 80
+    targetPort: 80
+    protocol: "TCP"
+    name: "workaround"
+  {{- end }}
+  selector:
+    {{- include "rasa-x.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: app
+{{- end }}

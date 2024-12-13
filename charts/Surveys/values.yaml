@@ -130,3 +130,55 @@ survey-studio:
         nginx.ingress.kubernetes.io/rewrite-target: /red/$2
       path: /survey-studio(/|$)(.*)
       pathType: ImplementationSpecific
+
+##############################scheduled-activities##############################
+scheduled-activities:
+   enabled: true
+   replicaCount: 1
+   image:
+      repository: campaign-manager/campaign-scheduler
+      tag: 4.5.5_f-CIM-14675
+   efConnectionVars: true
+   efEnvironmentVars: false
+   containerPorts:
+      - name: "http-sc-ac-8894"
+        containerPort: 8894
+   extraEnvVars:
+      - name: TZ
+        value: '{{ .Values.global.efCommonVars_TZ }}'
+      - name: CHANNEL_MANAGER_BASE_URL
+        value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+      - name: CONVERSATION_MANAGER_BASE_URL
+        value: "http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
+      - name: CACHED_OUTBOUND_MESSAGE_EXPIRY_IN_SECONDS
+        value: "86400"
+      - name: THIRD_PARTY_COMPONENTS_NEXT_RETRY_TIMEOUT_DURATION_IN_SECONDS
+        value: "600"
+      - name: THIRD_PARTY_COMPONENTS_RETRY_COUNT_ATTEMPTS_LIMIT
+        value: "5"
+      - name: LOG_LEVEL
+        value: "INFO"
+   service:
+      enabled: true
+      port: 8894
+      portName: "http-sc-ac-8894"
+      targetPort: "http-sc-ac-8894"
+   ingress:
+      enabled: true
+      annotations:
+         nginx.ingress.kubernetes.io/rewrite-target: /$2
+         nginx.ingress.kubernetes.io/use-regex: "true"
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+      path: /scheduler(/|$)(.*)
+      pathType: ImplementationSpecific
+   extraVolumes:
+      - name: redis-crt
+        secret:
+          secretName: redis-crt
+   extraVolumeMounts:
+      - name: redis-crt
+        mountPath: /redis
+
+
+
