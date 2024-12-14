@@ -40,6 +40,33 @@ entries:
   agent-desk:
   - apiVersion: v2
     appVersion: 4.7.0
+    created: "2024-12-14T15:28:14.401716601Z"
+    dependencies:
+    - condition: unified-agent.enabled
+      name: unified-agent
+      repository: file://charts/unified-agent
+      version: 1.0.0
+    - condition: grafana.enabled
+      name: grafana
+      repository: file://charts/grafana
+      version: 8.2.11
+    description: Expertflow CX Solution AgentDesk
+    digest: 4c83bf6ec7d4c6db2530ebd39513078bc6298a23da23c5ec5a5af28cfbb8ce21
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: agent-desk
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/agent-desk-1.0.21/agent-desk-1.0.21.tgz
+    version: 1.0.21
+  - apiVersion: v2
+    appVersion: 4.7.0
     created: "2024-12-13T14:19:27.498061163Z"
     dependencies:
     - condition: unified-agent.enabled
@@ -341,6 +368,46 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 8.17.0
+    created: "2024-12-14T15:28:14.525803248Z"
+    dependencies:
+    - condition: global.kibanaEnabled
+      name: kibana
+      repository: file://charts/kibana
+      version: 11.x.x
+    - name: common
+      repository: file://charts/common
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Elasticsearch is a distributed search and analytics engine. It is
+      used for web search, log monitoring, and real-time analytics. Ideal for Big
+      Data applications.
+    digest: f1d43ca5b6547bfeb3060f6c920f06c9d959a567a4ccf3c079beb929fadfe31d
+    home: https://bitnami.com
+    icon: https://bitnami.com/assets/stacks/elasticsearch/img/elasticsearch-stack-220x234.png
+    keywords:
+    - elasticsearch
+    maintainers:
+    - name: Broadcom, Inc. All Rights Reserved.
+      url: https://github.com/bitnami/charts
+    name: elasticsearch
+    sources:
+    - https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch
+    urls:
+    - https://github.com/expertflow/charts/releases/download/elasticsearch-21.4.2/elasticsearch-21.4.2.tgz
+    version: 21.4.2
+  - annotations:
+      category: Analytics
+      images: |
+        - name: elasticsearch
+          image: docker.io/bitnami/elasticsearch:8.17.0-debian-12-r0
+        - name: elasticsearch-exporter
+          image: docker.io/bitnami/elasticsearch-exporter:1.8.0-debian-12-r5
+        - name: os-shell
+          image: docker.io/bitnami/os-shell:12-debian-12-r34
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 8.17.0
     created: "2024-12-14T12:40:18.644701285Z"
     dependencies:
     - condition: global.kibanaEnabled
@@ -463,6 +530,75 @@ entries:
     - https://github.com/expertflow/charts/releases/download/keycloak-10.1.5-v1/keycloak-10.1.5-v1.tgz
     version: 10.1.5-v1
   kube-prometheus-stack:
+  - annotations:
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/prometheus-community/helm-charts
+        - name: Upstream Project
+          url: https://github.com/prometheus-operator/kube-prometheus
+      artifacthub.io/operator: "true"
+    apiVersion: v2
+    appVersion: v0.78.2
+    created: "2024-12-14T15:28:14.686219338Z"
+    dependencies:
+    - condition: crds.enabled
+      name: crds
+      repository: ""
+      version: 0.0.0
+    - condition: kubeStateMetrics.enabled
+      name: kube-state-metrics
+      repository: file://charts/kube-state-metrics
+      version: 5.27.*
+    - condition: nodeExporter.enabled
+      name: prometheus-node-exporter
+      repository: file://charts/prometheus-node-exporter
+      version: 4.42.*
+    - condition: grafana.enabled
+      name: grafana
+      repository: file://charts/grafana
+      version: 8.7.*
+    - condition: windowsMonitoring.enabled
+      name: prometheus-windows-exporter
+      repository: file://charts/prometheus-windows-exporter
+      version: 0.7.*
+    description: kube-prometheus-stack collects Kubernetes manifests, Grafana dashboards,
+      and Prometheus rules combined with documentation and scripts to provide easy
+      to operate end-to-end Kubernetes cluster monitoring with Prometheus using the
+      Prometheus Operator.
+    digest: cfe30de6517bb729bcad0217fc88c2f9be93ba4d863baec7aa91002c97b7f21e
+    home: https://github.com/prometheus-operator/kube-prometheus
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - operator
+    - prometheus
+    - kube-prometheus
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - email: andrew@quadcorps.co.uk
+      name: andrewgkew
+    - email: gianrubio@gmail.com
+      name: gianrubio
+    - email: github.gkarthiks@gmail.com
+      name: gkarthiks
+    - email: kube-prometheus-stack@sisti.pt
+      name: GMartinez-Sisti
+    - email: github@jkroepke.de
+      name: jkroepke
+    - email: scott@r6by.com
+      name: scottrigby
+    - email: miroslav.hadzhiev@gmail.com
+      name: Xtigyro
+    - email: quentin.bisson@gmail.com
+      name: QuentinBisson
+    name: kube-prometheus-stack
+    sources:
+    - https://github.com/prometheus-community/helm-charts
+    - https://github.com/prometheus-operator/kube-prometheus
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/kube-prometheus-stack-66.6.1/kube-prometheus-stack-66.6.1.tgz
+    version: 66.6.1
   - annotations:
       artifacthub.io/license: Apache-2.0
       artifacthub.io/links: |
@@ -1226,4 +1362,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2024-12-14T14:19:57.820408838Z"
+generated: "2024-12-14T15:28:14.686260045Z"
