@@ -1,0 +1,9 @@
+dependencies:
+- name: kibana
+  repository: file://charts/kibana
+  version: 11.4.0
+- name: common
+  repository: file://charts/common
+  version: 2.28.0
+digest: sha256:b1e6cbd0970076bddc659b586ebf06b7aed8e5cc9228de1e1e241fab388d6d45
+generated: "2024-12-14T12:37:47.085757779Z"
