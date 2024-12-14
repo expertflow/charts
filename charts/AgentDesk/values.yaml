@@ -205,7 +205,6 @@ unified-agent:
          nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
          nginx.ingress.kubernetes.io/cors-allow-methods: 'PUT, GET, POST, OPTIONS, DELETE,PATCH'
          nginx.ingress.kubernetes.io/enable-cors: "true"
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
       path: /unified-agent(/|$)(.*)
       pathType: ImplementationSpecific
       ingressAssetsAnnotations:
@@ -278,6 +277,9 @@ grafana:
     path: /grafana(/|$)(.*)
     annotations:
       nginx.ingress.kubernetes.io/rewrite-target: /$2
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
     tls: true
     extraTls:
        - host:

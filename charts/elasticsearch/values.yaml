@@ -392,6 +392,7 @@ ingress:
   ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: 
+     #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
      nginx.ingress.kubernetes.io/rewrite-target: /$2
      nginx.ingress.kubernetes.io/use-regex: "true"
@@ -2814,6 +2815,8 @@ kibana:
      hostname: '{{ .Values.global.ingressRouter }}'
      path: /ef-kibana(/|$)(.*)
      annotations:
+        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         nginx.ingress.kubernetes.io/rewrite-target: /$2
         nginx.ingress.kubernetes.io/use-regex: "true"
      tls: true
