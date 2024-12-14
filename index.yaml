@@ -462,6 +462,31 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/keycloak-10.1.5-v1/keycloak-10.1.5-v1.tgz
     version: 10.1.5-v1
+  logging-operator:
+  - apiVersion: v2
+    appVersion: 4.11.2
+    created: "2024-12-14T12:45:33.156918515Z"
+    dependencies:
+    - condition: crds.install
+      name: crds
+      repository: ""
+      version: 0.0.0
+    description: Logging operator for Kubernetes based on Fluentd and Fluentbit.
+    digest: 4b39ab88d0ec0fcf2c81c2bb30c2ca4299186c2b0d522186e0878a9b5693abf5
+    home: https://kube-logging.github.io
+    keywords:
+    - logging
+    - fluentd
+    - fluentbit
+    kubeVersion: '>=1.22.0-0'
+    name: logging-operator
+    sources:
+    - https://github.com/kube-logging/logging-operator
+    - https://github.com/kube-logging/helm-charts/tree/main/charts/logging-operator
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/logging-operator-4.11.2/logging-operator-4.11.2.tgz
+    version: 4.11.2
   minio:
   - annotations:
       category: Infrastructure
@@ -1131,4 +1156,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2024-12-14T12:40:18.644732093Z"
+generated: "2024-12-14T12:45:33.156968338Z"
