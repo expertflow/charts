@@ -462,6 +462,76 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/keycloak-10.1.5-v1/keycloak-10.1.5-v1.tgz
     version: 10.1.5-v1
+  kube-prometheus-stack:
+  - annotations:
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/prometheus-community/helm-charts
+        - name: Upstream Project
+          url: https://github.com/prometheus-operator/kube-prometheus
+      artifacthub.io/operator: "true"
+    apiVersion: v2
+    appVersion: v0.78.2
+    created: "2024-12-14T14:19:57.820372511Z"
+    dependencies:
+    - condition: crds.enabled
+      name: crds
+      repository: ""
+      version: 0.0.0
+    - condition: kubeStateMetrics.enabled
+      name: kube-state-metrics
+      repository: file://charts/kube-state-metrics
+      version: 5.27.*
+    - condition: nodeExporter.enabled
+      name: prometheus-node-exporter
+      repository: file://charts/prometheus-node-exporter
+      version: 4.42.*
+    - condition: grafana.enabled
+      name: grafana
+      repository: file://charts/grafana
+      version: 8.7.*
+    - condition: windowsMonitoring.enabled
+      name: prometheus-windows-exporter
+      repository: file://charts/prometheus-windows-exporter
+      version: 0.7.*
+    description: kube-prometheus-stack collects Kubernetes manifests, Grafana dashboards,
+      and Prometheus rules combined with documentation and scripts to provide easy
+      to operate end-to-end Kubernetes cluster monitoring with Prometheus using the
+      Prometheus Operator.
+    digest: e92d3ab9ace9253684a58aaffca223b52ea9a3897a83caffa50c8f0ad5c15ba4
+    home: https://github.com/prometheus-operator/kube-prometheus
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - operator
+    - prometheus
+    - kube-prometheus
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - email: andrew@quadcorps.co.uk
+      name: andrewgkew
+    - email: gianrubio@gmail.com
+      name: gianrubio
+    - email: github.gkarthiks@gmail.com
+      name: gkarthiks
+    - email: kube-prometheus-stack@sisti.pt
+      name: GMartinez-Sisti
+    - email: github@jkroepke.de
+      name: jkroepke
+    - email: scott@r6by.com
+      name: scottrigby
+    - email: miroslav.hadzhiev@gmail.com
+      name: Xtigyro
+    - email: quentin.bisson@gmail.com
+      name: QuentinBisson
+    name: kube-prometheus-stack
+    sources:
+    - https://github.com/prometheus-community/helm-charts
+    - https://github.com/prometheus-operator/kube-prometheus
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/kube-prometheus-stack-66.6.0/kube-prometheus-stack-66.6.0.tgz
+    version: 66.6.0
   logging-operator:
   - apiVersion: v2
     appVersion: 4.11.2
@@ -1156,4 +1226,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2024-12-14T12:45:33.156968338Z"
+generated: "2024-12-14T14:19:57.820408838Z"
