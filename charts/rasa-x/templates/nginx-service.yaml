@@ -1,0 +1,32 @@
+{{- if .Values.nginx.enabled }}
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: {{ include "rasa-x.fullname" . }}-nginx
+  labels:
+    {{ include "rasa-x.labels" . | nindent 4 }}
+    app.kubernetes.io/component: nginx
+{{- with .Values.nginx.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+{{- end }}
+spec:
+  ports:
+  - port: {{ .Values.nginx.service.port }}
+    targetPort: 8080
+    protocol: "TCP"
+    name: "http"
+    {{- if .Values.nginx.service.nodePort }}
+    nodePort: {{ .Values.nginx.service.nodePort }}
+    {{- end }}
+    {{- if .Values.nginx.service.externalIPs }}
+  externalIPs: {{ .Values.nginx.service.externalIPs | toYaml | nindent 2 }}
+    {{- end }}
+  type: {{ .Values.nginx.service.type }}
+    {{- if .Values.nginx.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{ .Values.nginx.service.loadBalancerSourceRanges | toYaml | nindent 2 }}
+    {{- end }}
+  selector:
+    {{- include "rasa-x.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: nginx
+{{- end }}

@@ -1,0 +1,100 @@
+apiVersion: v2
+name: cx
+description: Expertflow CX Solution
+home: https://expertflow.com
+icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+keywords:
+- Expertflow
+- C2C Communications
+dependencies:
+  - name: agent-manager
+    version: 1.0.0
+    condition: agent-manager.enabled
+    repository: file://charts/agent-manager
+  - name: bot-framework
+    version: 1.0.0
+    condition: bot-framework.enabled
+    repository: file://charts/bot-framework
+  - name: ccm
+    version: 1.0.0
+    condition: ccm.enabled
+    repository: file://charts/ccm
+  - name: cim-customer
+    version: 1.0.0
+    condition: cim-customer.enabled
+    repository: file://charts/cim-customer
+  - name: conversation-manager
+    version: 1.0.0
+    condition: conversation-manager.enabled
+    repository: file://charts/conversation-manager
+  - name: conversation-monitor
+    version: 1.0.0
+    condition: conversation-monitor.enabled
+    repository: file://charts/conversation-monitor
+  - name: customer-widget
+    version: 1.0.0
+    condition: customer-widget.enabled
+    repository: file://charts/customer-widget
+  - name: file-engine
+    version: 1.0.0
+    condition: file-engine.enabled
+    repository: file://charts/file-engine
+  - name: historical-reports
+    version: 1.0.0
+    condition: historical-reports.enabled
+    repository: file://charts/historical-reports
+  - name: license-manager
+    version: 1.0.0
+    condition: license-manager.enabled
+    repository: file://charts/license-manager
+  - name: realtime-reports
+    version: 1.0.0
+    condition: realtime-reports.enabled
+    repository: file://charts/realtime-reports
+  - name: routing-engine
+    version: 1.0.0
+    condition: routing-engine.enabled
+    repository: file://charts/routing-engine
+  - name: state-events-logger
+    version: 1.0.0
+    condition: state-events-logger.enabled
+    repository: file://charts/state-events-logger
+  - name: team-announcement
+    version: 1.0.0
+    condition: team-announcement.enabled
+    repository: file://charts/team-announcement
+  - name: unified-admin
+    version: 1.0.0
+    condition: unified-admin.enabled
+    repository: file://charts/unified-admin
+  - name: web-channel-manager
+    version: 1.0.0
+    condition: web-channel-manager.enabled
+    repository: file://charts/web-channel-manager
+# A chart can be either an 'application' or a 'debug' chart.
+
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+
+# Library charts provide useful utilities or functions for the chart developer. They're included as
+# a dependency of application charts to inject those utilities and functions into the rendering
+# pipeline. Library charts do not define any templates and therefore cannot be deployed.
+type: application
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: 1.0.20
+#  
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application. Versions are not expected to
+# follow Semantic Versioning. They should reflect the version the application is using.
+# It is recommended to use it with quotes.
+appVersion:  4.7.0
+maintainers:
+   - name: NMR Nasir Mehmood Rajput
+     email: nasir.mehmood@expertflow.com
+
+
+
+

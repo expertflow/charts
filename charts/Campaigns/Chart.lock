@@ -1,0 +1,9 @@
+dependencies:
+- name: campaigns-backend
+  repository: file://charts/campaigns-backend
+  version: 1.0.0
+- name: campaign-studio
+  repository: file://charts/campaign-studio
+  version: 1.0.0
+digest: sha256:3d96d9d92797a959cd3effe13b154ef9b1fd3526404bab6534db81b308fa261d
+generated: "2024-12-13T13:55:06.94085135Z"

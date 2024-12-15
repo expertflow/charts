@@ -1,0 +1,81 @@
+{{- if .Values.duckling.enabled }}
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: {{ .Release.Name }}-duckling
+  labels:
+    {{- include "rasa-x.labels" . | nindent 4 }}
+    app.kubernetes.io/component: duckling
+spec:
+  progressDeadlineSeconds: {{ .Values.global.progressDeadlineSeconds }}
+  replicas: {{ default 1 .Values.duckling.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "rasa-x.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: duckling
+  template:
+    metadata:
+      labels:
+        {{- include "rasa-x.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: duckling
+        {{- if .Values.duckling.podLabels }}
+{{ toYaml .Values.duckling.podLabels | indent 8 }}
+        {{- end }}
+    spec:
+      automountServiceAccountToken: {{ .Values.duckling.automountServiceAccountToken }}
+      {{ include "rasa-x.spec" . }}
+      {{- if .Values.duckling.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.duckling.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.duckling.tolerations }}
+      tolerations:
+{{ toYaml .Values.duckling.tolerations | indent 6 }}
+      {{- end }}
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.duckling.name }}:{{ .Values.duckling.tag }}"
+        imagePullPolicy: {{ .Values.images.pullPolicy }}
+        {{- if .Values.duckling.command }}
+        command:
+          {{- toYaml .Values.duckling.command | nindent 10 }}
+        {{- end }}
+        {{- if .Values.duckling.args }}
+        args:
+          {{- toYaml .Values.duckling.args | nindent 10 }}
+        {{- end }}
+        env:
+        {{- include "duckling.extra.envs" $ | nindent 8 }}
+        ports:
+        - name: "http"
+          containerPort: {{ default 8000 .Values.duckling.port }}
+          protocol: "TCP"
+        {{- if or .Values.duckling.livenessProbe.enabled (not (hasKey .Values.duckling.livenessProbe "enabled")) }}
+        livenessProbe:
+          httpGet:
+            path: "/"
+            port: "http"
+            scheme: {{ default "HTTP" .Values.duckling.livenessProbe.scheme }}
+          initialDelaySeconds: {{ default 10 .Values.duckling.livenessProbe.initialProbeDelay }}
+        {{- end }}
+        {{- if or .Values.duckling.readinessProbe.enabled (not (hasKey .Values.duckling.readinessProbe "enabled")) }}
+        readinessProbe:
+          httpGet:
+            path: "/"
+            port: "http"
+            scheme: {{ default "HTTP" .Values.duckling.readinessProbe.scheme }}
+          initialDelaySeconds: {{ default 10 .Values.duckling.readinessProbe.initialProbeDelay }}
+        {{- end }}
+        {{- with .Values.duckling.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{ if .Values.duckling.extraVolumeMounts }}
+        volumeMounts:
+{{ toYaml .Values.duckling.extraVolumeMounts | indent 8 }}
+        {{- end }}
+      {{ if .Values.duckling.extraVolumes }}
+      volumes:
+{{ toYaml .Values.duckling.extraVolumes | indent 6 }}
+      {{- end }}
+{{- end }}

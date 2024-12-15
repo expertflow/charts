@@ -1,0 +1,108 @@
+{{- if .Values.reportingConnectorCronJob.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "common.names.fullname" . }}-cron
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if or .Values.reportingConnectorCronJob.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.reportingConnectorCronJob.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.reportingConnectorCronJob.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  schedule: {{ quote .Values.reportingConnectorCronJob.schedule }}
+  concurrencyPolicy: {{ .Values.reportingConnectorCronJob.concurrencyPolicy }}
+  failedJobsHistoryLimit: {{ .Values.reportingConnectorCronJob.failedJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ .Values.reportingConnectorCronJob.successfulJobsHistoryLimit }}
+  {{- if .Values.reportingConnectorCronJob.startingDeadlineSeconds }}
+  startingDeadlineSeconds: {{ .Values.reportingConnectorCronJob.startingDeadlineSeconds }}
+  {{- end }}
+  jobTemplate:
+    spec:
+      {{- if .Values.reportingConnectorCronJob.backoffLimit }}
+      backoffLimit: {{ .Values.reportingConnectorCronJob.backoffLimit }}
+      {{- end }}
+      {{- if .Values.reportingConnectorCronJob.ttlSecondsAfterFinished }}
+      ttlSecondsAfterFinished: {{ .Values.reportingConnectorCronJob.ttlSecondsAfterFinished }}
+      {{- end }}
+      template:
+        metadata:
+          labels: {{- include "common.labels.standard" . | nindent 12 }}
+            {{- if .Values.reportingConnectorCronJob.labels }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.reportingConnectorCronJob.labels "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.commonLabels }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.reportingConnectorCronJob.annotations .Values.commonAnnotations }}
+          annotations:
+            {{- if .Values.reportingConnectorCronJob.annotations }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.reportingConnectorCronJob.annotations "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.commonAnnotations }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+        spec:
+          imagePullSecrets:
+             - name: {{ .Values.reportingConnectorCronJob.imagePullSecret }}
+          containers:
+          - name: {{ include "common.names.fullname" . }}-cron
+            image: {{ .Values.reportingConnectorCronJob.image }}
+            imagePullPolicy: IfNotPresent
+            env:
+            {{- if .Values.reportingConnectorCronJob.extraEnvVars }}
+               {{- include "common.tplvalues.render" (dict "value" .Values.reportingConnectorCronJob.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+                - name: MONGODB_ENABLE_SSL
+                  valueFrom:
+                    configMapKeyRef:
+                      key: MONGODB_ENABLE_SSL
+                      name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+                - name: MONGODB_CLIENT_CERT
+                  valueFrom:
+                    configMapKeyRef:
+                      key: MONGODB_CLIENT_CERT
+                      name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+                - name: MONGODB_CA_CERT
+                  valueFrom:
+                    configMapKeyRef:
+                      key: MONGODB_CA_CERT
+                      name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+                - name: TRUST_STORE_PASSWORD
+                  valueFrom:
+                    configMapKeyRef:
+                      key: TRUST_STORE_PASSWORD
+                      name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+                - name: KEY_STORE_PASSWORD
+                  valueFrom:
+                    configMapKeyRef:
+                      key: KEY_STORE_PASSWORD
+                      name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+            {{- if .Values.reportingConnectorCronJob.command }}
+            command: {{- include "common.tplvalues.render" (dict "value" .Values.reportingConnectorCronJob.command "context" $) | nindent 14 }}
+            {{- end }}
+            {{- if .Values.reportingConnectorCronJob.resources }}
+            resources: {{- include "common.tplvalues.render" (dict "value" .Values.reportingConnectorCronJob.resources "context" $) | nindent 14 }}
+            {{- else if ne .Values.reportingConnectorCronJob.resourcesPreset "none" }}
+            resources: {{- include "common.resources.preset" (dict "type" .Values.reportingConnectorCronJob.resourcesPreset) | nindent 14 }}
+            {{- end }}
+            {{- if .Values.reportingConnectorCronJob.containerSecurityContext.enabled }}
+            securityContext:
+              {{- include "common.tplvalues.render" ( dict "value" ( omit .Values.reportingConnectorCronJob.containerSecurityContext "enabled" ) "context" $) | nindent 14 }}
+            {{- end }}
+            {{- if .Values.reportingConnectorCronJob.extraVolumeMounts }}
+            volumeMounts:
+              {{- include "common.tplvalues.render" ( dict "value" .Values.reportingConnectorCronJob.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+          restartPolicy: {{ .Values.reportingConnectorCronJob.restartPolicy }}
+          volumes:
+          {{- if .Values.reportingConnectorCronJob.extraVolumes }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.reportingConnectorCronJob.extraVolumes "context" $) | nindent 12 }}
+          {{- end }}
+{{- end }}

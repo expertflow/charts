@@ -1,0 +1,100 @@
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: {{ template "rasa-x.rasa.configuration-files" . }}
+  labels:
+    {{ include "rasa-x.labels" . | nindent 4 }}
+data:
+  rasa-credentials: |
+    rasa:
+      url: {{ .Values.rasax.scheme }}://{{ include "rasa-x.host" . }}.{{ .Release.Namespace }}.svc:{{ .Values.rasax.port }}/api
+    {{- with .Values.rasa.additionalChannelCredentials }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
+  rasa-endpoints: |
+    models:
+      url: ${RASA_MODEL_SERVER}
+      token: ${RASA_X_TOKEN}
+      wait_time_between_pulls: 10
+    tracker_store:
+      type: sql
+      dialect: "postgresql"
+      url: {{ template "rasa-x.psql.host" . }}
+      port: {{ template "rasa-x.psql.port" . }}
+      username: {{ template "rasa-x.psql.username" . }}
+      password: ${DB_PASSWORD}
+      db: ${DB_DATABASE}
+    {{- if .Values.rasa.trackerStore.query }}
+      query:
+    {{- toYaml .Values.rasa.trackerStore.query | nindent 8 }}
+    {{- end }}
+      {{- if .Values.rasa.useLoginDatabase }}
+      login_db: {{ template "rasa-x.psql.database" . }}
+      {{- end }}
+    {{- if $.Values.rabbitmq.enabled }}
+    event_broker:
+      type: "pika"
+      url: "{{ template "rasa-x.rabbitmq.host" . }}"
+      username: "{{ .Values.rabbitmq.auth.username }}"
+      password: ${RABBITMQ_PASSWORD}
+      port: {{ default 5672 .Values.rabbitmq.service.port }}
+      {{ if or (regexMatch ".*(a|rc)[0-9]+" .Values.rasa.version) (regexMatch "2.*[0-9]+-full" .Values.rasa.version) -}}
+      queues:
+      - ${RABBITMQ_QUEUE}
+      {{- include  "rasa.additionalRabbitQueues" $ | nindent 6 }}
+      {{- else -}}
+      {{ if semverCompare ">= 1.9.0" .Values.rasa.version -}}
+      queues:
+      - ${RABBITMQ_QUEUE}
+      {{- include  "rasa.additionalRabbitQueues" $ | nindent 6 }}
+      {{- else -}}
+      queue: ${RABBITMQ_QUEUE}
+      {{- end }}
+      {{- end }}
+    {{- end }}
+    action_endpoint:
+      url: {{ if .Values.app.existingUrl }}"{{ .Values.app.existingUrl }}"{{ else }}"{{ .Values.app.scheme }}://{{ include "rasa-x.fullname" . }}-app.{{ .Release.Namespace }}.svc:{{ template "rasa-x.custom-actions.port" . }}{{ .Values.app.endpoints.actionEndpointUrl }}"{{ end }}
+      token:  ""
+    {{- if $.Values.redis.install }}
+    lock_store:
+      {{- if $.Values.rasa.rasaPlus.enabled }}
+      type: "rasa_plus.components.concurrent_lock_store.ConcurrentRedisLockStore"
+      host: {{ template "rasa-x.redis.host" . }}
+      {{- else }}
+      type: "redis"
+      url: {{ template "rasa-x.redis.host" . }}
+      {{- end }}
+      port: {{ default 6379 .Values.redis.redisPort }}
+      password: ${REDIS_PASSWORD}
+      db: {{ default "1" .Values.rasa.lockStoreDatabase }}
+    cache:
+      type: "redis"
+      url: {{ template "rasa-x.redis.host" . }}
+      port: {{ default 6379 .Values.redis.redisPort }}
+      password: ${REDIS_PASSWORD}
+      db: {{ default "2" .Values.rasa.cacheDatabase }}
+      key_prefix: "rasax_cache"
+    {{- end }}
+    {{- if $.Values.redis.external }}
+    lock_store:
+      {{- if $.Values.rasa.rasaPlus.enabled }}
+      type: "rasa_plus.components.concurrent_lock_store.ConcurrentRedisLockStore"
+      host: {{ .Values.redis.existingHost }}
+      {{- else }}
+      type: "redis"
+      url: {{ .Values.redis.existingHost }}
+      {{- end }}
+      port: {{ default 6379 .Values.redis.redisPort }}
+      password: ${REDIS_PASSWORD}
+      db: {{ default "1" .Values.rasa.lockStoreDatabase }}
+    cache:
+      type: "redis"
+      url: {{ .Values.redis.existingHost }}
+      port: {{ default 6379 .Values.redis.redisPort }}
+      password: ${REDIS_PASSWORD}
+      db: {{ default "2" .Values.rasa.cacheDatabase }}
+      key_prefix: "rasax_cache"
+    {{- end }}
+    {{- with .Values.rasa.additionalEndpoints }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
