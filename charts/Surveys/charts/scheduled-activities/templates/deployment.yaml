@@ -108,11 +108,11 @@ spec:
           {{- end }}
           {{- if .Values.efConnectionVars }}
             - configMapRef:
-                 name: {{ .Release.Name }}-efconnections-cm
+                 name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
           {{- end }}
           {{- if .Values.efEnvironmentVars }}
             - configMapRef:
-                 name: {{ .Release.Name }}-efenvironment-cm
+                 name: {{ .Values.global.efCxReleaseName }}-efenvironment-cm
           {{- end }}
           {{- if .Values.containerPorts }}
           ports:
