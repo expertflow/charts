@@ -944,6 +944,8 @@ routing-engine:
       - name: "http-ro-en-8081"
         containerPort: 8081
    extraEnvVars:
+      - name: IS_QUEUE_PRIORITY_ENABLED
+        value: "false"
       - name: TZ
         value: '{{ .Values.global.efCommonVars_TZ }}'
       - name: LOGGING_CONFIG
