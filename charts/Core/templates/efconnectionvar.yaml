@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ .Release.Name }}-efconnections-cm
-  namespace: {{ .Release.Namespace }}
-data:
-  {{- include "common.tplvalues.render" (dict "value" .Values.efConnectionVars  "context" $) | nindent 4 }}
