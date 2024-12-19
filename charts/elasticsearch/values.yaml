@@ -2803,7 +2803,7 @@ kibana:
          enabled: true
          createSystemUser: true
          kibanaPassword: s3cr3tPasW0rD
-         elasticsearchPasswordSecret: "{{ .Release.Name }}-elasticsearch"
+         elasticsearchPasswordSecret: "{{ .Release.Name }}"
        tls:
          enabled: true
          existingSecret: "{{ .Release.Name }}-elasticsearch-master-crt"
