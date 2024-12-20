@@ -479,7 +479,7 @@ ingress:
 master:
   ## @param master.masterOnly Deploy the Elasticsearch master-elegible nodes as master-only nodes. Recommended for high-demand deployments.
   ## If you are
-  masterOnly: true
+  masterOnly: false
   ## @param master.replicaCount Number of master-elegible replicas to deploy
   ##
   replicaCount: 1
@@ -2790,6 +2790,7 @@ kibana:
      server:
        basePath: /ef-kibana
        rewriteBasePath: true
+       publicBaseUrl: "https://{{ .Values.global.ingressRouter }}/ef-kibana"
    extraConfiguration:
      xpack.encryptedSavedObjects.encryptionKey: f9cd92d3834129433fb0404740b5e89c
      xpack.reporting.encryptionKey: e3de4fcf3fb5e6f973ce024121ead576
@@ -2813,12 +2814,12 @@ kibana:
      enabled: true
      pathType: ImplementationSpecific
      hostname: '{{ .Values.global.ingressRouter }}'
-     path: /ef-kibana(/|$)(.*)
+     path: /ef-kibana
      annotations:
         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-        nginx.ingress.kubernetes.io/use-regex: "true"
+        #nginx.ingress.kubernetes.io/rewrite-target: /$2
+        #nginx.ingress.kubernetes.io/use-regex: "true"
      tls: true
      selfSigned: false
      extraTls:

@@ -23,7 +23,7 @@ data:
     server.basePath: {{ .Values.configuration.server.basePath | quote }}
     {{- end }}
     {{- if or .Values.configuration.server.publicBaseUrl .Values.ingress.enabled }}
-    server.publicBaseUrl: {{ default .Values.ingress.hostname .Values.configuration.server.publicBaseUrl }}
+    server.publicBaseUrl: {{ include "common.tplvalues.render" ( dict "value"  .Values.configuration.server.publicBaseUrl  "context" $ ) }}
     {{- end }}
     server.rewriteBasePath: {{ .Values.configuration.server.rewriteBasePath }}
     {{- if .Values.extraConfiguration }}
