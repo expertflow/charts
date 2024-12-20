@@ -184,8 +184,9 @@ initImage:
   pullPolicy: IfNotPresent
 
 service:
-  type: ClusterIP
+  type: NodePort
   port: 8088
+  nodePort: 30808
   annotations: {}
     # cloud.google.com/load-balancer-type: "Internal"
   loadBalancerIP: null
@@ -193,22 +194,27 @@ service:
 ingress:
   enabled: false
   # ingressClassName: nginx
-  annotations: {}
-    # kubernetes.io/tls-acme: "true"
-    ## Extend timeout to allow long running queries.
-    # nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
-    # nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
-    # nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
-  path: /
-    # nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+  annotations: 
+    nginx.ingress.kubernetes.io/client-body-buffer-size: 10M
+    nginx.ingress.kubernetes.io/proxy-body-size: 10M
+    nginx.ingress.kubernetes.io/proxy-buffering: "on"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "10M"
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "3000"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+     more_set_headers "X-Forwarded-Proto: https";
   path: /
   pathType: ImplementationSpecific
   hosts:
-    - chart-example.local
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+    - devops.ef.com
+  tls: 
+    - secretName: ef-ingress-tls-secret
+      hosts:
+        - devops.ef.com
 
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious

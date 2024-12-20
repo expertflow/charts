@@ -34,6 +34,7 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+      nodePort: {{ .Values.service.nodePort }}
   selector:
     app: {{ template "superset.name" . }}
     release: {{ .Release.Name }}
