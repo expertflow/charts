@@ -1,6 +1,6 @@
 apiVersion: v2
-name: web-channels
-description: Expertflow CX Solution Web Channels
+name: channels
+description: Expertflow CX Solution Channels
 home: https://expertflow.com
 icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
 keywords:
