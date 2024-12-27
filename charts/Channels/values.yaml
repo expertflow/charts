@@ -67,7 +67,7 @@ connect360:
    replicaCount: 1
    image:
       repository: cim/360-connector
-      tag: 4.6_f-CIM-26684
+      tag: 4.5.5_f-CIM-14675
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -116,7 +116,7 @@ facebook-connector:
    replicaCount: 1
    image:       
       repository: cim/facebook-connector
-      tag: 4.6_f-CIM-26684
+      tag: 4.5.5_f-CIM-14675    
    efConnectionVars: false
    efEnvironmentVars: true 
    containerPorts:
@@ -163,7 +163,7 @@ instagram-connector:
    replicaCount: 1
    image:       
       repository: cim/instagram-connector
-      tag: 4.6_f-CIM-26684
+      tag: 4.5.5_f-CIM-14675    
    efConnectionVars: false
    efEnvironmentVars: false 
    containerPorts:
@@ -210,7 +210,7 @@ smpp-connector:
    replicaCount: 1
    image:       
       repository: cti/hc_smpp_connector
-      tag: 4.6_f-CIM-26684
+      tag: 4.5.5_f-CIM-14675    
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -257,7 +257,7 @@ telegram-connector:
    replicaCount: 1
    image:       
       repository: cim/telegram-connector
-      tag: 4.6_f-CIM-26684
+      tag: 4.5.5_f-CIM-14675    
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -305,7 +305,7 @@ twilio-connector:
    replicaCount: 1
    image:       
       repository: cim/twilio-connector
-      tag: 4.6_f-CIM-26684
+      tag: 4.5.5_f-CIM-14675    
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -351,7 +351,7 @@ twitter-connector:
    replicaCount: 1
    image:       
       repository: cim/twitter-connector
-      tag: 4.6_f-CIM-26684
+      tag: 4.5.5_f-CIM-14675    
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -387,7 +387,7 @@ viber-connector:
    replicaCount: 1
    image:       
       repository: cim/viber-connector
-      tag: 4.6_f-CIM-26684
+      tag: 4.5.5_f-CIM-14675    
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
