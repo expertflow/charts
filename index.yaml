@@ -1558,6 +1558,25 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/traefik-16.0.0-v1/traefik-16.0.0-v1.tgz
     version: 16.0.0-v1
+  transflux:
+  - apiVersion: v2
+    appVersion: 4.6.0
+    created: "2024-12-27T07:53:33.851051611Z"
+    description: Expertflow CX Solution
+    digest: b07670667182b3ed69902e70c337e59f895e772f752513ec8698c366c09698f7
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: transflux
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/transflux-1.0.14/transflux-1.0.14.tgz
+    version: 1.0.14
   web-channels:
   - apiVersion: v2
     appVersion: 4.7.0
@@ -1661,4 +1680,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2024-12-23T12:57:01.060662677Z"
+generated: "2024-12-27T07:53:33.851127522Z"
