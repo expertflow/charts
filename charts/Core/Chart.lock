@@ -48,4 +48,4 @@ dependencies:
   repository: file://charts/web-channel-manager
   version: 1.0.0
 digest: sha256:1405133dfc2c4b857eee2053ca4da51055170f7481b2b34feb5f844b5f7a9871
-generated: "2024-12-15T10:22:42.558160109Z"
+generated: "2024-12-27T15:52:54.874609+05:00"
