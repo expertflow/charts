@@ -393,7 +393,9 @@ ingress:
   ##
   annotations: 
      #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+     nginx.ingress.kubernetes.io/proxy-ssl-verify: "false"
      nginx.ingress.kubernetes.io/rewrite-target: /$2
      nginx.ingress.kubernetes.io/use-regex: "true"
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
