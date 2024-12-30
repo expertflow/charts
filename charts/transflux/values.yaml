@@ -138,9 +138,11 @@ extraEnvVars:
   - name: AIRFLOW_ADMIN_LASTNAME
     value: User
   - name: MYSQL_HOST
-    value:  "192.168.1.182"
+    value: "192.168.1.182"
+  - name: MYSQL_PORT
+    value: "3306" 
   - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
-    value: mysql+pymysql://${AIRFLOW_DB_USER}:${MYSQL_ROOT_PASSWORD}@192.168.1.182:3306/ef_4_5_2?ssl_ca=${AIRFLOW__CORE__MYSQL_SSL_CA}&ssl_cert=${AIRFLOW__CORE__MYSQL_SSL_CERT}&ssl_key=${AIRFLOW__CORE__MYSQL_SSL_KEY}&ssl_verify_cert=false
+    value: mysql+pymysql://${AIRFLOW_DB_USER}:${MYSQL_ROOT_PASSWORD}@${MYSQL_HOST}:${MYSQL_PORT}/${AIRFLOW_DB_NAME}?ssl_ca=${AIRFLOW__CORE__MYSQL_SSL_CA}&ssl_cert=${AIRFLOW__CORE__MYSQL_SSL_CERT}&ssl_key=${AIRFLOW__CORE__MYSQL_SSL_KEY}&ssl_verify_cert=false
   - name: AIRFLOW__CORE__EXECUTOR
     value: LocalExecutor
   - name: AIRFLOW__CORE__LOAD_EXAMPLES
@@ -152,17 +154,17 @@ extraEnvVars:
   - name: CONFIG_ROOT
     value: /transflux/config/
   - name: AIRFLOW__CORE__MYSQL_SSL_CA
-    value: /transflux/config/certificates/mysql_certs/ca.pem
+    value: /transflux/certificates/mysql_certs/ca.pem
   - name: AIRFLOW__CORE__MYSQL_SSL_CERT
-    value: /transflux/config/certificates/mysql_certs/client-cert.pem
+    value: /transflux/certificates/mysql_certs/client-cert.pem
   - name: AIRFLOW__CORE__MYSQL_SSL_KEY
-    value: /transflux/config/certificates/mysql_certs/client-key.pem
+    value: /transflux/certificates/mysql_certs/client-key.pem
   - name: MONGODB_AUTHENTICATION_DATABASE
     value: admin
   - name: MONGODB_CERTIFICATE_PATH
-    value:  https_things/cert.pem
-  - name:  MONGODB_ENABLE_SSL
-    value:  "true"
+    value: https_things/cert.pem
+  - name: MONGODB_ENABLE_SSL
+    value: "true"
   - name: MONGODB_HOST
     value: mongo-mongodb.ef-external.svc.cluster.local
   - name: MONGODB_KEEP_ALIVE_TIME
@@ -173,12 +175,12 @@ extraEnvVars:
     value: "27017"
   - name: MONGODB_RECONNECT_INTERVAL
     value: "500"
-  - name:  MONGODB_USERNAME
+  - name: MONGODB_USERNAME
     value: root
   - name: MONGODB_CLIENT_CERT
-    value: /mongo/client-pem
+    value: /transflux/certificates/mongo_certs/client-pem
   - name: MONGODB_CA_CERT
-    value: /mongo/mongodb-ca-cert
+    value: /transflux/certificates/mongo_certs/mongodb-ca-cert
 
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
@@ -465,17 +467,27 @@ autoscaling:
 extraVolumes: 
    - name: airflow-logs
      emptyDir: {}
-   - name: transflux-config
-     hostPath:
-       path: /var/transflux/
-       type: Directory
-
+   - name: ef-transflux-config-vol
+     configMap:
+       name: ef-transflux-config-cm
+   - name: ef-transflux-mysql-cert-vol
+     secret:
+       secretName: ef-transflux-mysql-certs-secret
+   - name: ef-transflux-mongo-cert-vol
+     secret:
+       secretName: mongo-mongodb-ca
 
 ## @param extraVolumeMounts Array to add extra mount
 ##
 extraVolumeMounts: 
-   - name: transflux-config
-     mountPath: /transflux/
+   - name: airflow-logs
+     mountPath: /opt/airflow/logs
+   - name: ef-transflux-mysql-cert-vol
+     mountPath: /transflux/certificates/mysql_certs
+   - name: ef-transflux-mongo-cert-vol
+     mountPath: /transflux/certificates/mongo_certs
+   - name: ef-transflux-config-vol
+     mountPath: /transflux/config
 
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
