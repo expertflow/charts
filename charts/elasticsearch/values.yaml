@@ -15,7 +15,7 @@
 ## @param global.kibanaEnabled Whether or not to enable Kibana
 ##
 global:
-  ingressRouter: "devops.ef.com"
+  ingressRouter: "devops211.ef.com"
   ingressCertName: "ef-ingress-tls-secret"
   ingressClassName: "nginx"
   imageRegistry: ""
@@ -311,7 +311,7 @@ security:
 service:
   ## @param service.type Elasticsearch service type
   ##
-  type: ClusterIP
+  type: NodePort
   ## @param service.ports.restAPI Elasticsearch service REST API port
   ## @param service.ports.transport Elasticsearch service transport port
   ##
@@ -324,8 +324,8 @@ service:
   ## NOTE: choose port between <30000-32767>
   ##
   nodePorts:
-    restAPI: ""
-    transport: ""
+    restAPI: "30920"
+    transport: "30930"
   ## @param service.clusterIP Elasticsearch service Cluster IP
   ## e.g.:
   ## clusterIP: None
@@ -382,7 +382,7 @@ ingress:
   ## @param ingress.path Default path for the ingress record
   ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
   ##
-  path: /ef-elastic
+  path: /ef-elastic(/|$)(.*)
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
@@ -391,13 +391,14 @@ ingress:
   ##   kubernetes.io/ingress.class: nginx
   ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
-  annotations: 
-     #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
-     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-     nginx.ingress.kubernetes.io/proxy-ssl-verify: "false"
-     nginx.ingress.kubernetes.io/rewrite-target: /$2
-     nginx.ingress.kubernetes.io/use-regex: "true"
+  annotations:
+      #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+      nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-ssl-verify: "false"
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+      nginx.ingress.kubernetes.io/use-regex: "true"
+
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
   ## You can:
@@ -439,10 +440,9 @@ ingress:
   ##   secretName: elasticsearch.local-tls
   ##
   extraTls: 
-   - hosts:
-     - "{{ .Values.global.ingressRouter }}"
-     secretName: "{{ .Values.global.ingressCertName }}"
-
+    - hosts:
+      - "{{ .Values.global.ingressRouter }}"
+      secretName: "{{ .Values.global.ingressCertName }}"
   ## @param ingress.secrets Custom TLS certificates as secrets
   ## NOTE: 'key' and 'certificate' are expected in PEM format
   ## NOTE: 'name' should line up with a 'secretName' set further up
@@ -527,15 +527,21 @@ master:
   resourcesPreset: "none"
   ## @param master.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
-  resources:
-     requests:
-       cpu: 1
-       memory: 1024Mi
-     limits:
-       cpu: 1
-       memory: 4096Mi
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ##
-  ##resources: {}
+  resources: 
+    requests:
+      cpu: 1
+      memory: 1024Mi
+    limits:
+      cpu: 1
+      memory: 4096Mi
   ## @param master.heapSize Elasticsearch master-eligible node heap size.
   ## Note: The recommended heapSize is half of the container's memory.
   ## If omitted, it will be automatically set.
@@ -1660,7 +1666,7 @@ ingest:
   enabled: false
   ## @param ingest.replicaCount Number of ingest-only replicas to deploy
   ##
-  replicaCount: 2
+  replicaCount: 0
   ## @param ingest.extraRoles Append extra roles to the node role
   ##
   extraRoles: []
@@ -2790,6 +2796,7 @@ kibana:
  #  plugins[1]: https://github.com/pjhampton/kibana-prometheus-exporter/releases/download/8.7.1/kibanaPrometheusExporter-8.7.1.zip
    configuration:
      server:
+       host: "0.0.0.0"
        basePath: /ef-kibana
        rewriteBasePath: true
        publicBaseUrl: "https://{{ .Values.global.ingressRouter }}/ef-kibana"
@@ -2797,6 +2804,13 @@ kibana:
      xpack.encryptedSavedObjects.encryptionKey: f9cd92d3834129433fb0404740b5e89c
      xpack.reporting.encryptionKey: e3de4fcf3fb5e6f973ce024121ead576
      xpack.security.encryptionKey: 4afebd157537e0f1b2c0b8deddff6b68
+   resources:
+     requests:
+       cpu: 1
+       memory: 1024Mi
+     limits:
+       cpu: 1
+       memory: 2048Mi
    elasticsearch:
      hosts:
        - '{{ include "elasticsearch.service.name" . }}'
@@ -2829,4 +2843,3 @@ kibana:
             - '{{ .Values.global.ingressRouter }}'
           secretName: '{{ .Values.global.ingressCertName }}'
      ingressClassName: '{{ .Values.global.ingressClassName }}'
-
