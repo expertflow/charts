@@ -2,7 +2,7 @@ name: Release Charts
 on:
   push:
     branches:
-      - main
+      - develop
     paths:
       - 'charts/**'
 jobs:
