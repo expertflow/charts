@@ -416,6 +416,57 @@ entries:
     - https://github.com/expertflow/charts/releases/download/channels-4.7.0/channels-4.7.0.tgz
     version: 4.7.0
   - apiVersion: v2
+    appVersion: 4.7.0
+    created: "2025-01-06T11:41:47.495073998Z"
+    dependencies:
+    - condition: connect360.enabled
+      name: connect360
+      repository: file://charts/connect360
+      version: 1.0.0
+    - condition: facebook-connector.enabled
+      name: facebook-connector
+      repository: file://charts/facebook-connector
+      version: 1.0.0
+    - condition: instagram-connector.enabled
+      name: instagram-connector
+      repository: file://charts/instagram-connector
+      version: 1.0.0
+    - condition: smpp-connector.enabled
+      name: smpp-connector
+      repository: file://charts/smpp-connector
+      version: 1.0.0
+    - condition: telegram-connector.enabled
+      name: telegram-connector
+      repository: file://charts/telegram-connector
+      version: 1.0.0
+    - condition: twilio-connector.enabled
+      name: twilio-connector
+      repository: file://charts/twilio-connector
+      version: 1.0.0
+    - condition: twitter-connector.enabled
+      name: twitter-connector
+      repository: file://charts/twitter-connector
+      version: 1.0.0
+    - condition: viber-connector.enabled
+      name: viber-connector
+      repository: file://charts/viber-connector
+      version: 1.0.0
+    description: Expertflow CX Solution Channels
+    digest: ad4740bbbd8b35a9c4791c8883e8a0ca3cc2057b3c08f71111149d91cf3bb8ce
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: channels
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/channels-4.7.0-alpha/channels-4.7.0-alpha.tgz
+    version: 4.7.0-alpha
+  - apiVersion: v2
     appVersion: 4.6.0
     created: "2024-12-27T12:39:13.303133329Z"
     dependencies:
@@ -485,6 +536,24 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/cisco-scheduler-4.7.0/cisco-scheduler-4.7.0.tgz
     version: 4.7.0
+  - apiVersion: v2
+    appVersion: 4.7.0
+    created: "2025-01-06T11:41:47.676542016Z"
+    description: Expertflow CX Solution Cisco Integrations
+    digest: 206d06a58346187a8ed0a6a72e2777371342ac3c012b61c12f86189e37028347
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: cisco-scheduler
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/cisco-scheduler-4.7.0-alpha/cisco-scheduler-4.7.0-alpha.tgz
+    version: 4.7.0-alpha
   - apiVersion: v2
     appVersion: 4.6.0
     created: "2024-12-27T12:23:57.539863854Z"
@@ -623,6 +692,89 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/cx-4.7.0/cx-4.7.0.tgz
     version: 4.7.0
+  - apiVersion: v2
+    appVersion: 4.7.0
+    created: "2025-01-06T11:41:47.959410878Z"
+    dependencies:
+    - condition: agent-manager.enabled
+      name: agent-manager
+      repository: file://charts/agent-manager
+      version: 1.0.0
+    - condition: bot-framework.enabled
+      name: bot-framework
+      repository: file://charts/bot-framework
+      version: 1.0.0
+    - condition: ccm.enabled
+      name: ccm
+      repository: file://charts/ccm
+      version: 1.0.0
+    - condition: cim-customer.enabled
+      name: cim-customer
+      repository: file://charts/cim-customer
+      version: 1.0.0
+    - condition: conversation-manager.enabled
+      name: conversation-manager
+      repository: file://charts/conversation-manager
+      version: 1.0.0
+    - condition: conversation-monitor.enabled
+      name: conversation-monitor
+      repository: file://charts/conversation-monitor
+      version: 1.0.0
+    - condition: customer-widget.enabled
+      name: customer-widget
+      repository: file://charts/customer-widget
+      version: 1.0.0
+    - condition: file-engine.enabled
+      name: file-engine
+      repository: file://charts/file-engine
+      version: 1.0.0
+    - condition: historical-reports.enabled
+      name: historical-reports
+      repository: file://charts/historical-reports
+      version: 1.0.0
+    - condition: license-manager.enabled
+      name: license-manager
+      repository: file://charts/license-manager
+      version: 1.0.0
+    - condition: realtime-reports.enabled
+      name: realtime-reports
+      repository: file://charts/realtime-reports
+      version: 1.0.0
+    - condition: routing-engine.enabled
+      name: routing-engine
+      repository: file://charts/routing-engine
+      version: 1.0.0
+    - condition: state-events-logger.enabled
+      name: state-events-logger
+      repository: file://charts/state-events-logger
+      version: 1.0.0
+    - condition: team-announcement.enabled
+      name: team-announcement
+      repository: file://charts/team-announcement
+      version: 1.0.0
+    - condition: unified-admin.enabled
+      name: unified-admin
+      repository: file://charts/unified-admin
+      version: 1.0.0
+    - condition: web-channel-manager.enabled
+      name: web-channel-manager
+      repository: file://charts/web-channel-manager
+      version: 1.0.0
+    description: Expertflow CX Solution
+    digest: 2cece96426ae69cb2805813ca44bc2406b9f2de769c4daddf79ac4ed64ee6130
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: cx
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/cx-4.7.0-alpha/cx-4.7.0-alpha.tgz
+    version: 4.7.0-alpha
   - apiVersion: v2
     appVersion: 4.6.0
     created: "2024-12-27T12:23:57.747087621Z"
@@ -1276,6 +1428,33 @@ entries:
     - https://github.com/expertflow/charts/releases/download/eleveo-4.7.0/eleveo-4.7.0.tgz
     version: 4.7.0
   - apiVersion: v2
+    appVersion: 4.7.0
+    created: "2025-01-06T11:41:48.160808809Z"
+    dependencies:
+    - condition: eleveo-api.enabled
+      name: eleveo-api
+      repository: file://charts/eleveo-api
+      version: 1.0.0
+    - condition: eleveo-runner.enabled
+      name: eleveo-runner
+      repository: file://charts/eleveo-runner
+      version: 1.0.0
+    description: Expertflow CX Solution For Eleveo
+    digest: 8f598e2a276cec6ca8fb564920c65cf900447a9dfca9e99d641ea5f104b97a78
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: eleveo
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/eleveo-4.7.0-alpha/eleveo-4.7.0-alpha.tgz
+    version: 4.7.0-alpha
+  - apiVersion: v2
     appVersion: 4.6.0
     created: "2024-12-27T12:23:57.860665454Z"
     dependencies:
@@ -1721,6 +1900,41 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/mongodb-13.1.7-v1/mongodb-13.1.7-v1.tgz
     version: 13.1.7-v1
+  mongodb-ha:
+  - annotations:
+      category: Database
+    apiVersion: v2
+    appVersion: 6.0.2
+    created: "2025-01-06T11:41:48.329890194Z"
+    dependencies:
+    - name: common
+      repository: file://charts/common
+      tags:
+      - bitnami-common
+      version: 2.0.3
+    description: MongoDB(R) is a relational open source NoSQL database. Easy to use,
+      it stores data in JSON-like documents. Automated scalability and high-performance.
+      Ideal for developing cloud native applications.
+    digest: 172c69771fdc22c7a50ec6b1ac85af193a773a11c9825d87676b6bb94e16301c
+    home: https://github.com/bitnami/charts/tree/master/bitnami/mongodb
+    icon: https://bitnami.com/assets/stacks/mongodb/img/mongodb-stack-220x234.png
+    keywords:
+    - mongodb
+    - database
+    - nosql
+    - cluster
+    - replicaset
+    - replication
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: mongodb-ha
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/mongodb
+    - https://mongodb.org
+    urls:
+    - https://github.com/expertflow/charts/releases/download/mongodb-ha-13.1.8/mongodb-ha-13.1.8.tgz
+    version: 13.1.8
   opensearch:
   - annotations:
       category: Analytics
@@ -1976,6 +2190,24 @@ entries:
     - https://github.com/expertflow/charts/releases/download/reporting-4.7.0/reporting-4.7.0.tgz
     version: 4.7.0
   - apiVersion: v2
+    appVersion: 4.7.0
+    created: "2025-01-06T11:41:48.78003414Z"
+    description: Expertflow CX Solution Reporting Synchronizer
+    digest: 4ce7eafda4ad36c922122f58d7fd4f0d87460f98fd3ef3b513351a2737c943d3
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: reporting
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/reporting-4.7.0-alpha/reporting-4.7.0-alpha.tgz
+    version: 4.7.0-alpha
+  - apiVersion: v2
     appVersion: 4.6.0
     created: "2024-12-27T12:23:57.954641554Z"
     description: Expertflow CX Solution Reporting Synchronizer
@@ -2188,6 +2420,37 @@ entries:
     - https://github.com/expertflow/charts/releases/download/surveys-4.7.0/surveys-4.7.0.tgz
     version: 4.7.0
   - apiVersion: v2
+    appVersion: 4.7.0
+    created: "2025-01-06T11:41:48.996144028Z"
+    dependencies:
+    - condition: survey-studio.enabled
+      name: survey-studio
+      repository: file://charts/survey-studio
+      version: 1.0.0
+    - condition: survey-backend.enabled
+      name: survey-backend
+      repository: file://charts/survey-backend
+      version: 1.0.0
+    - condition: scheduled-activities.enabled
+      name: scheduled-activities
+      repository: file://charts/scheduled-activities
+      version: 1.0.0
+    description: Expertflow CX Solution for Surveys
+    digest: 13a08b9fb51fc839597e1603b6e246c33fe61e0d56f838d36732898cba4a2dcc
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: surveys
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/surveys-4.7.0-alpha/surveys-4.7.0-alpha.tgz
+    version: 4.7.0-alpha
+  - apiVersion: v2
     appVersion: 4.6.0
     created: "2024-12-27T12:23:58.078909191Z"
     dependencies:
@@ -2373,6 +2636,24 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/transflux-4.7.0/transflux-4.7.0.tgz
     version: 4.7.0
+  - apiVersion: v2
+    appVersion: 4.7.0
+    created: "2025-01-06T11:41:49.198014636Z"
+    description: CX Data Platform
+    digest: a26bfb3e1b5abdc5f119c0accfd3681eb2cd381ec275466e92696090cb87fc41
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: transflux
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/transflux-4.7.0-alpha/transflux-4.7.0-alpha.tgz
+    version: 4.7.0-alpha
   - apiVersion: v2
     appVersion: 4.7.0
     created: "2024-12-27T09:39:43.264468495Z"
@@ -2614,4 +2895,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-01-06T11:30:27.900487748Z"
+generated: "2025-01-06T11:41:49.198200604Z"
