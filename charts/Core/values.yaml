@@ -39,6 +39,15 @@ global:
   efCommonVars_TZ: UTC
   efCommonVars_MASK_ATTRIBUTES_PATH: /sensitive.js
   efCommonVars_LOGGING_CONFIG: /logback/logback-spring.xml
+  efCommonVars_IS_ENABLED_2FA: "false"
+  efCommonVars_CHANNEL_2FA: "app"
+  efCommonVars_TWILIO_SID: ""
+  efCommonVars_TWILIO_VERIFY_SID: ""
+  efCommonVars_TWILIO_AUTH_TOKEN: ""
+  efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
+  efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
+
+
 
 
 
@@ -107,11 +116,13 @@ efConnectionVars:
     MONGODB_AUTHENTICATION_DATABASE: admin
     MONGODB_CERTIFICATE_PATH: https_things/cert.pem
     MONGODB_ENABLE_SSL: "true"
-    MONGODB_HOST: mongo-mongodb.ef-external.svc
+    MONGODB_HOST: "mongo-mongodb.ef-external.svc:27017"
+    MONGODB_READ_PREFERENCE: "secondaryPreferred"
+    MONGODB_REPLICASET: "expertflow"
+    MONGODB_REPLICASET_ENABLED: "false"
     #MONGODB_HOST: mongodb://mongo-mongodb-0.mongo-mongodb-headless.ef-external.svc.cluster.local:27017,mongo-mongodb-1.mongo-mongodb-headless.ef-external.svc.cluster.local:27017,mongo-mongodb-2.mongo-mongodb-headless.ef-external.svc.cluster.local:27017/?replicaSet=expertflow&tls=false&ssl=false&retrywrites=true
     MONGODB_KEEP_ALIVE_TIME: "3000"
     MONGODB_PASSWORD: "Expertflow123"
-    MONGODB_PORT: "27017"
     MONGODB_RECONNECT_INTERVAL: "500"
     MONGODB_USERNAME: root
     MONGODB_CLIENT_CERT: /mongo/client-pem
@@ -137,19 +148,22 @@ efConnectionVars:
     REDIS_SENTINEL_PASSWORD: Expertflow123
 
 
+
 ##############################agent-manager##############################
 agent-manager:
    enabled: true
    replicaCount: 1
    image:       
       repository: cim/agent-manager
-      tag: 4.5.3    
+      tag: 4.7_b-CRM-54
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "http-ag-ma-3000"
         containerPort: 3000
    extraEnvVars:
+      - name: SOCKET_DISCONNECT_TIME
+        value:  "10000"  
       - name: IS_WRAP_UP_ENABLED
         value: '{{ .Values.global.efCommonVars_IS_WRAP_UP_ENABLED }}'
       - name: WRAPUP_TIME
@@ -184,6 +198,16 @@ agent-manager:
         value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
       - name: FINESSE_URL
         value: "https://uccx12-5p.ucce.ipcc:8445"
+      - name: IS_ENABLED_2FA
+        value: '{{ .Values.global.efCommonVars_IS_ENABLED_2FA }}'
+      - name: CHANNEL_2FA
+        value: '{{ .Values.global.efCommonVars_CHANNEL_2FA }}'
+      - name: TWILIO_SID
+        value: '{{ .Values.global.efCommonVars_TWILIO_SID }}'
+      - name: TWILIO_VERIFY_SID
+        value: '{{ .Values.global.efCommonVars_TWILIO_VERIFY_SID }}'
+      - name: TWILIO_AUTH_TOKEN
+        value: '{{ .Values.global.efCommonVars_TWILIO_AUTH_TOKEN }}'
    service:
       enabled: true
       port: 3000
@@ -225,7 +249,7 @@ bot-framework:
    replicaCount: 1
    image:       
       repository: cim/bot-framework
-      tag: 4.5.5_f-CIM-14675    
+      tag: 4.6_b-CRM-59
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -256,6 +280,10 @@ bot-framework:
         value: "true"
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.botframework.commons.MaskingPatternLayout"
+      - name: TOPIC_CONCURRENCY_MIN
+        value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
+      - name: TOPIC_CONCURRENCY_MAX
+        value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
    service:
       enabled: true
       port: 8082
@@ -295,7 +323,7 @@ ccm:
    replicaCount: 1
    image:       
       repository: cim/customer-channel-manager
-      tag: 4.5.5_f-CIM-14675    
+      tag: 4.7_b-CRM-54
    efConnectionVars: true
    efEnvironmentVars: true 
    containerPorts:
@@ -324,6 +352,14 @@ ccm:
         value: "86400"
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.ccm.utils.MaskingPatternLayout"
+      - name: QUEUE_CONCURRENCY_MIN
+        value: "1"
+      - name: QUEUE_CONCURRENCY_MAX
+        value: "3"
+      - name: TOPIC_CONCURRENCY_MIN
+        value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
+      - name: TOPIC_CONCURRENCY_MAX
+        value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
    service:
       enabled: true
       port: 8081
@@ -363,7 +399,7 @@ cim-customer:
    replicaCount: 1
    image:       
       repository: cim/cim-backend
-      tag: 4.5.4_f-CIM-15802    
+      tag: 4.7_b-CRM-47
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -405,7 +441,7 @@ conversation-manager:
    replicaCount: 1
    image:       
       repository: cim/conversation-manager
-      tag: 4.5.5_f-CIM-14675    
+      tag: 4.6.1_b-CRM-60
    efConnectionVars: true
    efEnvironmentVars: false
    extraEnvVars:
@@ -449,6 +485,10 @@ conversation-manager:
         value: "false"
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.conversationmanager.utility.MaskingPatternLayout"
+      - name: TOPIC_CONCURRENCY_MIN
+        value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
+      - name: TOPIC_CONCURRENCY_MAX
+        value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
    containerPorts: 
       - name: "http-co-ma-8080"
         containerPort: 8080
@@ -501,7 +541,7 @@ conversation-manager:
       - name: ef-logback
         mountPath: /logback
    sidecars:
-      - image: '{{ .Values.global.imageRegistry }}/cim/conversation-controller:4.5.2'
+      - image: '{{ .Values.global.imageRegistry }}/cim/conversation-controller:4.6.1_f-CIM-27184'
         name: '{{ .Release.Name }}-conversation-controller'
         imagePullPolicy: IfNotPresent
         env:
@@ -529,6 +569,8 @@ conversation-manager:
             value: "5000"
           - name: CONVERSATION_MANAGER
             value: http://localhost:8080
+          - name: REDIS_EXPIRY_SECONDS
+            value: "86400"
         envFrom:
           - configMapRef:
                name: '{{ .Release.Name }}-efconnections-cm'
@@ -554,7 +596,7 @@ conversation-monitor:
    replicaCount: 1
    image:       
       repository: cim/conversation-monitor
-      tag: 4.5.5_f-CIM-14675    
+      tag: 4.7_b-CRM-54
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -585,6 +627,10 @@ conversation-monitor:
         value: "http://{{ .Release.Name }}-conversation-controller-svc.{{ .Release.Namespace }}.svc:5000"
       - name: UNIFIED_ADMIN_URL
         value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
+      - name: TOPIC_CONCURRENCY_MIN
+        value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
+      - name: TOPIC_CONCURRENCY_MAX
+        value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
    service:
       enabled: true
       port: 8080
@@ -620,7 +666,7 @@ customer-widget:
    replicaCount: 1
    image:       
       repository: efpublic/customer-widget
-      tag: 4.5.5-SR1-f-CIM-26383    
+      tag: 4.6_f-CIM-15619
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -681,7 +727,7 @@ file-engine:
    replicaCount: 1
    image:       
       repository: chat-solution/file-engine
-      tag: 4.5.2    
+      tag: 4.6.1_f-CIM-27184
    efConnectionVars: true
    efEnvironmentVars: false 
    containerPorts:
@@ -770,7 +816,7 @@ historical-reports:
    replicaCount: 1
    image:       
       repository: cim/historical-reports-manager
-      tag: 4.5.5_f-CIM-14675    
+      tag: 4.7_f-CRM-48
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -818,7 +864,7 @@ license-manager:
    replicaCount: 1
    image:       
       repository: license-mangement/license-manager
-      tag: 4.5.2    
+      tag: 4.6.1_f-CIM-27184
    efConnectionVars: true
    efEnvironmentVars: false 
    containerPorts:
@@ -869,13 +915,15 @@ realtime-reports:
    replicaCount: 1
    image:       
       repository: cim/realtime-reports-manager
-      tag: 4.5.5_f-CIM-14675    
+      tag: 4.6_b-CRM-37
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "http-re-rp-8080"
         containerPort: 8080
    extraEnvVars:
+      - name: UNIFIED_ADMIN_URL
+        value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
       - name: TZ
         value: '{{ .Values.global.efCommonVars_TZ }}'
       - name: ROOT_LOG_LEVEL
@@ -928,13 +976,15 @@ routing-engine:
    replicaCount: 1
    image:       
       repository: cim/media-routing-engine
-      tag: 4.5.5_f-CIM-14675    
+      tag: 4.7_b-CRM-54
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "http-ro-en-8081"
         containerPort: 8081
    extraEnvVars:
+      - name: IS_QUEUE_PRIORITY_ENABLED
+        value: "false"
       - name: TZ
         value: '{{ .Values.global.efCommonVars_TZ }}'
       - name: LOGGING_CONFIG
@@ -988,63 +1038,13 @@ routing-engine:
         mountPath: /logback
 
 
-##############################scheduled-activities##############################
-scheduled-activities:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: campaign-manager/campaign-scheduler
-      tag: 4.5.5_f-CIM-14675    
-   efConnectionVars: true
-   efEnvironmentVars: false
-   containerPorts:
-      - name: "http-sc-ac-8894"
-        containerPort: 8894
-   extraEnvVars:
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: CHANNEL_MANAGER_BASE_URL
-        value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
-      - name: CONVERSATION_MANAGER_BASE_URL
-        value: "http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
-      - name: CACHED_OUTBOUND_MESSAGE_EXPIRY_IN_SECONDS
-        value: "86400"
-      - name: THIRD_PARTY_COMPONENTS_NEXT_RETRY_TIMEOUT_DURATION_IN_SECONDS
-        value: "600"
-      - name: THIRD_PARTY_COMPONENTS_RETRY_COUNT_ATTEMPTS_LIMIT
-        value: "5"
-      - name: LOG_LEVEL
-        value: "INFO"
-   service:
-      enabled: true
-      port: 8894
-      portName: "http-sc-ac-8894"
-      targetPort: "http-sc-ac-8894"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path: /scheduler(/|$)(.*)
-      pathType: ImplementationSpecific
-   extraVolumes:
-      - name: redis-crt
-        secret:
-          secretName: redis-crt
-   extraVolumeMounts:
-      - name: redis-crt
-        mountPath: /redis
-
-
 ##############################state-events-logger##############################
 state-events-logger:
    enabled: true
    replicaCount: 1
    image:       
       repository: cim/state-events-logger
-      tag: 4.5.5_f-CIM-14675    
+      tag: 4.6.1_f-CIM-27184
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts: []
@@ -1076,13 +1076,15 @@ team-announcement:
    replicaCount: 1
    image:       
       repository: cim/team-announcement
-      tag: 4.5.3    
+      tag: 4.7_b-CRM-54
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "ef-team-a-8080"
         containerPort: 8080
    extraEnvVars:
+      - name: UNIFIED_ADMIN_URL
+        value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
       - name: TZ
         value: '{{ .Values.global.efCommonVars_TZ }}'
       - name: PORT
@@ -1167,7 +1169,7 @@ unified-admin:
    replicaCount: 1
    image:       
       repository: cim/unified-admin
-      tag: 4.5.6-SR1-b-CRM-25    
+      tag: 4.7_b-CRM-58
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -1214,6 +1216,17 @@ unified-admin:
         value: "false"
       - name: MONGODB_NAME
         value: "adminPanel"
+      - name: IS_ENABLED_2FA
+        value: '{{ .Values.global.efCommonVars_IS_ENABLED_2FA }}'
+      - name: CHANNEL_2FA
+        value: '{{ .Values.global.efCommonVars_CHANNEL_2FA }}'
+      - name: TWILIO_SID
+        value: '{{ .Values.global.efCommonVars_TWILIO_SID }}'
+      - name: TWILIO_VERIFY_SID
+        value: '{{ .Values.global.efCommonVars_TWILIO_VERIFY_SID }}'
+      - name: TWILIO_AUTH_TOKEN
+        value: '{{ .Values.global.efCommonVars_TWILIO_AUTH_TOKEN }}'
+
    service:
       enabled: true
       port: 3000
@@ -1250,7 +1263,7 @@ web-channel-manager:
    replicaCount: 1
    image:       
       repository: cim/web-channel-manager
-      tag: 4.5.5-SR1_f-CIM-26383    
+      tag: 4.7_b-CRM-54
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:

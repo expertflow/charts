@@ -35,9 +35,6 @@ dependencies:
 - name: routing-engine
   repository: file://charts/routing-engine
   version: 1.0.0
-- name: scheduled-activities
-  repository: file://charts/scheduled-activities
-  version: 1.0.0
 - name: state-events-logger
   repository: file://charts/state-events-logger
   version: 1.0.0
@@ -50,5 +47,5 @@ dependencies:
 - name: web-channel-manager
   repository: file://charts/web-channel-manager
   version: 1.0.0
-digest: sha256:08cc094596f8a0002b3418fe03a598ca2b107c8e331b6295f6578f29bb47e7f3
-generated: "2024-12-27T16:42:20.982882+05:00"
+digest: sha256:1405133dfc2c4b857eee2053ca4da51055170f7481b2b34feb5f844b5f7a9871
+generated: "2025-01-06T16:24:40.176436+05:00"

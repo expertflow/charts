@@ -1,0 +1,5 @@
+{{- if eq .Values.global.ingressRouter "devops.ef.com" }}
+  {{- fail "Default value of global.ingressRouter can not be used. Please update the FQDN." }}
+{{- end }}
+
+

@@ -40,6 +40,13 @@ global:
   efCommonVars_TZ: UTC
   efCommonVars_MASK_ATTRIBUTES_PATH: /sensitive.js
   efCommonVars_LOGGING_CONFIG: /logback/logback-spring.xml
+  efCommonVars_IS_ENABLED_2FA: "false"
+  efCommonVars_CHANNEL_2FA: "app"
+  efCommonVars_TWILIO_SID: ""
+  efCommonVars_TWILIO_VERIFY_SID: ""
+  efCommonVars_TWILIO_AUTH_TOKEN: ""
+  efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
+  efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
 
 
 # Change the below given paragraph when deploying an offline solution to pick the images from 
@@ -67,7 +74,7 @@ connect360:
    replicaCount: 1
    image:
       repository: cim/360-connector
-      tag: 4.6_f-CIM-26684
+      tag: 4.6.1_f-CIM-27184
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -116,7 +123,7 @@ facebook-connector:
    replicaCount: 1
    image:       
       repository: cim/facebook-connector
-      tag: 4.6_f-CIM-26684
+      tag: 4.6.1_f-CIM-27184
    efConnectionVars: false
    efEnvironmentVars: true 
    containerPorts:
@@ -163,7 +170,7 @@ instagram-connector:
    replicaCount: 1
    image:       
       repository: cim/instagram-connector
-      tag: 4.6_f-CIM-26684
+      tag: 4.6.1_f-CIM-27184
    efConnectionVars: false
    efEnvironmentVars: false 
    containerPorts:
@@ -210,7 +217,7 @@ smpp-connector:
    replicaCount: 1
    image:       
       repository: cti/hc_smpp_connector
-      tag: 4.6_f-CIM-26684
+      tag: 4.6.1_f-CIM-27184
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -257,7 +264,7 @@ telegram-connector:
    replicaCount: 1
    image:       
       repository: cim/telegram-connector
-      tag: 4.6_f-CIM-26684
+      tag: 4.6.1_f-CIM-27184
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -305,7 +312,7 @@ twilio-connector:
    replicaCount: 1
    image:       
       repository: cim/twilio-connector
-      tag: 4.6_f-CIM-26684
+      tag: 4.6.1_f-CIM-27184
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -351,7 +358,7 @@ twitter-connector:
    replicaCount: 1
    image:       
       repository: cim/twitter-connector
-      tag: 4.6_f-CIM-26684
+      tag: 4.6.1_f-CIM-27184
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -387,7 +394,7 @@ viber-connector:
    replicaCount: 1
    image:       
       repository: cim/viber-connector
-      tag: 4.6_f-CIM-26684
+      tag: 4.6.1_f-CIM-27184
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:

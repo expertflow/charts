@@ -17,7 +17,7 @@ metadata:
   {{- end }}
 spec:
   {{- if and .Values.dashboards.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
-  ingressClassName: {{ .Values.dashboards.ingress.ingressClassName | quote }}
+  ingressClassName:  {{ include "common.tplvalues.render" ( dict "value" .Values.dashboards.ingress.ingressClassName "context" $ ) |  quote }}
   {{- end }}
   rules:
     {{- if .Values.dashboards.ingress.hostname }}
@@ -32,7 +32,7 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "opensearch.dashboards.servicename" .) "servicePort" "http" "context" $)  | nindent 14 }}
       {{- if ne .Values.dashboards.ingress.hostname "*" }}
-      host: {{ .Values.dashboards.ingress.hostname }}
+      host: {{ include "common.tplvalues.render" ( dict "value"  .Values.dashboards.ingress.hostname "context" $ ) }}
       {{- end }}
     {{- end }}
     {{- range .Values.dashboards.ingress.extraHosts }}

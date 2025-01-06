@@ -24,4 +24,4 @@ dependencies:
   repository: file://charts/viber-connector
   version: 1.0.0
 digest: sha256:6764ab8b9baf7100f8ce47c02016162dd547aa6129f3fe1c11400ba1678b9457
-generated: "2024-12-27T17:41:37.763311+05:00"
+generated: "2025-01-06T16:24:39.879167+05:00"

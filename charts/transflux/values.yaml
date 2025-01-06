@@ -83,8 +83,8 @@ diagnosticMode:
 ##
 image:
   registry: gitimages.expertflow.com
-  repository: cim/cx-data-platform/build
-  tag: 4.5.2_f-BI-145s-957fa6a61d2fdc1132bd8f071adfb7d99e79740c
+  repository: cim/cx-data-platform
+  tag: 4.6.1_f-BI-60
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
