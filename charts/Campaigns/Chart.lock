@@ -6,4 +6,4 @@ dependencies:
   repository: file://charts/campaign-studio
   version: 1.0.0
 digest: sha256:3d96d9d92797a959cd3effe13b154ef9b1fd3526404bab6534db81b308fa261d
-generated: "2024-12-27T16:42:20.56586+05:00"
+generated: "2025-01-06T16:24:39.748728+05:00"
