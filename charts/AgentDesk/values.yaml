@@ -40,6 +40,14 @@ global:
   efCommonVars_TZ: UTC
   efCommonVars_MASK_ATTRIBUTES_PATH: /sensitive.js
   efCommonVars_LOGGING_CONFIG: /logback/logback-spring.xml
+  efCommonVars_IS_ENABLED_2FA: "false"
+  efCommonVars_CHANNEL_2FA: "app"
+  efCommonVars_TWILIO_SID: ""
+  efCommonVars_TWILIO_VERIFY_SID: ""
+  efCommonVars_TWILIO_AUTH_TOKEN: ""
+  efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
+  efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
+
   ## EF-External related Service URIs -- not used atm. 
   efGrafanaDatasourceSecret: "ef-grafana-datasource-secret"
   efGrafanaSupervisorDashboardConfigMap: "ef-grafana-supervisor-dashboard-mysql"
@@ -60,7 +68,7 @@ unified-agent:
    replicaCount: 1
    image:       
       repository: cim/unified-agent
-      tag: 4.5.6_b-CCC-1165    
+      tag: 4.6_b-CRM-53
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -205,7 +213,6 @@ unified-agent:
          nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
          nginx.ingress.kubernetes.io/cors-allow-methods: 'PUT, GET, POST, OPTIONS, DELETE,PATCH'
          nginx.ingress.kubernetes.io/enable-cors: "true"
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
       path: /unified-agent(/|$)(.*)
       pathType: ImplementationSpecific
       ingressAssetsAnnotations:
@@ -278,6 +285,9 @@ grafana:
     path: /grafana(/|$)(.*)
     annotations:
       nginx.ingress.kubernetes.io/rewrite-target: /$2
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
     tls: true
     extraTls:
        - host:
