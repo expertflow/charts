@@ -176,8 +176,6 @@ agent-manager:
         value: "60000"
       - name: CONVERSATION_MANAGER_URL
         value: "http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
-      - name: SOCKET_DISCONNECT_TIME
-        value: "120000"
       - name: CCM_URL
         value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
       - name: CIM_CUSTOMER_URL
