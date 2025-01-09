@@ -5,8 +5,5 @@ dependencies:
 - name: survey-backend
   repository: file://charts/survey-backend
   version: 1.0.0
-- name: scheduled-activities
-  repository: file://charts/scheduled-activities
-  version: 1.0.0
-digest: sha256:8f257a9a297e4022577a3fbfb3ca81d2ae5268002541629c786b0fdcd13b3ce8
-generated: "2025-01-07T16:44:37.422187+05:00"
+digest: sha256:66ed7f44794029a5ce2d6e9637414452418970d787bad1fb051fc702f1ff7bfb
+generated: "2025-01-09T16:55:18.657535+05:00"

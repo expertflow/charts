@@ -15,10 +15,7 @@ dependencies:
     version: 1.0.0
     condition: survey-backend.enabled
     repository: file://charts/survey-backend
-  - name: scheduled-activities
-    version: 1.0.0
-    condition: scheduled-activities.enabled
-    repository: file://charts/scheduled-activities
+
 
 # A chart can be either an 'application' or a 'debug' chart.
 
