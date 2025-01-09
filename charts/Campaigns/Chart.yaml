@@ -15,6 +15,10 @@ dependencies:
     version: 1.0.0
     condition: campaign-studio.enabled
     repository: file://charts/campaign-studio
+  - name: scheduled-activities
+    version: 1.0.0
+    condition: scheduled-activities.enabled
+    repository: file://charts/scheduled-activities
 # A chart can be either an 'application' or a 'debug' chart.
 
 # Application charts are a collection of templates that can be packaged into versioned archives
