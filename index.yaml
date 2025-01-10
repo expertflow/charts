@@ -498,6 +498,57 @@ entries:
     - https://github.com/expertflow/charts/releases/download/channels-4.7.0-alpha/channels-4.7.0-alpha.tgz
     version: 4.7.0-alpha
   - apiVersion: v2
+    appVersion: 4.7.0
+    created: "2025-01-10T12:38:26.853408708Z"
+    dependencies:
+    - condition: connect360.enabled
+      name: connect360
+      repository: file://charts/connect360
+      version: 1.0.0
+    - condition: facebook-connector.enabled
+      name: facebook-connector
+      repository: file://charts/facebook-connector
+      version: 1.0.0
+    - condition: instagram-connector.enabled
+      name: instagram-connector
+      repository: file://charts/instagram-connector
+      version: 1.0.0
+    - condition: smpp-connector.enabled
+      name: smpp-connector
+      repository: file://charts/smpp-connector
+      version: 1.0.0
+    - condition: telegram-connector.enabled
+      name: telegram-connector
+      repository: file://charts/telegram-connector
+      version: 1.0.0
+    - condition: twilio-connector.enabled
+      name: twilio-connector
+      repository: file://charts/twilio-connector
+      version: 1.0.0
+    - condition: twitter-connector.enabled
+      name: twitter-connector
+      repository: file://charts/twitter-connector
+      version: 1.0.0
+    - condition: viber-connector.enabled
+      name: viber-connector
+      repository: file://charts/viber-connector
+      version: 1.0.0
+    description: Expertflow CX Solution Channels
+    digest: bf342f4c3797ad335a4102dd52c1bd0d1e747e4d61f36433987480d26f9ba0c8
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: channels
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/channels-4.7.0-alpha/channels-4.7.0-alpha.tgz
+    version: 4.7.0-alpha
+  - apiVersion: v2
     appVersion: 4.6.0
     created: "2024-12-27T12:39:13.303133329Z"
     dependencies:
@@ -3067,4 +3118,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-01-09T12:37:46.420967764Z"
+generated: "2025-01-10T12:38:26.853569928Z"
