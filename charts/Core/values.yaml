@@ -1167,7 +1167,7 @@ unified-admin:
    replicaCount: 1
    image:       
       repository: cim/unified-admin
-      tag: 4.7_b-CRM-58
+      tag: 4.7_b-CRM-69
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
