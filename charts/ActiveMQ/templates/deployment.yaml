@@ -137,7 +137,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: {{ include "common.names.fullname" . }}
-              mountPath: "/opt/activemq/data"
+              mountPath: "/opt/apache-activemq-6.0.0/data"
           {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
