@@ -1055,6 +1055,10 @@ state-events-logger:
         value: "VirtualTopic.STATE_CHANNEL"
       - name: MONGODB_DATABASE
         value: "state-events-logger_cx_db"
+      - name: BATCH_TIMER_IN_SECONDS
+        value: "5"
+      - name: MAX_IDLE_CYCLES
+        value: "10"
    service:
       enabled: false
    ingress: 
