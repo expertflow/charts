@@ -76,7 +76,7 @@ survey-backend:
    image:       
       repository: cim/survey-backend
       tag: 4.6.1
-   efConnectionVars: false
+   efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "http-su-ba-3000"
@@ -148,6 +148,9 @@ survey-studio:
         nginx.ingress.kubernetes.io/rewrite-target: /red/$2
       path: /survey-studio(/|$)(.*)
       pathType: ImplementationSpecific
+   extraVolumeMounts:
+     - name: cx-surveys-studio-flow-vol
+       mountPath: /flows
 
 
 

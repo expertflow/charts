@@ -148,7 +148,7 @@ spec:
           {{- end }}
           {{- if .Values.efEnvironmentVars }}
             - configMapRef:
-                 name: {{ .Release.Name }}-efenvironment-cm
+                 name: {{ .Values.global.efCxReleaseName }}-efenvironment-cm
           {{- end }}
           {{- if .Values.containerPorts }}
           ports:
