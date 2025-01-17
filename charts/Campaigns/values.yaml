@@ -68,7 +68,7 @@ campaigns-backend:
    image:       
       repository: cim/campaigns
       tag: 4.6
-   efConnectionVars: false
+   efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "http-cp-3000"
@@ -173,6 +173,9 @@ campaign-studio:
    extraVolumeMounts:
       - name: ef-logback
         mountPath: /logback
+      - name: cx-campaigns-studio-flow-vol
+        mountPath: /flows
+
 
 
 ##############################scheduled-activities##############################
