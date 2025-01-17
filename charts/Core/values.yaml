@@ -120,7 +120,7 @@ efConnectionVars:
     MONGODB_READ_PREFERENCE: "secondaryPreferred"
     MONGODB_REPLICASET: "expertflow"
     MONGODB_REPLICASET_ENABLED: "false"
-    #MONGODB_HOST: mongodb://mongo-mongodb-0.mongo-mongodb-headless.ef-external.svc.cluster.local:27017,mongo-mongodb-1.mongo-mongodb-headless.ef-external.svc.cluster.local:27017,mongo-mongodb-2.mongo-mongodb-headless.ef-external.svc.cluster.local:27017/?replicaSet=expertflow&tls=false&ssl=false&retrywrites=true
+    #MONGODB_HOST: mongo-mongodb-0.mongo-mongodb-headless.ef-external.svc.cluster.local:27017,mongo-mongodb-1.mongo-mongodb-headless.ef-external.svc.cluster.local:27017
     MONGODB_KEEP_ALIVE_TIME: "3000"
     MONGODB_PASSWORD: "Expertflow123"
     MONGODB_RECONNECT_INTERVAL: "500"
