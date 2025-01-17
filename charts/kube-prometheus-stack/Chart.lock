@@ -15,4 +15,4 @@ dependencies:
   repository: file://charts/prometheus-windows-exporter
   version: 0.7.1
 digest: sha256:7fdf2bd3aaedb013145931fc6e507145cb2c86bceec9f4c94446f173eba8dccd
-generated: "2024-12-14T15:25:03.52101439Z"
+generated: "2025-01-17T18:54:00.078364+05:00"
