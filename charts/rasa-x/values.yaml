@@ -11,17 +11,17 @@ rasax:
   # name of the Rasa Enterprise image to use
   name: "rasa/rasa-x"  # gcr.io/rasa-platform/rasa-x-ee
   # tag refers to the Rasa Enterprise image tag (uses `appVersion` by default)
-  tag: "1.1.2"
+  tag: ""
   # port on which Rasa Enterprise runs
   port: 5002
   # scheme by which Rasa Enterprise is accessible
   scheme: http
   # passwordSalt Rasa Enterprise uses to salt the user passwords
-  passwordSalt: ".-IKPjqMi0McI.W"
+  passwordSalt: "passwordSalt"
   # token Rasa Enterprise accepts as authentication token from other Rasa services
-  token: "kRSHm7vsYcLeYHw"
+  token: "rasaXToken"
   # jwtSecret which is used to sign the jwtTokens of the users
-  jwtSecret: "kRSHm7vsYcLeYHw"
+  jwtSecret: "jwtSecret"
   # databaseName Rasa Enterprise uses to store data
   # (uses the value of global.postgresql.postgresqlDatabase by default)
   databaseName: ""
@@ -34,7 +34,7 @@ rasax:
     # username specifies a name of this user
     username: "admin"
     # password for this user (leave it empty to skip the user creation)
-    password: "admin"
+    password: ""
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -129,11 +129,9 @@ rasax:
 # It's recommended to use the rasa helm chart instead.
 # see: https://github.com/RasaHQ/helm-charts/tree/main/charts/rasa#quick-start
 rasa:
-  rasaPlus:
-    enabled: false
   # version is the Rasa Open Source version which should be used.
   # Used to ensure backward compatibility with older Rasa Open Source versions.
-  version: "3.1.2-cim"  # Please update the default value in the Readme when updating this
+  version: "3.2.6"  # Please update the default value in the Readme when updating this
   # disableTelemetry permanently disables telemetry
   disableTelemetry: false
   # override the default command to run in the container
@@ -143,24 +141,27 @@ rasa:
   # add extra arguments to the command in the container
   extraArgs: []
   # name of the Rasa image to use
-  name: "gitimages.expertflow.com/bot/rasa/rasa"
+  name: "rasa/rasa"
   # tag refers to the Rasa image tag. If empty `.Values.rasa.version-full` is used.
-  tag: "3.1.2-cim"
+  tag: ""
   # port on which Rasa runs
   port: 5005
   # scheme by which Rasa services are accessible
   scheme: http
   # token Rasa accepts as authentication token from other Rasa services
-  token: "InWVMW0bMr3lN3D"
+  token: "rasaToken"
   # rabbitQueue it should use to dispatch events to Rasa Enterprise
   rabbitQueue: "rasa_production_events"
   # Optional additional rabbit queues for e.g. connecting to an analytics stack
   additionalRabbitQueues: []
+  # when deploying with a rasa-plus license, enabled value should be set to true to configure the redis
+  # concurrent lock store automatically.
+  rasaPlus:
+    enabled: false
   # additionalChannelCredentials which should be used by Rasa to connect to various
   # input channels
-  additionalChannelCredentials:
-    rest:
-    hybridchat:
+  additionalChannelCredentials: {}
+    # rest:
     # facebook:
     #   verify: "rasa-bot"
     #   secret: "3e34709d01ea89032asdebfe5a74518"
@@ -227,7 +228,7 @@ rasa:
 
       # enable the rasa-production deployment
       # You can disable the rasa-production deployment in order to use external Rasa OSS deployment instead.
-      enabled: true
+      enabled: false
 
       # Define if external Rasa OSS should be used.
       external:
@@ -467,9 +468,9 @@ app:
   # override the default arguments to run in the container
   args: []
   # name of the custom action server image to use
-  name: "gitimages.expertflow.com/cim/cim-rasa-bot"
+  name: "rasa/rasa-x-demo"
   # tag refers to the custom action server image tag
-  tag: "4.5.3"
+  tag: "0.38.0"
   # replicaCount of the custom action server container
   replicaCount: 1
   # port on which the custom action server runs
@@ -481,38 +482,7 @@ app:
   # Jaeger Sidecar
   jaegerSidecar: "false"
   # extraEnvs are environment variables which can be added to the app deployment
-  #
-  #
-  #  Expertflow Notes:
-  #
-  #  When using the RASA-X on the same host along with CIM, please use
-  #  
-  #  extraEnvs:
-  #   - name:  BOT_FRAMEWORK_URL
-  #     value: http://ef-bot-framework-svc.expertflow.svc.cluster.local:8082
-  #   - name:  FILE_ENGINE_FQDN
-  #     value: https://devops.ef.com
-  #
-  #  When using Standalone RASA-X for CIM running on another system
-  #  
-  #  extraEnvs:
-  #   - name:  BOT_FRAMEWORK_URL
-  #     value: http://CIM-FQDN/bot-framework
-  #   - name:  FILE_ENGINE_FQDN
-  #     value: https://devops.ef.com
-  #
-  #
-  #
-  #
-  #
-  #
-  #
-  #
-  extraEnvs:
-     - name:  BOT_FRAMEWORK_URL
-       value: http://devops.ef.com/bot-framework
-     - name:  FILE_ENGINE_FQDN
-       value: https://devops.ef.com
+  extraEnvs: []
   #  - name: DATABASE_URL
   #    valueFrom:
   #      secretKeyRef:
@@ -590,7 +560,7 @@ nginx:
   # name of the nginx image to use
   name: "nginx"
   # tag refers to the nginx image tag (uses `appVersion` by default)
-  tag: "1.22.0"
+  tag: "1.19"
   # custom config map containing nginx.conf, ssl.conf.template, rasax.nginx.template
   customConfConfigMap: ""
   # replicaCount of nginx containers to run
@@ -602,13 +572,13 @@ nginx:
     # annotations for the service
     annotations: {}
     # type of the service (https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
-    type: NodePort
+    type: LoadBalancer
     # loadBalancerSourceRange for AWS deployments (https://kubernetes.io/docs/concepts/services-networking/service/#aws-nlb-support)
     loadBalancerSourceRanges: []
     # port is the port which the nginx service exposes for HTTP connections
     port: 8000
     # nodePort can be used with a service of type `NodePort` to expose the service on a certain port of the node (https://kubernetes.io/docs/concepts/services-networking/service/#nodeport)
-    nodePort: "30800"
+    nodePort: ""
     # externalIPs can be used to expose the service to certain IPs (https://kubernetes.io/docs/concepts/services-networking/service/#external-ips)
     externalIPs: []
   livenessProbe:
@@ -758,7 +728,7 @@ postgresql:
 
   image:
     # tag of PostgreSQL Image
-    tag: "14.3.0"
+    tag: "12.9.0"
 
   # Configure security context for the postgresql init container
   # volumePermissions:
@@ -777,17 +747,17 @@ postgresql:
 # RabbitMQ specific settings (https://artifacthub.io/packages/helm/bitnami/rabbitmq/8.26.0)
 rabbitmq:
   # Install should be `true` if the rabbitmq subchart should be used
-  install: true # Enabled should be `true` if any version of rabbit is used
+  install: true
+  # Enabled should be `true` if any version of rabbit is used
   enabled: true
 
   auth:
     # username which is used for the authentication
     username: "user"
     # password which is used for the authentication
-    password: "fR6vo3Ix,AHYCf-"
+    password: "password"
     # existingPasswordSecret which should be used for the password instead of putting it in the values file
     existingPasswordSecret: ""
-    erlangCookie: "qd0VSDabLbOz9cCIwWPM1FyNiT6iJIV2"
   # service specifies settings for exposing rabbit to other services
   service:
     # port on which rabbitmq is exposed to Rasa
@@ -904,10 +874,9 @@ networkPolicy:
 # images: Settings for the images
 images:
   # pullPolicy to use when deploying images
-  pullPolicy: "IfNotPresent"
+  pullPolicy: "Always"
   # imagePullSecrets which are required to pull images for private registries
-  imagePullSecrets:
-    - name:  expertflow-reg-cred
+  imagePullSecrets: []
 
 # securityContext to use
 securityContext:
@@ -934,7 +903,7 @@ global:
     # postgresqlUsername which should be used by Rasa to connect to Postgres
     postgresqlUsername: "postgres"
     # postgresqlPassword is the password which is used when the postgresqlUsername equals "postgres"
-    postgresqlPassword: "BBByrV5NfVX4SLR"
+    postgresqlPassword: "password"
     # existingSecret which should be used for the password instead of putting it in the values file
     existingSecret: ""
     # postgresDatabase which should be used by Rasa Enterprise
@@ -945,9 +914,8 @@ global:
   # redis: global settings of the postgresql subchart
   redis:
     # password to use in case there no external secret was provided
-    password: "lfbWwuKFdGGeVqe"
+    password: "redis-password"
 
   # additionalDeploymentLabels can be used to map organizational structures onto system objects
   # https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   additionalDeploymentLabels: {}
-
