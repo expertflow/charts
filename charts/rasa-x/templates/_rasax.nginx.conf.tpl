@@ -23,6 +23,22 @@ server {
     proxy_pass {{ include "rasa.production.url" .}};
   }
 
+  location {{ trimSuffix "/" .Values.nginx.subPath }}/model/parse {
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header Host $host;
+    proxy_pass {{ include "rasa.production.url" .}};
+  }
+
+  location {{ trimSuffix "/" .Values.nginx.subPath }}/conversations {
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header Host $host;
+    proxy_pass {{ include "rasa.production.url" .}};
+  }
+
   # avoid users having to change how they configure
   # their credentials URLs between Rasa and Rasa X
   location {{ trimSuffix "/" .Values.nginx.subPath }}/webhooks/ {

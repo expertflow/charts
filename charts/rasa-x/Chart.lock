@@ -8,5 +8,5 @@ dependencies:
 - name: rabbitmq
   repository: file://charts/rabbitmq
   version: 8.26.0
-digest: sha256:be2c50fa6f59f91436f7364168a98f82e64a56931be8f917ea8ab2fd6a88ae2d
-generated: "2024-12-13T14:05:18.705181693Z"
+digest: sha256:01d13aee000e0b1e8491c4ddfa8f81e25cd3f0553f3c3c3fb8364aa76c46c629
+generated: "2025-01-21T10:41:53.538716748Z"
