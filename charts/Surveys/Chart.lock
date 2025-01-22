@@ -6,4 +6,4 @@ dependencies:
   repository: file://charts/survey-backend
   version: 1.0.0
 digest: sha256:66ed7f44794029a5ce2d6e9637414452418970d787bad1fb051fc702f1ff7bfb
-generated: "2025-01-17T18:13:32.211257+05:00"
+generated: "2025-01-22T11:11:50.837081+05:00"
