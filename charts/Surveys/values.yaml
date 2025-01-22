@@ -75,7 +75,7 @@ survey-backend:
    enabled: true
    image:       
       repository: cim/survey-backend
-      tag: 4.6.1
+      tag: 4.6.1_f-CIM-27598
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
