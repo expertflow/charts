@@ -67,7 +67,7 @@ campaigns-backend:
    enabled: true
    image:       
       repository: cim/campaigns
-      tag: 4.6
+      tag: 4.6_f-CIM-27597
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -184,7 +184,7 @@ scheduled-activities:
   replicaCount: 1
   image:
     repository: campaign-manager/campaign-scheduler
-    tag: 4.6.1_f-CIM-27184
+    tag: 4.7_b-CIM-27596
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
