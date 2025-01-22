@@ -97,41 +97,6 @@ spec:
           {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
           {{- end }}
-            - name: MONGO_HOST
-              valueFrom:
-                configMapKeyRef:
-                  key: MONGODB_HOST
-                  name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
-            - name: MONGO_AUTH_SOURCE
-              valueFrom:
-                configMapKeyRef:
-                  key: MONGODB_AUTHENTICATION_DATABASE
-                  name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
-            - name: MONGO_USERNAME
-              valueFrom:
-                configMapKeyRef:
-                  key: MONGODB_USERNAME
-                  name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
-            - name: MONGO_PASSWORD
-              valueFrom:
-                configMapKeyRef:
-                  key: MONGODB_PASSWORD
-                  name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
-            - name: MONGO_TLS
-              valueFrom:
-                configMapKeyRef:
-                  key: MONGODB_ENABLE_SSL
-                  name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
-            - name: MONGO_TLS_CA
-              valueFrom:
-                configMapKeyRef:
-                  key: MONGODB_CA_CERT
-                  name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
-            - name: MONGO_TLS_CLIENT_CERTIFICATE
-              valueFrom:
-                configMapKeyRef:
-                  key: MONGODB_CLIENT_CERT
-                  name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
           envFrom:
           {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
