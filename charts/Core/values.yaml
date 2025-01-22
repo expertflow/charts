@@ -594,7 +594,7 @@ conversation-monitor:
    replicaCount: 1
    image:       
       repository: cim/conversation-monitor
-      tag: 4.7_b-CIM-27596
+      tag:  4.7_b-CRM-90
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -603,6 +603,8 @@ conversation-monitor:
    extraEnvVars:
       - name: IS_WRAP_UP_ENABLED
         value: '{{ .Values.global.efCommonVars_IS_WRAP_UP_ENABLED }}'
+      - name: LOGGING_CONFIG
+        value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
       - name: DEFAULT_ROOM_NAME
         value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_NAME }}'
       - name: DEFAULT_ROOM_DESCRIPTION
@@ -629,6 +631,10 @@ conversation-monitor:
         value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
       - name: TOPIC_CONCURRENCY_MAX
         value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
+      - name: MASKING_LAYOUT_CLASS
+        value: "com.ef.conversationmonitor.utility.MaskingPatternLayout"
+
+
    service:
       enabled: true
       port: 8080
@@ -650,11 +656,16 @@ conversation-monitor:
       - name: redis-crt
         secret:
           secretName: redis-crt
+      - name: ef-logback
+        configMap:
+          name: ef-logback-cm
    extraVolumeMounts:
       - name: redis-crt
         mountPath: /redis
       - name: mongo-mongodb-ca
         mountPath: /mongo
+      - name: ef-logback
+        mountPath: /logback
 
 
 
@@ -974,7 +985,7 @@ routing-engine:
    replicaCount: 1
    image:       
       repository: cim/media-routing-engine
-      tag: 4.7_b-CIM-27596
+      tag: 4.7_b-CIM-27498
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -1003,6 +1014,14 @@ routing-engine:
         value: "http://{{ .Release.Name }}-realtime-reports-svc.{{ .Release.Namespace }}.svc:8080"
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.mediaroutingengine.global.utilities.MaskingPatternLayout"
+      - name: CUSTOM_THREAD_CORE_POOL_SIZE
+        value: "10"
+      - name: CUSTOM_THREAD_MAX_POOL_SIZE
+        value: "20"
+      - name: CUSTOM_THREAD_KEEP_ALIVE_TIME
+        value: "30"
+      - name: CUSTOM_THREAD_QUEUE_CAPACITY
+        value: "100"
    service:
       enabled: true
       port: 8081
@@ -1203,9 +1222,9 @@ unified-admin:
       - name: HTTPS_CERTIFICATE_PASSPHRASE
         value: ""
       - name: HTTPS_CERTIFICATE_PATH
-        value: "httpsFiles/server.cert"
+        value: /httpsCerts/server.cert
       - name: HTTPS_KEY_PATH
-        value: "httpsFiles/server.key"
+        value: /httpsCerts/server.key
       - name: LICENSE_MANAGER_URL
         value: "https://{{ .Values.global.ingressRouter  }}/license-manager"
       - name: LOG_LEVEL
