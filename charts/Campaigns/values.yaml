@@ -67,7 +67,7 @@ campaigns-backend:
    enabled: true
    image:       
       repository: cim/campaigns
-      tag: 4.6_f-CIM-27597
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
