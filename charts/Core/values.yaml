@@ -155,7 +155,7 @@ agent-manager:
    replicaCount: 1
    image:       
       repository: cim/agent-manager
-      tag: 4.7_b-CIM-27596
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -247,7 +247,7 @@ bot-framework:
    replicaCount: 1
    image:       
       repository: cim/bot-framework
-      tag: 4.7_b-CIM-27596
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -321,7 +321,7 @@ ccm:
    replicaCount: 1
    image:       
       repository: cim/customer-channel-manager
-      tag: 4.7_b-CIM-27596
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: true 
    containerPorts:
@@ -351,13 +351,16 @@ ccm:
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.ccm.utils.MaskingPatternLayout"
       - name: QUEUE_CONCURRENCY_MIN
-        value: "1"
+        value: "6"
       - name: QUEUE_CONCURRENCY_MAX
-        value: "3"
+        value: "7"
       - name: TOPIC_CONCURRENCY_MIN
         value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
       - name: TOPIC_CONCURRENCY_MAX
         value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
+      - name: TOMCAT_MAX_THREADS
+        value: "1000"
+
    service:
       enabled: true
       port: 8081
@@ -397,7 +400,7 @@ cim-customer:
    replicaCount: 1
    image:       
       repository: cim/cim-backend
-      tag: 4.7_b-CIM-27596
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -439,7 +442,7 @@ conversation-manager:
    replicaCount: 1
    image:       
       repository: cim/conversation-manager
-      tag: 4.7_b-CIM-27596
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: false
    extraEnvVars:
@@ -539,7 +542,7 @@ conversation-manager:
       - name: ef-logback
         mountPath: /logback
    sidecars:
-      - image: '{{ .Values.global.imageRegistry }}/cim/conversation-controller:4.6.1_f-CIM-27184'
+      - image: '{{ .Values.global.imageRegistry }}/cim/conversation-controller:4.7'
         name: '{{ .Release.Name }}-conversation-controller'
         imagePullPolicy: IfNotPresent
         env:
@@ -594,7 +597,7 @@ conversation-monitor:
    replicaCount: 1
    image:       
       repository: cim/conversation-monitor
-      tag:  4.7_b-CRM-90
+      tag:  4.7
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -633,6 +636,8 @@ conversation-monitor:
         value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.conversationmonitor.utility.MaskingPatternLayout"
+      - name: TOMCAT_MAX_THREADS
+        value: "1000"
 
 
    service:
@@ -675,7 +680,7 @@ customer-widget:
    replicaCount: 1
    image:       
       repository: efpublic/customer-widget
-      tag: 4.6_f-CIM-15619
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -736,7 +741,7 @@ file-engine:
    replicaCount: 1
    image:       
       repository: chat-solution/file-engine
-      tag: 4.7_b-CIM-27596
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: false 
    containerPorts:
@@ -825,7 +830,7 @@ historical-reports:
    replicaCount: 1
    image:       
       repository: cim/historical-reports-manager
-      tag: 4.7_b-CIM-27596
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -873,7 +878,7 @@ license-manager:
    replicaCount: 1
    image:       
       repository: license-mangement/license-manager
-      tag: 4.7_b-CIM-27596
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: false 
    containerPorts:
@@ -924,7 +929,7 @@ realtime-reports:
    replicaCount: 1
    image:       
       repository: cim/realtime-reports-manager
-      tag: 4.7_b-CIM-27596
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -985,7 +990,7 @@ routing-engine:
    replicaCount: 1
    image:       
       repository: cim/media-routing-engine
-      tag: 4.7_b-CIM-27498
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -1061,7 +1066,7 @@ state-events-logger:
    replicaCount: 1
    image:       
       repository: cim/state-events-logger
-      tag: 4.7_b-CIM-27596
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts: []
@@ -1097,7 +1102,7 @@ team-announcement:
    replicaCount: 1
    image:       
       repository: cim/team-announcement
-      tag: 4.7_b-CIM-27596
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -1190,7 +1195,7 @@ unified-admin:
    replicaCount: 1
    image:       
       repository: cim/unified-admin
-      tag: 4.7_b-CIM-27596
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -1289,7 +1294,7 @@ web-channel-manager:
    replicaCount: 1
    image:       
       repository: cim/web-channel-manager
-      tag: 4.7_b-CRM-54
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
