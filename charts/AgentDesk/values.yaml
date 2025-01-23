@@ -68,7 +68,7 @@ unified-agent:
    replicaCount: 1
    image:       
       repository: cim/unified-agent
-      tag: 4.6_f-CCC-1100
+      tag: 4.7
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
