@@ -279,7 +279,7 @@ grafana:
         value: "true"
   ingress:
     enabled: true
-    className: "nginx"
+    className: "{{ .Values.global.ingressClassName }}"
     pathType: Prefix
     hostname: "{{ .Values.global.ingressRouter }}"
     path: /grafana(/|$)(.*)
