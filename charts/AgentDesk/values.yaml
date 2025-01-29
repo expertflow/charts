@@ -290,7 +290,7 @@ grafana:
       #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
     tls: true
     extraTls:
-       - host:
+       - hosts:
            -  '{{ .Values.global.ingressRouter }}'
          secretName: '{{ .Values.global.ingressCertName }}'
 
