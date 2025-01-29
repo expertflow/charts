@@ -29,7 +29,7 @@ global:
   imagePullSecrets: 
    - ef-gitlab-secret
   ## The CommonEnvVars are now part of the globals. Selective adaption to components is mandatory.
-  efCommonVars_IS_WRAP_UP_ENABLED: true
+  efCommonVars_IS_WRAP_UP_ENABLED: false
   efCommonVars_WRAPUP_TIME: "60"
   efCommonVars_DEFAULT_ROOM_NAME: CC
   efCommonVars_DEFAULT_ROOM_DESCRIPTION: Contact Center Room
@@ -275,7 +275,7 @@ bot-framework:
       - name: RASA_TOKEN
         value: "InWVMW0bMr3lN3D"
       - name: SEND_EVENTS_TO_BOT
-        value: "true"
+        value: "false"
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.botframework.commons.MaskingPatternLayout"
       - name: TOPIC_CONCURRENCY_MIN
@@ -345,7 +345,7 @@ ccm:
       - name: CONVERSATION_MANAGER_URL
         value: "http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
       - name: WHATSAPP_BUTTON_MESSAGE_AS_TEXT
-        value: "true"
+        value: "false"
       - name: CACHED_OUTBOUND_MESSAGE_EXPIRY_IN_SECONDS
         value: "86400"
       - name: MASKING_LAYOUT_CLASS
