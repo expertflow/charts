@@ -30,7 +30,7 @@ global:
   imagePullSecrets: 
    - ef-gitlab-secret
   ## The CommonEnvVars are now part of the globals. Selective adaption to components is mandatory.
-  efCommonVars_IS_WRAP_UP_ENABLED: true
+  efCommonVars_IS_WRAP_UP_ENABLED: false
   efCommonVars_WRAPUP_TIME: "60"
   efCommonVars_DEFAULT_ROOM_NAME: CC
   efCommonVars_DEFAULT_ROOM_DESCRIPTION: Contact Center Room
