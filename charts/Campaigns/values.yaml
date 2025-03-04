@@ -67,7 +67,7 @@ campaigns-backend:
    enabled: true
    image:       
       repository: cim/campaigns
-      tag: 4.7
+      tag: 4.7.1
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -93,7 +93,7 @@ campaigns-backend:
       - name: CCM_URL
         value: http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081
       - name: SCHEDULER_URL
-        value: http://{{ .Values.global.efCxReleaseName }}-scheduled-activities-svc.{{ .Release.Namespace }}.svc:8894
+        value: http://{{ .Release.Name }}-scheduled-activities-svc.{{ .Release.Namespace }}.svc:8894
    service:
       enabled: true
       port: 3000
@@ -123,7 +123,7 @@ campaign-studio:
    enabled: true
    image:       
       repository: cim/conversation-studio
-      tag: 4.6
+      tag: 4.7.1
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -184,7 +184,7 @@ scheduled-activities:
   replicaCount: 1
   image:
     repository: campaign-manager/campaign-scheduler
-    tag: 4.7
+    tag: 4.7_b-CIM-27596
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
