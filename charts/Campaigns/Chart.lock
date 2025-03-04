@@ -9,4 +9,4 @@ dependencies:
   repository: file://charts/scheduled-activities
   version: 1.0.0
 digest: sha256:abdfb7297c7e4ed8af8b9f442a7408ad35cdfaccf170b209bad6e7b3d76c28f5
-generated: "2025-01-29T17:32:15.054129+05:00"
+generated: "2025-03-04T14:10:11.149764+05:00"
