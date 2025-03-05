@@ -155,7 +155,7 @@ agent-manager:
    replicaCount: 1
    image:       
       repository: cim/agent-manager
-      tag: 4.7
+      tag: 4.7.1
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -247,7 +247,7 @@ bot-framework:
    replicaCount: 1
    image:       
       repository: cim/bot-framework
-      tag: 4.7
+      tag: 4.7.1
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -442,7 +442,7 @@ conversation-manager:
    replicaCount: 1
    image:       
       repository: cim/conversation-manager
-      tag: 4.7
+      tag: 4.7.1
    efConnectionVars: true
    efEnvironmentVars: false
    extraEnvVars:
@@ -680,7 +680,7 @@ customer-widget:
    replicaCount: 1
    image:       
       repository: efpublic/customer-widget
-      tag: 4.7
+      tag: 4.7.1
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -830,7 +830,7 @@ historical-reports:
    replicaCount: 1
    image:       
       repository: cim/historical-reports-manager
-      tag: 4.7
+      tag: 4.7.1
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -990,7 +990,7 @@ routing-engine:
    replicaCount: 1
    image:       
       repository: cim/media-routing-engine
-      tag: 4.7
+      tag: 4.7.1
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
