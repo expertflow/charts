@@ -83,8 +83,8 @@ diagnosticMode:
 ##
 image:
   registry: gitimages.expertflow.com
-  repository: cim/cx-data-platform
-  tag: 4.7
+  repository: cim/cx-data-platform 
+  tag: 4.7.1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -118,15 +118,7 @@ args: []
 ##   - name: FOO
 ##     value: BAR
 ##
-extraEnvVars: 
-  - name: AIRFLOW_DB_NAME
-    value: ef_4_5_2
-  - name: AIRFLOW_DB_USER
-    value: elonmusk
-  - name: AIRFLOW_DB_PASSWORD
-    value: 68i3nj7t
-  - name: MYSQL_ROOT_PASSWORD
-    value:  68i3nj7t
+extraEnvVars:
   - name: AIRFLOW_ADMIN_USERNAME
     value:  admin
   - name: AIRFLOW_ADMIN_PASSWORD
@@ -136,13 +128,9 @@ extraEnvVars:
   - name: AIRFLOW_ADMIN_FIRSTNAME
     value: Admin
   - name: AIRFLOW_ADMIN_LASTNAME
-    value: User
-  - name: MYSQL_HOST
-    value: "192.168.1.182"
-  - name: MYSQL_PORT
-    value: "3306" 
+    value: User 
   - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
-    value: mysql+pymysql://${AIRFLOW_DB_USER}:${MYSQL_ROOT_PASSWORD}@${MYSQL_HOST}:${MYSQL_PORT}/${AIRFLOW_DB_NAME}?ssl_ca=${AIRFLOW__CORE__MYSQL_SSL_CA}&ssl_cert=${AIRFLOW__CORE__MYSQL_SSL_CERT}&ssl_key=${AIRFLOW__CORE__MYSQL_SSL_KEY}&ssl_verify_cert=false
+    value: postgresql+psycopg2://sa:Expertflow123@ef-postgresql.ef-external.svc:5432/airflow?sslmode=verify-ca&sslrootcert=/postgresql/ca.crt
   - name: AIRFLOW__CORE__EXECUTOR
     value: LocalExecutor
   - name: AIRFLOW__CORE__LOAD_EXAMPLES
@@ -153,12 +141,6 @@ extraEnvVars:
     value: "1"
   - name: CONFIG_ROOT
     value: /transflux/config/
-  - name: AIRFLOW__CORE__MYSQL_SSL_CA
-    value: /transflux/certificates/mysql_certs/ca.pem
-  - name: AIRFLOW__CORE__MYSQL_SSL_CERT
-    value: /transflux/certificates/mysql_certs/client-cert.pem
-  - name: AIRFLOW__CORE__MYSQL_SSL_KEY
-    value: /transflux/certificates/mysql_certs/client-key.pem
   - name: MONGODB_AUTHENTICATION_DATABASE
     value: admin
   - name: MONGODB_CERTIFICATE_PATH
@@ -181,6 +163,11 @@ extraEnvVars:
     value: /transflux/certificates/mongo_certs/client-pem
   - name: MONGODB_CA_CERT
     value: /transflux/certificates/mongo_certs/mongodb-ca-cert
+  - name: ALEMBIC_DB_URL
+    ## For without SSL enabled target databases, use the following connection string, make sure that database name is same where the tables are present for upgrade/downgrade
+    value: "mysql+pymysql://user:Expertflow123@192.168.2.202:3306/hold_db"
+    ## For SSL enabled target databases, use the following connection string, make sure to copy the certs in the respective directory
+    # value: "mysql+pymysql://user:Expertflow123@192.168.2.202:3306/hold_db?ssl_ca=/transflux/certificates/mysql_certs/ca.pem&ssl_cert=/transflux/certificates/mysql_certs/client-cert.pem&ssl_key=/transflux/certificates/mysql_certs/client-key.pem&ssl_verify_cert=false"
 
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
@@ -476,6 +463,9 @@ extraVolumes:
    - name: ef-transflux-mongo-cert-vol
      secret:
        secretName: mongo-mongodb-ca
+   - name: ef-postgresql-crt-vol
+     secret:
+       secretName: ef-postgresql-crt
 
 ## @param extraVolumeMounts Array to add extra mount
 ##
@@ -488,6 +478,8 @@ extraVolumeMounts:
      mountPath: /transflux/certificates/mongo_certs
    - name: ef-transflux-config-vol
      mountPath: /transflux/config
+   - name: ef-postgresql-crt-vol
+     mountPath: /postgresql
 
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
