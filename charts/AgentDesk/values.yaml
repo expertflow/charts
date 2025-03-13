@@ -68,7 +68,7 @@ unified-agent:
    replicaCount: 1
    image:       
       repository: cim/unified-agent
-      tag: 4.7.1
+      tag: 4.7_f-CCC-1546
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -197,6 +197,8 @@ unified-agent:
         value: "0000"
       - name: SIP_MONITORING_DN
         value: "*44"
+      - name: SIP_EXTERNAL_DN
+        value: "99887765"
    service:
       enabled: true
       port: 80
