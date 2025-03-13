@@ -47,5 +47,8 @@ dependencies:
 - name: web-channel-manager
   repository: file://charts/web-channel-manager
   version: 1.0.0
-digest: sha256:1405133dfc2c4b857eee2053ca4da51055170f7481b2b34feb5f844b5f7a9871
-generated: "2025-03-05T22:01:23.114308+05:00"
+- name: business-calendar
+  repository: file://charts/business-calendar
+  version: 1.0.14
+digest: sha256:c692626b5bc9add2e1f489cf336870ed3810a8ba4e22291c1f9db275bafcb8c2
+generated: "2025-03-13T17:14:13.768306+05:00"

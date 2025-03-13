@@ -46,6 +46,7 @@ global:
   efCommonVars_TWILIO_AUTH_TOKEN: ""
   efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
   efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
+  efCommonVars_MEMORY_THRESHOLD_MBS: 1000
 
 
 
@@ -155,13 +156,15 @@ agent-manager:
    replicaCount: 1
    image:       
       repository: cim/agent-manager
-      tag: 4.7.1
+      tag: 4.7_f-CCC-1609
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "http-ag-ma-3000"
         containerPort: 3000
    extraEnvVars:
+      - name: MEMORY_THRESHOLD_MBS
+        value: '{{ .Values.global.efCommonVars_MEMORY_THRESHOLD_MBS }}'
       - name: SOCKET_DISCONNECT_TIME
         value:  "10000"  
       - name: IS_WRAP_UP_ENABLED
@@ -247,7 +250,7 @@ bot-framework:
    replicaCount: 1
    image:       
       repository: cim/bot-framework
-      tag: 4.7.1
+      tag: 4.7_f-CIM-27865
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -321,7 +324,7 @@ ccm:
    replicaCount: 1
    image:       
       repository: cim/customer-channel-manager
-      tag: 4.7
+      tag: 4.7_f-CIM-27865
    efConnectionVars: true
    efEnvironmentVars: true 
    containerPorts:
@@ -400,13 +403,15 @@ cim-customer:
    replicaCount: 1
    image:       
       repository: cim/cim-backend
-      tag: 4.7
+      tag: 4.7_f-CIM-26130
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "http-ci-cu-8080"
         containerPort: 8080
    extraEnvVars:
+      - name: MEMORY_THRESHOLD_MBS
+        value: '{{ .Values.global.efCommonVars_MEMORY_THRESHOLD_MBS }}'
       - name: TZ
         value: '{{ .Values.global.efCommonVars_TZ }}'
       - name: HTTP_PORT
@@ -442,7 +447,7 @@ conversation-manager:
    replicaCount: 1
    image:       
       repository: cim/conversation-manager
-      tag: 4.7.1
+      tag: 4.7_f-CIM-27865
    efConnectionVars: true
    efEnvironmentVars: false
    extraEnvVars:
@@ -480,6 +485,10 @@ conversation-manager:
         value: "http://localhost:5000"
       - name: UNIFIED_ADMIN_URL
         value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
+      - name: CCM_URL
+        value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+      - name: CIM_CUSTOMER_URL
+        value: "http://{{ .Release.Name }}-cim-customer-svc.{{ .Release.Namespace }}.svc:8080"
       - name: PROCESS_EVENTS
         value: "false"
       - name: ENABLE_LAST_AGENT_ROUTING
@@ -597,7 +606,7 @@ conversation-monitor:
    replicaCount: 1
    image:       
       repository: cim/conversation-monitor
-      tag:  4.7
+      tag: 4.7_f-CIM-27865
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -680,7 +689,7 @@ customer-widget:
    replicaCount: 1
    image:       
       repository: efpublic/customer-widget
-      tag: 4.7.1
+      tag:  4.7_f-CIM-9384
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -705,6 +714,8 @@ customer-widget:
         value: "https://{{ .Values.global.ingressRouter  }}/conversation-manager/customer-topics"
       - name: AUTHENTICATOR_URL
         value: "https://cim.expertflow.com/secure-link"
+      - name: BUSINESSCALENDAR_URL
+        value: "https://cim.expertflow.com/business-calendar"
       - name: CHANNEL_IDENTIFIER
         value: "phone"
       - name: ENABLE_LOGO
@@ -732,7 +743,13 @@ customer-widget:
          nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
          nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS, DELETE,PATCH
          nginx.ingress.kubernetes.io/enable-cors: "true"
-
+   extraVolumes:
+      - name: ef-widget-translation
+        configMap:
+           name: ef-widget-translations-cm
+   extraVolumeMounts:
+      - name: ef-widget-translation
+        mountPath: /usr/share/nginx/html/widget-assets/i18n/
 
 
 ##############################file-engine##############################
@@ -830,7 +847,7 @@ historical-reports:
    replicaCount: 1
    image:       
       repository: cim/historical-reports-manager
-      tag: 4.7.1
+      tag: 4.7_f-CIM-27865
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -929,7 +946,7 @@ realtime-reports:
    replicaCount: 1
    image:       
       repository: cim/realtime-reports-manager
-      tag: 4.7
+      tag: 4.7_f-CIM-27865
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -990,7 +1007,7 @@ routing-engine:
    replicaCount: 1
    image:       
       repository: cim/media-routing-engine
-      tag: 4.7.1
+      tag: 4.7_f-CIM-27865
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -1066,7 +1083,7 @@ state-events-logger:
    replicaCount: 1
    image:       
       repository: cim/state-events-logger
-      tag: 4.7
+      tag: 4.7_f-CIM-27865
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts: []
@@ -1195,7 +1212,7 @@ unified-admin:
    replicaCount: 1
    image:       
       repository: cim/unified-admin
-      tag: 4.7
+      tag: 4.7-SR1_f-CIM-15934
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -1252,7 +1269,30 @@ unified-admin:
         value: '{{ .Values.global.efCommonVars_TWILIO_VERIFY_SID }}'
       - name: TWILIO_AUTH_TOKEN
         value: '{{ .Values.global.efCommonVars_TWILIO_AUTH_TOKEN }}'
-
+      - name: CX_ACTIVITY
+        value: 'https://{{ .Values.global.ingressRouter  }}/conversation-manager'      
+      - name: QM_API_URL
+        value: 'https://{{ .Values.global.ingressRouter  }}/qm-backend'
+      - name: KEYCLOAK_URL
+        value: 'https://{{ .Values.global.ingressRouter  }}/auth/realms'
+      - name: KEYCLOAK_URL_ADMIN
+        value: 'https://{{ .Values.global.ingressRouter  }}/auth/admin/realms'
+      - name: ADMIN_USERNAME
+        value: 'admin'
+      - name: ADMIN_PASSWORD
+        value: 'admin'
+      - name: CLIENT_ID
+        value: 'cim'
+      - name: CLIENT_SECRET
+        value: 'ef61df80-061c-4c29-b9ac-387e6bf67052'
+      - name: GRANT_TYPE
+        value: 'password'
+      - name: REALM
+        value: 'expertflow'
+      - name: WRAPUP_FORM_ID
+        value: '62d07f4f0980a50a91210bef'
+      - name: REVIEWING_AGENT_CHAT
+        value: 'false'
    service:
       enabled: true
       port: 3000
@@ -1294,13 +1334,15 @@ web-channel-manager:
    replicaCount: 1
    image:       
       repository: cim/web-channel-manager
-      tag: 4.7
+      tag: 4.7_f-CIM-26062
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "http-we-ch-7000"
         containerPort: 7000
    extraEnvVars:
+      - name: MEMORY_THRESHOLD_MBS
+        value: '{{ .Values.global.efCommonVars_MEMORY_THRESHOLD_MBS }}'
       - name: TZ
         value: '{{ .Values.global.efCommonVars_TZ }}'
       - name: CCM_URL
@@ -1328,3 +1370,57 @@ web-channel-manager:
 
       path: /web-channel-manager(/|$)(.*)
       pathType: ImplementationSpecific
+
+
+
+##############################business-calendar##############################
+business-calendar:
+   enabled: true
+   replicaCount: 1
+   image:
+      repository: cim/business-calendar
+      tag: 4.7_f_CIM-26615
+   efConnectionVars: true
+   efEnvironmentVars: false
+   containerPorts:
+      - name: "http-bu-ca-8443"
+        containerPort: 8443
+   extraEnvVars:
+      - name: MAX_EVENT_LIMIT_RECURRING_INSTANCES
+        value: "365"
+      - name: MONGODB_DATABASE
+        value: business_calendars_db
+      - name: LOG_LEVEL
+        value: DEBUG
+      - name: LOGGING_CONFIG
+        value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
+      - name: MASKING_LAYOUT_CLASS
+        value: "com.ef.calendar.utils.MaskingPatternLayout"
+   service:
+      enabled: true
+      port: 8443
+      portName: "http-bu-ca-8443"
+      targetPort: "http-bu-ca-8443"
+   ingress:
+      enabled: true
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /$2
+        nginx.ingress.kubernetes.io/use-regex: "true"
+      path: /business-calendar(/|$)(.*)
+      pathType: ImplementationSpecific
+   extraVolumes:
+      - name: mongo-mongodb-ca
+        secret:
+          secretName: mongo-mongodb-ca
+      - name: ef-logback
+        configMap:
+            name: ef-logback-cm
+   extraVolumeMounts:
+      - name: mongo-mongodb-ca
+        mountPath: /mongo
+      - name: ef-logback
+        mountPath: /logback
+
+
+
+
