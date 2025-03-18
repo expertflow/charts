@@ -62,7 +62,7 @@ clusterDomain: cluster.local
 
 
 
-##############################360-connector##############################
+##############################campaigns##############################
 campaigns-backend:
    enabled: true
    image:       
@@ -118,7 +118,7 @@ campaigns-backend:
 
 
 
-##############################360-connector##############################
+##############################conversation-studio##############################
 campaign-studio:
    enabled: true
    image:       
@@ -184,7 +184,7 @@ scheduled-activities:
   replicaCount: 1
   image:
     repository: campaign-manager/campaign-scheduler
-    tag: 4.7
+    tag: 4.8
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
