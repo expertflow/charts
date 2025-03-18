@@ -47,6 +47,7 @@ global:
   efCommonVars_TWILIO_AUTH_TOKEN: ""
   efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
   efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
+  efCommonVars_MEMORY_THRESHOLD_MBS: 1000
 
 # Change the below given paragraph when deploying an offline solution to pick the images from 
 #  -- Local Repo running inside the Kubernetes Engine
