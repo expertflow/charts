@@ -1,0 +1,145 @@
+{{- if .Values.middlewareCronJob.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: middleware-cronjob
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if or .Values.middlewareCronJob.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.middlewareCronJob.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.middlewareCronJob.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  schedule: {{ quote .Values.middlewareCronJob.schedule }}
+  concurrencyPolicy: {{ .Values.middlewareCronJob.concurrencyPolicy }}
+  failedJobsHistoryLimit: {{ .Values.middlewareCronJob.failedJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ .Values.middlewareCronJob.successfulJobsHistoryLimit }}
+  {{- if .Values.middlewareCronJob.startingDeadlineSeconds }}
+  startingDeadlineSeconds: {{ .Values.middlewareCronJob.startingDeadlineSeconds }}
+  {{- end }}
+  jobTemplate:
+    spec:
+      {{- if .Values.middlewareCronJob.backoffLimit }}
+      backoffLimit: {{ .Values.middlewareCronJob.backoffLimit }}
+      {{- end }}
+      {{- if .Values.middlewareCronJob.ttlSecondsAfterFinished }}
+      ttlSecondsAfterFinished: {{ .Values.middlewareCronJob.ttlSecondsAfterFinished }}
+      {{- end }}
+      template:
+        metadata:
+          labels: {{- include "common.labels.standard" . | nindent 12 }}
+            {{- if .Values.middlewareCronJob.labels }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.middlewareCronJob.labels "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.commonLabels }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.middlewareCronJob.annotations .Values.commonAnnotations }}
+          annotations:
+            {{- if .Values.middlewareCronJob.annotations }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.middlewareCronJob.annotations "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.commonAnnotations }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+        spec:
+          imagePullSecrets:
+             - name: {{ .Values.middlewareCronJob.imagePullSecret }}
+          containers:
+          - name: {{ include "common.names.fullname" . }}-cron
+            image: {{ .Values.middlewareCronJob.image }}
+            imagePullPolicy: IfNotPresent
+            env:
+            {{- if .Values.middlewareCronJob.extraEnvVars }}
+               {{- include "common.tplvalues.render" (dict "value" .Values.middlewareCronJob.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+            - name: MONGODB_CERTIFICATE_PATH
+              valueFrom:
+                 configMapKeyRef:
+                    key: MONGODB_CERTIFICATE_PATH
+                    name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+            - name: MONGODB_AUTHENTICATION_DATABASE
+              valueFrom:
+                 configMapKeyRef:
+                    key: MONGODB_AUTHENTICATION_DATABASE
+                    name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+            - name: MONGODB_ENABLE_SSL
+              valueFrom:
+                 configMapKeyRef:
+                    key: MONGODB_ENABLE_SSL
+                    name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+            - name: MONGODB_HOST
+              valueFrom:
+                 configMapKeyRef:
+                    key: MONGODB_HOST
+                    name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                 configMapKeyRef:
+                    key: MONGODB_PASSWORD
+                    name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+            - name: MONGODB_REPLICASET
+              valueFrom:
+                 configMapKeyRef:
+                    key: MONGODB_REPLICASET
+                    name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+            - name: MONGODB_READ_PREFERENCE
+              valueFrom:
+                 configMapKeyRef:
+                    key: MONGODB_READ_PREFERENCE
+                    name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+            - name: MONGODB_REPLICASET_ENABLED
+              valueFrom:
+                 configMapKeyRef:
+                    key: MONGODB_REPLICASET_ENABLED
+                    name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+
+
+            - name: MONGODB_USERNAME
+              valueFrom:
+                 configMapKeyRef:
+                    key: MONGODB_USERNAME
+                    name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+            - name: MONGODB_USERNAME
+              valueFrom:
+                 configMapKeyRef:
+                    key: MONGODB_USERNAME
+                    name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+            - name: MONGODB_CLIENT_CERT
+              valueFrom:
+                 configMapKeyRef:
+                    key: MONGODB_CLIENT_CERT
+                    name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+            - name: MONGODB_CA_CERT
+              valueFrom:
+                 configMapKeyRef:
+                    key: MONGODB_CA_CERT
+                    name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
+            {{- if .Values.middlewareCronJob.command }}
+            command: {{- include "common.tplvalues.render" (dict "value" .Values.middlewareCronJob.command "context" $) | nindent 14 }}
+            {{- end }}
+            {{- if .Values.middlewareCronJob.resources }}
+            resources: {{- include "common.tplvalues.render" (dict "value" .Values.middlewareCronJob.resources "context" $) | nindent 14 }}
+            {{- else if ne .Values.middlewareCronJob.resourcesPreset "none" }}
+            resources: {{- include "common.resources.preset" (dict "type" .Values.middlewareCronJob.resourcesPreset) | nindent 14 }}
+            {{- end }}
+            {{- if .Values.middlewareCronJob.containerSecurityContext.enabled }}
+            securityContext:
+              {{- include "common.tplvalues.render" ( dict "value" ( omit .Values.middlewareCronJob.containerSecurityContext "enabled" ) "context" $) | nindent 14 }}
+            {{- end }}
+            {{- if .Values.middlewareCronJob.extraVolumeMounts }}
+            volumeMounts:
+              {{- include "common.tplvalues.render" ( dict "value" .Values.middlewareCronJob.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+          restartPolicy: {{ .Values.middlewareCronJob.restartPolicy }}
+          volumes:
+          {{- if .Values.middlewareCronJob.extraVolumes }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.middlewareCronJob.extraVolumes "context" $) | nindent 12 }}
+          {{- end }}
+{{- end }}

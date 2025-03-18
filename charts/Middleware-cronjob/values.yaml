@@ -1,0 +1,81 @@
+# Default values for ef-cx.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+#
+# ███████ ██   ██ ██████  ███████ ██████  ████████ ███████ ██       ██████  ██     ██
+# ██       ██ ██  ██   ██ ██      ██   ██    ██    ██      ██      ██    ██ ██     ██
+# █████     ███   ██████  █████   ██████     ██    █████   ██      ██    ██ ██  █  ██
+# ██       ██ ██  ██      ██      ██   ██    ██    ██      ██      ██    ██ ██ ███ ██
+# ███████ ██   ██ ██      ███████ ██   ██    ██    ██      ███████  ██████   ███ ███
+#
+
+global:
+   efCxReleaseName: "ef-cx"
+   ingressRouter: devops.ef.com
+clusterDomain: cluster.local
+####################### Middleware CronJob Definitions ######################
+middlewareCronJob:
+   enabled: true
+   labels: {}
+   containerSecurityContext:
+     enabled: false
+     seLinuxOptions: {}
+     runAsUser: 1001
+     runAsGroup: 1001
+     runAsNonRoot: true
+     privileged: false
+     readOnlyRootFilesystem: true
+     allowPrivilegeEscalation: false
+     capabilities:
+       drop: ["ALL"]
+     seccompProfile:
+       type: "RuntimeDefault"
+   annotations: {}
+   schedule: "*/5 * * * *"
+   failedJobsHistoryLimit: 1
+   successfulJobsHistoryLimit: 5
+   startingDeadlineSeconds: 20
+   concurrencyPolicy: "Forbid"
+   backoffLimit: 0
+   restartPolicy: OnFailure
+   imagePullSecret: ef-gitlab-secret
+   image: gitimages.expertflow.com/voice-recording-solution/recording-link-activities:4.8
+   extraEnvVars:
+     - name: LOG_LEVEL
+       value: DEBUG
+     - name: RECORDING_BACKEND
+       value: ELEVEO
+     - name: ELEVEO_PASSWORD
+       value: "abc123"
+     - name: ELEVEO_URL
+       value: http://ELEVEO-IP
+     - name: ELEVEO_USERNAME
+       value: ccmanager
+     - name: ELEVEO_TIMEZONE
+       value: Asia/Karachi
+     - name: ELEVEO_PROCESSING_TIME
+       value: "10"
+     - name: ELEVEO_MAX_CALL_TIME
+       value: "60"
+     - name: CX_FQDN
+       value: https://{{ .Values.global.ingressRouter }}
+     - name: MIDDLEWARE_API
+       value: https://{{ .Values.global.ingressRouter }}/recording-middleware
+     - name: RETRIEVAL_INTERVAL
+       value: "5"
+     - name: TRUST_STORE_PASSWORD
+       value: "Expertflow123"
+     - name: KEY_STORE_PASSWORD
+       value: "Expertflow123"
+     - name: CX_CONVERSATION_MANAGER
+       value: "http://{{ .Values.global.efCxReleaseName }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
+   resourcesPreset: "none"
+   resources: {}
+   extraVolumeMounts: 
+      - name: mongo-mongodb-ca
+        mountPath: /mongo
+   extraVolumes:
+      - name: mongo-mongodb-ca
+        secret:
+          secretName: mongo-mongodb-ca
+
