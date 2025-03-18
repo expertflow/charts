@@ -71,6 +71,10 @@ dependencies:
     version: 1.0.0
     condition: web-channel-manager.enabled
     repository: file://charts/web-channel-manager
+  - name: business-calendar
+    version: 1.0.14
+    condition: business-calendar.enabled
+    repository: file://charts/business-calendar
 # A chart can be either an 'application' or a 'debug' chart.
 
 # Application charts are a collection of templates that can be packaged into versioned archives
@@ -84,13 +88,13 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 4.7.1
+version: 4.8.0
 #  
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion:  4.7.0
+appVersion:  4.8.0
 maintainers:
    - name: NMR Nasir Mehmood Rajput
      email: nasir.mehmood@expertflow.com
