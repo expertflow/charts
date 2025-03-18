@@ -3452,6 +3452,34 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/postgresql-11.9.7-v1/postgresql-11.9.7-v1.tgz
     version: 11.9.7-v1
+  qm:
+  - apiVersion: v2
+    appVersion: 4.8.0
+    created: "2025-03-18T08:06:41.164476229Z"
+    dependencies:
+    - condition: qm-backend.enabled
+      name: qm-backend
+      repository: file://charts/qm-backend
+      version: 1.0.0
+    - condition: qm-connector.enabled
+      name: qm-connector
+      repository: file://charts/qm-connector
+      version: 1.0.0
+    description: Expertflow CX Solution
+    digest: 7281c8e6d1ea7fe9ea126a25032064037f0b6984f65d4d96e91e6cb617bb710c
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: qm
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/qm-4.8.0/qm-4.8.0.tgz
+    version: 4.8.0
   rasa-x:
   - annotations:
       artifacthub.io/changes: |
@@ -4499,4 +4527,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-03-18T07:42:41.093379714Z"
+generated: "2025-03-18T08:06:41.164702672Z"
