@@ -2912,6 +2912,24 @@ entries:
   eleveo-middleware:
   - apiVersion: v2
     appVersion: 4.8.0
+    created: "2025-03-18T07:42:41.093102168Z"
+    description: Expertflow CX Solution
+    digest: c1797656106f85b53f16afc3814523e2cdc91ea6739817978b3bd2ca52883009
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: eleveo-middleware
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/eleveo-middleware-4.8.0/eleveo-middleware-4.8.0.tgz
+    version: 4.8.0
+  - apiVersion: v2
+    appVersion: 4.8.0
     created: "2025-03-13T12:07:19.845759744Z"
     description: Expertflow CX Solution
     digest: c3d8e45fab8dab8dff9e79e0ee9c74b6744e1b83a45196613c2cce0cd878c893
@@ -4481,4 +4499,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-03-18T07:29:15.033722935Z"
+generated: "2025-03-18T07:42:41.093379714Z"
