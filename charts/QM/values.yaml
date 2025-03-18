@@ -1,0 +1,188 @@
+# Default values for ef-cx.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+#
+# ███████ ██   ██ ██████  ███████ ██████  ████████ ███████ ██       ██████  ██     ██
+# ██       ██ ██  ██   ██ ██      ██   ██    ██    ██      ██      ██    ██ ██     ██
+# █████     ███   ██████  █████   ██████     ██    █████   ██      ██    ██ ██  █  ██
+# ██       ██ ██  ██      ██      ██   ██    ██    ██      ██      ██    ██ ██ ███ ██
+# ███████ ██   ██ ██      ███████ ██   ██    ██    ██      ███████  ██████   ███ ███
+#
+# Globals Section:
+#
+# global.ingressRouter: Provides a central location for the FQDN that will be used \
+#                       across the EF CX solution
+# global.registry: when deploying solution with limited access to internet, \
+#                  changing this will cause all subsequent image pulls from this registry. \
+#                  Used as Variable in all sub-charts
+#
+
+global:
+  ingressRouter: "devops212.ef.com"
+  ingressCertName: "ef-ingress-tls-secret"
+  ingressClassName: "nginx"
+  efCxReleaseName: "ef-cx"
+  commonIngressAnnotations: {}
+  ##    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  ##    nginx.ingress.kubernetes.io/use-regex: "true"
+  imageRegistry: "gitimages.expertflow.com"
+  imagePullSecrets:
+    - ef-gitlab-secret
+  ## The CommonEnvVars are now part of the globals. Selective adaption to components is mandatory.
+#  -- Local Repo running inside the Kubernetes Engine
+#  -- Customer's own Repo requiring all images to be sorted locally
+#
+# imageCredentials:
+# imageCredentials.registry: provides the registry URL
+# imageCredentials.username: username to use
+# imageCredentials.password: Password for the user
+# imageCredentials.email: an email address for the user
+#
+clusterDomain: cluster.local
+
+imageCredentials:
+  registry: gitimages.expertflow.com
+  username: efcx
+  password: RecRpsuH34yqp56YRFUb
+  email: devops@expertflow.com
+
+##############################qm-backend##############################
+qm-backend:
+  enabled: true
+  image:
+    repository: cim/qm-backend
+    tag: 4.8
+  efConnectionVars: false
+  efEnvironmentVars: false
+  containerPorts:
+    - name: "http-qmbe3000"
+      containerPort: 3000
+  extraEnvVars:
+    - name: PG_PORT
+      value: "5432"
+    - name: LOG_LEVEL
+      value: debug
+    - name: PG_USERNAME
+      value: sa
+    - name: PG_PASSWORD
+      value: "Expertflow123"
+    - name: PG_DATABASE
+      value: "qm_db"
+    - name: CONVERSATION_MANAGER_URL
+      value: http://{{ .Values.global.efCxReleaseName }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080
+    - name: PG_HOST
+      value: ef-postgresql.ef-external.svc.cluster.local
+  service:
+    enabled: true
+    port: 3000
+    portName: "http-qmbe3000"
+    targetPort: "http-qmbe3000"
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS, DELETE,PATCH
+      nginx.ingress.kubernetes.io/enable-cors: "true"
+      nginx.ingress.kubernetes.io/configuration-snippet:
+        'more_set_headers "Access-Control-Allow-Origin:
+        $http_origin";'
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+      nginx.ingress.kubernetes.io/use-regex: "true"
+    longLivedConnection:
+      path: "/qm-backend/(notification/[^/]+/sse)(/|$)"
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /$1
+        nginx.ingress.kubernetes.io/proxy-buffering: "off"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "43200"
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "43200"
+    path: "/qm-backend(/|$)(.*)"
+    pathType: ImplementationSpecific
+  extraVolumes:
+    - name: ef-postgresql-crt
+      secret:
+        secretName: ef-postgresql-crt
+  extraVolumeMounts:
+    - name: ef-postgresql-crt
+      mountPath: /postgresql
+##############################qm-connector##############################
+qm-connector:
+  enabled: false
+  image:
+    repository: voice-recording-solution/qm-connector
+    tag: 4.8
+  containerPorts: []
+  extraEnvVars:
+    - name: RECORDING_SERVER_FQDN
+      value: https://192.168.1.126
+    - name: EFCX_FQDN
+      value: https://efcx-frontend.expertflow.com
+    - name: CALL_BACK_URL
+      value: http://webhook.site/5ba1c6f9-d086-48cb-8341-c76cd13e4a80
+    - name: UCCE_ENGINE
+      value: sqlserver
+    - name: UCCE_IP
+      value: "192.168.1.72"
+    - name: UCCE_PORT
+      value: "1433"
+    - name: UCCE_DATABASE
+      value: uc126_awdb
+    - name: UCCE_USERNAME
+      value: sa
+    - name: UCCE_PASSWORD
+      value: Expertflow464
+    - name: UCCE_OB_SERVICE_IDENTIFIER
+      value: "8899"
+    - name: KEYCLOAK_REALM_NAME
+      value: expertflow
+    - name: KEYCLOAK_CLIENT_ID
+      value: cim
+    - name: KEYCLOAK_CLIENT_SECRET
+      value: ef61df80-061c-4c29-b9ac-387e6bf67052
+    - name: KEYCLOAK_USERNAME
+      value: vrs
+    - name: KEYCLOAK_PASSWORD
+      value: vrs
+    - name: KEYCLOAK_AGENT_ROLE_NAME
+      value: agent
+    - name: KEYCLOAK_AGENT_ROLE_ID
+      value: 1903735d-5bcc-4253-a05e-ea1487195c9c
+    - name: DB_NAME
+      value: vrs5
+    - name: DB_USER
+      value: sa
+    - name: DB_PASSWORD
+      value: Expertflow123
+    - name: DB_ENGINE
+      value: sqlserver
+    - name: DB_HOST
+      value: 192.168.1.126
+    - name: DB_PORT
+      value: "1433"
+    - name: DB_DRIVER
+      value: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  service:
+    enabled: false
+    port: ""
+    portName: ""
+    targetPort: ""
+  ingress:
+    enabled: false
+    annotations:
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_headers "Access-Control-Allow-Origin: $http_origin";
+        if ($request_uri ~* "^/survey-studio$") {
+          return 301 $scheme://$host$request_uri/;
+        }
+      nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+      nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS, DELETE,PATCH
+      nginx.ingress.kubernetes.io/enable-cors: "true"
+      nginx.ingress.kubernetes.io/rewrite-target: /red/$2
+    path: ""
+    pathType: ImplementationSpecific
+  extraVolumes: []
+  extraVolumeMounts: []

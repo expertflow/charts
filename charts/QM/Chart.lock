@@ -1,0 +1,9 @@
+dependencies:
+- name: qm-backend
+  repository: file://charts/qm-backend
+  version: 1.0.0
+- name: qm-connector
+  repository: file://charts/qm-connector
+  version: 1.0.0
+digest: sha256:dca9cf06b30198d103a11af74b76176808f3cca50dbabee0a3d79694a10f18c7
+generated: "2025-03-18T13:03:54.010443+05:00"

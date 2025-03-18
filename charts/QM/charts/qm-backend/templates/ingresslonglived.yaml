@@ -1,0 +1,51 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "common.names.fullname-ingress" . }}-longlived
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if or .Values.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingress.longLivedConnection.annotations .Values.ingress.annotations  .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.global.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.global.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.global.ingressRouter }}
+    - host: {{ .Values.global.ingressRouter | quote }}
+      http:
+        paths:
+          {{- if .Values.ingress.extraPaths }}
+          {{-  include "common.tplvalues.render" ( dict "value"  .Values.ingress.extraPaths "context" $) | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.ingress.longLivedConnection.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname-svc" .) "servicePort"  .Values.service.port  "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname-svc" $) "servicePort" .Values.service.port  "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  tls:
+    - hosts:
+        - {{ .Values.global.ingressRouter | quote }}
+      secretName: {{- include "common.tplvalues.render" ( dict "value"   .Values.ingress.tlsSecretName "context"  $) | indent 2  }}
+    {{- if .Values.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+{{- end }}
+
