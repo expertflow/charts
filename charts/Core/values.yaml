@@ -680,7 +680,7 @@ customer-widget:
    replicaCount: 1
    image:       
       repository: efpublic/customer-widget
-      tag: 4.7.1
+      tag: 4.7.2
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -713,6 +713,8 @@ customer-widget:
         value: "true"
       - name: USERNAME_ENABLED
         value: "true"
+      - name: MUTE_NOTIFICATIONS
+        value: "false"
    service:
       enabled: true
       port: 80
@@ -732,6 +734,14 @@ customer-widget:
          nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
          nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS, DELETE,PATCH
          nginx.ingress.kubernetes.io/enable-cors: "true"
+   extraVolumes:
+      - name: ef-widget-translation
+        configMap:
+           name: ef-widget-translations-cm
+   extraVolumeMounts:
+      - name: ef-widget-translation
+        mountPath: /usr/share/nginx/html/widget-assets/i18n/
+        
 
 
 
