@@ -75,7 +75,7 @@ connect360:
    replicaCount: 1
    image:
       repository: cim/360-connector
-      tag: 4.8
+      tag: 4.9
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -124,7 +124,7 @@ facebook-connector:
    replicaCount: 1
    image:       
       repository: cim/facebook-connector
-      tag: 4.8
+      tag: 4.9
    efConnectionVars: false
    efEnvironmentVars: true 
    containerPorts:
@@ -171,7 +171,7 @@ instagram-connector:
    replicaCount: 1
    image:       
       repository: cim/instagram-connector
-      tag: 4.8
+      tag: 4.9
    efConnectionVars: false
    efEnvironmentVars: false 
    containerPorts:
@@ -218,7 +218,7 @@ smpp-connector:
    replicaCount: 1
    image:       
       repository: cti/hc_smpp_connector
-      tag: 4.8
+      tag: 4.9
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -265,7 +265,7 @@ telegram-connector:
    replicaCount: 1
    image:       
       repository: cim/telegram-connector
-      tag: 4.8
+      tag: 4.9
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -313,7 +313,7 @@ twilio-connector:
    replicaCount: 1
    image:       
       repository: cim/twilio-connector
-      tag: 4.8
+      tag: 4.9
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -359,7 +359,7 @@ twitter-connector:
    replicaCount: 1
    image:       
       repository: cim/twitter-connector
-      tag: 4.8
+      tag: 4.9
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -395,7 +395,7 @@ viber-connector:
    replicaCount: 1
    image:       
       repository: cim/viber-connector
-      tag: 4.8
+      tag: 4.9
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -434,3 +434,235 @@ viber-connector:
       - name: ef-logback
         mountPath: /logback
 
+##############################email-connector##############################
+email-connector:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: cim/email-connector
+    tag: 4.9
+  efConnectionVars: true
+  efEnvironmentVars: false
+  containerPorts:
+    - name: "http-em-co-8080"
+      containerPort: 8080
+  extraEnvVars:
+    - name: TZ
+      value: '{{ .Values.global.efCommonVars_TZ }}'
+    - name: CCM_URL
+      value: "http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+    - name: FILE_ENGINE_URL
+      value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
+    - name: SCHEDULER_FIXED_RATE_IN_MS
+      value: "60000"
+  service:
+    enabled: true
+    port: 8080
+    portName: "http-em-co-8080"
+    targetPort: "http-em-co-8080"
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+
+    path: /email-connector(/|$)(.*)
+    pathType: ImplementationSpecific
+
+##############################whatsapp-connector##############################
+whatsapp-connector:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: cim/whatsapp-connector
+    tag: 4.9
+  efConnectionVars: false
+  efEnvironmentVars: false
+  containerPorts:
+    - name: "http-wa-co-8080"
+      containerPort: 8080
+  extraEnvVars:
+    - name: TZ
+      value: '{{ .Values.global.efCommonVars_TZ }}'
+    - name: LOGGING_CONFIG
+      value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
+    - name: CCM_URL
+      value: "http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+    - name: FILE_ENGINE_URL
+      value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
+    - name: MASKING_LAYOUT_CLASS
+      value: "com.ef.connector.whatsappconnector.utils.MaskingPatternLayout"
+  service:
+    enabled: true
+    port: 8080
+    portName: "http-wa-co-8080"
+    targetPort: "http-wa-co-8080"
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+    path:  /whatsapp-connector(/|$)(.*)
+    pathType: ImplementationSpecific
+  extraVolumes:
+    - name: ef-logback
+      configMap:
+        name: ef-logback-cm
+  extraVolumeMounts:
+    - name: ef-logback
+      mountPath: /logback
+
+
+##############################microsoft-exchange-email-connector##############################
+ms-email-connector:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: cim/ms-exchange-email-connector
+    tag: 4.9
+  efConnectionVars: true
+  efEnvironmentVars: false
+  containerPorts:
+    - name: "http-ex-co-8080"
+      containerPort: 8080
+  extraEnvVars:
+    - name: TZ
+      value: '{{ .Values.global.efCommonVars_TZ }}'
+    - name: LOGGING_CONFIG
+      value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
+    - name: CCM_URL
+      value: "http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+    - name: FILE_ENGINE_URL
+      value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
+    - name: MASKING_LAYOUT_CLASS
+      value: "com.ef.connector.msexchangeemailconnector.utils.MaskingPatternLayout"
+    - name: SCHEDULER_FIXED_RATE_IN_MS
+      value: "60000"
+  service:
+    enabled: true
+    port: 8080
+    portName: "http-ex-co-8080"
+    targetPort: "http-ex-co-8080"
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+    path:  /ms-email-connector(/|$)(.*)
+    pathType: ImplementationSpecific
+  extraVolumes:
+    - name: ef-logback
+      configMap:
+        name: ef-logback-cm
+  extraVolumeMounts:
+    - name: ef-logback
+      mountPath: /logback
+
+
+##############################################youtube-connector##############################################
+youtube-connector:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: cim/youtube-connector
+    tag: 4.9
+  efConnectionVars: true
+  efEnvironmentVars: false
+  containerPorts:
+    - name: http-yt-co-8080
+      containerPort: 8080
+  extraEnvVars:
+    - name: TZ
+      value: "{{ .Values.global.efCommonVars_TZ }}"
+    - name: CCM_URL
+      value: http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081
+    - name: FILE_ENGINE_URL
+      value: http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080
+    - name: SCHEDULER_FIXED_RATE_IN_MS
+      value: "90000"
+    - name: DAYS_TO_KEEP_TOP_LEVEL_COMMENTS
+      value: "7"
+  service:
+    enabled: true
+    port: 8080
+    portName: http-yt-co-8080
+    targetPort: http-yt-co-8080
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    path: /youtube-connector(/|$)(.*)
+    pathType: ImplementationSpecific
+##############################linkedin-connector##############################
+linkedin-connector:
+   enabled: true
+   replicaCount: 1
+   image:
+      repository: project_dev/linkedinconnector
+      tag: 4.9
+   efConnectionVars: false
+   efEnvironmentVars: false
+   containerPorts:
+      - name: "http-li-9001"
+        containerPort: 9001
+   extraEnvVars:
+      - name: http.connect.timeout.sec
+        value: "500000"
+      - name: http.read.timeout.sec
+        value: "1000000"
+      - name: http.request.timeout.sec
+        value: "10000000"
+      - name: enable.ssl.env
+        value: "false"
+      - name: linkedin.scheduler.fixed-rate
+        value: "600000"
+      - name: LINKEDIN_CIM_SERVICE_ID
+        value: "2001"
+      - name: TZ
+        value: '{{ .Values.global.efCommonVars_TZ }}'
+      - name: LOGGING_CONFIG
+        value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
+      - name: LINKEDIN_CIM_SERVICE_URL
+        value: "http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+      - name: MASKING_LAYOUT_CLASS
+        value: "com.linkedin.connector.logging.MaskingPatternLayout"
+      - name: DATABASE_URL
+        value: jdbc:postgresql://ef-postgresql.ef-external.svc:5432/linkedinmetadata?sslmode=verify-ca&sslrootcert=/postgresql/ca.crt
+      - name: DATABASE_USERNAME
+        value: "sa"
+      - name: DATABASE_PASSWORD
+        value: "Expertflow123"
+   service:
+      enabled: true
+      port: 9001
+      portName: "http-li-9001"
+      targetPort: "http-li-9001"
+   ingress:
+      enabled: true
+      annotations:
+         nginx.ingress.kubernetes.io/rewrite-target: /$2
+         nginx.ingress.kubernetes.io/use-regex: "true"
+         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+      path:  /linkedin-connector(/|$)(.*)
+      pathType: ImplementationSpecific
+   extraVolumes:
+      - name: ef-logback
+        configMap:
+          name: ef-logback-cm
+      - name: ef-postgresql-crt-vol
+        secret:
+          secretName: ef-postgresql-crt
+   extraVolumeMounts:
+      - name: ef-logback
+        mountPath: /logback
+      - name: ef-postgresql-crt-vol
+        mountPath: /postgresql

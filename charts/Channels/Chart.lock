@@ -23,5 +23,20 @@ dependencies:
 - name: viber-connector
   repository: file://charts/viber-connector
   version: 1.0.0
-digest: sha256:6764ab8b9baf7100f8ce47c02016162dd547aa6129f3fe1c11400ba1678b9457
-generated: "2025-03-18T12:16:25.341889+05:00"
+- name: youtube-connector
+  repository: file://charts/youtube-connector
+  version: 1.0.0
+- name: email-connector
+  repository: file://charts/email-connector
+  version: 1.0.0
+- name: ms-email-connector
+  repository: file://charts/ms-email-connector
+  version: 1.0.0
+- name: whatsapp-connector
+  repository: file://charts/whatsapp-connector
+  version: 1.0.0
+- name: linkedin-connector
+  repository: file://charts/linkedin-connector
+  version: 1.0.14
+digest: sha256:82d0bc8c391f1a0ebf1c9004b35c7fd86050e8c8993308f049377423019477a6
+generated: "2025-04-21T13:08:48.35798+05:00"
