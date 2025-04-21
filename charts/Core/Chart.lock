@@ -51,4 +51,4 @@ dependencies:
   repository: file://charts/business-calendar
   version: 1.0.14
 digest: sha256:c692626b5bc9add2e1f489cf336870ed3810a8ba4e22291c1f9db275bafcb8c2
-generated: "2025-03-18T12:27:29.62966+05:00"
+generated: "2025-04-21T12:38:21.269567+05:00"
