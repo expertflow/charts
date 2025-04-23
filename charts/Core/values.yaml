@@ -155,7 +155,7 @@ agent-manager:
    enabled: true
    replicaCount: 1
    image:       
-      repository: cim/agent-manager/build
+      repository: cim/agent-manager
       tag: 4.9
    efConnectionVars: true
    efEnvironmentVars: false
@@ -323,7 +323,7 @@ ccm:
    enabled: true
    replicaCount: 1
    image:       
-      repository: cim/customer-channel-manager/build
+      repository: cim/customer-channel-manager
       tag: 4.9
    efConnectionVars: true
    efEnvironmentVars: true 
@@ -688,7 +688,7 @@ customer-widget:
    enabled: true
    replicaCount: 1
    image:       
-      repository: efpublic/customer-widget/build
+      repository: efpublic/customer-widget
       tag: 4.9
    efConnectionVars: true
    efEnvironmentVars: false
@@ -856,7 +856,7 @@ historical-reports:
    enabled: true
    replicaCount: 1
    image:       
-      repository: cim/historical-reports-manager/build
+      repository: cim/historical-reports-manager
       tag: 4.9
    efConnectionVars: true
    efEnvironmentVars: false
