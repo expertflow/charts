@@ -497,6 +497,59 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/agent-desk-1.0.19/agent-desk-1.0.19.tgz
     version: 1.0.19
+  apisix:
+  - annotations:
+      category: Infrastructure
+      images: |
+        - name: apisix
+          image: docker.io/bitnami/apisix:3.12.0-debian-12-r0
+        - name: apisix-dashboard
+          image: docker.io/bitnami/apisix-dashboard:3.0.1-debian-12-r64
+        - name: apisix-ingress-controller
+          image: docker.io/bitnami/apisix-ingress-controller:1.8.4-debian-12-r0
+        - name: os-shell
+          image: docker.io/bitnami/os-shell:12-debian-12-r40
+      licenses: Apache-2.0
+      tanzuCategory: application
+    apiVersion: v2
+    appVersion: 3.12.0
+    created: "2025-04-25T07:08:37.684884062Z"
+    dependencies:
+    - condition: etcd.enabled
+      name: etcd
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 11.x.x
+    - name: common
+      repository: oci://registry-1.docker.io/bitnamicharts
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Apache APISIX is high-performance, real-time API Gateway. Features
+      load balancing, dynamic upstream, canary release, circuit breaking, authentication,
+      observability, amongst others.
+    digest: 50b3ad928b7ed388af1d8f48a65526c637dbbc11c2b8deb38bcd3345cdad7f59
+    home: https://bitnami.com
+    icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/apisix/img/apisix-stack-220x234.png
+    keywords:
+    - apisix
+    - ingress
+    - openresty
+    - controller
+    - http
+    - web
+    - www
+    - reverse proxy
+    maintainers:
+    - name: Broadcom, Inc. All Rights Reserved.
+      url: https://github.com/bitnami/charts
+    name: apisix
+    sources:
+    - https://github.com/bitnami/charts/tree/main/bitnami/apisix
+    - https://github.com/bitnami/charts/tree/main/bitnami/apisix-dashboard
+    - https://github.com/bitnami/charts/tree/main/bitnami/apisix-ingress-controller
+    urls:
+    - https://github.com/expertflow/charts/releases/download/apisix-4.2.2/apisix-4.2.2.tgz
+    version: 4.2.2
   campaigns:
   - apiVersion: v2
     appVersion: 4.9.0
@@ -4936,4 +4989,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-04-21T10:08:21.709068499Z"
+generated: "2025-04-25T07:08:37.685092138Z"
