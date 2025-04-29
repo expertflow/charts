@@ -6,4 +6,4 @@ dependencies:
   repository: file://charts/grafana
   version: 8.2.11
 digest: sha256:984780ee71443606f67a6e102d8db9a1bdb920730bd04449ac6599594742c4d4
-generated: "2025-04-21T12:49:27.045197+05:00"
+generated: "2025-04-29T16:50:54.099061+05:00"
