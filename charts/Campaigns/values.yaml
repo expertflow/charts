@@ -48,6 +48,28 @@ global:
   efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
   efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
   efCommonVars_MEMORY_THRESHOLD_MBS: 1000
+  apisix:
+    keycloak:
+      discoveryUrl: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration" # Internal URL
+      realm: "expertflow"
+      clientId: "cim"
+      clientSecret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+      bearerOnly: true
+      tokenSigningAlg: "RS256"
+      setAccessTokenHeader: false # Don't pass token header to backend
+      setUserInfoHeader: false    # Don't pass userinfo header to backend
+      defaultAudience: ["cim", "account", "realm-management"]
+      defaultScopes: ["email", "profile"]
+    plugins:
+      cors:
+        enabled: false # Default CORS disabled unless enabled per route
+        allowOrigins: "*"
+        allowMethods: "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+        allowCredentials: true
+      rewrite:
+        stripPrefix: true # Default rewrite action
+
+
 
 # Change the below given paragraph when deploying an offline solution to pick the images from 
 #  -- Local Repo running inside the Kubernetes Engine
@@ -68,7 +90,7 @@ campaigns-backend:
    enabled: true
    image:       
       repository: cim/campaigns
-      tag: 4.7.1
+      tag: 4.9_f-CIM-28910
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -100,15 +122,24 @@ campaigns-backend:
       port: 3000
       portName: "http-cp-3000"
       targetPort: "http-cp-3000"
-   ingress: 
-      enabled: true 
-      annotations:
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-        nginx.ingress.kubernetes.io/use-regex: "true"
-      path: /campaigns(/|$)(.*)(/|$)(.*)
-      pathType: ImplementationSpecific
+   ingress: { enabled: false } # Using APISIX
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/campaigns/*"]     # From ingress path
+       backendServicePort: 3000    # From ingress backend
+       # backendServiceName: ""    # Optional: Defaults to chart service name
+       # backendNamespace: ""    # Optional: Defaults to release namespace
+       # backendScheme: "http"     # Optional: Defaults to http
+       # methods: ["GET", "POST"]  # Optional: Defaults to all
+       # enableWebsocket: false    # Optional: Defaults to false
+       plugins:
+         enableAuth: true          # Assumed: Requires auth
+         enableRewrite: true       # From ingress rewrite-target (implies default prefix strip)
+         # rewriteStripPrefix: true # Template default when enableRewrite=true and no custom regex
+         enableCors: false         # No CORS annotations on specific ingress
+         enableTrailingSlashRedirect: false # No redirect needed
    extraVolumes:
       - name: mongo-mongodb-ca
         secret:
@@ -124,7 +155,7 @@ campaign-studio:
    enabled: true
    image:       
       repository: cim/conversation-studio
-      tag: 4.7.1
+      tag: 4.9_f-CIM-28910
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -145,28 +176,42 @@ campaign-studio:
         value: 52952a5a-e7b0-40bc-aae2-f0819446c968
       - name: IVR_EXTENSION
         value: "*9664"
+      - name: UCCE_FQDN
+        value: 192.168.1.89
+      - name: UCCE_USERNAME
+        value: administrator@ucce.ipcc
+      - name: UCCE_PASSWORD
+        value: Expertflow464
+      - name: UCCX_FQDN
+        value: 192.168.1.33
+      - name: UCCX_USERNAME
+        value: Administrator
+      - name: UCCX_PASSWORD
+        value: Expertflow464
+      - name: ALLOW_CISCO_SELF_SIGNED_CERTS
+        value: "true"
+      - name: CISCO_PROXY
+        value: 'https://{{ .Values.global.ingressRouter }}/campaign-studio'
    service:
       enabled: true
       port: 1880
       portName: "http-sb-1880"
       targetPort: "http-sb-1880"
-   ingress: 
-      enabled: true 
-      annotations:
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-        nginx.ingress.kubernetes.io/use-regex: "true"
-        nginx.ingress.kubernetes.io/configuration-snippet: |
-           more_set_headers "Access-Control-Allow-Origin: $http_origin";
-           if ($request_uri ~* "^/campaign-studio$") {
-             return 301 $scheme://$host$request_uri/;
-           }
-        nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
-        nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS, DELETE,PATCH
-        nginx.ingress.kubernetes.io/enable-cors: "true"
-        nginx.ingress.kubernetes.io/rewrite-target: /red/$2
-      path: /campaign-studio(/|$)(.*)
-      pathType: ImplementationSpecific
+   ingress: { enabled: false } # Using APISIX
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/campaign-studio/*"] # From ingress path
+       backendServicePort: 1880    # From ingress backend
+       plugins:
+         enableAuth: true          # Assumed: Requires auth
+         enableRewrite: true       # Enable rewrite for custom rule
+         rewriteStripPrefix: false # MUST be false to allow custom regex below
+         rewriteRegexUriFrom: "^/campaign-studio(/|$)(.*)" # Specific rule from ingress rewrite-target: /red/$2
+         rewriteRegexUriTo: "/red/$2"
+         enableCors: true          # CORS annotations were present on specific ingress
+         enableTrailingSlashRedirect: true #
    extraVolumes:
       - name: ef-logback
         configMap:
@@ -185,7 +230,7 @@ scheduled-activities:
   replicaCount: 1
   image:
     repository: campaign-manager/campaign-scheduler
-    tag: 4.9.1
+    tag: 4.9_f-CIM-28776
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -211,15 +256,19 @@ scheduled-activities:
     port: 8894
     portName: "http-sc-ac-8894"
     targetPort: "http-sc-ac-8894"
-  ingress:
-    enabled: true
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /$2
-      nginx.ingress.kubernetes.io/use-regex: "true"
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-      #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-    path: /scheduler(/|$)(.*)
-    pathType: ImplementationSpecific
+  ingress: { enabled: false } # Using APISIX
+  apisixRoutes:
+    - nameSuffix: "main"
+      enabled: true
+      priority: 0
+      paths: ["/scheduler/*"]     # From ingress path
+      backendServicePort: 8894    # From ingress backend
+      plugins:
+        enableAuth: true          # Assumed: Requires auth
+        enableRewrite: true       # From ingress rewrite-target (implies default prefix strip)
+        # rewriteStripPrefix: true # Template default when enableRewrite=true and no custom regex
+        enableCors: false         # No CORS annotations on specific ingress
+        enableTrailingSlashRedirect: false # No redirect needed
   extraVolumes:
     - name: redis-crt
       secret:
