@@ -1,10 +1,11 @@
+{{- if .Values.ingress.ingressAssets.enabled }}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "common.names.fullname-ingress" . }}-assets
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value"  .Values.ingress.ingressAssetsAnnotations "context"  $)  | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value"  .Values.ingress.ingressAssets.annotations "context"  $)  | nindent 4 }}
 spec:
   {{- if and .Values.global.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
   ingressClassName: {{ .Values.global.ingressClassName | quote }}
@@ -14,7 +15,7 @@ spec:
     - host: {{ .Values.global.ingressRouter | quote }}
       http:
         paths:
-          - path: /assets
+          - path: {{- .Values.ingressAssets.path }}
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: Prefix
             {{- end }}
@@ -24,3 +25,4 @@ spec:
     - hosts:
         - {{ .Values.global.ingressRouter | quote }}
       secretName: {{- include "common.tplvalues.render" ( dict "value"   .Values.ingress.tlsSecretName "context"  $) | indent 2  }}
+{{- end }}

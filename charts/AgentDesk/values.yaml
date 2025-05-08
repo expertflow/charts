@@ -56,6 +56,34 @@ global:
   efGrafanaAgentDashboardFilename: "Agent_Dashboard_CIM-mysql.json"
   efGrafanaDashboardDroviderCM: "ef-grafana-dashboard-provider-cm"
   efGrafanaIniCM: "ef-grafana-ini-cm"
+  apisix:
+    # --- Default Keycloak OIDC Config ---
+    # Used IF a route has plugins.enableAuth = true
+    keycloak:
+      discoveryUrl: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration" # Internal URL
+      realm: "expertflow"
+      clientId: "cim"
+      # !! IMPORTANT: Use Helm secrets or external secret management for clientSecret !!
+      clientSecret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+      # Default behavior settings
+      bearerOnly: true
+      tokenSigningAlg: "RS256"
+      setAccessTokenHeader: false # Don't pass token header to backend
+      setUserInfoHeader: false    # Don't pass userinfo header to backend
+      # Default Audience/Scopes (OVERRIDE PER ROUTE if needed)
+      defaultAudience: ["cim", "account", "realm-management"]
+      defaultScopes: ["email", "profile"]
+
+    # --- Default Plugin Settings ---
+    plugins:
+      cors:
+        enabled: false # Default CORS disabled unless enabled per route
+        allowOrigins: "*"
+        allowMethods: "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+        allowCredentials: true
+      rewrite:
+        stripPrefix: true # Default rewrite action
+
 
 
 
@@ -68,7 +96,7 @@ unified-agent:
    replicaCount: 1
    image:       
       repository: cim/unified-agent
-      tag: 4.9.1
+      tag: 4.9_f-CIM-28279
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -204,24 +232,34 @@ unified-agent:
       port: 80
       portName: "http-un-ag-80"
       targetPort: "http-un-ag-80"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/configuration-snippet: 'more_set_headers "Access-Control-Allow-Origin: $http_origin";'
-         nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
-         nginx.ingress.kubernetes.io/cors-allow-methods: 'PUT, GET, POST, OPTIONS, DELETE,PATCH'
-         nginx.ingress.kubernetes.io/enable-cors: "true"
-      path: /unified-agent(/|$)(.*)
-      pathType: ImplementationSpecific
-      ingressAssetsAnnotations:
-         nginx.ingress.kubernetes.io/configuration-snippet: 'more_set_headers "Access-Control-Allow-Origin: $http_origin";'
-         nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
-         nginx.ingress.kubernetes.io/cors-allow-methods: 'PUT, GET, POST, OPTIONS, DELETE,PATCH'
-         nginx.ingress.kubernetes.io/enable-cors: "true"
+   ingress:
+      enabled: false
+      ingressAssets:
+        enabled: false
+        annotations: {}
+        path: /assets
+   apisixRoutes:
+     # Route 1: Main application path
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0 # Default priority
+       paths: ["/unified-agent", "/unified-agent/*"] # Matches /unified-agent/ and everything after
+       backendServicePort: 80
+       plugins:
+         enableAuth: false      # Assumed: Main application endpoints require auth
+         enableRewrite: true   # Corresponds to rewrite-target removing /unified-agent
+         # rewriteStripPrefix: true is implied by enableRewrite: true unless overridden
+         enableCors: true      # From ingress annotations
+     # Route 2: Assets path
+     - nameSuffix: "assets"
+       enabled: true
+       priority: 0 # Same priority should be fine as paths are distinct prefixes
+       paths: ["/assets/*"]    # Matches /assets/* directly
+       backendServicePort: 80
+       plugins:
+         enableAuth: false     # Assumed: Assets typically don't require auth
+         enableRewrite: false  # No rewrite annotation was present for assets ingress
+         enableCors: true      # From ingress annotations
    extraVolumes:
       - name: ef-app-translation
         configMap:
@@ -279,21 +317,14 @@ grafana:
         value: "true"
       - name: GF_AUTH_ANONYMOUS_ENABLED
         value: "true"
-  ingress:
-    enabled: true
-    className: "{{ .Values.global.ingressClassName }}"
-    pathType: ImplementationSpecific
-    hostname: "{{ .Values.global.ingressRouter }}"
-    path: /grafana(/|$)(.*)
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /$2
-      nginx.ingress.kubernetes.io/use-regex: "true"
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-      #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-    tls: true
-    extraTls:
-       - hosts:
-           -  '{{ .Values.global.ingressRouter }}'
-         secretName: '{{ .Values.global.ingressCertName }}'
-
-
+  ingress: { enabled: false } # Disabled in favor of APISIX
+  apisixRoutes:
+    - nameSuffix: "main"
+      enabled: true
+      # Translating path /grafana(/|$)(.*) to APISIX prefix match
+      paths: ["/grafana/*"]
+      backendServicePort: 3000 # Matches assumed service port
+      plugins:
+        enableAuth: false # Assuming Grafana requires auth
+        enableRewrite: true # Use default stripPrefix to remove /grafana
+        # enableCors: false # No CORS annotations were present for Grafana ingress
