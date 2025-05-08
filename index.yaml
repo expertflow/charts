@@ -4419,6 +4419,33 @@ entries:
   qm:
   - apiVersion: v2
     appVersion: 4.8.0
+    created: "2025-05-08T09:11:25.567925361Z"
+    dependencies:
+    - condition: qm-backend.enabled
+      name: qm-backend
+      repository: file://charts/qm-backend
+      version: 1.0.0
+    - condition: qm-connector.enabled
+      name: qm-connector
+      repository: file://charts/qm-connector
+      version: 1.0.0
+    description: Expertflow CX Solution
+    digest: c41ab1276ca90ed4e153960b67b397fc7629d3128d2f654e2b4a12c09fc2190f
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: qm
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/qm-4.9.2-rc.1/qm-4.9.2-rc.1.tgz
+    version: 4.9.2-rc.1
+  - apiVersion: v2
+    appVersion: 4.8.0
     created: "2025-03-18T08:06:41.164476229Z"
     dependencies:
     - condition: qm-backend.enabled
@@ -5563,4 +5590,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-05-08T09:09:22.355148561Z"
+generated: "2025-05-08T09:11:25.568163527Z"
