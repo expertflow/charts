@@ -47,6 +47,27 @@ global:
   efCommonVars_TWILIO_AUTH_TOKEN: ""
   efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
   efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
+ # --- Added APISIX Global Config ---
+  apisix:
+    keycloak:
+      discoveryUrl: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration" # Internal URL
+      realm: "expertflow"
+      clientId: "cim" # Verify this Client ID exists and is configured if auth is enabled
+      clientSecret: "ef61df80-061c-4c29-b9ac-387e6bf67052" # Use appropriate secret management
+      bearerOnly: true
+      tokenSigningAlg: "RS256"
+      setAccessTokenHeader: false
+      setUserInfoHeader: false
+      defaultAudience: ["cim", "account", "realm-management"]
+      defaultScopes: ["email", "profile"]
+    plugins:
+      cors:
+        enabled: false
+        allowOrigins: "*"
+        allowMethods: "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+        allowCredentials: true
+      rewrite:
+        stripPrefix: true
 
 
 
@@ -93,15 +114,18 @@ survey-backend:
       port: 3000
       portName: "http-su-ba-3000"
       targetPort: "http-su-ba-3000"
-   ingress: 
-      enabled: true 
-      annotations:
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-        nginx.ingress.kubernetes.io/use-regex: "true"
-      path: /survey-backend(/|$)(.*)
-      pathType: ImplementationSpecific
+   ingress: {enabled: false} # <-- Explicitly disable standard Ingress
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/survey-backend/*"] # From original ingress path
+       backendServicePort: 3000     # From original ingress backend port
+       plugins:
+         enableAuth: false          # <-- Default: Auth Disabled
+         enableRewrite: true        # From original ingress rewrite-target (default strip)
+         enableCors: false          # No specific CORS rules in original
+         enableTrailingSlashRedirect: false # No redirect needed
    extraVolumes:
       - name: mongo-mongodb-ca
         secret:
@@ -131,23 +155,21 @@ survey-studio:
       port: 1880
       portName: "http-su-st-1880"
       targetPort: "http-su-st-1880"
-   ingress: 
-      enabled: true 
-      annotations:
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-        nginx.ingress.kubernetes.io/use-regex: "true"
-        nginx.ingress.kubernetes.io/configuration-snippet: |
-           more_set_headers "Access-Control-Allow-Origin: $http_origin";
-           if ($request_uri ~* "^/survey-studio$") {
-             return 301 $scheme://$host$request_uri/;
-           }
-        nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
-        nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS, DELETE,PATCH
-        nginx.ingress.kubernetes.io/enable-cors: "true"
-        nginx.ingress.kubernetes.io/rewrite-target: /red/$2
-      path: /survey-studio(/|$)(.*)
-      pathType: ImplementationSpecific
+   ingress: {enabled: false} # <-- Explicitly disable standard Ingress
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/survey-studio/*"] # From original ingress path
+       backendServicePort: 1880    # From original ingress backend port
+       plugins:
+         enableAuth: false          # <-- ASSUMPTION: Auth needed due to /red/ target. Confirm please!
+         enableRewrite: true       # Enable rewrite for custom rule
+         rewriteStripPrefix: false # MUST be false for custom rule
+         rewriteRegexUriFrom: "^/survey-studio(/|\\$)(.*)" # From original path + rewrite target
+         rewriteRegexUriTo: "/red/$2"                  # From original rewrite target
+         enableCors: true          # CORS enabled in original annotations
+         enableTrailingSlashRedirect: true # Trailing slash redirect needed from original snippet
    extraVolumeMounts:
      - name: cx-surveys-studio-flow-vol
        mountPath: /flows
