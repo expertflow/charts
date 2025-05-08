@@ -3694,6 +3694,33 @@ entries:
   eleveo:
   - apiVersion: v2
     appVersion: 4.7.0
+    created: "2025-05-08T09:09:22.354929139Z"
+    dependencies:
+    - condition: eleveo-api.enabled
+      name: eleveo-api
+      repository: file://charts/eleveo-api
+      version: 1.0.0
+    - condition: eleveo-runner.enabled
+      name: eleveo-runner
+      repository: file://charts/eleveo-runner
+      version: 1.0.0
+    description: Expertflow CX Solution For Eleveo
+    digest: 51b4f094399e31616a7730a4bb216595a334df2b7af84fd270e6efcf5a2f424f
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: eleveo
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/eleveo-4.9.2-rc.1/eleveo-4.9.2-rc.1.tgz
+    version: 4.9.2-rc.1
+  - apiVersion: v2
+    appVersion: 4.7.0
     created: "2024-12-27T11:13:15.245575531Z"
     dependencies:
     - condition: eleveo-api.enabled
@@ -5536,4 +5563,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-05-08T09:06:40.696925148Z"
+generated: "2025-05-08T09:09:22.355148561Z"
