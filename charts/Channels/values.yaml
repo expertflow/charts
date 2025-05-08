@@ -48,6 +48,28 @@ global:
   efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
   efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
   efCommonVars_MEMORY_THRESHOLD_MBS: 1000
+  # --- Added APISIX Global Config (Auth details less relevant if disabled below, but kept for structure) ---
+  apisix:
+    keycloak:
+      discoveryUrl: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration" # Internal URL
+      realm: "expertflow"
+      clientId: "cim"
+      clientSecret: "ef61df80-061c-4c29-b9ac-387e6bf67052" # Use appropriate secret management
+      bearerOnly: true
+      tokenSigningAlg: "RS256"
+      setAccessTokenHeader: false
+      setUserInfoHeader: false
+      defaultAudience: ["cim", "account", "realm-management"]
+      defaultScopes: ["email", "profile"]
+    plugins:
+      cors:
+        enabled: false # Default CORS disabled unless enabled per route
+        allowOrigins: "*"
+        allowMethods: "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+        allowCredentials: true
+      rewrite:
+        stripPrefix: true # Default rewrite action is prefix stripping
+
 
 
 # Change the below given paragraph when deploying an offline solution to pick the images from 
@@ -75,7 +97,7 @@ connect360:
    replicaCount: 1
    image:
       repository: cim/360-connector
-      tag: 4.9.1
+      tag: 4.9_f-CIM-28776
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -99,15 +121,18 @@ connect360:
       port: 8080
       portName: "http-360c-8080"
       targetPort: "http-360c-8080"
-   ingress:
-      enabled: true
-      annotations:
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-        nginx.ingress.kubernetes.io/use-regex: "true"
-      path: /360connector(/|$)(.*)
-      pathType: ImplementationSpecific
+   ingress: { enabled: false }
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/360connector/*"]
+       backendServicePort: 8080
+       plugins:
+         enableAuth: false          # <-- *** AUTH DISABLED ***
+         enableRewrite: true
+         enableCors: false
+         enableTrailingSlashRedirect: false
    extraVolumes:
       - name: ef-logback
         configMap:
@@ -124,7 +149,7 @@ facebook-connector:
    replicaCount: 1
    image:       
       repository: cim/facebook-connector
-      tag: 4.9.1
+      tag: 4.9_f-CIM-28776
    efConnectionVars: false
    efEnvironmentVars: true 
    containerPorts:
@@ -146,15 +171,18 @@ facebook-connector:
       port: 8080
       portName: "http-fb-co-8080"
       targetPort: "http-fb-co-8080"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-      path: /facebook-connector(/|$)(.*)
-      pathType: ImplementationSpecific
+   ingress: {enabled: false} # <-- Explicitly disable standard Ingress
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/facebook-connector/*"]
+       backendServicePort: 8080
+       plugins:
+         enableAuth: false
+         enableRewrite: true
+         enableCors: false
+         enableTrailingSlashRedirect: false
    extraVolumes:
       - name: ef-logback
         configMap:
@@ -171,7 +199,7 @@ instagram-connector:
    replicaCount: 1
    image:       
       repository: cim/instagram-connector
-      tag: 4.9.1
+      tag: 4.9_f-CIM-28776
    efConnectionVars: false
    efEnvironmentVars: false 
    containerPorts:
@@ -193,15 +221,18 @@ instagram-connector:
       port: 8080
       portName: "http-in-co-8080"
       targetPort: "http-in-co-8080"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path: /instagram-connector(/|$)(.*)
-      pathType: ImplementationSpecific
+   ingress: {enabled: false} # <-- Explicitly disable standard Ingress
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/instagram-connector/*"]
+       backendServicePort: 8080
+       plugins:
+         enableAuth: false
+         enableRewrite: true
+         enableCors: false
+         enableTrailingSlashRedirect: false
    extraVolumes:
       - name: ef-logback
         configMap:
@@ -218,7 +249,7 @@ smpp-connector:
    replicaCount: 1
    image:       
       repository: cti/hc_smpp_connector
-      tag: 4.9.1
+      tag: 4.9_f-CIM-28776
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -242,15 +273,18 @@ smpp-connector:
       port: 8115
       portName: "http-sm-cn-8115"
       targetPort: "http-sm-cn-8115"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path: /smppconnector(/|$)(.*)
-      pathType: ImplementationSpecific
+   ingress: {enabled: false} # <-- Explicitly disable standard Ingress
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/smppconnector/*"]
+       backendServicePort: 8115
+       plugins:
+         enableAuth: false
+         enableRewrite: true
+         enableCors: false
+         enableTrailingSlashRedirect: false
    extraVolumes:
       - name: ef-logback
         configMap:
@@ -265,7 +299,7 @@ telegram-connector:
    replicaCount: 1
    image:       
       repository: cim/telegram-connector
-      tag: 4.9.1
+      tag: 4.9_f-CIM-28776
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -289,15 +323,18 @@ telegram-connector:
       port: 8664
       portName: "http-te-co-8664"
       targetPort: "http-te-co-8664"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path: /telegram-connector(/|$)(.*)
-      pathType: ImplementationSpecific
+   ingress: {enabled: false} # <-- Explicitly disable standard Ingress
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/telegram-connector/*"]
+       backendServicePort: 8664
+       plugins:
+         enableAuth: false
+         enableRewrite: true
+         enableCors: false
+         enableTrailingSlashRedirect: false
    extraVolumes:
       - name: ef-logback
         configMap:
@@ -313,7 +350,7 @@ twilio-connector:
    replicaCount: 1
    image:       
       repository: cim/twilio-connector
-      tag: 4.9.1
+      tag: 4.9_f-CIM-28776
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -335,15 +372,18 @@ twilio-connector:
       port: 8085
       portName: "http-tw-co-8085"
       targetPort: "http-tw-co-8085"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path: /twilio-connector(/|$)(.*)
-      pathType: ImplementationSpecific
+   ingress: {enabled: false} # <-- Explicitly disable standard Ingress
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/twilio-connector/*"]
+       backendServicePort: 8085
+       plugins:
+         enableAuth: false
+         enableRewrite: true
+         enableCors: false
+         enableTrailingSlashRedirect: false
    extraVolumes:
       - name: ef-logback
         configMap:
@@ -359,7 +399,7 @@ twitter-connector:
    replicaCount: 1
    image:       
       repository: cim/twitter-connector
-      tag: 4.9.1
+      tag: 4.9_f-CIM-28776
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -377,16 +417,18 @@ twitter-connector:
       port: 8080
       portName: "http-tt-co-8080"
       targetPort: "http-tt-co-8080"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-
-      path: /twitter-connector(/|$)(.*)
-      pathType: ImplementationSpecific
+   ingress: {enabled: false} # <-- Explicitly disable standard Ingress
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/twitter-connector/*"]
+       backendServicePort: 8080
+       plugins:
+         enableAuth: false
+         enableRewrite: true
+         enableCors: false
+         enableTrailingSlashRedirect: false
 
 
 ##############################viber-connector##############################
@@ -395,7 +437,7 @@ viber-connector:
    replicaCount: 1
    image:       
       repository: cim/viber-connector
-      tag: 4.9.1
+      tag: 4.9_f-CIM-28776
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -417,15 +459,18 @@ viber-connector:
       port: 8080
       portName: "http-vb-co-8080"
       targetPort: "http-vb-co-8080"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path:  /viber-connector(/|$)(.*)
-      pathType: ImplementationSpecific
+   ingress: {enabled: false} # <-- Explicitly disable standard Ingress
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/viber-connector/*"]
+       backendServicePort: 8080
+       plugins:
+         enableAuth: false
+         enableRewrite: true
+         enableCors: false
+         enableTrailingSlashRedirect: false
    extraVolumes:
       - name: ef-logback
         configMap:
@@ -436,133 +481,141 @@ viber-connector:
 
 ##############################email-connector##############################
 email-connector:
-  enabled: true
-  replicaCount: 1
-  image:
-    repository: cim/email-connector
-    tag: 4.9.1
-  efConnectionVars: true
-  efEnvironmentVars: false
-  containerPorts:
-    - name: "http-em-co-8080"
-      containerPort: 8080
-  extraEnvVars:
-    - name: TZ
-      value: '{{ .Values.global.efCommonVars_TZ }}'
-    - name: CCM_URL
-      value: "http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
-    - name: FILE_ENGINE_URL
-      value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
-    - name: SCHEDULER_FIXED_RATE_IN_MS
-      value: "60000"
-  service:
-    enabled: true
-    port: 8080
-    portName: "http-em-co-8080"
-    targetPort: "http-em-co-8080"
-  ingress:
-    enabled: true
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /$2
-      nginx.ingress.kubernetes.io/use-regex: "true"
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-      cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-
-    path: /email-connector(/|$)(.*)
-    pathType: ImplementationSpecific
+   enabled: true
+   replicaCount: 1
+   image:
+     repository: cim/email-connector
+     tag: 4.9_f-CIM-28776
+   efConnectionVars: true
+   efEnvironmentVars: false
+   containerPorts:
+     - name: "http-em-co-8080"
+       containerPort: 8080
+   extraEnvVars:
+     - name: TZ
+       value: '{{ .Values.global.efCommonVars_TZ }}'
+     - name: CCM_URL
+       value: "http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+     - name: FILE_ENGINE_URL
+       value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
+     - name: SCHEDULER_FIXED_RATE_IN_MS
+       value: "60000"
+   service:
+     enabled: true
+     port: 8080
+     portName: "http-em-co-8080"
+     targetPort: "http-em-co-8080"
+   ingress: {enabled: false} # <-- Explicitly disable standard Ingress
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/email-connector/*"]
+       backendServicePort: 8080
+       plugins:
+         enableAuth: false
+         enableRewrite: true
+         enableCors: false
+         enableTrailingSlashRedirect: false
 
 ##############################whatsapp-connector##############################
 whatsapp-connector:
-  enabled: true
-  replicaCount: 1
-  image:
-    repository: cim/whatsapp-connector
-    tag: 4.9.1
-  efConnectionVars: false
-  efEnvironmentVars: false
-  containerPorts:
-    - name: "http-wa-co-8080"
-      containerPort: 8080
-  extraEnvVars:
-    - name: TZ
-      value: '{{ .Values.global.efCommonVars_TZ }}'
-    - name: LOGGING_CONFIG
-      value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
-    - name: CCM_URL
-      value: "http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
-    - name: FILE_ENGINE_URL
-      value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
-    - name: MASKING_LAYOUT_CLASS
-      value: "com.ef.connector.whatsappconnector.utils.MaskingPatternLayout"
-  service:
-    enabled: true
-    port: 8080
-    portName: "http-wa-co-8080"
-    targetPort: "http-wa-co-8080"
-  ingress:
-    enabled: true
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /$2
-      nginx.ingress.kubernetes.io/use-regex: "true"
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-      #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-    path:  /whatsapp-connector(/|$)(.*)
-    pathType: ImplementationSpecific
-  extraVolumes:
-    - name: ef-logback
-      configMap:
-        name: ef-logback-cm
-  extraVolumeMounts:
-    - name: ef-logback
-      mountPath: /logback
+   enabled: true
+   replicaCount: 1
+   image:
+     repository: cim/whatsapp-connector
+     tag: 4.9_f-CIM-28776
+   efConnectionVars: false
+   efEnvironmentVars: false
+   containerPorts:
+     - name: "http-wa-co-8080"
+       containerPort: 8080
+   extraEnvVars:
+     - name: TZ
+       value: '{{ .Values.global.efCommonVars_TZ }}'
+     - name: LOGGING_CONFIG
+       value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
+     - name: CCM_URL
+       value: "http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+     - name: FILE_ENGINE_URL
+       value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
+     - name: MASKING_LAYOUT_CLASS
+       value: "com.ef.connector.whatsappconnector.utils.MaskingPatternLayout"
+   service:
+     enabled: true
+     port: 8080
+     portName: "http-wa-co-8080"
+     targetPort: "http-wa-co-8080"
+   ingress: {enabled: false} # <-- Explicitly disable standard Ingress
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/whatsapp-connector/*"]
+       backendServicePort: 8080
+       plugins:
+         enableAuth: false
+         enableRewrite: true
+         enableCors: false
+         enableTrailingSlashRedirect: false
+   extraVolumes:
+     - name: ef-logback
+       configMap:
+         name: ef-logback-cm
+   extraVolumeMounts:
+     - name: ef-logback
+       mountPath: /logback
 
 
 ##############################microsoft-exchange-email-connector##############################
 ms-email-connector:
-  enabled: true
-  replicaCount: 1
-  image:
-    repository: cim/ms-exchange-email-connector
-    tag: 4.9.1
-  efConnectionVars: true
-  efEnvironmentVars: false
-  containerPorts:
-    - name: "http-ex-co-8080"
-      containerPort: 8080
-  extraEnvVars:
-    - name: TZ
-      value: '{{ .Values.global.efCommonVars_TZ }}'
-    - name: LOGGING_CONFIG
-      value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
-    - name: CCM_URL
-      value: "http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
-    - name: FILE_ENGINE_URL
-      value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
-    - name: MASKING_LAYOUT_CLASS
-      value: "com.ef.connector.msexchangeemailconnector.utils.MaskingPatternLayout"
-    - name: SCHEDULER_FIXED_RATE_IN_MS
-      value: "60000"
-  service:
-    enabled: true
-    port: 8080
-    portName: "http-ex-co-8080"
-    targetPort: "http-ex-co-8080"
-  ingress:
-    enabled: true
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /$2
-      nginx.ingress.kubernetes.io/use-regex: "true"
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-      #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-    path:  /ms-email-connector(/|$)(.*)
-    pathType: ImplementationSpecific
-  extraVolumes:
-    - name: ef-logback
-      configMap:
-        name: ef-logback-cm
-  extraVolumeMounts:
-    - name: ef-logback
-      mountPath: /logback
+   enabled: true
+   replicaCount: 1
+   image:
+     repository: cim/ms-exchange-email-connector
+     tag: 4.9.1_b-CIM-28934
+   efConnectionVars: true
+   efEnvironmentVars: false
+   containerPorts:
+     - name: "http-ex-co-8080"
+       containerPort: 8080
+   extraEnvVars:
+     - name: TZ
+       value: '{{ .Values.global.efCommonVars_TZ }}'
+     - name: LOGGING_CONFIG
+       value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
+     - name: CCM_URL
+       value: "http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+     - name: FILE_ENGINE_URL
+       value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
+     - name: MASKING_LAYOUT_CLASS
+       value: "com.ef.connector.msexchangeemailconnector.utils.MaskingPatternLayout"
+     - name: SCHEDULER_FIXED_RATE_IN_MS
+       value: "60000"
+   service:
+     enabled: true
+     port: 8080
+     portName: "http-ex-co-8080"
+     targetPort: "http-ex-co-8080"
+   ingress: {enabled: false} # <-- Explicitly disable standard Ingress
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/ms-email-connector/*"]
+       backendServicePort: 8080
+       plugins:
+         enableAuth: false
+         enableRewrite: true
+         enableCors: false
+         enableTrailingSlashRedirect: false
+   extraVolumes:
+     - name: ef-logback
+       configMap:
+         name: ef-logback-cm
+   extraVolumeMounts:
+     - name: ef-logback
+       mountPath: /logback
 
 
 ##############################################youtube-connector##############################################
@@ -571,7 +624,7 @@ youtube-connector:
   replicaCount: 1
   image:
     repository: cim/youtube-connector
-    tag: 4.9.1
+    tag: 4.9_f-CIM-28776
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -593,21 +646,27 @@ youtube-connector:
     port: 8080
     portName: http-yt-co-8080
     targetPort: http-yt-co-8080
-  ingress:
-    enabled: true
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /$2
-      nginx.ingress.kubernetes.io/use-regex: "true"
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    path: /youtube-connector(/|$)(.*)
-    pathType: ImplementationSpecific
+  ingress: {enabled: false} # <-- Explicitly disable standard Ingress
+  apisixRoutes:
+    - nameSuffix: "main"
+      enabled: true
+      priority: 0
+      paths: ["/youtube-connector/*"]
+      backendServicePort: 8080
+      plugins:
+        enableAuth: false
+        enableRewrite: true
+        enableCors: false
+        enableTrailingSlashRedirect: false
+
+
 ##############################linkedin-connector##############################
 linkedin-connector:
    enabled: true
    replicaCount: 1
    image:
       repository: project_dev/linkedinconnector
-      tag: 4.9.1
+      tag: 4.9_f-CIM-28776
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -645,15 +704,18 @@ linkedin-connector:
       port: 9001
       portName: "http-li-9001"
       targetPort: "http-li-9001"
-   ingress:
-      enabled: true
-      annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path:  /linkedin-connector(/|$)(.*)
-      pathType: ImplementationSpecific
+   ingress: {enabled: false} # <-- Explicitly disable standard Ingress
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/linkedin-connector/*"]
+       backendServicePort: 9001
+       plugins:
+         enableAuth: false
+         enableRewrite: true
+         enableCors: false
+         enableTrailingSlashRedirect: false
    extraVolumes:
       - name: ef-logback
         configMap:
