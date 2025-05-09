@@ -6,4 +6,4 @@ dependencies:
   repository: file://charts/qm-connector
   version: 1.0.0
 digest: sha256:dca9cf06b30198d103a11af74b76176808f3cca50dbabee0a3d79694a10f18c7
-generated: "2025-03-18T13:03:54.010443+05:00"
+generated: "2025-05-09T16:10:02.970551+05:00"
