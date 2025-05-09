@@ -47,7 +47,33 @@ global:
   efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
   efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
   efCommonVars_MEMORY_THRESHOLD_MBS: 1000
+  apisix:
+    # --- Default Keycloak OIDC Config ---
+    # Used IF a route has plugins.enableAuth = true
+    keycloak:
+      discoveryUrl: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration" # Internal URL
+      realm: "expertflow"
+      clientId: "cim"
+      # !! IMPORTANT: Use Helm secrets or external secret management for clientSecret !!
+      clientSecret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+      # Default behavior settings
+      bearerOnly: true
+      tokenSigningAlg: "RS256"
+      setAccessTokenHeader: false # Don't pass token header to backend
+      setUserInfoHeader: false    # Don't pass userinfo header to backend
+      # Default Audience/Scopes (OVERRIDE PER ROUTE if needed)
+      defaultAudience: ["cim", "account", "realm-management"]
+      defaultScopes: ["email", "profile"]
 
+    # --- Default Plugin Settings ---
+    plugins:
+      cors:
+        enabled: false # Default CORS disabled unless enabled per route
+        allowOrigins: "*"
+        allowMethods: "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+        allowCredentials: true
+      rewrite:
+        stripPrefix: true # Default rewrite action
 
 
 
@@ -152,1283 +178,1402 @@ efConnectionVars:
 
 ##############################agent-manager##############################
 agent-manager:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: cim/agent-manager
-      tag: 4.9.1
-   efConnectionVars: true
-   efEnvironmentVars: false
-   containerPorts:
-      - name: "http-ag-ma-3000"
-        containerPort: 3000
-   extraEnvVars:
-      - name: MEMORY_THRESHOLD_MBS
-        value: '{{ .Values.global.efCommonVars_MEMORY_THRESHOLD_MBS }}'
-      - name: SOCKET_DISCONNECT_TIME
-        value:  "10000"  
-      - name: IS_WRAP_UP_ENABLED
-        value: '{{ .Values.global.efCommonVars_IS_WRAP_UP_ENABLED }}'
-      - name: WRAPUP_TIME
-        value: '{{ .Values.global.efCommonVars_WRAPUP_TIME  }}'
-      - name: MASK_ATTRIBUTES_PATH
-        value: '{{ .Values.global.efCommonVars_MASK_ATTRIBUTES_PATH }}'
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: ACCEPT_TIMEOUT
-        value: "60000"
-      - name: CONVERSATION_MANAGER_URL
-        value: "http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
-      - name: CCM_URL
-        value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
-      - name: CIM_CUSTOMER_URL
-        value: "http://{{ .Release.Name }}-cim-customer-svc.{{ .Release.Namespace }}.svc:8080"
-      - name: LIC_MNGR_URL
-        value: "http://{{ .Release.Name }}-license-manager-svc.{{ .Release.Namespace }}.svc:8888"
-      - name: LOG_LEVEL
-        value: "debug"
-      - name: NODE_ENV
-        value: "prod"
-      - name: PORT
-        value: "3000"
-      - name: PRODUCT_ID
-        value: "77108"
-      - name: ROUTING_ENGINE_URL
-        value: "http://{{ .Release.Name }}-routing-engine-svc.{{ .Release.Namespace }}.svc:8081"
-      - name: UNIFIED_ADMIN_URL
-        value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
-      - name: FINESSE_URL
-        value: "https://uccx12-5p.ucce.ipcc:8445"
-      - name: IS_ENABLED_2FA
-        value: '{{ .Values.global.efCommonVars_IS_ENABLED_2FA }}'
-      - name: CHANNEL_2FA
-        value: '{{ .Values.global.efCommonVars_CHANNEL_2FA }}'
-      - name: TWILIO_SID
-        value: '{{ .Values.global.efCommonVars_TWILIO_SID }}'
-      - name: TWILIO_VERIFY_SID
-        value: '{{ .Values.global.efCommonVars_TWILIO_VERIFY_SID }}'
-      - name: TWILIO_AUTH_TOKEN
-        value: '{{ .Values.global.efCommonVars_TWILIO_AUTH_TOKEN }}'
-   service:
-      enabled: true
-      port: 3000
-      portName: "http-ag-ma-3000"
-      targetPort: "http-ag-ma-3000"
-   ingress: 
-      enabled: true 
-      annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-        nginx.ingress.kubernetes.io/use-regex: "true"
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path: /agent-manager(/|$)(.*)
-      pathType: ImplementationSpecific
-   extraVolumes:
-      - name: mongo-mongodb-ca
-        secret:
-          secretName: mongo-mongodb-ca
-      - name: redis-crt
-        secret:
-          secretName: redis-crt
-      - name: sensitive-config
-        configMap:
-          name: ef-node-logback-cm
-   extraVolumeMounts:
-      - name: redis-crt
-        mountPath: /redis
-      - name: mongo-mongodb-ca
-        mountPath: /mongo
-      - name: sensitive-config
-        mountPath: /sensitive.js
-        subPath: sensitive.js
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: cim/agent-manager
+        tag: 4.9.2
+    efConnectionVars: true
+    efEnvironmentVars: false
+    containerPorts:
+        - name: "http-ag-ma-3000"
+          containerPort: 3000
+    extraEnvVars:
+        - name: MEMORY_THRESHOLD_MBS
+          value: '{{ .Values.global.efCommonVars_MEMORY_THRESHOLD_MBS }}'
+        - name: SOCKET_DISCONNECT_TIME
+          value:  "10000"
+        - name: IS_WRAP_UP_ENABLED
+          value: '{{ .Values.global.efCommonVars_IS_WRAP_UP_ENABLED }}'
+        - name: WRAPUP_TIME
+          value: '{{ .Values.global.efCommonVars_WRAPUP_TIME  }}'
+        - name: MASK_ATTRIBUTES_PATH
+          value: '{{ .Values.global.efCommonVars_MASK_ATTRIBUTES_PATH }}'
+        - name: TZ
+          value: '{{ .Values.global.efCommonVars_TZ }}'
+        - name: ACCEPT_TIMEOUT
+          value: "60000"
+        - name: CONVERSATION_MANAGER_URL
+          value: "http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
+        - name: CCM_URL
+          value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+        - name: CIM_CUSTOMER_URL
+          value: "http://{{ .Release.Name }}-cim-customer-svc.{{ .Release.Namespace }}.svc:8080"
+        - name: LIC_MNGR_URL
+          value: "http://{{ .Release.Name }}-license-manager-svc.{{ .Release.Namespace }}.svc:8888"
+        - name: LOG_LEVEL
+          value: "debug"
+        - name: NODE_ENV
+          value: "prod"
+        - name: PORT
+          value: "3000"
+        - name: PRODUCT_ID
+          value: "77108"
+        - name: ROUTING_ENGINE_URL
+          value: "http://{{ .Release.Name }}-routing-engine-svc.{{ .Release.Namespace }}.svc:8081"
+        - name: UNIFIED_ADMIN_URL
+          value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
+        - name: FINESSE_URL
+          value: "https://uccx12-5p.ucce.ipcc:8445"
+        - name: IS_ENABLED_2FA
+          value: '{{ .Values.global.efCommonVars_IS_ENABLED_2FA }}'
+        - name: CHANNEL_2FA
+          value: '{{ .Values.global.efCommonVars_CHANNEL_2FA }}'
+        - name: TWILIO_SID
+          value: '{{ .Values.global.efCommonVars_TWILIO_SID }}'
+        - name: TWILIO_VERIFY_SID
+          value: '{{ .Values.global.efCommonVars_TWILIO_VERIFY_SID }}'
+        - name: TWILIO_AUTH_TOKEN
+          value: '{{ .Values.global.efCommonVars_TWILIO_AUTH_TOKEN }}'
+    service:
+        enabled: true
+        port: 3000
+        portName: "http-ag-ma-3000"
+        targetPort: "http-ag-ma-3000"
+    ingress: { enabled: false }
+    apisixRoutes:
+      # Route 1: Login Exclusion
+      - nameSuffix: "login-unsecured"
+        enabled: true
+        priority: 10
+        paths: ["/agent-manager/agent/login"]
+        backendServicePort: 3000
+        plugins:
+          enableAuth: false
+          enableRewrite: true
+          rewriteStripPrefix: false
+          rewriteRegexUriFrom: "^/agent-manager/agent/login$"
+          rewriteRegexUriTo: "/agent/login"
+      # Route 2: Socket.IO Exclusion
+      - nameSuffix: "socketio-unsecured"
+        enabled: true
+        priority: 10
+        paths: ["/agent-manager/socket.io/*"]
+        backendServicePort: 3000
+        enableWebsocket: true
+        websocketTimeout: { connect: "5s", send: "3600s", read: "3600s" }
+        plugins:
+          enableAuth: false
+          enableRewrite: true
+          rewriteStripPrefix: false
+          rewriteRegexUriFrom: "^/agent-manager/(socket\\.io/.*)"
+          rewriteRegexUriTo: "/$1"
+      # Route 3: Main Secured Route
+      - nameSuffix: "secured"
+        enabled: true
+        priority: 0
+        paths: ["/agent-manager/*"]
+        backendServicePort: 3000
+        plugins:
+          enableAuth: true
+          enableRewrite: true # Uses default stripPrefix
+          customPlugins:
+            - name: limit-count # Example 1: Rate Limiting
+              enable: false
+              config:
+                count: 2000
+                time_window: 60
+                key_type: var
+                key: remote_addr
+                rejected_code: 429
+            - name: ip-restriction # Example 2: IP Whitelisting
+              enable: false
+              config:
+                whitelist:
+                  - "192.168.1.0/24"
+                  - "127.0.0.1"
+            - name: response-rewrite # Example 3: Add response header
+              enable: false
+              config:
+                headers:
+                  set:
+                    X-Handled-By: AgentManager-Route
+            # --- START: Added client-control plugin ---
+            - name: client-control
+              enable: false
+              config:
+                max_body_size: 8m # Set max request body size to 8 Megabytes
+            # --- END: Added client-control plugin ---
+          # ######################################################## #
+          # END: Added customPlugins section                         #
+          # ######################################################## #
+    extraVolumes:
+        - name: mongo-mongodb-ca
+          secret:
+            secretName: mongo-mongodb-ca
+        - name: redis-crt
+          secret:
+            secretName: redis-crt
+        - name: sensitive-config
+          configMap:
+            name: ef-node-logback-cm
+    extraVolumeMounts:
+        - name: redis-crt
+          mountPath: /redis
+        - name: mongo-mongodb-ca
+          mountPath: /mongo
+        - name: sensitive-config
+          mountPath: /sensitive.js
+          subPath: sensitive.js
 
 
 
 ##############################bot-framework##############################
 bot-framework:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: cim/bot-framework
-      tag: 4.9.1
-   efConnectionVars: true
-   efEnvironmentVars: false
-   containerPorts:
-      - name: "http-bot-f-8082"
-        containerPort: 8082
-   extraEnvVars:
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: LOGGING_CONFIG
-        value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
-      - name: APPLICATION_LOG_LEVEL
-        value: "debug"
-      - name: BOT_INTENT_COUNT
-        value: "1"
-      - name: BOT_TIMEOUT
-        value: "3"
-      - name: FILE_ENGINE_URL
-        value: "http://{{ .Release.Name }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
-      - name: MONGODB_DATABASE
-        value: "bot-framework_db"
-      - name: ROOT_LOG_LEVEL
-        value: "INFO"
-      - name: ROUTING_ENGINE_ASSIGN_RESOURCE_BASE_URL
-        value: "http://{{ .Release.Name }}-routing-engine-svc.{{ .Release.Namespace }}.svc:8081"
-      - name: RASA_TOKEN
-        value: "InWVMW0bMr3lN3D"
-      - name: SEND_EVENTS_TO_BOT
-        value: "false"
-      - name: MASKING_LAYOUT_CLASS
-        value: "com.ef.botframework.commons.MaskingPatternLayout"
-      - name: TOPIC_CONCURRENCY_MIN
-        value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
-      - name: TOPIC_CONCURRENCY_MAX
-        value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
-   service:
-      enabled: true
-      port: 8082
-      portName: "http-bot-f-8082"
-      targetPort: "http-bot-f-8082"
-   ingress: 
-      enabled: true 
-      annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-        nginx.ingress.kubernetes.io/use-regex: "true"
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path: /bot-framework(/|$)(.*)
-      pathType: ImplementationSpecific
-   extraVolumes:
-      - name: mongo-mongodb-ca
-        secret:
-          secretName: mongo-mongodb-ca
-      - name: redis-crt
-        secret:
-          secretName: redis-crt
-      - name: ef-logback
-        configMap:
-            name: ef-logback-cm
-   extraVolumeMounts:
-      - name: redis-crt
-        mountPath: /redis
-      - name: mongo-mongodb-ca
-        mountPath: /mongo
-      - name: ef-logback
-        mountPath: /logback
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: cim/bot-framework
+        tag: 4.9.2
+    efConnectionVars: true
+    efEnvironmentVars: false
+    containerPorts:
+        - name: "http-bot-f-8082"
+          containerPort: 8082
+    extraEnvVars:
+        - name: TZ
+          value: '{{ .Values.global.efCommonVars_TZ }}'
+        - name: LOGGING_CONFIG
+          value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
+        - name: APPLICATION_LOG_LEVEL
+          value: "debug"
+        - name: BOT_INTENT_COUNT
+          value: "1"
+        - name: BOT_TIMEOUT
+          value: "3"
+        - name: FILE_ENGINE_URL
+          value: "http://{{ .Release.Name }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
+        - name: MONGODB_DATABASE
+          value: "bot-framework_db"
+        - name: ROOT_LOG_LEVEL
+          value: "INFO"
+        - name: ROUTING_ENGINE_ASSIGN_RESOURCE_BASE_URL
+          value: "http://{{ .Release.Name }}-routing-engine-svc.{{ .Release.Namespace }}.svc:8081"
+        - name: RASA_TOKEN
+          value: "InWVMW0bMr3lN3D"
+        - name: SEND_EVENTS_TO_BOT
+          value: "false"
+        - name: MASKING_LAYOUT_CLASS
+          value: "com.ef.botframework.commons.MaskingPatternLayout"
+        - name: TOPIC_CONCURRENCY_MIN
+          value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
+        - name: TOPIC_CONCURRENCY_MAX
+          value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
+    service:
+        enabled: true
+        port: 8082
+        portName: "http-bot-f-8082"
+        targetPort: "http-bot-f-8082"
+    ingress: { enabled: false }
+    apisixRoutes:
+      - nameSuffix: "main"
+        enabled: true
+        paths: ["/bot-framework/*"]
+        backendServicePort: 8082
+        plugins:
+          enableAuth: true
+          enableRewrite: true # Uses default stripPrefix
+    extraVolumes:
+        - name: mongo-mongodb-ca
+          secret:
+            secretName: mongo-mongodb-ca
+        - name: redis-crt
+          secret:
+            secretName: redis-crt
+        - name: ef-logback
+          configMap:
+              name: ef-logback-cm
+    extraVolumeMounts:
+        - name: redis-crt
+          mountPath: /redis
+        - name: mongo-mongodb-ca
+          mountPath: /mongo
+        - name: ef-logback
+          mountPath: /logback
 
 
 ##############################ccm##############################
 ccm:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: cim/customer-channel-manager
-      tag: 4.9.1
-   efConnectionVars: true
-   efEnvironmentVars: true 
-   containerPorts:
-      - name: "http-ccm-8081"
-        containerPort: 8081
-   extraEnvVars:
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: LOGGING_CONFIG
-        value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
-      - name: APPLICATION_LOG_LEVEL
-        value: "debug"
-      - name: CIM_API_URL
-        value: "http://{{ .Release.Name }}-cim-customer-svc.{{ .Release.Namespace }}.svc:8080"
-      - name: MONGODB_DATABASE
-        value: "ccm_db"
-      - name: ROOT_LOG_LEVEL
-        value: "info"
-      - name: TOPIC_MANAGER_URL
-        value: "http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
-      - name: CONVERSATION_MANAGER_URL
-        value: "http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
-      - name: WHATSAPP_BUTTON_MESSAGE_AS_TEXT
-        value: "false"
-      - name: CACHED_OUTBOUND_MESSAGE_EXPIRY_IN_SECONDS
-        value: "86400"
-      - name: MASKING_LAYOUT_CLASS
-        value: "com.ef.ccm.utils.MaskingPatternLayout"
-      - name: QUEUE_CONCURRENCY_MIN
-        value: "6"
-      - name: QUEUE_CONCURRENCY_MAX
-        value: "7"
-      - name: TOPIC_CONCURRENCY_MIN
-        value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
-      - name: TOPIC_CONCURRENCY_MAX
-        value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
-      - name: TOMCAT_MAX_THREADS
-        value: "1000"
-
-   service:
-      enabled: true
-      port: 8081
-      portName: "http-ccm-8081"
-      targetPort: "http-ccm-8081"
-   ingress: 
-      enabled: true 
-      annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-        nginx.ingress.kubernetes.io/use-regex: "true"
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path: /ccm(/|$)(.*)
-      pathType: ImplementationSpecific
-   extraVolumes:
-      - name: mongo-mongodb-ca
-        secret:
-          secretName: mongo-mongodb-ca
-      - name: redis-crt
-        secret:
-          secretName: redis-crt
-      - name: ef-logback
-        configMap:
-            name: ef-logback-cm
-   extraVolumeMounts:
-      - name: redis-crt
-        mountPath: /redis
-      - name: mongo-mongodb-ca
-        mountPath: /mongo
-      - name: ef-logback
-        mountPath: /logback
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: cim/customer-channel-manager
+        tag: 4.9.2
+    efConnectionVars: true
+    efEnvironmentVars: true
+    containerPorts:
+        - name: "http-ccm-8081"
+          containerPort: 8081
+    extraEnvVars:
+        - name: TZ
+          value: '{{ .Values.global.efCommonVars_TZ }}'
+        - name: LOGGING_CONFIG
+          value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
+        - name: APPLICATION_LOG_LEVEL
+          value: "debug"
+        - name: CIM_API_URL
+          value: "http://{{ .Release.Name }}-cim-customer-svc.{{ .Release.Namespace }}.svc:8080"
+        - name: MONGODB_DATABASE
+          value: "ccm_db"
+        - name: ROOT_LOG_LEVEL
+          value: "info"
+        - name: TOPIC_MANAGER_URL
+          value: "http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
+        - name: CONVERSATION_MANAGER_URL
+          value: "http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
+        - name: WHATSAPP_BUTTON_MESSAGE_AS_TEXT
+          value: "false"
+        - name: CACHED_OUTBOUND_MESSAGE_EXPIRY_IN_SECONDS
+          value: "86400"
+        - name: MASKING_LAYOUT_CLASS
+          value: "com.ef.ccm.utils.MaskingPatternLayout"
+        - name: QUEUE_CONCURRENCY_MIN
+          value: "6"
+        - name: QUEUE_CONCURRENCY_MAX
+          value: "7"
+        - name: TOPIC_CONCURRENCY_MIN
+          value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
+        - name: TOPIC_CONCURRENCY_MAX
+          value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
+        - name: TOMCAT_MAX_THREADS
+          value: "1000"
+    service:
+        enabled: true
+        port: 8081
+        portName: "http-ccm-8081"
+        targetPort: "http-ccm-8081"
+    ingress: { enabled: false }
+    apisixRoutes:
+      # Route 1: Agents Exclusion
+      - nameSuffix: "agents-unsecured"
+        enabled: true
+        priority: 10
+        paths: ["/ccm/agents/*"] # Path from verified YAML
+        backendServicePort: 8081
+        plugins:
+          enableAuth: false
+          enableRewrite: true
+          rewriteStripPrefix: false
+          rewriteRegexUriFrom: "^/ccm/(.*)"
+          rewriteRegexUriTo: "/$1" # Strip /ccm/
+      # Route 2: Channels Service ID Exclusion
+      - nameSuffix: "channels-svc-id-unsecured"
+        enabled: true
+        priority: 10
+        paths: ["/ccm/channels/service-identifier/*"]
+        backendServicePort: 8081
+        plugins:
+          enableAuth: false
+          enableRewrite: true
+          rewriteStripPrefix: false
+          rewriteRegexUriFrom: "^/ccm/(.*)"
+          rewriteRegexUriTo: "/$1" # Strip /ccm/
+      # Route 3: Widget Configs Exclusion
+      - nameSuffix: "widget-configs-unsecured"
+        enabled: true
+        priority: 10
+        paths: ["/ccm/widget-configs/*"]
+        backendServicePort: 8081
+        plugins:
+          enableAuth: false
+          enableRewrite: true
+          rewriteStripPrefix: false
+          rewriteRegexUriFrom: "^/ccm/(.*)"
+          rewriteRegexUriTo: "/$1" # Strip /ccm/
+      # Route 4: Main Secured Route
+      - nameSuffix: "main-secured"
+        enabled: true
+        priority: 0
+        paths: ["/ccm/*"]
+        backendServicePort: 8081
+        plugins:
+          enableAuth: true # Enable Auth
+          enableRewrite: true # Uses default stripPrefix
+    extraVolumes:
+        - name: mongo-mongodb-ca
+          secret:
+            secretName: mongo-mongodb-ca
+        - name: redis-crt
+          secret:
+            secretName: redis-crt
+        - name: ef-logback
+          configMap:
+              name: ef-logback-cm
+    extraVolumeMounts:
+        - name: redis-crt
+          mountPath: /redis
+        - name: mongo-mongodb-ca
+          mountPath: /mongo
+        - name: ef-logback
+          mountPath: /logback
 
 
 ##############################cim-customer##############################
 cim-customer:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: cim/cim-backend
-      tag: 4.9
-   efConnectionVars: true
-   efEnvironmentVars: false
-   containerPorts:
-      - name: "http-ci-cu-8080"
-        containerPort: 8080
-   extraEnvVars:
-      - name: MEMORY_THRESHOLD_MBS
-        value: '{{ .Values.global.efCommonVars_MEMORY_THRESHOLD_MBS }}'
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: HTTP_PORT
-        value: "8080"
-      - name: MONGODB_DATABASE
-        value: "cim_customer"
-   service:
-      enabled: true
-      port: 8080
-      portName: "http-ci-cu-8080"
-      targetPort: "http-ci-cu-8080"
-   ingress: 
-      enabled: true 
-      annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-        nginx.ingress.kubernetes.io/use-regex: "true"
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path: /cim-customer(/|$)(.*)
-      pathType: ImplementationSpecific
-   extraVolumes:
-      - name: mongo-mongodb-ca
-        secret:
-          secretName: mongo-mongodb-ca
-   extraVolumeMounts:
-      - name: mongo-mongodb-ca
-        mountPath: /mongo
+    enabled: true
+    replicaCount: 1
+    image:
+       repository: cim/cim-backend
+       tag: 4.9
+    efConnectionVars: true
+    efEnvironmentVars: false
+    containerPorts:
+       - name: "http-ci-cu-8080"
+         containerPort: 8080
+    extraEnvVars:
+       - name: MEMORY_THRESHOLD_MBS
+         value: '{{ .Values.global.efCommonVars_MEMORY_THRESHOLD_MBS }}'
+       - name: TZ
+         value: '{{ .Values.global.efCommonVars_TZ }}'
+       - name: HTTP_PORT
+         value: "8080"
+       - name: MONGODB_DATABASE
+         value: "cim_customer"
+    service:
+       enabled: true
+       port: 8080
+       portName: "http-ci-cu-8080"
+       targetPort: "http-ci-cu-8080"
+    ingress: { enabled: false }
+    apisixRoutes:
+        - nameSuffix: "main"
+          enabled: true
+          paths: [ "/cim-customer/*" ]
+          backendServicePort: 8080
+          plugins:
+            enableAuth: true
+            enableRewrite: true # Uses default stripPrefix
+    extraVolumes:
+       - name: mongo-mongodb-ca
+         secret:
+           secretName: mongo-mongodb-ca
+    extraVolumeMounts:
+       - name: mongo-mongodb-ca
+         mountPath: /mongo
 
 
 ##############################conversation-manager##############################
 conversation-manager:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: cim/conversation-manager
-      tag: 4.9.1
-   efConnectionVars: true
-   efEnvironmentVars: false
-   extraEnvVars:
-      - name: IS_WRAP_UP_ENABLED
-        value: '{{ .Values.global.efCommonVars_IS_WRAP_UP_ENABLED }}'
-      - name: WRAPUP_TIME
-        value: '{{ .Values.global.efCommonVars_WRAPUP_TIME  }}'
-      - name: DEFAULT_ROOM_NAME
-        value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_NAME }}'
-      - name: DEFAULT_ROOM_DESCRIPTION
-        value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_DESCRIPTION  }}'
-      - name: DEFAULT_ROOM_LABEL
-        value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_LABEL  }}'
-      - name: ROOM_IS_USER_ID
-        value: '{{ .Values.global.efCommonVars_ROOM_IS_USER_ID }}'
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: CONVERSATION_SEARCH_WINDOW_HRS
-        value: '{{ .Values.global.efCommonVars_CONVERSATION_SEARCH_WINDOW_HRS }}'
-      - name: MASK_ATTRIBUTES_PATH
-        value: '{{ .Values.global.efCommonVars_MASK_ATTRIBUTES_PATH }}'
-      - name: LOGGING_CONFIG
-        value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
-      - name: ROOT_LOG_LEVEL
-        value: "warn"
-      - name: APPLICATION_LOG_LEVEL
-        value: "debug"
-      - name: MONGODB_DATABASE
-        value: "conversation-manager_db"
-      - name: ROUTING_ENGINE_URL
-        value: "http://{{ .Release.Name }}-routing-engine-svc.{{ .Release.Namespace }}.svc:8081"
-      - name: BOT_FRAMEWORK_URL
-        value: "http://{{ .Release.Name }}-bot-framework-svc.{{ .Release.Namespace }}.svc:8082"
-      - name: CONTROLLER_URL
-        value: "http://localhost:5000"
-      - name: UNIFIED_ADMIN_URL
-        value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
-      - name: CCM_URL
-        value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
-      - name: CIM_CUSTOMER_URL
-        value: "http://{{ .Release.Name }}-cim-customer-svc.{{ .Release.Namespace }}.svc:8080"
-      - name: PROCESS_EVENTS
-        value: "false"
-      - name: ENABLE_LAST_AGENT_ROUTING
-        value: "false"
-      - name: MASKING_LAYOUT_CLASS
-        value: "com.ef.conversationmanager.utility.MaskingPatternLayout"
-      - name: TOPIC_CONCURRENCY_MIN
-        value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
-      - name: TOPIC_CONCURRENCY_MAX
-        value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
-   containerPorts: 
-      - name: "http-co-ma-8080"
-        containerPort: 8080
-   service:
-      enabled: true
-      port: 8080
-      portName: "http-co-ma-8080"
-      targetPort: "http-co-ma-8080"
-      extraPorts: 
-        - name: "ef-co-ct-5000"
-          port: 5000
-          protocol: TCP
-          targetPort: "http-co-ct-5000"
-   ingress: 
-      enabled: true 
-      annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-        nginx.ingress.kubernetes.io/use-regex: "true"
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path: /conversation-manager(/|$)(.*)
-      pathType: ImplementationSpecific
-   extraVolumes:
-      - name: mongo-mongodb-ca
-        secret:
-          secretName: mongo-mongodb-ca
-      - name: redis-crt
-        secret:
-          secretName: redis-crt
-      - name: ef-logback
-        configMap:
-            name: ef-logback-cm
-      - name: ef-conversation-controller-actions
-        configMap:
-           name: ef-conversation-controller-actions-cm
-           optional: true
-      - name: ef-conversation-controller-pycache
-        configMap:
-           name: ef-conversation-controller-actions-pycache-cm
-           optional: true
-      - name: ef-conversation-controller-utils
-        configMap:
-           name: ef-conversation-controller-actions-utils-cm
-           optional: true
-   extraVolumeMounts:
-      - name: redis-crt
-        mountPath: /redis
-      - name: mongo-mongodb-ca
-        mountPath: /mongo
-      - name: ef-logback
-        mountPath: /logback
-   sidecars:
-      - image: '{{ .Values.global.imageRegistry }}/cim/conversation-controller:4.7'
-        name: '{{ .Release.Name }}-conversation-controller'
-        imagePullPolicy: IfNotPresent
-        env:
-          - name: IS_WRAP_UP_ENABLED
-            value: '{{ .Values.global.efCommonVars_IS_WRAP_UP_ENABLED }}'
-          - name: WRAPUP_TIME
-            value: '{{ .Values.global.efCommonVars_WRAPUP_TIME  }}'
-          - name: DEFAULT_ROOM_NAME
-            value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_NAME }}'
-          - name: DEFAULT_ROOM_DESCRIPTION
-            value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_DESCRIPTION  }}'
-          - name: DEFAULT_ROOM_LABEL
-            value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_LABEL  }}'
-          - name: ROOM_IS_USER_ID
-            value: '{{ .Values.global.efCommonVars_ROOM_IS_USER_ID }}'
-          - name: TZ
-            value: '{{ .Values.global.efCommonVars_TZ }}'
-          - name: MASK_ATTRIBUTES_PATH
-            value: '{{ .Values.global.efCommonVars_MASK_ATTRIBUTES_PATH }}'
-          - name: LOGGING_CONFIG
-            value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
-          - name: CONVERSATION_SEARCH_WINDOW_HRS
-            value: '{{ .Values.global.efCommonVars_CONVERSATION_SEARCH_WINDOW_HRS  }}'
-          - name: PORT
-            value: "5000"
-          - name: CONVERSATION_MANAGER
-            value: http://localhost:8080
-          - name: REDIS_EXPIRY_SECONDS
-            value: "86400"
-        envFrom:
-          - configMapRef:
-               name: '{{ .Release.Name }}-efconnections-cm'
-        ports:
-          - containerPort: 5000
-            name: "http-co-ct-5000"
-        volumeMounts:
-          - name: ef-conversation-controller-actions
-            mountPath: /app/actions
-          - name: ef-conversation-controller-pycache
-            mountPath: /app/actions/__pycache__
-          - name: ef-conversation-controller-utils
-            mountPath: /app/actions/utils
-          - name: redis-crt
-            mountPath: /redis
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: cim/conversation-manager
+        tag: 4.9.2
+    efConnectionVars: true
+    efEnvironmentVars: false
+    extraEnvVars:
+        - name: IS_WRAP_UP_ENABLED
+          value: '{{ .Values.global.efCommonVars_IS_WRAP_UP_ENABLED }}'
+        - name: WRAPUP_TIME
+          value: '{{ .Values.global.efCommonVars_WRAPUP_TIME  }}'
+        - name: DEFAULT_ROOM_NAME
+          value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_NAME }}'
+        - name: DEFAULT_ROOM_DESCRIPTION
+          value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_DESCRIPTION  }}'
+        - name: DEFAULT_ROOM_LABEL
+          value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_LABEL  }}'
+        - name: ROOM_IS_USER_ID
+          value: '{{ .Values.global.efCommonVars_ROOM_IS_USER_ID }}'
+        - name: TZ
+          value: '{{ .Values.global.efCommonVars_TZ }}'
+        - name: CONVERSATION_SEARCH_WINDOW_HRS
+          value: '{{ .Values.global.efCommonVars_CONVERSATION_SEARCH_WINDOW_HRS }}'
+        - name: MASK_ATTRIBUTES_PATH
+          value: '{{ .Values.global.efCommonVars_MASK_ATTRIBUTES_PATH }}'
+        - name: LOGGING_CONFIG
+          value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
+        - name: ROOT_LOG_LEVEL
+          value: "warn"
+        - name: APPLICATION_LOG_LEVEL
+          value: "debug"
+        - name: MONGODB_DATABASE
+          value: "conversation-manager_db"
+        - name: ROUTING_ENGINE_URL
+          value: "http://{{ .Release.Name }}-routing-engine-svc.{{ .Release.Namespace }}.svc:8081"
+        - name: BOT_FRAMEWORK_URL
+          value: "http://{{ .Release.Name }}-bot-framework-svc.{{ .Release.Namespace }}.svc:8082"
+        - name: CONTROLLER_URL
+          value: "http://localhost:5000"
+        - name: UNIFIED_ADMIN_URL
+          value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
+        - name: CCM_URL
+          value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+        - name: CIM_CUSTOMER_URL
+          value: "http://{{ .Release.Name }}-cim-customer-svc.{{ .Release.Namespace }}.svc:8080"
+        - name: PROCESS_EVENTS
+          value: "false"
+        - name: ENABLE_LAST_AGENT_ROUTING
+          value: "false"
+        - name: MASKING_LAYOUT_CLASS
+          value: "com.ef.conversationmanager.utility.MaskingPatternLayout"
+        - name: TOPIC_CONCURRENCY_MIN
+          value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
+        - name: TOPIC_CONCURRENCY_MAX
+          value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
+    containerPorts:
+        - name: "http-co-ma-8080"
+          containerPort: 8080
+    service:
+        enabled: true
+        port: 8080
+        portName: "http-co-ma-8080"
+        targetPort: "http-co-ma-8080"
+        extraPorts:
+          - name: "ef-co-ct-5000"
+            port: 5000
+            protocol: TCP
+            targetPort: "http-co-ct-5000"
+    ingress: { enabled: false }
+    apisixRoutes:
+      - nameSuffix: "main"
+        enabled: true
+        paths: ["/conversation-manager/*"]
+        backendServicePort: 8080
+        plugins:
+          enableAuth: true
+          enableRewrite: true # Uses default stripPrefix
+    extraVolumes:
+        - name: mongo-mongodb-ca
+          secret:
+            secretName: mongo-mongodb-ca
+        - name: redis-crt
+          secret:
+            secretName: redis-crt
+        - name: ef-logback
+          configMap:
+              name: ef-logback-cm
+        - name: ef-conversation-controller-actions
+          configMap:
+            name: ef-conversation-controller-actions-cm
+            optional: true
+        - name: ef-conversation-controller-pycache
+          configMap:
+            name: ef-conversation-controller-actions-pycache-cm
+            optional: true
+        - name: ef-conversation-controller-utils
+          configMap:
+            name: ef-conversation-controller-actions-utils-cm
+            optional: true
+    extraVolumeMounts:
+        - name: redis-crt
+          mountPath: /redis
+        - name: mongo-mongodb-ca
+          mountPath: /mongo
+        - name: ef-logback
+          mountPath: /logback
+    sidecars:
+        - image: '{{ .Values.global.imageRegistry }}/cim/conversation-controller:4.7'
+          name: '{{ .Release.Name }}-conversation-controller'
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: IS_WRAP_UP_ENABLED
+              value: '{{ .Values.global.efCommonVars_IS_WRAP_UP_ENABLED }}'
+            - name: WRAPUP_TIME
+              value: '{{ .Values.global.efCommonVars_WRAPUP_TIME  }}'
+            - name: DEFAULT_ROOM_NAME
+              value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_NAME }}'
+            - name: DEFAULT_ROOM_DESCRIPTION
+              value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_DESCRIPTION  }}'
+            - name: DEFAULT_ROOM_LABEL
+              value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_LABEL  }}'
+            - name: ROOM_IS_USER_ID
+              value: '{{ .Values.global.efCommonVars_ROOM_IS_USER_ID }}'
+            - name: TZ
+              value: '{{ .Values.global.efCommonVars_TZ }}'
+            - name: MASK_ATTRIBUTES_PATH
+              value: '{{ .Values.global.efCommonVars_MASK_ATTRIBUTES_PATH }}'
+            - name: LOGGING_CONFIG
+              value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
+            - name: CONVERSATION_SEARCH_WINDOW_HRS
+              value: '{{ .Values.global.efCommonVars_CONVERSATION_SEARCH_WINDOW_HRS  }}'
+            - name: PORT
+              value: "5000"
+            - name: CONVERSATION_MANAGER
+              value: http://localhost:8080
+            - name: REDIS_EXPIRY_SECONDS
+              value: "86400"
+          envFrom:
+            - configMapRef:
+                name: '{{ .Release.Name }}-efconnections-cm'
+          ports:
+            - containerPort: 5000
+              name: "http-co-ct-5000"
+          volumeMounts:
+            - name: ef-conversation-controller-actions
+              mountPath: /app/actions
+            - name: ef-conversation-controller-pycache
+              mountPath: /app/actions/__pycache__
+            - name: ef-conversation-controller-utils
+              mountPath: /app/actions/utils
+            - name: redis-crt
+              mountPath: /redis
 
 
 
 
 ##############################conversation-monitor##############################
 conversation-monitor:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: cim/conversation-monitor
-      tag: 4.9.1
-   efConnectionVars: true
-   efEnvironmentVars: false
-   containerPorts:
-      - name: "http-c-m-8080"
-        containerPort: 8080
-   extraEnvVars:
-      - name: IS_WRAP_UP_ENABLED
-        value: '{{ .Values.global.efCommonVars_IS_WRAP_UP_ENABLED }}'
-      - name: LOGGING_CONFIG
-        value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
-      - name: DEFAULT_ROOM_NAME
-        value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_NAME }}'
-      - name: DEFAULT_ROOM_DESCRIPTION
-        value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_DESCRIPTION  }}'
-      - name: DEFAULT_ROOM_LABEL
-        value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_LABEL  }}'
-      - name: ROOM_IS_USER_ID
-        value: '{{ .Values.global.efCommonVars_ROOM_IS_USER_ID }}'
-      - name: ROOT_LOG_LEVEL
-        value: "warn"
-      - name: APPLICATION_LOG_LEVEL
-        value: "info"
-      - name: MONGODB_DATABASE
-        value: "conversation-monitor_db"
-      - name: ROUTING_ENGINE_URL
-        value: "http://{{ .Release.Name }}-routing-engine-svc.{{ .Release.Namespace }}.svc:8081"
-      - name: BOT_FRAMEWORK_URL
-        value: "http://{{ .Release.Name }}-bot-framework-svc.{{ .Release.Namespace }}.svc:8082"
-      - name: CONTROLLER_URL
-        value: "http://{{ .Release.Name }}-conversation-controller-svc.{{ .Release.Namespace }}.svc:5000"
-      - name: UNIFIED_ADMIN_URL
-        value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
-      - name: TOPIC_CONCURRENCY_MIN
-        value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
-      - name: TOPIC_CONCURRENCY_MAX
-        value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
-      - name: MASKING_LAYOUT_CLASS
-        value: "com.ef.conversationmonitor.utility.MaskingPatternLayout"
-      - name: TOMCAT_MAX_THREADS
-        value: "1000"
-
-
-   service:
-      enabled: true
-      port: 8080
-      portName: "http-c-m-8080"
-      targetPort: "http-c-m-8080"
-   ingress: 
-      enabled: true 
-      annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-        nginx.ingress.kubernetes.io/use-regex: "true"
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path: /conversation-monitor(/|$)(.*)
-      pathType: ImplementationSpecific
-   extraVolumes:
-      - name: mongo-mongodb-ca
-        secret:
-          secretName: mongo-mongodb-ca
-      - name: redis-crt
-        secret:
-          secretName: redis-crt
-      - name: ef-logback
-        configMap:
-          name: ef-logback-cm
-   extraVolumeMounts:
-      - name: redis-crt
-        mountPath: /redis
-      - name: mongo-mongodb-ca
-        mountPath: /mongo
-      - name: ef-logback
-        mountPath: /logback
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: cim/conversation-monitor
+        tag: 4.9.2
+    efConnectionVars: true
+    efEnvironmentVars: false
+    containerPorts:
+        - name: "http-c-m-8080"
+          containerPort: 8080
+    extraEnvVars:
+        - name: IS_WRAP_UP_ENABLED
+          value: '{{ .Values.global.efCommonVars_IS_WRAP_UP_ENABLED }}'
+        - name: LOGGING_CONFIG
+          value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
+        - name: DEFAULT_ROOM_NAME
+          value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_NAME }}'
+        - name: DEFAULT_ROOM_DESCRIPTION
+          value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_DESCRIPTION  }}'
+        - name: DEFAULT_ROOM_LABEL
+          value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_LABEL  }}'
+        - name: ROOM_IS_USER_ID
+          value: '{{ .Values.global.efCommonVars_ROOM_IS_USER_ID }}'
+        - name: ROOT_LOG_LEVEL
+          value: "warn"
+        - name: APPLICATION_LOG_LEVEL
+          value: "info"
+        - name: MONGODB_DATABASE
+          value: "conversation-monitor_db"
+        - name: ROUTING_ENGINE_URL
+          value: "http://{{ .Release.Name }}-routing-engine-svc.{{ .Release.Namespace }}.svc:8081"
+        - name: BOT_FRAMEWORK_URL
+          value: "http://{{ .Release.Name }}-bot-framework-svc.{{ .Release.Namespace }}.svc:8082"
+        - name: CONTROLLER_URL
+          value: "http://{{ .Release.Name }}-conversation-controller-svc.{{ .Release.Namespace }}.svc:5000"
+        - name: UNIFIED_ADMIN_URL
+          value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
+        - name: TOPIC_CONCURRENCY_MIN
+          value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
+        - name: TOPIC_CONCURRENCY_MAX
+          value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
+        - name: MASKING_LAYOUT_CLASS
+          value: "com.ef.conversationmonitor.utility.MaskingPatternLayout"
+        - name: TOMCAT_MAX_THREADS
+          value: "1000"
+    service:
+        enabled: true
+        port: 8080
+        portName: "http-c-m-8080"
+        targetPort: "http-c-m-8080"
+    ingress: { enabled: false }
+    apisixRoutes:
+      - nameSuffix: "main"
+        enabled: true
+        paths: ["/conversation-monitor/*"]
+        backendServicePort: 8080
+        plugins:
+          enableAuth: true
+          enableRewrite: true # Uses default stripPrefix
+    extraVolumes:
+        - name: mongo-mongodb-ca
+          secret:
+            secretName: mongo-mongodb-ca
+        - name: redis-crt
+          secret:
+            secretName: redis-crt
+        - name: ef-logback
+          configMap:
+            name: ef-logback-cm
+    extraVolumeMounts:
+        - name: redis-crt
+          mountPath: /redis
+        - name: mongo-mongodb-ca
+          mountPath: /mongo
+        - name: ef-logback
+          mountPath: /logback
 
 
 
 ##############################customer-widget##############################
 customer-widget:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: efpublic/customer-widget
-      tag: 4.9
-   efConnectionVars: true
-   efEnvironmentVars: false
-   containerPorts:
-      - name: "http-cu-wi-80"
-        containerPort: 80
-   extraEnvVars:
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: CCM_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/ccm"
-      - name: CUSTOMER_GADGET_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/customer-widget"
-      - name: TRANSCRIPT_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/web-widget/chat-transcript"
-      - name: FILE_SERVER_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/file-engine"
-      - name: SOCKET_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/web-channel-manager"
-      - name: FORM_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/unified-admin"
-      - name: CONVERSATIONAL_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/conversation-manager/customer-topics"
-      - name: AUTHENTICATOR_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/secure-link"
-      - name: BUSINESSCALENDAR_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/business-calendar"
-      - name: CHANNEL_IDENTIFIER
-        value: "phone"
-      - name: ENABLE_LOGO
-        value: "false"
-      - name: ADDITIONAL_PANEL
-        value: "true"
-      - name: USERNAME_ENABLED
-        value: "true"
-      - name: MUTE_NOTIFICATIONS
-        value: "false"
-   service:
-      enabled: true
-      port: 80
-      portName: "http-cu-wi-80"
-      targetPort: "http-cu-wi-80"
-   ingress: 
-      enabled: true
-      annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-        nginx.ingress.kubernetes.io/use-regex: "true"
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path: /customer-widget(/|$)(.*)
-      pathType: ImplementationSpecific
-      ingressAssetsAnnotations:
-         nginx.ingress.kubernetes.io/configuration-snippet: 'more_set_headers "Access-Control-Allow-Origin: $http_origin";'
-         nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
-         nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS, DELETE,PATCH
-         nginx.ingress.kubernetes.io/enable-cors: "true"
-   extraVolumes:
-      - name: ef-widget-translation
-        configMap:
-           name: ef-widget-translations-cm
-   extraVolumeMounts:
-      - name: ef-widget-translation
-        mountPath: /usr/share/nginx/html/widget-assets/i18n/
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: efpublic/customer-widget
+        tag: 4.9.2
+    efConnectionVars: true
+    efEnvironmentVars: false
+    containerPorts:
+        - name: "http-cu-wi-80"
+          containerPort: 80
+    extraEnvVars:
+        - name: TZ
+          value: '{{ .Values.global.efCommonVars_TZ }}'
+        - name: CCM_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/ccm"
+        - name: CUSTOMER_GADGET_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/customer-widget"
+        - name: TRANSCRIPT_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/web-widget/chat-transcript"
+        - name: FILE_SERVER_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/file-engine"
+        - name: SOCKET_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/web-channel-manager"
+        - name: FORM_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/unified-admin"
+        - name: CONVERSATIONAL_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/conversation-manager/customer-topics"
+        - name: AUTHENTICATOR_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/secure-link"
+        - name: BUSINESSCALENDAR_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/business-calendar"
+        - name: CHANNEL_IDENTIFIER
+          value: "phone"
+        - name: ENABLE_LOGO
+          value: "false"
+        - name: ADDITIONAL_PANEL
+          value: "true"
+        - name: USERNAME_ENABLED
+          value: "true"
+        - name: MUTE_NOTIFICATIONS
+          value: "false"
+    service:
+        enabled: true
+        port: 80
+        portName: "http-cu-wi-80"
+        targetPort: "http-cu-wi-80"
+    ingress:
+        enabled: false
+        ingressAssets:
+            enabled: false
+    apisixRoutes:
+      # Route 1: Main path
+      - nameSuffix: "main"
+        enabled: true
+        paths: ["/customer-widget/*"]
+        backendServicePort: 80
+        plugins:
+          enableAuth: false
+          enableRewrite: true # Uses default stripPrefix
+      # Route 2: Assets path
+      - nameSuffix: "assets"
+        enabled: true
+        paths: ["/widget-assets/*"]
+        backendServicePort: 80
+        plugins:
+          enableAuth: false
+          enableRewrite: false # No rewrite needed
+          enableCors: true
+    extraVolumes:
+        - name: ef-widget-translation
+          configMap:
+            name: ef-widget-translations-cm
+    extraVolumeMounts:
+        - name: ef-widget-translation
+          mountPath: /usr/share/nginx/html/widget-assets/i18n/
 
 
 ##############################file-engine##############################
 file-engine:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: chat-solution/file-engine
-      tag: 4.9
-   efConnectionVars: true
-   efEnvironmentVars: false 
-   containerPorts:
-      - name: "http-fi-m-8080"
-        containerPort: 8080
-   containerSecurityContext:
-     enabled: true
-     seLinuxOptions: null
-     runAsUser: 0
-     runAsGroup: 0
-     runAsNonRoot: false
-     privileged: true
-     readOnlyRootFilesystem: false
-     allowPrivilegeEscalation: true
-     seccompProfile:
-       type: "RuntimeDefault"
-   extraEnvVars:
-      - name: NODE_TLS_REJECT_UNAUTHORIZED
-        value: '0'
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: ACCESSKEY
-        value: "minioadmin"
-      - name: ALLOWEDFILETYPES
-        value: "png,jpeg,jpg,pdf,ppt,doc,docx,xls,xlsx,txt,svg,pptx,css,oga,mpga,webp,mp3,mp4,gif"
-      - name: BLOCK_UNKNOWN_FILES
-        value: "false"
-      - name: BUCKETNAME
-        value: "default"
-      - name: BYPASS_STRICT_TYPE_CHECK
-        value: "true"
-      - name: CERTIFICATE
-        value: "https/localhost.cert"
-      - name: CERTIFICATE_AUTHORITY
-        value: "https/file-engine.ca-bundle"
-      - name: CONTENTDISPOSITION
-        value: "inline"
-      - name: ENDPOINT
-        value: minio.ef-external.svc
-      - name: FORWARD_PROXY_HOST
-        value: "0.0.0.0"
-      - name: FORWARD_PROXY_PASSWORD
-        value: "xxxx"
-      - name: FORWARD_PROXY_PORT
-        value: "8080"
-      - name: FORWARD_PROXY_USER
-        value: "xxxx"
-      - name: MAXFILESIZE
-        value: "5"
-      - name: MINIOPORT
-        value: "9000"
-      - name: PASSPHRASE
-        value: "expertflow"
-      - name: PRIVATEKEY
-        value: "https/localhost.key"
-      - name: SECRETKEY
-        value: "minioadmin"
-      - name: USE_FORWARD_PROXY
-        value: "false"
-      - name: USE_SECURE_FORWARD_PROXY
-        value: "false"
-      - name: USESSL
-        value: "false"
-      - name: USESSL_MINIO
-        value: "true"
-      - name: CLAMSCAN_HOST
-        value: clamav.ef-external.svc
-      - name: CLAMSCAN_PORT
-        value: "3310"
-      - name: CLAMSCAN_RELOAD_DB
-        value: "false"
-      - name: IS_SCAN_ENABLED
-        value: "true"
-   service:
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: chat-solution/file-engine
+        tag: 4.9
+    efConnectionVars: true
+    efEnvironmentVars: false
+    containerPorts:
+        - name: "http-fi-m-8080"
+          containerPort: 8080
+    containerSecurityContext:
       enabled: true
-      port: 8080
-      portName: "http-fi-m-8080"
-      targetPort: "http-fi-m-8080"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/proxy-body-size: 8m
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-
-      path: /file-engine(/|$)(.*)
-      pathType: ImplementationSpecific
+      seLinuxOptions: null
+      runAsUser: 0
+      runAsGroup: 0
+      runAsNonRoot: false
+      privileged: true
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: true
+      seccompProfile:
+        type: "RuntimeDefault"
+    extraEnvVars:
+        - name: NODE_TLS_REJECT_UNAUTHORIZED
+          value: '0'
+        - name: TZ
+          value: '{{ .Values.global.efCommonVars_TZ }}'
+        - name: ACCESSKEY
+          value: "minioadmin"
+        - name: ALLOWEDFILETYPES
+          value: "png,jpeg,jpg,pdf,ppt,doc,docx,xls,xlsx,txt,svg,pptx,css,oga,mpga,webp,mp3,mp4,gif"
+        - name: BLOCK_UNKNOWN_FILES
+          value: "false"
+        - name: BUCKETNAME
+          value: "default"
+        - name: BYPASS_STRICT_TYPE_CHECK
+          value: "true"
+        - name: CERTIFICATE
+          value: "https/localhost.cert"
+        - name: CERTIFICATE_AUTHORITY
+          value: "https/file-engine.ca-bundle"
+        - name: CONTENTDISPOSITION
+          value: "inline"
+        - name: ENDPOINT
+          value: minio.ef-external.svc
+        - name: FORWARD_PROXY_HOST
+          value: "0.0.0.0"
+        - name: FORWARD_PROXY_PASSWORD
+          value: "xxxx"
+        - name: FORWARD_PROXY_PORT
+          value: "8080"
+        - name: FORWARD_PROXY_USER
+          value: "xxxx"
+        - name: MAXFILESIZE
+          value: "5"
+        - name: MINIOPORT
+          value: "9000"
+        - name: PASSPHRASE
+          value: "expertflow"
+        - name: PRIVATEKEY
+          value: "https/localhost.key"
+        - name: SECRETKEY
+          value: "minioadmin"
+        - name: USE_FORWARD_PROXY
+          value: "false"
+        - name: USE_SECURE_FORWARD_PROXY
+          value: "false"
+        - name: USESSL
+          value: "false"
+        - name: USESSL_MINIO
+          value: "true"
+        - name: CLAMSCAN_HOST
+          value: clamav.ef-external.svc
+        - name: CLAMSCAN_PORT
+          value: "3310"
+        - name: CLAMSCAN_RELOAD_DB
+          value: "false"
+        - name: IS_SCAN_ENABLED
+          value: "true"
+    service:
+        enabled: true
+        port: 8080
+        portName: "http-fi-m-8080"
+        targetPort: "http-fi-m-8080"
+    ingress: { enabled: false }
+    apisixRoutes:
+      - nameSuffix: "main"
+        enabled: true
+        paths: ["/file-engine/*"]
+        backendServicePort: 8080
+        plugins:
+          enableAuth: false
+          enableRewrite: true # Uses default stripPrefix
+        # Note: proxy-body-size needs APISIX global config or maybe a specific plugin if available
 
 ##############################historical-reports##############################
 historical-reports:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: cim/historical-reports-manager
-      tag: 4.9.1
-   efConnectionVars: true
-   efEnvironmentVars: false
-   containerPorts:
-      - name: "http-hi-rp-8081"
-        containerPort: 8081
-   extraEnvVars: 
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: ROOT_LOG_LEVEL
-        value: "INFO"
-      - name: APPLICATION_LOG_LEVEL
-        value: "INFO"
-      - name: BATCH_SIZE
-        value: "500"
-      - name: MONGODB_DATABASE
-        value: "conversation-manager_db"
-   service:
-      enabled: true
-      port: 8081
-      portName: "http-hi-rp-8081"
-      targetPort: "http-hi-rp-8081"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-
-      path: /historical-reports(/|$)(.*)
-      pathType: ImplementationSpecific
-   extraVolumes:
-      - name: mongo-mongodb-ca
-        secret:
-          secretName: mongo-mongodb-ca
-   extraVolumeMounts:
-      - name: mongo-mongodb-ca
-        mountPath: /mongo
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: cim/historical-reports-manager
+        tag: 4.9.2
+    efConnectionVars: true
+    efEnvironmentVars: false
+    containerPorts:
+        - name: "http-hi-rp-8081"
+          containerPort: 8081
+    extraEnvVars:
+        - name: TZ
+          value: '{{ .Values.global.efCommonVars_TZ }}'
+        - name: ROOT_LOG_LEVEL
+          value: "INFO"
+        - name: APPLICATION_LOG_LEVEL
+          value: "INFO"
+        - name: BATCH_SIZE
+          value: "500"
+        - name: MONGODB_DATABASE
+          value: "conversation-manager_db"
+    service:
+        enabled: true
+        port: 8081
+        portName: "http-hi-rp-8081"
+        targetPort: "http-hi-rp-8081"
+    ingress: { enabled: false }
+    apisixRoutes:
+      - nameSuffix: "main"
+        enabled: true
+        paths: ["/historical-reports/*"]
+        backendServicePort: 8081
+        plugins:
+          enableAuth: false
+          enableRewrite: true # Uses default stripPrefix
+    extraVolumes:
+        - name: mongo-mongodb-ca
+          secret:
+            secretName: mongo-mongodb-ca
+    extraVolumeMounts:
+        - name: mongo-mongodb-ca
+          mountPath: /mongo
 
 
 
 ##############################licence-manager##############################
 license-manager:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: license-mangement/license-manager
-      tag: 4.7
-   efConnectionVars: true
-   efEnvironmentVars: false 
-   containerPorts:
-      - name: "http-li-ma-8888"
-        containerPort: 8888
-   extraEnvVars:
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: TOPIC_NAME
-        value: LMTopic
-      - name: DB_URL
-        value: jdbc:postgresql://ef-postgresql.ef-external.svc:5432/licenseManager?sslmode=verify-ca&sslrootcert=/postgresql/ca.crt
-#      - name: DB_URL
-#        value: jdbc:postgresql://ef-postgresql-postgresql-ha-pgpool.ef-external.svc:5432/licenseManager
-      - name: DB_DRIVER
-        value: org.postgresql.Driver
-      - name: DB_USER
-        value: sa
-      - name: DB_PASS
-        value:  Expertflow123
-   service:
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: license-mangement/license-manager
+        tag: 4.9.2
+    efConnectionVars: true
+    efEnvironmentVars: false
+    containerPorts:
+        - name: "http-li-ma-8888"
+          containerPort: 8888
+    extraEnvVars:
+        - name: TZ
+          value: '{{ .Values.global.efCommonVars_TZ }}'
+        - name: TOPIC_NAME
+          value: LMTopic
+        - name: DB_URL
+          value: jdbc:postgresql://ef-postgresql.ef-external.svc:5432/licenseManager?sslmode=verify-ca&sslrootcert=/postgresql/ca.crt
+  #      - name: DB_URL
+  #        value: jdbc:postgresql://ef-postgresql-postgresql-ha-pgpool.ef-external.svc:5432/licenseManager
+        - name: DB_DRIVER
+          value: org.postgresql.Driver
+        - name: DB_USER
+          value: sa
+        - name: DB_PASS
+          value:  Expertflow123
+        - name: EF_SHOP_HOST_FQDN
+          value: stage-web.expertflow.com
+        - name: CONSUMER_KEY
+          value: ck_5722272213436c38d46580a412dca3517d7c7321
+        - name: CONSUMER_SECRET
+          value: cs_6ee59aab70191e2a62863ae2c3560beaa561f6aa
+    service:
       enabled: true
       port: 8888
       portName: "http-li-ma-8888"
       targetPort: "http-li-ma-8888"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-
-      path: /license-manager(/|$)(.*)
-      pathType: ImplementationSpecific
-   extraVolumes:
-      - name: ef-postgresql-crt-vol
-        secret:
-          secretName: ef-postgresql-crt
-   extraVolumeMounts:
-      - name: ef-postgresql-crt-vol
-        mountPath: /postgresql
+    ingress: { enabled: false }
+    apisixRoutes:
+      - nameSuffix: "main"
+        enabled: true
+        paths: ["/license-manager/*"]
+        backendServicePort: 8888
+        plugins:
+          enableAuth: true
+          enableRewrite: true # Uses default stripPrefix
+    extraVolumes:
+        - name: ef-postgresql-crt-vol
+          secret:
+            secretName: ef-postgresql-crt
+    extraVolumeMounts:
+        - name: ef-postgresql-crt-vol
+          mountPath: /postgresql
 
 
 ##############################realtime-reports##############################
 realtime-reports:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: cim/realtime-reports-manager
-      tag: 4.9.1
-   efConnectionVars: true
-   efEnvironmentVars: false
-   containerPorts:
-      - name: "http-re-rp-8080"
-        containerPort: 8080
-   extraEnvVars:
-      - name: UNIFIED_ADMIN_URL
-        value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: ROOT_LOG_LEVEL
-        value: "INFO"
-      - name: APPLICATION_LOG_LEVEL
-        value: "INFO"
-      - name: BOT_FRAMEWORK_URL
-        value: "http://{{ .Release.Name }}-bot-framework-svc.{{ .Release.Namespace }}.svc:8082"
-      - name: ROUTING_ENGINE_URL
-        value:  "http://{{ .Release.Name }}-routing-engine-svc.{{ .Release.Namespace }}.svc:8081"
-      - name: DATASOURCE_CONNECTION_TYPE
-        value:  "mysql"
-      - name: DATASOURCE_URL
-        value:  "jdbc:mysql://192.168.1.182:3306/cim_etl_report"
-      - name: DATASOURCE_USERNAME
-        value: "elonmusk"
-      - name: DATASOURCE_PASSWORD
-        value: "68i3nj7t"
-      - name: DATASOURCE_DRIVER_CLASS_NAME
-        value:  "com.mysql.cj.jdbc.Driver"
-      - name: RETRIEVE_PAST_DAY_DATA_ONLY
-        value: "true"
-   service:
-      enabled: true
-      port: 8080
-      portName: "http-re-rp-8080"
-      targetPort: "http-re-rp-8080"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path: /realtime-reports(/|$)(.*)
-      pathType: ImplementationSpecific
-   extraVolumes:
-      - name: redis-crt
-        secret:
-          secretName: redis-crt
-   extraVolumeMounts:
-      - name: redis-crt
-        mountPath: /redis
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: cim/realtime-reports-manager
+        tag: 4.9.2
+    efConnectionVars: true
+    efEnvironmentVars: false
+    containerPorts:
+        - name: "http-re-rp-8080"
+          containerPort: 8080
+    extraEnvVars:
+        - name: UNIFIED_ADMIN_URL
+          value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
+        - name: TZ
+          value: '{{ .Values.global.efCommonVars_TZ }}'
+        - name: ROOT_LOG_LEVEL
+          value: "INFO"
+        - name: APPLICATION_LOG_LEVEL
+          value: "INFO"
+        - name: BOT_FRAMEWORK_URL
+          value: "http://{{ .Release.Name }}-bot-framework-svc.{{ .Release.Namespace }}.svc:8082"
+        - name: ROUTING_ENGINE_URL
+          value:  "http://{{ .Release.Name }}-routing-engine-svc.{{ .Release.Namespace }}.svc:8081"
+        - name: DATASOURCE_CONNECTION_TYPE
+          value:  "mysql"
+        - name: DATASOURCE_URL
+          value:  "jdbc:mysql://192.168.1.182:3306/cim_etl_report"
+        - name: DATASOURCE_USERNAME
+          value: "elonmusk"
+        - name: DATASOURCE_PASSWORD
+          value: "68i3nj7t"
+        - name: DATASOURCE_DRIVER_CLASS_NAME
+          value:  "com.mysql.cj.jdbc.Driver"
+        - name: RETRIEVE_PAST_DAY_DATA_ONLY
+          value: "true"
+    service:
+        enabled: true
+        port: 8080
+        portName: "http-re-rp-8080"
+        targetPort: "http-re-rp-8080"
+    ingress: { enabled: false }
+    apisixRoutes:
+      - nameSuffix: "main"
+        enabled: true
+        paths: ["/realtime-reports/*"]
+        backendServicePort: 8080
+        plugins:
+          enableAuth: false
+          enableRewrite: true # Uses default stripPrefix
+    extraVolumes:
+        - name: redis-crt
+          secret:
+            secretName: redis-crt
+    extraVolumeMounts:
+        - name: redis-crt
+          mountPath: /redis
 
 
 
 ##############################routing-engine##############################
 routing-engine:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: cim/media-routing-engine
-      tag: 4.9.1
-   efConnectionVars: true
-   efEnvironmentVars: false
-   containerPorts:
-      - name: "http-ro-en-8081"
-        containerPort: 8081
-   extraEnvVars:
-      - name: IS_QUEUE_PRIORITY_ENABLED
-        value: "false"
-      - name: IS_MRD_AUTO_SYNC_ENABLED
-        value: "false"
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: LOGGING_CONFIG
-        value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
-      - name: AGENT_MANAGER_BASE_URI
-        value: "http://{{ .Release.Name }}-agent-manager-svc.{{ .Release.Namespace }}.svc:3000"
-      - name: ASSIGN_RESOURCE_RETRIES
-        value: "3"
-      - name: MONGODB_DATABASE
-        value: "routing-engine_db"
-      - name: ROOT_LOG_LEVEL
-        value: "warn"
-      - name: APPLICATION_LOG_LEVEL
-        value: "info"
-      - name: KEYCLOAK_AUTH_HOST
-        value: "https://{{ .Values.global.ingressRouter  }}/auth/"
-      - name: REALTIME_REPORTS_BASE_URI
-        value: "http://{{ .Release.Name }}-realtime-reports-svc.{{ .Release.Namespace }}.svc:8080"
-      - name: MASKING_LAYOUT_CLASS
-        value: "com.ef.mediaroutingengine.global.utilities.MaskingPatternLayout"
-      - name: CUSTOM_THREAD_CORE_POOL_SIZE
-        value: "10"
-      - name: CUSTOM_THREAD_MAX_POOL_SIZE
-        value: "20"
-      - name: CUSTOM_THREAD_KEEP_ALIVE_TIME
-        value: "30"
-      - name: CUSTOM_THREAD_QUEUE_CAPACITY
-        value: "100"
-   service:
-      enabled: true
-      port: 8081
-      portName: "http-ro-en-8081"
-      targetPort: "http-ro-en-8081"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path: /routing-engine(/|$)(.*)
-      pathType: ImplementationSpecific
-   extraVolumes:
-      - name: mongo-mongodb-ca
-        secret:
-          secretName: mongo-mongodb-ca
-      - name: redis-crt
-        secret:
-          secretName: redis-crt
-      - name: ef-logback
-        configMap:
-            name: ef-logback-cm
-   extraVolumeMounts:
-      - name: redis-crt
-        mountPath: /redis
-      - name: mongo-mongodb-ca
-        mountPath: /mongo
-      - name: ef-logback
-        mountPath: /logback
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: cim/media-routing-engine
+        tag: 4.9.2
+    efConnectionVars: true
+    efEnvironmentVars: false
+    containerPorts:
+        - name: "http-ro-en-8081"
+          containerPort: 8081
+    extraEnvVars:
+        - name: IS_QUEUE_PRIORITY_ENABLED
+          value: "false"
+        - name: IS_MRD_AUTO_SYNC_ENABLED
+          value: "false"
+        - name: TZ
+          value: '{{ .Values.global.efCommonVars_TZ }}'
+        - name: LOGGING_CONFIG
+          value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
+        - name: AGENT_MANAGER_BASE_URI
+          value: "http://{{ .Release.Name }}-agent-manager-svc.{{ .Release.Namespace }}.svc:3000"
+        - name: ASSIGN_RESOURCE_RETRIES
+          value: "3"
+        - name: MONGODB_DATABASE
+          value: "routing-engine_db"
+        - name: ROOT_LOG_LEVEL
+          value: "warn"
+        - name: APPLICATION_LOG_LEVEL
+          value: "info"
+        - name: KEYCLOAK_AUTH_HOST
+          value: "https://{{ .Values.global.ingressRouter  }}/auth/"
+        - name: REALTIME_REPORTS_BASE_URI
+          value: "http://{{ .Release.Name }}-realtime-reports-svc.{{ .Release.Namespace }}.svc:8080"
+        - name: MASKING_LAYOUT_CLASS
+          value: "com.ef.mediaroutingengine.global.utilities.MaskingPatternLayout"
+        - name: CUSTOM_THREAD_CORE_POOL_SIZE
+          value: "10"
+        - name: CUSTOM_THREAD_MAX_POOL_SIZE
+          value: "20"
+        - name: CUSTOM_THREAD_KEEP_ALIVE_TIME
+          value: "30"
+        - name: CUSTOM_THREAD_QUEUE_CAPACITY
+          value: "100"
+    service:
+        enabled: true
+        port: 8081
+        portName: "http-ro-en-8081"
+        targetPort: "http-ro-en-8081"
+    ingress: { enabled: false }
+    apisixRoutes:
+      - nameSuffix: "main"
+        enabled: true
+        paths: ["/routing-engine/*"]
+        backendServicePort: 8081
+        plugins:
+          enableAuth: true
+          enableRewrite: true # Uses default stripPrefix
+    extraVolumes:
+        - name: mongo-mongodb-ca
+          secret:
+            secretName: mongo-mongodb-ca
+        - name: redis-crt
+          secret:
+            secretName: redis-crt
+        - name: ef-logback
+          configMap:
+              name: ef-logback-cm
+    extraVolumeMounts:
+        - name: redis-crt
+          mountPath: /redis
+        - name: mongo-mongodb-ca
+          mountPath: /mongo
+        - name: ef-logback
+          mountPath: /logback
 
 
 ##############################state-events-logger##############################
 state-events-logger:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: cim/state-events-logger
-      tag: 4.9.1
-   efConnectionVars: true
-   efEnvironmentVars: false
-   containerPorts: []
-   extraEnvVars:
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: BATCH_SIZE
-        value: "10"
-      - name: TOPIC_NAME
-        value: "VirtualTopic.STATE_CHANNEL"
-      - name: MONGODB_DATABASE
-        value: "state-events-logger_cx_db"
-      - name: BATCH_TIMER_IN_SECONDS
-        value: "5"
-      - name: MAX_IDLE_CYCLES
-        value: "10"
-   service:
-      enabled: false
-   ingress: 
-      enabled: false
-   extraVolumes:
-      - name: mongo-mongodb-ca
-        secret:
-          secretName: mongo-mongodb-ca
-   extraVolumeMounts:
-      - name: mongo-mongodb-ca
-        mountPath: /mongo
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: cim/state-events-logger
+        tag: 4.9.2
+    efConnectionVars: true
+    efEnvironmentVars: false
+    containerPorts: []
+    extraEnvVars:
+        - name: TZ
+          value: '{{ .Values.global.efCommonVars_TZ }}'
+        - name: BATCH_SIZE
+          value: "10"
+        - name: TOPIC_NAME
+          value: "VirtualTopic.STATE_CHANNEL"
+        - name: MONGODB_DATABASE
+          value: "state-events-logger_cx_db"
+        - name: BATCH_TIMER_IN_SECONDS
+          value: "5"
+        - name: MAX_IDLE_CYCLES
+          value: "10"
+    service:
+        enabled: false
+    ingress:
+        enabled: false
+    extraVolumes:
+        - name: mongo-mongodb-ca
+          secret:
+            secretName: mongo-mongodb-ca
+    extraVolumeMounts:
+        - name: mongo-mongodb-ca
+          mountPath: /mongo
 
 
 ##############################team-announcement##############################
 team-announcement:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: cim/team-announcement
-      tag: 4.7
-   efConnectionVars: true
-   efEnvironmentVars: false
-   containerPorts:
-      - name: "ef-team-a-8080"
-        containerPort: 8080
-   extraEnvVars:
-      - name: UNIFIED_ADMIN_URL
-        value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: PORT
-        value: "8080"
-      - name: isSSL
-        value: "false"
-      - name: NODE_ENV
-        value: "production"
-      - name: HTTPS_CERTIFICATE_PATH
-        value: "httpsFiles/server.cert"
-      - name: HTTPS_CERTIFICATE_PASSPHRASE
-        value: ""
-      - name: HTTPS_KEY_PATH
-        value: "httpsFiles/server.key"
-      - name: LOG_LEVEL
-        value: "info"
-      - name: MONGODB_DATABASE_NAME
-        value: "teamAnnouncement"
-   service:
-      enabled: true
-      port: 8080
-      portName: "ef-team-a-8080"
-      targetPort: "ef-team-a-8080"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-      path: /team-announcement(/|$)(.*)
-      pathType: ImplementationSpecific
-   extraVolumes:
-      - name: mongo-mongodb-ca
-        secret:
-          secretName: mongo-mongodb-ca
-   extraVolumeMounts:
-      - name: mongo-mongodb-ca
-        mountPath: /mongo
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: cim/team-announcement
+        tag: 4.7
+    efConnectionVars: true
+    efEnvironmentVars: false
+    containerPorts:
+        - name: "ef-team-a-8080"
+          containerPort: 8080
+    extraEnvVars:
+        - name: UNIFIED_ADMIN_URL
+          value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
+        - name: TZ
+          value: '{{ .Values.global.efCommonVars_TZ }}'
+        - name: PORT
+          value: "8080"
+        - name: isSSL
+          value: "false"
+        - name: NODE_ENV
+          value: "production"
+        - name: HTTPS_CERTIFICATE_PATH
+          value: "httpsFiles/server.cert"
+        - name: HTTPS_CERTIFICATE_PASSPHRASE
+          value: ""
+        - name: HTTPS_KEY_PATH
+          value: "httpsFiles/server.key"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: MONGODB_DATABASE_NAME
+          value: "teamAnnouncement"
+    service:
+        enabled: true
+        port: 8080
+        portName: "ef-team-a-8080"
+        targetPort: "ef-team-a-8080"
+    ingress: { enabled: false }
+    apisixRoutes:
+      - nameSuffix: "main"
+        enabled: true
+        paths: ["/team-announcement/*"]
+        backendServicePort: 8080
+        plugins:
+          enableAuth: true
+          enableRewrite: true # Uses default stripPrefix
+    extraVolumes:
+        - name: mongo-mongodb-ca
+          secret:
+            secretName: mongo-mongodb-ca
+    extraVolumeMounts:
+        - name: mongo-mongodb-ca
+          mountPath: /mongo
 
 ####################### Team Annoucement CronJob Definitions ######################
-   teamAnnouncementsCronJob:
-      enabled: true
-      labels: {}
-      containerSecurityContext:
-        enabled: false
-        seLinuxOptions: {}
-        runAsUser: 1001
-        runAsGroup: 1001
-        runAsNonRoot: true
-        privileged: false
-        readOnlyRootFilesystem: true
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop: ["ALL"]
-        seccompProfile:
-          type: "RuntimeDefault"
-      annotations: {}
-      schedule: "*/5 * * * *"
-      failedJobsHistoryLimit: 1
-      successfulJobsHistoryLimit: 5
-      startingDeadlineSeconds: 20
-      concurrencyPolicy: "Forbid"
-      backoffLimit: 0
-      restartPolicy: OnFailure
-      image: alpine/curl
-      command: 
-       - /bin/sh
-       - -c
-       - curl -kL  "http://{{ .Release.Name }}-team-announcement-svc.{{ .Release.Namespace }}.svc:8080/announcement/checkActiveAnnouncements" && curl -kL "http://{{ .Release.Name }}-team-announcement-svc.{{ .Release.Namespace }}.svc:8080/announcement/checkScheduledAnnouncements"
-      extraEnvVars:
-        - name: TZ
-          value: '{{ .Values.global.efCommonVars_TZ }}' 
-      resourcesPreset: "none"
-      resources: {}
-      extraVolumeMounts: []
-      extraVolumes: []
+    teamAnnouncementsCronJob:
+       enabled: true
+       labels: {}
+       containerSecurityContext:
+         enabled: false
+         seLinuxOptions: {}
+         runAsUser: 1001
+         runAsGroup: 1001
+         runAsNonRoot: true
+         privileged: false
+         readOnlyRootFilesystem: true
+         allowPrivilegeEscalation: false
+         capabilities:
+           drop: ["ALL"]
+         seccompProfile:
+           type: "RuntimeDefault"
+       annotations: {}
+       schedule: "*/5 * * * *"
+       failedJobsHistoryLimit: 1
+       successfulJobsHistoryLimit: 5
+       startingDeadlineSeconds: 20
+       concurrencyPolicy: "Forbid"
+       backoffLimit: 0
+       restartPolicy: OnFailure
+       image: alpine/curl
+       command:
+        - /bin/sh
+        - -c
+        - curl -kL  "http://{{ .Release.Name }}-team-announcement-svc.{{ .Release.Namespace }}.svc:8080/announcement/checkActiveAnnouncements" && curl -kL "http://{{ .Release.Name }}-team-announcement-svc.{{ .Release.Namespace }}.svc:8080/announcement/checkScheduledAnnouncements"
+       extraEnvVars:
+         - name: TZ
+           value: '{{ .Values.global.efCommonVars_TZ }}'
+       resourcesPreset: "none"
+       resources: {}
+       extraVolumeMounts: []
+       extraVolumes: []
 
 ##############################unified-admin##############################
 unified-admin:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: cim/unified-admin
-      tag: 4.9
-   efConnectionVars: true
-   efEnvironmentVars: false
-   containerPorts:
-      - name: "http-un-ad-3000"
-        containerPort: 3000
-   extraEnvVars:
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: ADMIN_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/unified-admin"
-      - name: BOT_FRAMEWORK_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/bot-framework"
-      - name: BUSINESS_CALENDAR_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/business-calendar"
-      - name: BUSINESS_USER_ROLES
-        value: '["agent","supervisor"]'
-      - name: CCM_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/ccm"
-      - name: FILE_ENGINE_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/file-engine"
-      - name: SURVEY_NODERED_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/survey-studio"
-      - name: SURVEY_API_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/survey-backend"
-      - name: CAMPAIGN_NODERED_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/campaign-studio"
-      - name: CAMPAIGN_API_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/campaigns"
-      - name: HTTPS_CERTIFICATE_PASSPHRASE
-        value: ""
-      - name: HTTPS_CERTIFICATE_PATH
-        value: /httpsCerts/server.cert
-      - name: HTTPS_KEY_PATH
-        value: /httpsCerts/server.key
-      - name: LICENSE_MANAGER_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/license-manager"
-      - name: LOG_LEVEL
-        value: "info"
-      - name: MRE_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/routing-engine"
-      - name: PORT
-        value: "3000"
-      - name: isSSL
-        value: "false"
-      - name: MONGODB_NAME
-        value: "adminPanel"
-      - name: IS_ENABLED_2FA
-        value: '{{ .Values.global.efCommonVars_IS_ENABLED_2FA }}'
-      - name: CHANNEL_2FA
-        value: '{{ .Values.global.efCommonVars_CHANNEL_2FA }}'
-      - name: TWILIO_SID
-        value: '{{ .Values.global.efCommonVars_TWILIO_SID }}'
-      - name: TWILIO_VERIFY_SID
-        value: '{{ .Values.global.efCommonVars_TWILIO_VERIFY_SID }}'
-      - name: TWILIO_AUTH_TOKEN
-        value: '{{ .Values.global.efCommonVars_TWILIO_AUTH_TOKEN }}'
-      - name: CX_ACTIVITY
-        value: 'https://{{ .Values.global.ingressRouter  }}/conversation-manager'      
-      - name: QM_API_URL
-        value: 'https://{{ .Values.global.ingressRouter  }}/qm-backend'
-      - name: KEYCLOAK_URL
-        value: 'https://{{ .Values.global.ingressRouter  }}/auth/realms'
-      - name: KEYCLOAK_URL_ADMIN
-        value: 'https://{{ .Values.global.ingressRouter  }}/auth/admin/realms'
-      - name: ADMIN_USERNAME
-        value: 'admin'
-      - name: ADMIN_PASSWORD
-        value: 'admin'
-      - name: CLIENT_ID
-        value: 'cim'
-      - name: CLIENT_SECRET
-        value: 'ef61df80-061c-4c29-b9ac-387e6bf67052'
-      - name: GRANT_TYPE
-        value: 'password'
-      - name: REALM
-        value: 'expertflow'
-      - name: WRAPUP_FORM_ID
-        value: '62d07f4f0980a50a91210bef'
-      - name: REVIEWING_AGENT_CHAT
-        value: 'false'
-   service:
-      enabled: true
-      port: 3000
-      portName: "http-un-ad-3000"
-      targetPort: "http-un-ad-3000"
-   ingress: 
-      enabled: true 
-      ingressDefault: true
-      annotations:
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/configuration-snippet: 'more_set_headers "Access-Control-Allow-Origin: $http_origin";'
-         nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
-         nginx.ingress.kubernetes.io/cors-allow-methods: 'PUT, GET, POST, OPTIONS, DELETE,PATCH'
-         nginx.ingress.kubernetes.io/enable-cors: "true"
-      path: /unified-admin(/|$)(.*)
-      pathType: ImplementationSpecific
-   extraVolumes:
-      - name: mongo-mongodb-ca
-        secret:
-            secretName: mongo-mongodb-ca
-      - name: ef-unified-admin-https-certs-vol
-        secret:
-            secretName: ef-unified-admin-https-certs-secret
-   extraVolumeMounts:
-      - name: mongo-mongodb-ca
-        mountPath: /mongo
-      - name: ef-unified-admin-https-certs-vol
-        mountPath: /httpsCerts
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: cim/unified-admin
+        tag: 4.9.2
+    efConnectionVars: true
+    efEnvironmentVars: false
+    containerPorts:
+        - name: "http-un-ad-3000"
+          containerPort: 3000
+    extraEnvVars:
+        - name: TZ
+          value: '{{ .Values.global.efCommonVars_TZ }}'
+        - name: ADMIN_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/unified-admin"
+        - name: BOT_FRAMEWORK_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/bot-framework"
+        - name: BUSINESS_CALENDAR_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/business-calendar"
+        - name: BUSINESS_USER_ROLES
+          value: '["agent","supervisor"]'
+        - name: CCM_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/ccm"
+        - name: FILE_ENGINE_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/file-engine"
+        - name: SURVEY_NODERED_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/survey-studio"
+        - name: SURVEY_API_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/survey-backend"
+        - name: CAMPAIGN_NODERED_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/campaign-studio"
+        - name: CAMPAIGN_API_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/campaigns"
+        - name: HTTPS_CERTIFICATE_PASSPHRASE
+          value: ""
+        - name: HTTPS_CERTIFICATE_PATH
+          value: /httpsCerts/server.cert
+        - name: HTTPS_KEY_PATH
+          value: /httpsCerts/server.key
+        - name: LICENSE_MANAGER_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/license-manager"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: MRE_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/routing-engine"
+        - name: PORT
+          value: "3000"
+        - name: isSSL
+          value: "false"
+        - name: MONGODB_NAME
+          value: "adminPanel"
+        - name: IS_ENABLED_2FA
+          value: '{{ .Values.global.efCommonVars_IS_ENABLED_2FA }}'
+        - name: CHANNEL_2FA
+          value: '{{ .Values.global.efCommonVars_CHANNEL_2FA }}'
+        - name: TWILIO_SID
+          value: '{{ .Values.global.efCommonVars_TWILIO_SID }}'
+        - name: TWILIO_VERIFY_SID
+          value: '{{ .Values.global.efCommonVars_TWILIO_VERIFY_SID }}'
+        - name: TWILIO_AUTH_TOKEN
+          value: '{{ .Values.global.efCommonVars_TWILIO_AUTH_TOKEN }}'
+        - name: CX_ACTIVITY
+          value: 'https://{{ .Values.global.ingressRouter  }}/conversation-manager'
+        - name: QM_API_URL
+          value: 'https://{{ .Values.global.ingressRouter  }}/qm-backend'
+        - name: KEYCLOAK_URL
+          value: 'https://{{ .Values.global.ingressRouter  }}/auth/realms'
+        - name: KEYCLOAK_URL_ADMIN
+          value: 'https://{{ .Values.global.ingressRouter  }}/auth/admin/realms'
+        - name: ADMIN_USERNAME
+          value: 'admin'
+        - name: ADMIN_PASSWORD
+          value: 'admin'
+        - name: CLIENT_ID
+          value: 'cim'
+        - name: CLIENT_SECRET
+          value: 'ef61df80-061c-4c29-b9ac-387e6bf67052'
+        - name: GRANT_TYPE
+          value: 'password'
+        - name: REALM
+          value: 'expertflow'
+        - name: WRAPUP_FORM_ID
+          value: '62d07f4f0980a50a91210bef'
+        - name: REVIEWING_AGENT_CHAT
+          value: 'false'
+        - name: LICENSE_EXPIRY_WARNING_DAYS
+          value: '170'
+    service:
+        enabled: true
+        port: 3000
+        portName: "http-un-ad-3000"
+        targetPort: "http-un-ad-3000"
+    ingress:
+       enabled: false
+       defaultIngress: false
+    apisixRoutes:
+      # Route 1: Main /unified-admin/* path
+      - nameSuffix: "main"
+        enabled: true
+        paths: ["/unified-admin/*"]
+        backendServicePort: 3000
+        plugins:
+          enableAuth: false
+          enableRewrite: true
+          rewriteStripPrefix: false # Custom rewrite for slash
+          rewriteRegexUriFrom: "^/unified-admin/?(.*)"
+          rewriteRegexUriTo: "/$1"
+          enableCors: true
+      # Route 2: Default /* route
+      - nameSuffix: "default"
+        enabled: true
+        priority: -10
+        paths: ["/*"]
+        backendServicePort: 3000
+        plugins:
+          enableAuth: false # No auth on default
+          enableRewrite: false # No rewrite needed
+    extraVolumes:
+        - name: mongo-mongodb-ca
+          secret:
+              secretName: mongo-mongodb-ca
+        - name: ef-unified-admin-https-certs-vol
+          secret:
+              secretName: ef-unified-admin-https-certs-secret
+    extraVolumeMounts:
+        - name: mongo-mongodb-ca
+          mountPath: /mongo
+        - name: ef-unified-admin-https-certs-vol
+          mountPath: /httpsCerts
 
 
 
 
 ##############################web-channel-manager##############################
 web-channel-manager:
-   enabled: true
-   replicaCount: 1
-   image:       
-      repository: cim/web-channel-manager
-      tag: 4.8
-   efConnectionVars: true
-   efEnvironmentVars: false
-   containerPorts:
-      - name: "http-we-ch-7000"
-        containerPort: 7000
-   extraEnvVars:
-      - name: MEMORY_THRESHOLD_MBS
-        value: '{{ .Values.global.efCommonVars_MEMORY_THRESHOLD_MBS }}'
-      - name: TZ
-        value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: CCM_URL
-        value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
-      - name: CUSTOMER_RECONNECT_TIME
-        value: "200"
-      - name: LOG_LEVEL
-        value: "info"
-      - name: NODE_ENV
-        value: "prod"
-      - name: PORT
-        value: "7000"
-   service:
-      enabled: true
-      port: 7000
-      portName: "http-we-ch-7000"
-      targetPort: "http-we-ch-7000"
-   ingress: 
-      enabled: true 
-      annotations:
-         nginx.ingress.kubernetes.io/rewrite-target: /$2
-         nginx.ingress.kubernetes.io/use-regex: "true"
-         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-         #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-
-      path: /web-channel-manager(/|$)(.*)
-      pathType: ImplementationSpecific
-
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: cim/web-channel-manager
+        tag: 4.9.2
+    efConnectionVars: true
+    efEnvironmentVars: false
+    containerPorts:
+        - name: "http-we-ch-7000"
+          containerPort: 7000
+    extraEnvVars:
+        - name: MEMORY_THRESHOLD_MBS
+          value: '{{ .Values.global.efCommonVars_MEMORY_THRESHOLD_MBS }}'
+        - name: TZ
+          value: '{{ .Values.global.efCommonVars_TZ }}'
+        - name: CCM_URL
+          value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+        - name: CUSTOMER_RECONNECT_TIME
+          value: "200"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: NODE_ENV
+          value: "prod"
+        - name: PORT
+          value: "7000"
+    service:
+        enabled: true
+        port: 7000
+        portName: "http-we-ch-7000"
+        targetPort: "http-we-ch-7000"
+    ingress: { enabled: false }
+    apisixRoutes:
+      - nameSuffix: "main"
+        enabled: true
+        paths: ["/web-channel-manager/*"]
+        backendServicePort: 7000
+        enableWebsocket: true # Enable websocket
+        plugins:
+          enableAuth: false
+          enableRewrite: true # Uses default stripPrefix
 
 
 ##############################business-calendar##############################
 business-calendar:
-   enabled: true
-   replicaCount: 1
-   image:
-      repository: cim/business-calendar
-      tag: 4.8
-   efConnectionVars: true
-   efEnvironmentVars: false
-   containerPorts:
-      - name: "http-bu-ca-8443"
-        containerPort: 8443
-   extraEnvVars:
-      - name: MAX_EVENT_LIMIT_RECURRING_INSTANCES
-        value: "365"
-      - name: MONGODB_DATABASE
-        value: business_calendars_db
-      - name: LOG_LEVEL
-        value: DEBUG
-      - name: LOGGING_CONFIG
-        value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
-      - name: MASKING_LAYOUT_CLASS
-        value: "com.ef.calendar.utils.MaskingPatternLayout"
-   service:
-      enabled: true
-      port: 8443
-      portName: "http-bu-ca-8443"
-      targetPort: "http-bu-ca-8443"
-   ingress:
-      enabled: true
-      annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-        nginx.ingress.kubernetes.io/use-regex: "true"
-      path: /business-calendar(/|$)(.*)
-      pathType: ImplementationSpecific
-   extraVolumes:
-      - name: mongo-mongodb-ca
-        secret:
-          secretName: mongo-mongodb-ca
-      - name: ef-logback
-        configMap:
-            name: ef-logback-cm
-   extraVolumeMounts:
-      - name: mongo-mongodb-ca
-        mountPath: /mongo
-      - name: ef-logback
-        mountPath: /logback
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: cim/business-calendar
+        tag: 4.8
+    efConnectionVars: true
+    efEnvironmentVars: false
+    containerPorts:
+        - name: "http-bu-ca-8443"
+          containerPort: 8443
+    extraEnvVars:
+        - name: MAX_EVENT_LIMIT_RECURRING_INSTANCES
+          value: "365"
+        - name: MONGODB_DATABASE
+          value: business_calendars_db
+        - name: LOG_LEVEL
+          value: DEBUG
+        - name: LOGGING_CONFIG
+          value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
+        - name: MASKING_LAYOUT_CLASS
+          value: "com.ef.calendar.utils.MaskingPatternLayout"
+    service:
+        enabled: true
+        port: 8443
+        portName: "http-bu-ca-8443"
+        targetPort: "http-bu-ca-8443"
+    ingress: { enabled: false }
+    apisixRoutes:
+      - nameSuffix: "main"
+        enabled: true
+        paths: ["/business-calendar/*"]
+        backendServicePort: 8443
+        # backendScheme: https # Add if needed
+        plugins:
+          enableAuth: false
+          enableRewrite: true # Uses default stripPrefix
+    extraVolumes:
+        - name: mongo-mongodb-ca
+          secret:
+            secretName: mongo-mongodb-ca
+        - name: ef-logback
+          configMap:
+              name: ef-logback-cm
+    extraVolumeMounts:
+        - name: mongo-mongodb-ca
+          mountPath: /mongo
+        - name: ef-logback
+          mountPath: /logback

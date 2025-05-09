@@ -1,3 +1,4 @@
+{{- if .Values.ingress.ingressAssets.enabled }}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
@@ -24,4 +25,4 @@ spec:
     - hosts:
         - {{ .Values.global.ingressRouter | quote }}
       secretName: {{- include "common.tplvalues.render" ( dict "value"   .Values.ingress.tlsSecretName "context"  $) | indent 2  }}
-
+{{- end }}
