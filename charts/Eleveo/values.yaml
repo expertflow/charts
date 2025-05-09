@@ -47,6 +47,27 @@ global:
   efCommonVars_TWILIO_AUTH_TOKEN: ""
   efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
   efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
+# --- Added APISIX Global Config ---
+  apisix:
+    keycloak:
+      discoveryUrl: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration" # Internal URL
+      realm: "expertflow"
+      clientId: "cim" # Verify this Client ID exists and is configured if auth is enabled
+      clientSecret: "ef61df80-061c-4c29-b9ac-387e6bf67052" # Use appropriate secret management
+      bearerOnly: true
+      tokenSigningAlg: "RS256"
+      setAccessTokenHeader: false
+      setUserInfoHeader: false
+      defaultAudience: ["cim", "account", "realm-management"]
+      defaultScopes: ["email", "profile"]
+    plugins:
+      cors:
+        enabled: false
+        allowOrigins: "*"
+        allowMethods: "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+        allowCredentials: true
+      rewrite:
+        stripPrefix: true
 
 # Change the below given paragraph when deploying an offline solution to pick the images from 
 #  -- Local Repo running inside the Kubernetes Engine
@@ -100,15 +121,18 @@ eleveo-api:
       port: 8080
       portName: "http-el-co-8080"
       targetPort: "http-el-co-8080"
-   ingress: 
-      enabled: true 
-      annotations:
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-        nginx.ingress.kubernetes.io/use-regex: "true"
-      path: /eleveo-connector-api(/|$)(.*)
-      pathType: ImplementationSpecific
+   ingress: { enabled: false } # Explicitly disable standard Ingress ***
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/eleveo-connector-api/*"] # From original ingress path
+       backendServicePort: 8080          # From original ingress backend port
+       plugins:
+         enableAuth: false               # Auth Disabled as confirmed
+         enableRewrite: true             # From original ingress rewrite-target (default strip)
+         enableCors: false               # No CORS specified
+         enableTrailingSlashRedirect: false # No redirect specified
    extraVolumes: []
    extraVolumeMounts: []
 
@@ -137,15 +161,18 @@ eleveo-runner:
       port: 8080
       portName: "http-el-ru-8080"
       targetPort: "http-el-ru-8080"
-   ingress:
-      enabled: true
-      annotations:
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-        nginx.ingress.kubernetes.io/use-regex: "true"
-      path: /eleveo-recording-runner(/|$)(.*)
-      pathType: ImplementationSpecific
+   ingress: {enabled: false} # <-- *** CORRECTED: Explicitly disable standard Ingress ***
+   apisixRoutes:
+     - nameSuffix: "main"
+       enabled: true
+       priority: 0
+       paths: ["/eleveo-recording-runner/*"] # From original ingress path
+       backendServicePort: 8080             # From original ingress backend port
+       plugins:
+         enableAuth: false                  # Auth Disabled as confirmed
+         enableRewrite: true                # From original ingress rewrite-target (default strip)
+         enableCors: false                  # No CORS specified
+         enableTrailingSlashRedirect: false    # No redirect specified
    extraVolumes: []
    extraVolumeMounts: []
 
