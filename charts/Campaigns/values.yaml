@@ -135,7 +135,7 @@ campaigns-backend:
        # methods: ["GET", "POST"]  # Optional: Defaults to all
        # enableWebsocket: false    # Optional: Defaults to false
        plugins:
-         enableAuth: true          # Assumed: Requires auth
+         enableAuth: false          # Assumed: Requires auth
          enableRewrite: true       # From ingress rewrite-target (implies default prefix strip)
          # rewriteStripPrefix: true # Template default when enableRewrite=true and no custom regex
          enableCors: false         # No CORS annotations on specific ingress
@@ -205,7 +205,7 @@ campaign-studio:
        paths: ["/campaign-studio/*"] # From ingress path
        backendServicePort: 1880    # From ingress backend
        plugins:
-         enableAuth: true          # Assumed: Requires auth
+         enableAuth: false          # Assumed: Requires auth
          enableRewrite: true       # Enable rewrite for custom rule
          rewriteStripPrefix: false # MUST be false to allow custom regex below
          rewriteRegexUriFrom: "^/campaign-studio(/|$)(.*)" # Specific rule from ingress rewrite-target: /red/$2
@@ -264,7 +264,7 @@ scheduled-activities:
       paths: ["/scheduler/*"]     # From ingress path
       backendServicePort: 8894    # From ingress backend
       plugins:
-        enableAuth: true          # Assumed: Requires auth
+        enableAuth: false          # Assumed: Requires auth
         enableRewrite: true       # From ingress rewrite-target (implies default prefix strip)
         # rewriteStripPrefix: true # Template default when enableRewrite=true and no custom regex
         enableCors: false         # No CORS annotations on specific ingress
