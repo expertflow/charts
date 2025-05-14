@@ -275,7 +275,7 @@ agent-manager:
         paths: ["/agent-manager/*"]
         backendServicePort: 3000
         plugins:
-          enableAuth: true
+          enableAuth: false
           enableRewrite: true # Uses default stripPrefix
           customPlugins:
             - name: limit-count # Example 1: Rate Limiting
@@ -381,7 +381,7 @@ bot-framework:
         paths: ["/bot-framework/*"]
         backendServicePort: 8082
         plugins:
-          enableAuth: true
+          enableAuth: false
           enableRewrite: true # Uses default stripPrefix
     extraVolumes:
         - name: mongo-mongodb-ca
@@ -497,7 +497,7 @@ ccm:
         paths: ["/ccm/*"]
         backendServicePort: 8081
         plugins:
-          enableAuth: true # Enable Auth
+          enableAuth: false # Enable Auth
           enableRewrite: true # Uses default stripPrefix
     extraVolumes:
         - name: mongo-mongodb-ca
@@ -551,7 +551,7 @@ cim-customer:
           paths: [ "/cim-customer/*" ]
           backendServicePort: 8080
           plugins:
-            enableAuth: true
+            enableAuth: false
             enableRewrite: true # Uses default stripPrefix
     extraVolumes:
        - name: mongo-mongodb-ca
@@ -640,7 +640,7 @@ conversation-manager:
         paths: ["/conversation-manager/*"]
         backendServicePort: 8080
         plugins:
-          enableAuth: true
+          enableAuth: false
           enableRewrite: true # Uses default stripPrefix
     extraVolumes:
         - name: mongo-mongodb-ca
@@ -780,7 +780,7 @@ conversation-monitor:
         paths: ["/conversation-monitor/*"]
         backendServicePort: 8080
         plugins:
-          enableAuth: true
+          enableAuth: false
           enableRewrite: true # Uses default stripPrefix
     extraVolumes:
         - name: mongo-mongodb-ca
@@ -1069,7 +1069,7 @@ license-manager:
         paths: ["/license-manager/*"]
         backendServicePort: 8888
         plugins:
-          enableAuth: true
+          enableAuth: false
           enableRewrite: true # Uses default stripPrefix
     extraVolumes:
         - name: ef-postgresql-crt-vol
@@ -1198,7 +1198,7 @@ routing-engine:
         paths: ["/routing-engine/*"]
         backendServicePort: 8081
         plugins:
-          enableAuth: true
+          enableAuth: false
           enableRewrite: true # Uses default stripPrefix
     extraVolumes:
         - name: mongo-mongodb-ca
@@ -1300,7 +1300,7 @@ team-announcement:
         paths: ["/team-announcement/*"]
         backendServicePort: 8080
         plugins:
-          enableAuth: true
+          enableAuth: false
           enableRewrite: true # Uses default stripPrefix
     extraVolumes:
         - name: mongo-mongodb-ca
