@@ -1510,6 +1510,10 @@ web-channel-manager:
           value: "prod"
         - name: PORT
           value: "7000"
+        - name: KEYCLOAK_USERNAME_CUSTOMER
+          value: "customer"
+        - name: KEYCLOAK_PASSWORD_CUSTOMER
+          value: "customer"
     service:
         enabled: true
         port: 7000
