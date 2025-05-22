@@ -95,8 +95,8 @@ unified-agent:
    enabled: true
    replicaCount: 1
    image:       
-      repository: cim/unified-agent
-      tag: 4.9.2
+      repository: cim/unified-agent/build
+      tag: 4.9.2_f-CXIM-509
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -250,6 +250,11 @@ unified-agent:
          enableRewrite: true   # Corresponds to rewrite-target removing /unified-agent
          # rewriteStripPrefix: true is implied by enableRewrite: true unless overridden
          enableCors: true      # From ingress annotations
+         customPlugins:
+           - name: client-control
+             enable: false
+             config:
+               max_body_size: 5242880
      # Route 2: Assets path
      - nameSuffix: "assets"
        enabled: true
@@ -260,6 +265,11 @@ unified-agent:
          enableAuth: false     # Assumed: Assets typically don't require auth
          enableRewrite: false  # No rewrite annotation was present for assets ingress
          enableCors: true      # From ingress annotations
+         customPlugins:
+           - name: client-control
+             enable: true
+             config:
+               max_body_size: 6291456
    extraVolumes:
       - name: ef-app-translation
         configMap:
