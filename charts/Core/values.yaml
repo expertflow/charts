@@ -1002,7 +1002,7 @@ customer-widget:
             - name: client-control
               enable: false
               config:
-                max_body_size: 5242880
+                max_body_size: 6291456
     extraVolumes:
         - name: ef-widget-translation
           configMap:
@@ -1141,7 +1141,7 @@ file-engine:
              - name: client-control
                enable: true
                config:
-                 max_body_size: 5242880 # 5MB in bytes
+                 max_body_size: 6291456 # 5MB in bytes
              - name: response-rewrite
                enable: true
                config:
