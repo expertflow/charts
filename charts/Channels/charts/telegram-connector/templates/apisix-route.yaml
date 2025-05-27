@@ -1,12 +1,32 @@
 {{- /* charts/<COMPONENT>/templates/apisix-route.yaml */}}
-{{- /* v18: Added support for customPlugins list in values.yaml. */}}
-{{- /* Based on v17c logic (fixed backends, fixed redirect plugin config). */}}
-{{- /* Handles trailing slash redirect via a separate, higher-priority route. */}}
-{{- /* Handles backendScheme. */}}
+{{- /* v24: Uses 'common.names.fullname-svc' for default backendServiceName. */}}
+{{- /* - Robust 'enabled' flag logic. */}}
+{{- /* - Supports single string global.ingressRouter, per-route 'hosts' override (templateable), 'exprs' in match, shorter rule names, redirect fix, customPlugins. */}}
 
 {{- /* --- Loop through each route defined for this component --- */}}
 {{- range $index, $routeData := .Values.apisixRoutes }}
-{{-   if $routeData.enabled | default true }}
+{{- /*
+      Robust condition for 'enabled' flag:
+      1. Default to rendering the route ($renderRoute = true).
+      2. If 'enabled' key exists in $routeData:
+      3.   And if its type is boolean:
+      4.     And if its value is 'false':
+      5.       Then set $renderRoute = false (do not render).
+      This ensures that an explicit 'enabled: false' (boolean) in values.yaml reliably skips rendering.
+      If 'enabled' is true or missing, the route is rendered.
+*/}}
+{{-   $renderRoute := true -}}
+{{-   if hasKey $routeData "enabled" -}}
+{{- if eq ($routeData.enabled | typeOf) "bool" -}}
+{{-   if eq $routeData.enabled false -}}
+{{-     $renderRoute = false -}}
+{{-   end -}}
+{{- else }}
+      {{- /* Optional: Warn or error if 'enabled' is present but not a boolean */}}
+      {{- /* For now, non-boolean 'enabled' will lead to rendering, same as if it was true or missing */}}
+{{- end -}}
+{{-   end -}}
+{{-   if $renderRoute }}
 
 {{- /* --- Setup: Global Values & Current Route Variables --- */}}
 {{- $global := $.Values.global | default dict }}
@@ -22,6 +42,7 @@
 {{- $websocketEnabled := $routeData.enableWebsocket | default false }}
 
 {{- /* --- Backend Dictionary (used in multiple places) --- */}}
+{{- /* v24 Change: Default backendServiceName now uses 'common.names.fullname-svc' helper */}}
 {{- $backendServiceName := $routeData.backendServiceName | default (include "common.names.fullname-svc" $) }}
 {{- $backendServicePort := $routeData.backendServicePort | required (printf "Missing required field 'backendServicePort' for route %s-%s" (include "common.names.fullname" $) $routeData.nameSuffix) }}
 {{- $backendDict := dict "serviceName" $backendServiceName "servicePort" ($backendServicePort | int) }}
@@ -66,23 +87,20 @@
 {{- end }}
 {{- if $corsEnabled }}
 {{-   $corsConfig := dict
-              "allow_origins" (default $globalCors.allowOrigins $routePlugins.corsAllowOrigins)
-              "allow_methods" (default $globalCors.allowMethods $routePlugins.corsAllowMethods)
-              "allow_credentials" (default $globalCors.allowCredentials $routePlugins.corsAllowCredentials)
+              "allow_origins" (default $globalCors.allowOrigins $routePlugins.corsAllowOrigins | default "*")
+              "allow_methods" (default $globalCors.allowMethods $routePlugins.corsAllowMethods | default "GET, POST, PUT, DELETE, PATCH, OPTIONS")
+              "allow_credentials" (default $globalCors.allowCredentials $routePlugins.corsAllowCredentials | default true)
     -}}
 {{-   $mainPluginsList = append $mainPluginsList (dict "name" "cors" "enable" true "config" $corsConfig) }}
 {{- end }}
 
     {{- /* --- Append Custom Plugins specified in values.yaml --- */}}
-    {{- /* Expects $routePlugins.customPlugins to be a list of maps */}}
     {{- if $routePlugins.customPlugins }}
     {{-   range $customPlugin := $routePlugins.customPlugins }}
-    {{- /* Append the entire custom plugin map (which should contain name, enable, config) */}}
     {{- $mainPluginsList = append $mainPluginsList $customPlugin }}
     {{-   end }}
     {{- end }}
 
-    {{- /* --- Ensure separator for MAIN route only if it's NOT the first resource overall --- */}}
     {{- if $index | ne 0 }}
 ---
     {{- end }}
@@ -93,39 +111,57 @@ metadata:
   name: {{ include "common.names.fullname" $ }}-route-{{ $routeData.nameSuffix }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "common.labels.standard" $ | nindent 8 }}
+    {{- include "common.labels.standard" $ | nindent 4 }}
 spec:
   http:
-  - name: rule-{{ include "common.names.fullname" $ }}-{{ $routeData.nameSuffix }}
+  - name: r-{{ include "common.names.fullname" $ }}-{{ $routeData.nameSuffix | trunc 60 }}
     priority: {{ $routeData.priority | default 0 }}
     match:
       hosts:
-      - {{ $global.ingressRouter | required "Missing required field 'global.ingressRouter'" | quote }}
+      {{- if $routeData.hosts }}
+        {{- /* Use per-route hosts if defined, and render them using tpl (or common.tplvalues.render) */}}
+        {{- range $hostStr := $routeData.hosts }}
+        - {{ include "common.tplvalues.render" (dict "value" $hostStr "context" $) | quote }}
+        {{- end }}
+      {{- else if $global.ingressRouter }}
+        {{- /* Fallback to global.ingressRouter (expects string, tpl it) */}}
+        {{- if kindIs "string" $global.ingressRouter }}
+        - {{ include "common.tplvalues.render" (dict "value" $global.ingressRouter "context" $) | quote }}
+        {{- else }}
+          {{- required (printf "global.ingressRouter for component %s, route %s must be a string if routeData.hosts is not defined" (include "common.names.fullname" $) $routeData.nameSuffix) "" }}
+        {{- end }}
+      {{- else }}
+        {{- required (printf "Either routeData.hosts (list of templateable strings) or global.ingressRouter (templateable string) must be set for component %s, route %s" (include "common.names.fullname" $) $routeData.nameSuffix) "" }}
+      {{- end }}
       {{- if $routeData.paths }}
       paths:
         {{- $processedPaths := list }}
         {{- range $p := $routeData.paths }}
           {{- $processedPaths = append $processedPaths ( $p | trimSuffix "*" | printf "%s*" ) }}
         {{- end }}
-        {{- $processedPaths | toYaml | nindent 10 }}
+        {{- $processedPaths | toYaml | nindent 8 }}
       {{- else if $routeData.path }}
       paths:
       - {{ $routeData.path | trimSuffix "*" | printf "%s*" | quote }}
       {{- else }}
-        {{- required "Missing required field 'paths' (list) or 'path' (string) for main route" "" }}
+        {{- required (printf "Missing required field 'paths' (list) or 'path' (string) for main route %s-%s" (include "common.names.fullname" $) $routeData.nameSuffix) "" }}
       {{- end }}
       {{- with $routeData.methods }}
       methods:
-        {{- . | toYaml | nindent 10 }}
+        {{- . | toYaml | nindent 8 }}
       {{- end }}
-    backends: # Indent 6 relative to apiVersion line
-      - serviceName: {{ $backendDict.serviceName }} # Indent 8 (list item) + key at indent 10
-        servicePort: {{ $backendDict.servicePort }} # key at indent 10
-        {{- if $backendDict.namespace }}
-        namespace: {{ $backendDict.namespace }} # key at indent 10
+      {{- if $routeData.exprs }}
+      exprs:
+        {{- $routeData.exprs | toYaml | nindent 8 }}
+      {{- end }}
+    backends:
+      - serviceName: {{ $backendDict.serviceName }}
+        servicePort: {{ $backendDict.servicePort }}
+        {{- if $routeData.backendNamespace }}
+        namespace: {{ $routeData.backendNamespace }}
         {{- end }}
         {{- if $backendDict.scheme }}
-        scheme: {{ $backendDict.scheme }} # key at indent 10
+        scheme: {{ $backendDict.scheme }}
         {{- end }}
     {{- if $websocketEnabled }}
     websocket: true
@@ -138,11 +174,9 @@ spec:
     timeout: { connect: "5s", send: "3600s", read: "3600s" }
     {{- end }}
     {{- end }}
-    {{- /* Render the combined list of standard + custom plugins */}}
     {{- if gt (len $mainPluginsList) 0 }}
-    plugins: # Indent 8
-      {{- /* Use nindent 10 because list items start at indent 10 */}}
-      {{- $mainPluginsList | toYaml | nindent 10 }}
+    plugins:
+      {{- $mainPluginsList | toYaml | nindent 8 }}
     {{- end }}
 
 {{- /* --- Generate Separate Redirect Route if Enabled --- */}}
@@ -151,8 +185,7 @@ spec:
 {{- if $routeData.paths }}{{ $firstPathForRedirect = (first $routeData.paths) }}{{ else if $routeData.path }}{{ $firstPathForRedirect = $routeData.path }}{{ else }}{{ fail (printf "Cannot determine path for redirect on route %s-%s" (include "common.names.fullname" $) $routeData.nameSuffix) }}{{ end }}
 {{- $basePathForRedirect := $firstPathForRedirect | replace "/*" "" | trimSuffix "/" }}
 {{- if eq $basePathForRedirect "" }}{{ fail (printf "Trailing slash redirect cannot be applied to root path for route %s-%s" (include "common.names.fullname" $) $routeData.nameSuffix) }}{{ end }}
-{{- $redirectPluginConfig := dict "regex_uri" (list (printf "^%s$" $basePathForRedirect)) "uri" (printf "%s/" $basePathForRedirect) "ret_code" 301 }}
---- {{/* ALWAYS add separator before the redirect route if it's generated */}}
+---
 # Redirect ApisixRoute: {{ include "common.names.fullname" $ }}-redirect-route-{{ $routeData.nameSuffix }}
 apiVersion: apisix.apache.org/v2
 kind: ApisixRoute
@@ -160,38 +193,50 @@ metadata:
   name: {{ include "common.names.fullname" $ }}-redirect-route-{{ $routeData.nameSuffix }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "common.labels.standard" $ | nindent 8 }}
+    {{- include "common.labels.standard" $ | nindent 4 }}
 spec:
   http:
-  - name: rule-{{ include "common.names.fullname" $ }}-{{ $routeData.nameSuffix }}-redirect
+  - name: r-{{ include "common.names.fullname" $ }}-{{ $routeData.nameSuffix | trunc 54 }}-redir
     priority: {{ $routeData.priority | default 0 | add1 }}
     match:
       hosts:
-      - {{ $global.ingressRouter | quote }}
+      {{- if $routeData.hosts }}
+        {{- range $hostStr := $routeData.hosts }}
+        - {{ include "common.tplvalues.render" (dict "value" $hostStr "context" $) | quote }}
+        {{- end }}
+      {{- else if $global.ingressRouter }}
+        {{- if kindIs "string" $global.ingressRouter }}
+        - {{ include "common.tplvalues.render" (dict "value" $global.ingressRouter "context" $) | quote }}
+        {{- else }}
+          {{- required (printf "global.ingressRouter for component %s, redirect route %s must be a string if routeData.hosts is not defined" (include "common.names.fullname" $) $routeData.nameSuffix) "" }}
+        {{- end }}
+      {{- else }}
+        {{- required (printf "Either routeData.hosts or global.ingressRouter must be set for component %s, redirect route %s" (include "common.names.fullname" $) $routeData.nameSuffix) "" }}
+      {{- end }}
       paths:
       - {{ $basePathForRedirect | quote }}
       methods: ["GET"]
-    backends: # Indent 6
-      - serviceName: {{ $backendDict.serviceName }} # Indent 8 + key at 10
-        servicePort: {{ $backendDict.servicePort }} # key at 10
-        {{- if $backendDict.namespace }}
-        namespace: {{ $backendDict.namespace }} # key at 10
+      {{- if $routeData.exprs }}
+      exprs:
+        {{- $routeData.exprs | toYaml | nindent 8 }}
+      {{- end }}
+    backends:
+      - serviceName: {{ $backendDict.serviceName }}
+        servicePort: {{ $backendDict.servicePort }}
+        {{- if $routeData.backendNamespace }}
+        namespace: {{ $routeData.backendNamespace }}
         {{- end }}
         {{- if $backendDict.scheme }}
-        scheme: {{ $backendDict.scheme }} # key at 10
+        scheme: {{ $backendDict.scheme }}
         {{- end }}
-    plugins: # Indent 8
-      - name: redirect # Indent 10
-        enable: true  # Indent 12
-        config:       # Indent 12
-          # Define the redirect config keys directly for correct indentation
-          regex_uri: # Indent 14
-          {{- range $uri := $redirectPluginConfig.regex_uri }}
-          - {{ $uri | quote }} # Indent 14 (List item)
-          {{- end }}
-          uri: {{ $redirectPluginConfig.uri | quote }} # Indent 14
-          ret_code: {{ $redirectPluginConfig.ret_code }} # Indent 14
+    plugins:
+      - name: redirect
+        enable: true
+        config:
+          uri: "$uri/"
+          ret_code: 301
 {{- end }} {{- /* End if $redirectEnabled */}}
 
-{{- end }} {{- /* End if $routeData.enabled */}}
+{{- end }} {{- /* End if $renderRoute */}}
 {{- end }} {{- /* End range .Values.apisixRoutes */}}
+

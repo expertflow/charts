@@ -49,6 +49,8 @@ global:
   efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
   efCommonVars_MEMORY_THRESHOLD_MBS: 1000
   # --- Added APISIX Global Config (Auth details less relevant if disabled below, but kept for structure) ---
+  apisixInternalServiceHostname: "apisix-data-plane.ef-external.svc.cluster.local" # From your 'kubectl get svc -n ef-external'
+  apisixInternalServicePort: 80 # Default HTTP port for APISIX gateway service
   apisix:
     keycloak:
       discoveryUrl: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration" # Internal URL
@@ -573,7 +575,7 @@ ms-email-connector:
    replicaCount: 1
    image:
      repository: cim/ms-exchange-email-connector
-     tag: 4.9.2
+     tag: 4.9.3
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
