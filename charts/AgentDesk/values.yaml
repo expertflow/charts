@@ -256,7 +256,7 @@ unified-agent:
            - name: client-control
              enable: false
              config:
-               max_body_size: 5242880
+               max_body_size: 6291456
      # Route 2: Assets path
      - nameSuffix: "assets"
        enabled: true
