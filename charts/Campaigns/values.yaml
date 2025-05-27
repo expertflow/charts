@@ -48,6 +48,8 @@ global:
   efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
   efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
   efCommonVars_MEMORY_THRESHOLD_MBS: 1000
+  apisixInternalServiceHostname: "apisix-data-plane.ef-external.svc.cluster.local" # From your 'kubectl get svc -n ef-external'
+  apisixInternalServicePort: 80 # Default HTTP port for APISIX gateway service
   apisix:
     keycloak:
       discoveryUrl: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration" # Internal URL
