@@ -279,7 +279,7 @@ agent-manager:
           rewriteStripPrefix: false
           rewriteRegexUriFrom: "^/agent-manager/(socket\\.io/.*)"
           rewriteRegexUriTo: "/$1"
-      # New Route 3: Send SMS OTP (Unsecured)
+      # New Route 4: Send SMS OTP (Unsecured)
       - nameSuffix: "send-sms-otp-unsecured"
         enabled: true
         priority: 10 # Same high priority as other unsecured paths
@@ -292,7 +292,7 @@ agent-manager:
           rewriteRegexUriFrom: "^/agent-manager(/agent/send-sms-otp.*)$" # Capture /agent/send-sms-otp...
           rewriteRegexUriTo: "$1"
   
-      # New Route 4: Register Phone (Unsecured)
+      # New Route 5: Register Phone (Unsecured)
       - nameSuffix: "register-phone-unsecured"
         enabled: true
         priority: 10 # Same high priority
@@ -304,7 +304,7 @@ agent-manager:
           rewriteStripPrefix: false # Use custom rewrite
           rewriteRegexUriFrom: "^/agent-manager(/agent/register-phone.*)$" # Capture /agent/register-phone...
           rewriteRegexUriTo: "$1"
-      # New Route 5: Validate OTP (Unsecured)
+      # New Route 6: Validate OTP (Unsecured)
       - nameSuffix: "validate-otp-unsecured"
         enabled: true
         priority: 10 # Same high priority
@@ -1135,7 +1135,7 @@ file-engine:
         paths: ["/file-engine/*"]
         backendServicePort: 8080
         plugins:
-          enableAuth: true
+          enableAuth: false
           enableRewrite: true # Uses default stripPrefix
           customPlugins:      # <<< ENSURE THIS LIST IS PRESENT AND POPULATED
              - name: client-control
