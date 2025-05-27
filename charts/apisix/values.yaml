@@ -679,6 +679,11 @@ dataPlane:
     annotations: 
         nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        # Set it the max + 1 to allow max file size
+        nginx.ingress.kubernetes.io/proxy-body-size: "6m"
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "600s"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "600s"
+        nginx.ingress.kubernetes.io/proxy-connect-timeout: "60s"
     ## @param dataPlane.ingress.tls Enable TLS configuration for the host defined at `dataPlane.ingress.hostname` parameter
     ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
     ## You can:
