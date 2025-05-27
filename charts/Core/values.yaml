@@ -44,9 +44,14 @@ global:
   efCommonVars_TWILIO_SID: ""
   efCommonVars_TWILIO_VERIFY_SID: ""
   efCommonVars_TWILIO_AUTH_TOKEN: ""
+  efCommonVars_RSA_SERVER_URL: ""
+  efCommonVars_RSA_CLIENT_KEY: ""
+  efCommonVars_RSA_CLIENT_ID: ""
   efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
   efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
   efCommonVars_MEMORY_THRESHOLD_MBS: 1000
+  apisixInternalServiceHostname: "apisix-data-plane.ef-external.svc.cluster.local" # From your 'kubectl get svc -n ef-external'
+  apisixInternalServicePort: 80 # Default HTTP port for APISIX gateway service
   apisix:
     # --- Default Keycloak OIDC Config ---
     # Used IF a route has plugins.enableAuth = true
@@ -182,7 +187,7 @@ agent-manager:
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: 4.9.2
+        tag: 4.9.3
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -235,6 +240,12 @@ agent-manager:
           value: '{{ .Values.global.efCommonVars_TWILIO_VERIFY_SID }}'
         - name: TWILIO_AUTH_TOKEN
           value: '{{ .Values.global.efCommonVars_TWILIO_AUTH_TOKEN }}'
+        - name: RSA_SERVER_URL
+          value: '{{ .Values.global.efCommonVars_RSA_SERVER_URL }}'
+        - name: RSA_CLIENT_KEY
+          value: '{{ .Values.global.efCommonVars_RSA_CLIENT_KEY }}'
+        - name: RSA_CLIENT_ID
+          value: '{{ .Values.global.efCommonVars_RSA_CLIENT_ID }}'
     service:
         enabled: true
         port: 3000
@@ -268,6 +279,43 @@ agent-manager:
           rewriteStripPrefix: false
           rewriteRegexUriFrom: "^/agent-manager/(socket\\.io/.*)"
           rewriteRegexUriTo: "/$1"
+      # New Route 3: Send SMS OTP (Unsecured)
+      - nameSuffix: "send-sms-otp-unsecured"
+        enabled: true
+        priority: 10 # Same high priority as other unsecured paths
+        paths: ["/agent-manager/agent/send-sms-otp*"]
+        backendServicePort: 3000
+        plugins:
+          enableAuth: false
+          enableRewrite: true
+          rewriteStripPrefix: false # Use custom rewrite
+          rewriteRegexUriFrom: "^/agent-manager(/agent/send-sms-otp.*)$" # Capture /agent/send-sms-otp...
+          rewriteRegexUriTo: "$1"
+  
+      # New Route 4: Register Phone (Unsecured)
+      - nameSuffix: "register-phone-unsecured"
+        enabled: true
+        priority: 10 # Same high priority
+        paths: ["/agent-manager/agent/register-phone*"]
+        backendServicePort: 3000
+        plugins:
+          enableAuth: false
+          enableRewrite: true
+          rewriteStripPrefix: false # Use custom rewrite
+          rewriteRegexUriFrom: "^/agent-manager(/agent/register-phone.*)$" # Capture /agent/register-phone...
+          rewriteRegexUriTo: "$1"
+      # New Route 5: Validate OTP (Unsecured)
+      - nameSuffix: "validate-otp-unsecured"
+        enabled: true
+        priority: 10 # Same high priority
+        paths: ["/agent-manager/agent/validate-otp*"]
+        backendServicePort: 3000
+        plugins:
+          enableAuth: false
+          enableRewrite: true
+          rewriteStripPrefix: false # Use custom rewrite
+          rewriteRegexUriFrom: "^/agent-manager(/agent/validate-otp.*)$" # Capture /agent/validate-otp...
+          rewriteRegexUriTo: "$1"
       # Route 3: Main Secured Route
       - nameSuffix: "secured"
         enabled: true
@@ -302,8 +350,46 @@ agent-manager:
             - name: client-control
               enable: false
               config:
-                max_body_size: 8m # Set max request body size to 8 Megabytes
+                max_body_size: 8388608  # Set max request body size to 8 Megabytes
             # --- END: Added client-control plugin ---
+            - name: "error-page-rewrite"
+              enable: false
+              config:
+                # For each status code you want to override:
+                body: | # Default body if no specific status code matches below
+                  <!DOCTYPE html><html><head><title>Error</title></head><body><h1>An Unexpected Error Occurred</h1><p>Please try again later. Request ID: $request_id</p></body></html>
+                status_codes:
+                  # For a 500 error, redirect to an internal error page service
+                  - 500
+                  # For a 502 error, provide custom content directly
+                  - 502
+                  # For a 503 error, redirect to a different page
+                  - 503
+                # Define what to do for each status code
+                # This is an array of rewrite rules. APISIX will pick the first one that matches.
+                # You can serve content directly or redirect to an error page service.
+                rewrites:
+                  # Rule for 500 errors
+                  - status_code: 500
+                    # Option 1: Redirect to a full HTML page served by another internal service
+                    # This service (e.g., 'error-pages-svc') would serve /error_pages/500.html
+                    # target_uri: "/_internal_error_page_handler" # Path to an internal APISIX route
+                    # target_host: "error-pages-svc.your-namespace.svc" # K8s service for error pages
+                    # target_scheme: "http"
+                    # OR Option 2: Provide the body directly (can be limited in complexity)
+                    body: "<!DOCTYPE html><html><head><title>Internal Server Error</title></head><body><h1>500 - Internal Server Error</h1><p>We are experiencing technical difficulties. Please try again later. Request ID: $request_id</p></body></html>"
+                    headers:
+                      Content-Type: "text/html; charset=utf-8"
+                  # Rule for 502 errors
+                  - status_code: 502
+                    body: "<!DOCTYPE html><html><head><title>Bad Gateway</title></head><body><h1>502 - Bad Gateway</h1><p>The server received an invalid response from an upstream server. Request ID: $request_id</p></body></html>"
+                    headers:
+                      Content-Type: "text/html; charset=utf-8"
+                  # Rule for 503 errors - redirect to a static maintenance page
+                  # - status_code: 503
+                  #   target_uri: "https://status.example.com/maintenance.html" # External redirect
+                  #   is_redirect: true
+  
           # ######################################################## #
           # END: Added customPlugins section                         #
           # ######################################################## #
@@ -499,6 +585,41 @@ ccm:
         plugins:
           enableAuth: false # Enable Auth
           enableRewrite: true # Uses default stripPrefix
+      # Route 5: Internal route for web-channel-manager to ccm
+      - nameSuffix: "internal-wcm-access"
+        enabled: true
+        priority: 20
+        hosts:
+          # This string will be processed by `tpl` (via common.tplvalues.render) in the template
+          - "{{  .Values.global.apisixInternalServiceHostname  }}"
+        paths:
+          - "/internal-wcm-to-ccm/*"
+        #backendServiceName: "ef-cx-ccm-svc" # Adjust if your naming differs
+        backendServicePort: 8081
+        #backendNamespace: "expertflow" # Assuming ccm service is in expertflow namespace
+        plugins:
+          enableAuth: false
+          enableRewrite: true
+          rewriteStripPrefix: false
+          rewriteRegexUriFrom: "^/internal-wcm-to-ccm/(.*)"
+          rewriteRegexUriTo: "/$1"
+          enableCors: false
+          customPlugins:
+            - name: "real-ip"
+              enable: true
+              config:
+                source: "X-Forwarded-For"
+                trusted_addresses: ["10.42.0.0/16"] # Replace with your K8s Pod CIDR
+            - name: "limit-count"
+              enable: true
+              config:
+                count: 10
+                time_window: 1
+                key_type: "var"
+                key: "remote_addr"
+                rejected_code: 429
+                rejected_msg: "{\"error\":\"Internal rate limit exceeded .\"}"
+                show_limit_quota_header: true
     extraVolumes:
         - name: mongo-mongodb-ca
           secret:
@@ -808,7 +929,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: 4.9.2
+        tag: 4.9.3
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -863,6 +984,11 @@ customer-widget:
         plugins:
           enableAuth: false
           enableRewrite: true # Uses default stripPrefix
+          customPlugins:
+            - name: client-control
+              enable: true
+              config:
+                max_body_size: 6291456
       # Route 2: Assets path
       - nameSuffix: "assets"
         enabled: true
@@ -872,6 +998,11 @@ customer-widget:
           enableAuth: false
           enableRewrite: false # No rewrite needed
           enableCors: true
+          customPlugins:
+            - name: client-control
+              enable: false
+              config:
+                max_body_size: 5242880
     extraVolumes:
         - name: ef-widget-translation
           configMap:
@@ -968,14 +1099,56 @@ file-engine:
         targetPort: "http-fi-m-8080"
     ingress: { enabled: false }
     apisixRoutes:
+      # Route 1: Unsecured downloads for specific public SVG files
+      - nameSuffix: "public-svg-downloads"
+        enabled: false
+        priority: 10
+        paths:
+          - "/file-engine/api/downloadFileStream"
+        methods: ["GET"]
+        exprs:
+          - subject:
+              scope: Query
+              name: "filename"
+            op: RegexMatch
+            value: "^(_CISCO_CC\\.svg|_CX_VOICE\\.svg|_EMAIL\\.svg|_FACEBOOK\\.svg|_GENERIC\\.svg|_INSTAGRAM\\.svg|_LINKEDIN\\.svg|_SMS\\.svg|_TELEGRAM\\.svg|_TWITTER\\.svg|_VIBER\\.svg|_VOICEh\\.svg|_VOICE\\.svg|_WEB_RTC\\.svg|_WEB\\.svg|_WHATSAPP\\.svg|_YOUTUBE\\.svg)$"
+        backendServicePort: 8080
+        plugins:
+          enableAuth: false
+          enableRewrite: true
+          rewriteStripPrefix: false
+          rewriteRegexUriFrom: "^/file-engine/(api/downloadFileStream.*)$"
+          rewriteRegexUriTo: "/$1"
+          enableCors: true
+          corsAllowOrigins: "*"
+          corsAllowMethods: "GET, OPTIONS"
+          corsAllowCredentials: true
+          customPlugins:
+            - name: response-rewrite
+              enable: true
+              config:
+                headers:
+                  set:
+                    X-XSS-Protection: "1; mode=block"
       - nameSuffix: "main"
         enabled: true
         paths: ["/file-engine/*"]
         backendServicePort: 8080
         plugins:
-          enableAuth: false
+          enableAuth: true
           enableRewrite: true # Uses default stripPrefix
-        # Note: proxy-body-size needs APISIX global config or maybe a specific plugin if available
+          customPlugins:      # <<< ENSURE THIS LIST IS PRESENT AND POPULATED
+             - name: client-control
+               enable: true
+               config:
+                 max_body_size: 5242880 # 5MB in bytes
+             - name: response-rewrite
+               enable: true
+               config:
+                 headers:
+                   set:
+                     X-XSS-Protection: "1; mode=block"
+             # Note: proxy-body-size needs APISIX global config or maybe a specific plugin if available
 
 ##############################historical-reports##############################
 historical-reports:
@@ -1354,7 +1527,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: 4.9.2
+        tag: 4.9.3
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1363,6 +1536,8 @@ unified-admin:
     extraEnvVars:
         - name: TZ
           value: '{{ .Values.global.efCommonVars_TZ }}'
+        - name: UNIFIED_ADMIN_URL
+          value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
         - name: ADMIN_URL
           value: "https://{{ .Values.global.ingressRouter  }}/unified-admin"
         - name: BOT_FRAMEWORK_URL
@@ -1413,6 +1588,8 @@ unified-admin:
           value: '{{ .Values.global.efCommonVars_TWILIO_AUTH_TOKEN }}'
         - name: CX_ACTIVITY
           value: 'https://{{ .Values.global.ingressRouter  }}/conversation-manager'
+        - name: FORM_DATA_ACTIVITY
+          value: 'http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080'
         - name: QM_API_URL
           value: 'https://{{ .Values.global.ingressRouter  }}/qm-backend'
         - name: KEYCLOAK_URL
@@ -1437,6 +1614,12 @@ unified-admin:
           value: 'false'
         - name: LICENSE_EXPIRY_WARNING_DAYS
           value: '170'
+        - name: RSA_SERVER_URL
+          value: '{{ .Values.global.efCommonVars_RSA_SERVER_URL }}'
+        - name: RSA_CLIENT_KEY
+          value: '{{ .Values.global.efCommonVars_RSA_CLIENT_KEY }}'
+        - name: RSA_CLIENT_ID
+          value: '{{ .Values.global.efCommonVars_RSA_CLIENT_ID }}'
     service:
         enabled: true
         port: 3000
@@ -1458,6 +1641,11 @@ unified-admin:
           rewriteRegexUriFrom: "^/unified-admin/?(.*)"
           rewriteRegexUriTo: "/$1"
           enableCors: true
+          customPlugins:
+            - name: client-control
+              enable: true
+              config:
+                max_body_size: 6291456
       # Route 2: Default /* route
       - nameSuffix: "default"
         enabled: true
@@ -1467,6 +1655,48 @@ unified-admin:
         plugins:
           enableAuth: false # No auth on default
           enableRewrite: false # No rewrite needed
+      - nameSuffix: "default-404-handler"
+        enabled: false
+        priority: -200 # Very low priority
+        paths: ["/*"] # Catches all paths not matched by higher priority routes
+        # No backend is needed as the mocking plugin will generate the response
+        backendServicePort: 80 # Dummy, but APISIX schema might require it.
+        backendServiceName: "dummy-service" # Dummy
+        plugins:
+          enableAuth: false # Typically, 404 pages don't require auth
+          enableRewrite: false
+          enableCors: false # Or configure as needed for your 404 page
+          customPlugins:
+            - name: "mocking"
+              enable: false
+              config:
+                response_status: 404
+                response_headers:
+                  Content-Type: "text/html; charset=utf-8"
+                  X-Custom-Error-Page: "true"
+                response_example: |
+                  <!DOCTYPE html>
+                  <html lang="en">
+                  <head>
+                      <meta charset="UTF-8">
+                      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                      <title>Page Not Found</title>
+                      <style>
+                          body { font-family: Arial, sans-serif; text-align: center; padding: 50px; color: #333; }
+                          h1 { font-size: 48px; color: #555; }
+                          p { font-size: 18px; }
+                          a { color: #007bff; text-decoration: none; }
+                      </style>
+                  </head>
+                  <body>
+                      <h1>404 - Page Not Found</h1>
+                      <p>Sorry, the page you are looking for does not exist or has been moved.</p>
+                      <p><a href="/">Return to Homepage</a></p>
+                      <hr>
+                      <p><small>Request ID: $request_id</small></p>
+                      </body>
+                  </html>
+  
     extraVolumes:
         - name: mongo-mongodb-ca
           secret:
@@ -1489,7 +1719,7 @@ web-channel-manager:
     replicaCount: 1
     image:
         repository: cim/web-channel-manager
-        tag: 4.9.2
+        tag: 4.9.3
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1501,7 +1731,7 @@ web-channel-manager:
         - name: TZ
           value: '{{ .Values.global.efCommonVars_TZ }}'
         - name: CCM_URL
-          value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+          value: "http://apisix-data-plane.ef-external.svc.cluster.local:80/internal-wcm-to-ccm/"
         - name: CUSTOMER_RECONNECT_TIME
           value: "200"
         - name: LOG_LEVEL
