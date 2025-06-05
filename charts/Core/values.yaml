@@ -155,7 +155,7 @@ agent-manager:
    replicaCount: 1
    image:       
       repository: cim/agent-manager
-      tag: 4.7.1
+      tag: 4.7.3
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -247,7 +247,7 @@ bot-framework:
    replicaCount: 1
    image:       
       repository: cim/bot-framework
-      tag: 4.7.1
+      tag: 4.7.3
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -321,7 +321,7 @@ ccm:
    replicaCount: 1
    image:       
       repository: cim/customer-channel-manager
-      tag: 4.7
+      tag: 4.7.3
    efConnectionVars: true
    efEnvironmentVars: true 
    containerPorts:
@@ -400,7 +400,7 @@ cim-customer:
    replicaCount: 1
    image:       
       repository: cim/cim-backend
-      tag: 4.7
+      tag: 4.7.3
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -442,7 +442,7 @@ conversation-manager:
    replicaCount: 1
    image:       
       repository: cim/conversation-manager
-      tag: 4.7.1
+      tag: 4.7.3
    efConnectionVars: true
    efEnvironmentVars: false
    extraEnvVars:
@@ -542,7 +542,7 @@ conversation-manager:
       - name: ef-logback
         mountPath: /logback
    sidecars:
-      - image: '{{ .Values.global.imageRegistry }}/cim/conversation-controller:4.7'
+      - image: '{{ .Values.global.imageRegistry }}/cim/conversation-controller:4.7.2_f-CIM-29034'
         name: '{{ .Release.Name }}-conversation-controller'
         imagePullPolicy: IfNotPresent
         env:
@@ -597,7 +597,7 @@ conversation-monitor:
    replicaCount: 1
    image:       
       repository: cim/conversation-monitor
-      tag:  4.7
+      tag:  4.7.3
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -751,7 +751,7 @@ file-engine:
    replicaCount: 1
    image:       
       repository: chat-solution/file-engine
-      tag: 4.7
+      tag: 4.7.3
    efConnectionVars: true
    efEnvironmentVars: false 
    containerPorts:
@@ -784,9 +784,9 @@ file-engine:
       - name: BYPASS_STRICT_TYPE_CHECK
         value: "true"
       - name: CERTIFICATE
-        value: "https/localhost.cert"
+        value: /https/localhost.cert
       - name: CERTIFICATE_AUTHORITY
-        value: "https/file-engine.ca-bundle"
+        value: /https/file-engine.ca-bundle
       - name: CONTENTDISPOSITION
         value: "inline"
       - name: ENDPOINT
@@ -806,7 +806,7 @@ file-engine:
       - name: PASSPHRASE
         value: "expertflow"
       - name: PRIVATEKEY
-        value: "https/localhost.key"
+        value: /https/localhost.key
       - name: SECRETKEY
         value: "minioadmin"
       - name: USE_FORWARD_PROXY
@@ -833,6 +833,13 @@ file-engine:
 
       path: /file-engine(/|$)(.*)
       pathType: ImplementationSpecific
+   extraVolumes:
+      - name: ef-file-engine-https-certs-vol
+        secret:
+            secretName: ef-file-engine-https-certs-secret
+   extraVolumeMounts:
+      - name: ef-file-engine-https-certs-vol
+        mountPath: /https
 
 ##############################historical-reports##############################
 historical-reports:
@@ -840,7 +847,7 @@ historical-reports:
    replicaCount: 1
    image:       
       repository: cim/historical-reports-manager
-      tag: 4.7.1
+      tag: 4.7.3
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -888,7 +895,7 @@ license-manager:
    replicaCount: 1
    image:       
       repository: license-mangement/license-manager
-      tag: 4.7
+      tag: 4.7.3
    efConnectionVars: true
    efEnvironmentVars: false 
    containerPorts:
@@ -939,7 +946,7 @@ realtime-reports:
    replicaCount: 1
    image:       
       repository: cim/realtime-reports-manager
-      tag: 4.7
+      tag: 4.7.3
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -1000,7 +1007,7 @@ routing-engine:
    replicaCount: 1
    image:       
       repository: cim/media-routing-engine
-      tag: 4.7.1
+      tag: 4.7.3
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -1076,7 +1083,7 @@ state-events-logger:
    replicaCount: 1
    image:       
       repository: cim/state-events-logger
-      tag: 4.7
+      tag: 4.7.3
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts: []
@@ -1205,7 +1212,7 @@ unified-admin:
    replicaCount: 1
    image:       
       repository: cim/unified-admin
-      tag: 4.7
+      tag: 4.7.3
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -1304,7 +1311,7 @@ web-channel-manager:
    replicaCount: 1
    image:       
       repository: cim/web-channel-manager
-      tag: 4.7
+      tag: 4.7.3
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
