@@ -542,7 +542,7 @@ conversation-manager:
       - name: ef-logback
         mountPath: /logback
    sidecars:
-      - image: '{{ .Values.global.imageRegistry }}/cim/conversation-controller:4.7.2_f-CIM-29034'
+      - image: '{{ .Values.global.imageRegistry }}/cim/conversation-controller:4.7.3'
         name: '{{ .Release.Name }}-conversation-controller'
         imagePullPolicy: IfNotPresent
         env:
