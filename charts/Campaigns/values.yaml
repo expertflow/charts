@@ -92,7 +92,7 @@ campaigns-backend:
    enabled: true
    image:       
       repository: cim/campaigns
-      tag: 4.9.2
+      tag: 4.9.3
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -157,7 +157,7 @@ campaign-studio:
    enabled: true
    image:       
       repository: cim/conversation-studio
-      tag: 4.9.2
+      tag: 4.9.3
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
