@@ -246,6 +246,10 @@ agent-manager:
           value: '{{ .Values.global.efCommonVars_RSA_CLIENT_KEY }}'
         - name: RSA_CLIENT_ID
           value: '{{ .Values.global.efCommonVars_RSA_CLIENT_ID }}'
+        - name: SOCKET_PING_INTERVAL
+          value: "25000"
+        - name: SOCKET_PING_TIMEOUT
+          value: "20000"
     service:
         enabled: true
         port: 3000
@@ -645,7 +649,7 @@ cim-customer:
     replicaCount: 1
     image:
        repository: cim/cim-backend
-       tag: 4.9
+       tag: 4.9.3
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -689,7 +693,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: 4.9.2
+        tag: 4.9.3
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -1018,7 +1022,7 @@ file-engine:
     replicaCount: 1
     image:
         repository: chat-solution/file-engine
-        tag: 4.9
+        tag: 4.9.3
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1051,9 +1055,9 @@ file-engine:
         - name: BYPASS_STRICT_TYPE_CHECK
           value: "true"
         - name: CERTIFICATE
-          value: "https/localhost.cert"
+          value: /https/localhost.cert
         - name: CERTIFICATE_AUTHORITY
-          value: "https/file-engine.ca-bundle"
+          value: /https/file-engine.ca-bundle
         - name: CONTENTDISPOSITION
           value: "inline"
         - name: ENDPOINT
@@ -1073,7 +1077,7 @@ file-engine:
         - name: PASSPHRASE
           value: "expertflow"
         - name: PRIVATEKEY
-          value: "https/localhost.key"
+          value: /https/localhost.key
         - name: SECRETKEY
           value: "minioadmin"
         - name: USE_FORWARD_PROXY
@@ -1149,6 +1153,13 @@ file-engine:
                    set:
                      X-XSS-Protection: "1; mode=block"
              # Note: proxy-body-size needs APISIX global config or maybe a specific plugin if available
+    extraVolumes:
+      - name: ef-file-engine-https-certs-vol
+        secret:
+            secretName: ef-file-engine-https-certs-secret
+   extraVolumeMounts:
+      - name: ef-file-engine-https-certs-vol
+        mountPath: /https
 
 ##############################historical-reports##############################
 historical-reports:
@@ -1320,7 +1331,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: 4.9.2
+        tag: 4.9.3
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1434,7 +1445,7 @@ team-announcement:
     replicaCount: 1
     image:
         repository: cim/team-announcement
-        tag: 4.7
+        tag: 4.9.3
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1632,7 +1643,7 @@ unified-admin:
       # Route 1: Main /unified-admin/* path
       - nameSuffix: "main"
         enabled: true
-        paths: ["/unified-admin/*"]
+        paths: ["/unified-admin","/unified-admin/*"]
         backendServicePort: 3000
         plugins:
           enableAuth: false
@@ -1767,7 +1778,7 @@ business-calendar:
     replicaCount: 1
     image:
         repository: cim/business-calendar
-        tag: 4.8
+        tag: 4.9.3
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
