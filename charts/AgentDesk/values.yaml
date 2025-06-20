@@ -97,8 +97,8 @@ unified-agent:
    enabled: true
    replicaCount: 1
    image:       
-      repository: cim/unified-agent
-      tag: 4.9.3
+      repository: cim/unified-agent/build
+      tag: 4.9.3_b-CIM-29720
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -229,6 +229,10 @@ unified-agent:
         value: "*44"
       - name: SIP_EXTERNAL_DN
         value: "99887765"
+      - name: AUTO_ANSWER_DELAY
+        value: "5000"
+      - name: SOCKET_TIMEOUT
+        value: "20000"
    service:
       enabled: true
       port: 80
@@ -334,7 +338,7 @@ grafana:
     - nameSuffix: "main"
       enabled: true
       # Translating path /grafana(/|$)(.*) to APISIX prefix match
-      paths: ["/grafana/*"]
+      paths: ["/grafana", "/grafana/*"]
       backendServicePort: 3000 # Matches assumed service port
       plugins:
         enableAuth: false # Assuming Grafana requires auth
