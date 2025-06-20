@@ -1157,7 +1157,7 @@ file-engine:
       - name: ef-file-engine-https-certs-vol
         secret:
             secretName: ef-file-engine-https-certs-secret
-   extraVolumeMounts:
+    extraVolumeMounts:
       - name: ef-file-engine-https-certs-vol
         mountPath: /https
 
