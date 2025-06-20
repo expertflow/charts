@@ -98,7 +98,7 @@ survey-backend:
    enabled: true
    image:       
       repository: cim/survey-backend
-      tag: 4.7
+      tag: 4.9.3
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -141,7 +141,7 @@ survey-studio:
    enabled: true
    image:       
       repository: cim/survey-nodes
-      tag: 4.6.1
+      tag: 4.9.3
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
