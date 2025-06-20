@@ -97,8 +97,8 @@ unified-agent:
    enabled: true
    replicaCount: 1
    image:       
-      repository: cim/unified-agent/build
-      tag: 4.9.3_b-CIM-29720
+      repository: cim/unified-agent
+      tag: 4.9.3
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
