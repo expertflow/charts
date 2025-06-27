@@ -187,7 +187,7 @@ agent-manager:
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: 4.9.3
+        tag: 4.9.3_b-CIM-29720
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -250,6 +250,7 @@ agent-manager:
           value: "25000"
         - name: SOCKET_PING_TIMEOUT
           value: "20000"
+    siteEnvVars: []
     service:
         enabled: true
         port: 3000
@@ -295,7 +296,7 @@ agent-manager:
           rewriteStripPrefix: false # Use custom rewrite
           rewriteRegexUriFrom: "^/agent-manager(/agent/send-sms-otp.*)$" # Capture /agent/send-sms-otp...
           rewriteRegexUriTo: "$1"
-  
+
       # New Route 5: Register Phone (Unsecured)
       - nameSuffix: "register-phone-unsecured"
         enabled: true
@@ -393,7 +394,7 @@ agent-manager:
                   # - status_code: 503
                   #   target_uri: "https://status.example.com/maintenance.html" # External redirect
                   #   is_redirect: true
-  
+
           # ######################################################## #
           # END: Added customPlugins section                         #
           # ######################################################## #
@@ -459,6 +460,7 @@ bot-framework:
           value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
         - name: TOPIC_CONCURRENCY_MAX
           value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
+    siteEnvVars: []
     service:
         enabled: true
         port: 8082
@@ -537,6 +539,7 @@ ccm:
           value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
         - name: TOMCAT_MAX_THREADS
           value: "1000"
+    siteEnvVars: []
     service:
         enabled: true
         port: 8081
@@ -649,7 +652,7 @@ cim-customer:
     replicaCount: 1
     image:
        repository: cim/cim-backend
-       tag: 4.9.3
+       tag: 4.9.3_f-CIM-29662
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -664,6 +667,7 @@ cim-customer:
          value: "8080"
        - name: MONGODB_DATABASE
          value: "cim_customer"
+    siteEnvVars: []
     service:
        enabled: true
        port: 8080
@@ -693,7 +697,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: 4.9.3
+        tag: 4.9.3_b-CIM-29720
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -745,6 +749,7 @@ conversation-manager:
           value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
         - name: TOPIC_CONCURRENCY_MAX
           value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
+    siteEnvVars: []
     containerPorts:
         - name: "http-co-ma-8080"
           containerPort: 8080
@@ -796,37 +801,38 @@ conversation-manager:
           mountPath: /mongo
         - name: ef-logback
           mountPath: /logback
+    conversationControllerEnvVars:
+         - name: IS_WRAP_UP_ENABLED
+           value: '{{ .Values.global.efCommonVars_IS_WRAP_UP_ENABLED }}'
+         - name: WRAPUP_TIME
+           value: '{{ .Values.global.efCommonVars_WRAPUP_TIME  }}'
+         - name: DEFAULT_ROOM_NAME
+           value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_NAME }}'
+         - name: DEFAULT_ROOM_DESCRIPTION
+           value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_DESCRIPTION  }}'
+         - name: DEFAULT_ROOM_LABEL
+           value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_LABEL  }}'
+         - name: ROOM_IS_USER_ID
+           value: '{{ .Values.global.efCommonVars_ROOM_IS_USER_ID }}'
+         - name: TZ
+           value: '{{ .Values.global.efCommonVars_TZ }}'
+         - name: MASK_ATTRIBUTES_PATH
+           value: '{{ .Values.global.efCommonVars_MASK_ATTRIBUTES_PATH }}'
+         - name: LOGGING_CONFIG
+           value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
+         - name: CONVERSATION_SEARCH_WINDOW_HRS
+           value: '{{ .Values.global.efCommonVars_CONVERSATION_SEARCH_WINDOW_HRS  }}'
+         - name: PORT
+           value: "5000"
+         - name: CONVERSATION_MANAGER
+           value: http://localhost:8080
+         - name: REDIS_EXPIRY_SECONDS
+           value: "86400"
+    conversationControllerSiteEnvVars: []
     sidecars:
         - image: '{{ .Values.global.imageRegistry }}/cim/conversation-controller:4.7'
           name: '{{ .Release.Name }}-conversation-controller'
           imagePullPolicy: IfNotPresent
-          env:
-            - name: IS_WRAP_UP_ENABLED
-              value: '{{ .Values.global.efCommonVars_IS_WRAP_UP_ENABLED }}'
-            - name: WRAPUP_TIME
-              value: '{{ .Values.global.efCommonVars_WRAPUP_TIME  }}'
-            - name: DEFAULT_ROOM_NAME
-              value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_NAME }}'
-            - name: DEFAULT_ROOM_DESCRIPTION
-              value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_DESCRIPTION  }}'
-            - name: DEFAULT_ROOM_LABEL
-              value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_LABEL  }}'
-            - name: ROOM_IS_USER_ID
-              value: '{{ .Values.global.efCommonVars_ROOM_IS_USER_ID }}'
-            - name: TZ
-              value: '{{ .Values.global.efCommonVars_TZ }}'
-            - name: MASK_ATTRIBUTES_PATH
-              value: '{{ .Values.global.efCommonVars_MASK_ATTRIBUTES_PATH }}'
-            - name: LOGGING_CONFIG
-              value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
-            - name: CONVERSATION_SEARCH_WINDOW_HRS
-              value: '{{ .Values.global.efCommonVars_CONVERSATION_SEARCH_WINDOW_HRS  }}'
-            - name: PORT
-              value: "5000"
-            - name: CONVERSATION_MANAGER
-              value: http://localhost:8080
-            - name: REDIS_EXPIRY_SECONDS
-              value: "86400"
           envFrom:
             - configMapRef:
                 name: '{{ .Release.Name }}-efconnections-cm'
@@ -893,6 +899,7 @@ conversation-monitor:
           value: "com.ef.conversationmonitor.utility.MaskingPatternLayout"
         - name: TOMCAT_MAX_THREADS
           value: "1000"
+    siteEnvVars: []
     service:
         enabled: true
         port: 8080
@@ -970,6 +977,7 @@ customer-widget:
           value: "true"
         - name: MUTE_NOTIFICATIONS
           value: "false"
+    siteEnvVars: []
     service:
         enabled: true
         port: 80
@@ -1022,7 +1030,7 @@ file-engine:
     replicaCount: 1
     image:
         repository: chat-solution/file-engine
-        tag: 4.9.3
+        tag: 4.9.3_f-CIM-29662
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1096,6 +1104,7 @@ file-engine:
           value: "false"
         - name: IS_SCAN_ENABLED
           value: "true"
+    siteEnvVars: []
     service:
         enabled: true
         port: 8080
@@ -1184,6 +1193,7 @@ historical-reports:
           value: "500"
         - name: MONGODB_DATABASE
           value: "conversation-manager_db"
+    siteEnvVars: []
     service:
         enabled: true
         port: 8081
@@ -1241,6 +1251,7 @@ license-manager:
           value: ck_5722272213436c38d46580a412dca3517d7c7321
         - name: CONSUMER_SECRET
           value: cs_6ee59aab70191e2a62863ae2c3560beaa561f6aa
+    siteEnvVars: []
     service:
       enabled: true
       port: 8888
@@ -1301,6 +1312,7 @@ realtime-reports:
           value:  "com.mysql.cj.jdbc.Driver"
         - name: RETRIEVE_PAST_DAY_DATA_ONLY
           value: "true"
+    siteEnvVars: []
     service:
         enabled: true
         port: 8080
@@ -1331,7 +1343,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: 4.9.3
+        tag: 4.9.2_f-CCC-1533
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1370,6 +1382,7 @@ routing-engine:
           value: "30"
         - name: CUSTOM_THREAD_QUEUE_CAPACITY
           value: "100"
+    siteEnvVars: []
     service:
         enabled: true
         port: 8081
@@ -1426,6 +1439,7 @@ state-events-logger:
           value: "5"
         - name: MAX_IDLE_CYCLES
           value: "10"
+    siteEnvVars: []
     service:
         enabled: false
     ingress:
@@ -1445,7 +1459,7 @@ team-announcement:
     replicaCount: 1
     image:
         repository: cim/team-announcement
-        tag: 4.9.3
+        tag: 4.9.3_f-CIM-29662
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1472,6 +1486,7 @@ team-announcement:
           value: "info"
         - name: MONGODB_DATABASE_NAME
           value: "teamAnnouncement"
+    siteEnvVars: []
     service:
         enabled: true
         port: 8080
@@ -1527,6 +1542,7 @@ team-announcement:
        extraEnvVars:
          - name: TZ
            value: '{{ .Values.global.efCommonVars_TZ }}'
+       siteEnvVars: []
        resourcesPreset: "none"
        resources: {}
        extraVolumeMounts: []
@@ -1538,7 +1554,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: 4.9.3
+        tag: 4.9.3_f-CIM-29662
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1631,6 +1647,7 @@ unified-admin:
           value: '{{ .Values.global.efCommonVars_RSA_CLIENT_KEY }}'
         - name: RSA_CLIENT_ID
           value: '{{ .Values.global.efCommonVars_RSA_CLIENT_ID }}'
+    siteEnvVars: []
     service:
         enabled: true
         port: 3000
@@ -1707,7 +1724,7 @@ unified-admin:
                       <p><small>Request ID: $request_id</small></p>
                       </body>
                   </html>
-  
+
     extraVolumes:
         - name: mongo-mongodb-ca
           secret:
@@ -1730,7 +1747,7 @@ web-channel-manager:
     replicaCount: 1
     image:
         repository: cim/web-channel-manager
-        tag: 4.9.3
+        tag: 4.9.3_f-CIM-29662
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1755,6 +1772,7 @@ web-channel-manager:
           value: "customer"
         - name: KEYCLOAK_PASSWORD_CUSTOMER
           value: "customer"
+    siteEnvVars: []
     service:
         enabled: true
         port: 7000
@@ -1778,7 +1796,7 @@ business-calendar:
     replicaCount: 1
     image:
         repository: cim/business-calendar
-        tag: 4.9.3
+        tag: 4.8_b-CIM-29666
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1795,6 +1813,7 @@ business-calendar:
           value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
         - name: MASKING_LAYOUT_CLASS
           value: "com.ef.calendar.utils.MaskingPatternLayout"
+    siteEnvVars: []
     service:
         enabled: true
         port: 8443
