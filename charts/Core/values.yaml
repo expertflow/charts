@@ -187,7 +187,7 @@ agent-manager:
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: 4.9.3
+        tag: 4.9.4
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1331,7 +1331,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: 4.9.3
+        tag: 4.9.4
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
