@@ -107,8 +107,8 @@ survey-backend:
 survey-studio:
    enabled: true
    image:       
-      repository: cim/survey-nodes
-      tag: 4.9.3
+      repository: cim/survey-nodes/build
+      tag: 4.9.2_f-CIM-28061-release-candidate
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
