@@ -19,7 +19,7 @@
 
 
 global:
-  ingressRouter: "devops.ef.com"
+  ingressRouter: "devops243.ef.com"
   ingressCertName: "ef-ingress-tls-secret"
   ingressClassName: "nginx"
   efCxReleaseName: "ef-cx"
@@ -48,31 +48,6 @@ global:
   efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
   efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
   efCommonVars_MEMORY_THRESHOLD_MBS: 1000
-  # --- Added APISIX Global Config (Auth details less relevant if disabled below, but kept for structure) ---
-  apisixInternalServiceHostname: "apisix-data-plane.ef-external.svc.cluster.local" # From your 'kubectl get svc -n ef-external'
-  apisixInternalServicePort: 80 # Default HTTP port for APISIX gateway service
-  apisix:
-    keycloak:
-      discoveryUrl: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration" # Internal URL
-      realm: "expertflow"
-      clientId: "cim"
-      clientSecret: "ef61df80-061c-4c29-b9ac-387e6bf67052" # Use appropriate secret management
-      bearerOnly: true
-      tokenSigningAlg: "RS256"
-      setAccessTokenHeader: false
-      setUserInfoHeader: false
-      defaultAudience: ["cim", "account", "realm-management"]
-      defaultScopes: ["email", "profile"]
-    plugins:
-      cors:
-        enabled: false # Default CORS disabled unless enabled per route
-        allowOrigins: "*"
-        allowMethods: "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-        allowCredentials: true
-      rewrite:
-        stripPrefix: true # Default rewrite action is prefix stripping
-
-
 
 # Change the below given paragraph when deploying an offline solution to pick the images from 
 #  -- Local Repo running inside the Kubernetes Engine
@@ -99,7 +74,7 @@ connect360:
    replicaCount: 1
    image:
       repository: cim/360-connector
-      tag: 4.9.4
+      tag: 4.9.4_f-CIM-27802
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -118,23 +93,13 @@ connect360:
         value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.connector360.utility.MaskingPatternLayout"
+   siteEnvVars: []
    service:
       enabled: true
       port: 8080
       portName: "http-360c-8080"
       targetPort: "http-360c-8080"
    ingress: { enabled: false }
-   apisixRoutes:
-     - nameSuffix: "main"
-       enabled: true
-       priority: 0
-       paths: ["/360connector/*"]
-       backendServicePort: 8080
-       plugins:
-         enableAuth: false          # <-- *** AUTH DISABLED ***
-         enableRewrite: true
-         enableCors: false
-         enableTrailingSlashRedirect: false
    extraVolumes:
       - name: ef-logback
         configMap:
@@ -151,7 +116,7 @@ facebook-connector:
    replicaCount: 1
    image:       
       repository: cim/facebook-connector
-      tag: 4.9.4
+      tag: 4.9.4_f-CIM-27802
    efConnectionVars: false
    efEnvironmentVars: true 
    containerPorts:
@@ -168,23 +133,13 @@ facebook-connector:
         value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.connector.facebookconnector.utility.MaskingPatternLayout"
+   siteEnvVars: []
    service:
       enabled: true
       port: 8080
       portName: "http-fb-co-8080"
       targetPort: "http-fb-co-8080"
    ingress: {enabled: false} # <-- Explicitly disable standard Ingress
-   apisixRoutes:
-     - nameSuffix: "main"
-       enabled: true
-       priority: 0
-       paths: ["/facebook-connector/*"]
-       backendServicePort: 8080
-       plugins:
-         enableAuth: false
-         enableRewrite: true
-         enableCors: false
-         enableTrailingSlashRedirect: false
    extraVolumes:
       - name: ef-logback
         configMap:
@@ -201,7 +156,7 @@ instagram-connector:
    replicaCount: 1
    image:       
       repository: cim/instagram-connector
-      tag: 4.9.4
+      tag: 4.9.4_f-CIM-27802
    efConnectionVars: false
    efEnvironmentVars: false 
    containerPorts:
@@ -218,23 +173,13 @@ instagram-connector:
         value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.connector.instagramconnector.utils.MaskingPatternLayout"
+   siteEnvVars: []
    service:
       enabled: true
       port: 8080
       portName: "http-in-co-8080"
       targetPort: "http-in-co-8080"
    ingress: {enabled: false} # <-- Explicitly disable standard Ingress
-   apisixRoutes:
-     - nameSuffix: "main"
-       enabled: true
-       priority: 0
-       paths: ["/instagram-connector/*"]
-       backendServicePort: 8080
-       plugins:
-         enableAuth: false
-         enableRewrite: true
-         enableCors: false
-         enableTrailingSlashRedirect: false
    extraVolumes:
       - name: ef-logback
         configMap:
@@ -251,7 +196,7 @@ smpp-connector:
    replicaCount: 1
    image:       
       repository: cti/hc_smpp_connector
-      tag: 4.9.4
+      tag: 4.9.4_f-CIM-27802
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -270,23 +215,13 @@ smpp-connector:
         value: "195"
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.sms.utils.MaskingPatternLayout"
+   siteEnvVars: []
    service:
       enabled: true
       port: 8115
       portName: "http-sm-cn-8115"
       targetPort: "http-sm-cn-8115"
    ingress: {enabled: false} # <-- Explicitly disable standard Ingress
-   apisixRoutes:
-     - nameSuffix: "main"
-       enabled: true
-       priority: 0
-       paths: ["/smppconnector/*"]
-       backendServicePort: 8115
-       plugins:
-         enableAuth: false
-         enableRewrite: true
-         enableCors: false
-         enableTrailingSlashRedirect: false
    extraVolumes:
       - name: ef-logback
         configMap:
@@ -301,7 +236,7 @@ telegram-connector:
    replicaCount: 1
    image:       
       repository: cim/telegram-connector
-      tag: 4.9.4
+      tag: 4.9.4_f-CIM-27802
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -320,23 +255,13 @@ telegram-connector:
         value: "com.ef.spring.util.MaskingPatternLayout"
       - name: LOG_LEVEL
         value: "INFO"
+   siteEnvVars: []
    service:
       enabled: true
       port: 8664
       portName: "http-te-co-8664"
       targetPort: "http-te-co-8664"
    ingress: {enabled: false} # <-- Explicitly disable standard Ingress
-   apisixRoutes:
-     - nameSuffix: "main"
-       enabled: true
-       priority: 0
-       paths: ["/telegram-connector/*"]
-       backendServicePort: 8664
-       plugins:
-         enableAuth: false
-         enableRewrite: true
-         enableCors: false
-         enableTrailingSlashRedirect: false
    extraVolumes:
       - name: ef-logback
         configMap:
@@ -352,7 +277,7 @@ twilio-connector:
    replicaCount: 1
    image:       
       repository: cim/twilio-connector
-      tag: 4.9.4
+      tag: 4.9.4_f-CIM-27802
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -369,23 +294,13 @@ twilio-connector:
         value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.twilio.connector.util.MaskingPatternLayout"
+   siteEnvVars: []
    service:
       enabled: true
       port: 8085
       portName: "http-tw-co-8085"
       targetPort: "http-tw-co-8085"
    ingress: {enabled: false} # <-- Explicitly disable standard Ingress
-   apisixRoutes:
-     - nameSuffix: "main"
-       enabled: true
-       priority: 0
-       paths: ["/twilio-connector/*"]
-       backendServicePort: 8085
-       plugins:
-         enableAuth: false
-         enableRewrite: true
-         enableCors: false
-         enableTrailingSlashRedirect: false
    extraVolumes:
       - name: ef-logback
         configMap:
@@ -401,7 +316,7 @@ twitter-connector:
    replicaCount: 1
    image:       
       repository: cim/twitter-connector
-      tag: 4.9.4
+      tag: 4.9.4_f-CIM-27802
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -414,24 +329,13 @@ twitter-connector:
         value: "http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
       - name: FILE_ENGINE_URL
         value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
+   siteEnvVars: []
    service:
       enabled: true
       port: 8080
       portName: "http-tt-co-8080"
       targetPort: "http-tt-co-8080"
    ingress: {enabled: false} # <-- Explicitly disable standard Ingress
-   apisixRoutes:
-     - nameSuffix: "main"
-       enabled: true
-       priority: 0
-       paths: ["/twitter-connector/*"]
-       backendServicePort: 8080
-       plugins:
-         enableAuth: false
-         enableRewrite: true
-         enableCors: false
-         enableTrailingSlashRedirect: false
-
 
 ##############################viber-connector##############################
 viber-connector:
@@ -439,7 +343,7 @@ viber-connector:
    replicaCount: 1
    image:       
       repository: cim/viber-connector
-      tag: 4.9.4
+      tag: 4.9.4_f-CIM-27802
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -456,23 +360,13 @@ viber-connector:
         value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.connector.utils.MaskingPatternLayout"
+   siteEnvVars: []
    service:
       enabled: true
       port: 8080
       portName: "http-vb-co-8080"
       targetPort: "http-vb-co-8080"
    ingress: {enabled: false} # <-- Explicitly disable standard Ingress
-   apisixRoutes:
-     - nameSuffix: "main"
-       enabled: true
-       priority: 0
-       paths: ["/viber-connector/*"]
-       backendServicePort: 8080
-       plugins:
-         enableAuth: false
-         enableRewrite: true
-         enableCors: false
-         enableTrailingSlashRedirect: false
    extraVolumes:
       - name: ef-logback
         configMap:
@@ -487,7 +381,7 @@ email-connector:
    replicaCount: 1
    image:
      repository: cim/email-connector
-     tag: 4.9.4
+     tag: 4.9.4_f-CIM-27802
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -502,23 +396,13 @@ email-connector:
        value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
      - name: SCHEDULER_FIXED_RATE_IN_MS
        value: "60000"
+   siteEnvVars: []
    service:
      enabled: true
      port: 8080
      portName: "http-em-co-8080"
      targetPort: "http-em-co-8080"
    ingress: {enabled: false} # <-- Explicitly disable standard Ingress
-   apisixRoutes:
-     - nameSuffix: "main"
-       enabled: true
-       priority: 0
-       paths: ["/email-connector/*"]
-       backendServicePort: 8080
-       plugins:
-         enableAuth: false
-         enableRewrite: true
-         enableCors: false
-         enableTrailingSlashRedirect: false
 
 ##############################whatsapp-connector##############################
 whatsapp-connector:
@@ -526,7 +410,7 @@ whatsapp-connector:
    replicaCount: 1
    image:
      repository: cim/whatsapp-connector
-     tag: 4.9.4
+     tag: 4.9.4_f-CIM-27802
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -543,23 +427,13 @@ whatsapp-connector:
        value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
      - name: MASKING_LAYOUT_CLASS
        value: "com.ef.connector.whatsappconnector.utils.MaskingPatternLayout"
+   siteEnvVars: []
    service:
      enabled: true
      port: 8080
      portName: "http-wa-co-8080"
      targetPort: "http-wa-co-8080"
    ingress: {enabled: false} # <-- Explicitly disable standard Ingress
-   apisixRoutes:
-     - nameSuffix: "main"
-       enabled: true
-       priority: 0
-       paths: ["/whatsapp-connector/*"]
-       backendServicePort: 8080
-       plugins:
-         enableAuth: false
-         enableRewrite: true
-         enableCors: false
-         enableTrailingSlashRedirect: false
    extraVolumes:
      - name: ef-logback
        configMap:
@@ -575,7 +449,7 @@ ms-email-connector:
    replicaCount: 1
    image:
      repository: cim/ms-exchange-email-connector
-     tag: 4.9.4
+     tag: 4.9.4_f-CIM-27802
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -594,23 +468,13 @@ ms-email-connector:
        value: "com.ef.connector.msexchangeemailconnector.utils.MaskingPatternLayout"
      - name: SCHEDULER_FIXED_RATE_IN_MS
        value: "60000"
+   siteEnvVars: []
    service:
      enabled: true
      port: 8080
      portName: "http-ex-co-8080"
      targetPort: "http-ex-co-8080"
    ingress: {enabled: false} # <-- Explicitly disable standard Ingress
-   apisixRoutes:
-     - nameSuffix: "main"
-       enabled: true
-       priority: 0
-       paths: ["/ms-email-connector/*"]
-       backendServicePort: 8080
-       plugins:
-         enableAuth: false
-         enableRewrite: true
-         enableCors: false
-         enableTrailingSlashRedirect: false
    extraVolumes:
      - name: ef-logback
        configMap:
@@ -626,7 +490,7 @@ youtube-connector:
   replicaCount: 1
   image:
     repository: cim/youtube-connector
-    tag: 4.9.4
+    tag: 4.9.4_f-CIM-27802
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -643,23 +507,13 @@ youtube-connector:
       value: "90000"
     - name: DAYS_TO_KEEP_TOP_LEVEL_COMMENTS
       value: "7"
+  siteEnvVars: []
   service:
     enabled: true
     port: 8080
     portName: http-yt-co-8080
     targetPort: http-yt-co-8080
   ingress: {enabled: false} # <-- Explicitly disable standard Ingress
-  apisixRoutes:
-    - nameSuffix: "main"
-      enabled: true
-      priority: 0
-      paths: ["/youtube-connector/*"]
-      backendServicePort: 8080
-      plugins:
-        enableAuth: false
-        enableRewrite: true
-        enableCors: false
-        enableTrailingSlashRedirect: false
 
 
 ##############################linkedin-connector##############################
@@ -668,7 +522,7 @@ linkedin-connector:
    replicaCount: 1
    image:
       repository: project_dev/linkedinconnector
-      tag: 4.9.3
+      tag: 4.9.4_f-CIM-27802
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -701,23 +555,13 @@ linkedin-connector:
         value: "sa"
       - name: DATABASE_PASSWORD
         value: "Expertflow123"
+   siteEnvVars: []
    service:
       enabled: true
       port: 9001
       portName: "http-li-9001"
       targetPort: "http-li-9001"
    ingress: {enabled: false} # <-- Explicitly disable standard Ingress
-   apisixRoutes:
-     - nameSuffix: "main"
-       enabled: true
-       priority: 0
-       paths: ["/linkedin-connector/*"]
-       backendServicePort: 9001
-       plugins:
-         enableAuth: false
-         enableRewrite: true
-         enableCors: false
-         enableTrailingSlashRedirect: false
    extraVolumes:
       - name: ef-logback
         configMap:
