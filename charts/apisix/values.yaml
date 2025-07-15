@@ -1714,6 +1714,7 @@ apisixStandalone:
        hosts: ["{{ .Values.global.ingressRouter }}"]
        priority: 0
        service_id: svc-grafana
+       enable_websocket: true
        status: 1
        plugins:
          proxy-rewrite:
