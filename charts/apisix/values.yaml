@@ -1247,7 +1247,7 @@ apisixStandalone:
        status: 1
        plugins:
          openid-connect:
-           enable: true # Corrected: Disabled by default
+           enable: false # Corrected: Disabled by default
            discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
            realm: "expertflow"
            client_id: "cim"
@@ -1555,7 +1555,7 @@ apisixStandalone:
        status: 1
        plugins:
          openid-connect:
-           enable: true
+           enable: false
            discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
            realm: "expertflow"
            client_id: "cim"
