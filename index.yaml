@@ -2564,6 +2564,25 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/cisco-scheduler-1.0.15/cisco-scheduler-1.0.15.tgz
     version: 1.0.15
+  cisco-sync-service:
+  - apiVersion: v2
+    appVersion: 4.10.0
+    created: "2025-07-15T06:29:09.268968648Z"
+    description: Expertflow CX Solution
+    digest: 72ccb00594a22388551c81b031143d2b5f50e39d966a7a0bad4a09369803d356
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: cisco-sync-service
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/cisco-sync-service-4.10.0-rc.1/cisco-sync-service-4.10.0-rc.1.tgz
+    version: 4.10.0-rc.1
   clamav:
   - apiVersion: v2
     appVersion: 4.9.0
@@ -7124,4 +7143,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-07-15T06:26:28.468037563Z"
+generated: "2025-07-15T06:29:09.269717479Z"
