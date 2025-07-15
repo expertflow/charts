@@ -1,0 +1,126 @@
+csi:
+  enabled: true
+  agent:
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 250m
+      limits:
+        memory: 256Mi
+        cpu: 250m
+  volumes:
+    - name: userconfig-tls-ca
+      secret:
+        defaultMode: 420
+        secretName: tls-ca
+    - name: userconfig-tls-server-vault
+      secret:
+        defaultMode: 420
+        secretName: tls-server-vault
+  volumeMounts:
+    - name: userconfig-tls-ca
+      mountPath: "/vault/userconfig/tls-ca"
+      readOnly: true
+    - name: userconfig-tls-server-vault
+      mountPath: "/vault/userconfig/tls-server-vault"
+      readOnly: true
+injector:
+  enabled: false
+global:
+  enabled: true
+  tlsDisable: false
+server:
+  enabled: "true"
+  image:
+    repository: "hashicorp/vault"
+    tag: "1.13.3"
+  resources:
+    requests:
+      memory: 50Mi
+      cpu: 500m
+    limits:
+      memory: 2Gi
+      cpu: 1500m
+  readinessProbe:
+    enabled: true
+    path: "/v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204"
+  livenessProbe:
+    enabled: true
+    path: "/v1/sys/health?standbyok=true"
+    initialDelaySeconds: 60
+  extraEnvironmentVars:
+    VAULT_CACERT: /vault/userconfig/tls-ca/tls.crt
+    VAULT_TLSCERT: /vault/userconfig/tls-server-vault/tls.crt
+    VAULT_TLSKEY: /vault/userconfig/tls-server-vault/tls.key
+  extraVolumes:
+    - type: secret
+      name: tls-server-vault
+    - type: secret
+      name: tls-server-client
+    - type: secret
+      name: tls-ca
+  auditStorage:
+    enabled: true
+    size: 1Gi
+  dataStorage:
+    enabled: true
+    size: 1Gi
+  standalone:
+    enabled: false
+  affinity: null
+  ha:
+    enabled: true
+    replicas: 5
+    raft:
+      enabled: true
+      setNodeId: true
+      config: |
+        ui = true
+        cluster_name = "vault-integrated-storage"
+        listener "tcp" {
+          address = "[::]:8200"
+          cluster_address = "[::]:8201"
+          tls_cert_file = "/vault/userconfig/tls-server-vault/tls.crt"
+          tls_key_file = "/vault/userconfig/tls-server-vault/tls.key"
+          tls_client_ca_file = "/vault/userconfig/tls-ca/tls.crt"
+        }
+        storage "raft" {
+          path = "/vault/data"
+            retry_join {
+            leader_api_addr = "https://vault-0.vault-internal:8200"
+            leader_ca_cert_file = "/vault/userconfig/tls-ca/tls.crt"
+            leader_client_cert_file = "/vault/userconfig/tls-server-vault/tls.crt"
+            leader_client_key_file = "/vault/userconfig/tls-server-vault/tls.key"
+          }
+          retry_join {
+            leader_api_addr = "https://vault-1.vault-internal:8200"
+            leader_ca_cert_file = "/vault/userconfig/tls-ca/tls.crt"
+            leader_client_cert_file = "/vault/userconfig/tls-server-vault/tls.crt"
+            leader_client_key_file = "/vault/userconfig/tls-server-vault/tls.key"
+          }
+          retry_join {
+            leader_api_addr = "https://vault-2.vault-internal:8200"
+            leader_ca_cert_file = "/vault/userconfig/tls-ca/tls.crt"
+            leader_client_cert_file = "/vault/userconfig/tls-server-vault/tls.crt"
+            leader_client_key_file = "/vault/userconfig/tls-server-vault/tls.key"
+          }
+          retry_join {
+            leader_api_addr = "https://vault-3.vault-internal:8200"
+            leader_ca_cert_file = "/vault/userconfig/tls-ca/tls.crt"
+            leader_client_cert_file = "/vault/userconfig/tls-server-vault/tls.crt"
+            leader_client_key_file = "/vault/userconfig/tls-server-vault/tls.key"
+          }
+          retry_join {
+            leader_api_addr = "https://vault-4.vault-internal:8200"
+            leader_ca_cert_file = "/vault/userconfig/tls-ca/tls.crt"
+            leader_client_cert_file = "/vault/userconfig/tls-server-vault/tls.crt"
+            leader_client_key_file = "/vault/userconfig/tls-server-vault/tls.key"
+          }
+        }
+# Vault UI
+ui:
+  enabled: true
+  serviceType: "NodePort"
+  serviceNodePort: 31313
+  externalPort: 8200
+

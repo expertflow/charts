@@ -1,0 +1,27 @@
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: postgresql
+  namespace: ef-external
+spec:
+  provider: vault
+  secretObjects:
+  - data:
+    - key: postgres-password
+      objectName: postgres-password
+    - key: password
+      objectName: password
+    secretName: postgresql
+    type: Opaque
+  parameters:
+    vaultAddress: "https://vault-internal.vault.svc.cluster.local:8200"
+    vaultCACertPath: "/vault/userconfig/tls-ca/tls.crt"
+    vaultSkipTLSVerify: "true"
+    roleName: "database"
+    objects: |
+      - objectName: "postgres-password"
+        secretPath: "secret/data/postgresql"
+        secretKey: "postgres-password"
+      - objectName: "password"
+        secretPath: "secret/data/postgresql"
+        secretKey: "password"

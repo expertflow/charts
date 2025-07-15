@@ -1,0 +1,34 @@
+
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: vault-appname-2
+  namespace: expertflow
+spec:
+  provider: vault
+  secretObjects:
+  - data:
+    - key: password
+      objectName: appname-2-password
+    - key: username
+      objectName: appname-2-username
+    - key: token
+      objectName: appname-2-token
+    secretName: appname-2-secret
+    type: Opaque
+  parameters:
+    vaultAddress: "https://vault-internal.vault.svc.cluster.local:8200"
+    vaultCACertPath: "/vault/userconfig/tls-ca/tls.crt"
+    vaultSkipTLSVerify: "true"
+    roleName: "database"
+    objects: |
+      - objectName: "appname-2-password"
+        secretPath: "secret/data/appname-2"
+        secretKey: "password"
+      - objectName: "appname-2-username"
+        secretPath: "secret/data/appname-2"
+        secretKey: "username"
+      - objectName: "appname-2-token"
+        secretPath: "secret/data/appname-2"
+        secretKey: "token"
+

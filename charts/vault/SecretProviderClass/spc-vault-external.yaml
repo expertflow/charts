@@ -1,0 +1,27 @@
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: vault-external
+  namespace: ef-external
+spec:
+  provider: vault
+  secretObjects:
+  - data:
+    - key: password
+      objectName: vault-external-password
+    - key: admin-password
+      objectName: vault-external-admin-password
+    secretName: vault-external
+    type: Opaque
+  parameters:
+    vaultAddress: "https://vault-internal.vault.svc.cluster.local:8200"
+    vaultCACertPath: "/vault/userconfig/tls-ca/tls.crt"
+    vaultSkipTLSVerify: "true"
+    roleName: "database"
+    objects: |
+      - objectName: "vault-external-password"
+        secretPath: "secret/data/vault-external"
+        secretKey: "password"
+      - objectName: "vault-external-admin-password"
+        secretPath: "secret/data/vault-external"
+        secretKey: "admin-password"

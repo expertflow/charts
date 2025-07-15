@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ef-app
+  name: ef-app
+  namespace: expertflow
+spec:
+  selector:
+    matchLabels:
+      app: ef-app
+  template:
+    metadata:
+      labels:
+        app: ef-app
+    spec:
+      containers:
+        - image: nginx
+          name: nginx
+          env:
+#            - name: SECRET_USERNAME
+#              valueFrom:
+#                secretKeyRef:
+#                  name: mysecret
+#                  key: username
+#            - name: SECRET_PASSWORD
+#              valueFrom:
+#                secretKeyRef:
+#                  name: mysecret
+#                  key: password
+            - name: POSTGRES_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: password
+          resources: {}

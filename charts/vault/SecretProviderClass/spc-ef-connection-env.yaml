@@ -1,0 +1,65 @@
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: ef-connection-env
+  namespace: expertflow
+spec:
+  provider: vault
+  secretObjects:
+  - data:
+    - key: ACTIVEMQ_PASSWORD
+      objectName: ACTIVEMQ_PASSWORD
+    - key: ACTIVEMQ_USERNAME
+      objectName: ACTIVEMQ_USERNAME
+    - key: KEYCLOAK_PASSWORD_ADMIN
+      objectName: KEYCLOAK_PASSWORD_ADMIN
+    - key: KEYCLOAK_USERNAME_ADMIN
+      objectName: KEYCLOAK_USERNAME_ADMIN
+    - key: MONGODB_PASSWORD
+      objectName: MONGODB_PASSWORD
+    - key: MONGODB_USERNAME
+      objectName: MONGODB_USERNAME
+    - key: REDIS_PASSWORD
+      objectName: REDIS_PASSWORD
+    - key: REDIS_SENTINEL_MASTER
+      objectName: REDIS_SENTINEL_MASTER
+    - key: REDIS_SENTINEL_PASSWORD
+      objectName: REDIS_SENTINEL_PASSWORD
+    secretName: ef-connection-env
+    type: Opaque
+  parameters:
+    vaultAddress: "https://vault-internal.vault.svc.cluster.local:8200"
+    vaultCACertPath: "/vault/userconfig/tls-ca/tls.crt"
+    vaultSkipTLSVerify: "true"
+    roleName: "database"
+    objects: |
+      - objectName: "ACTIVEMQ_PASSWORD"
+        secretPath: "secret/data/ef-connection-env"
+        secretKey: "ACTIVEMQ_PASSWORD"
+      - objectName: "ACTIVEMQ_USERNAME"
+        secretPath: "secret/data/ef-connection-env"
+        secretKey: "ACTIVEMQ_USERNAME"
+      - objectName: "KEYCLOAK_PASSWORD_ADMIN"
+        secretPath: "secret/data/ef-connection-env"
+        secretKey: "KEYCLOAK_PASSWORD_ADMIN"
+      - objectName: "KEYCLOAK_USERNAME_ADMIN"
+        secretPath: "secret/data/ef-connection-env"
+        secretKey: "KEYCLOAK_USERNAME_ADMIN"
+      - objectName: "MONGODB_PASSWORD"
+        secretPath: "secret/data/ef-connection-env"
+        secretKey: "MONGODB_PASSWORD"
+      - objectName: "MONGODB_USERNAME"
+        secretPath: "secret/data/ef-connection-env"
+        secretKey: "MONGODB_USERNAME"
+      - objectName: "REDIS_PASSWORD"
+        secretPath: "secret/data/ef-connection-env"
+        secretKey: "REDIS_PASSWORD"
+      - objectName: "REDIS_SENTINEL_MASTER"
+        secretPath: "secret/data/ef-connection-env"
+        secretKey: "REDIS_SENTINEL_MASTER"
+      - objectName: "REDIS_SENTINEL_PASSWORD"
+        secretPath: "secret/data/ef-connection-env"
+        secretKey: "REDIS_SENTINEL_PASSWORD"
+
+
+
