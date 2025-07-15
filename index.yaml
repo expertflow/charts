@@ -890,6 +890,38 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/apisix-4.2.2-rc.1/apisix-4.2.2-rc.1.tgz
     version: 4.2.2-rc.1
+  - annotations:
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
+    appVersion: 3.11.0
+    created: "2025-07-15T06:21:20.359647776Z"
+    dependencies:
+    - condition: etcd.enabled
+      name: etcd
+      repository: https://charts.bitnami.com/bitnami
+      version: 9.7.3
+    - alias: dashboard
+      condition: dashboard.enabled
+      name: apisix-dashboard
+      repository: https://charts.apiseven.com
+      version: 0.8.2
+    - alias: ingress-controller
+      condition: ingress-controller.enabled
+      name: apisix-ingress-controller
+      repository: https://charts.apiseven.com
+      version: 0.14.0
+    description: A Helm chart for Apache APISIX v3
+    digest: e0cabd47f4a49d452a3d1d2f03e957ef70d35f73cf14274aaf124be4725be287
+    icon: https://apache.org/logos/res/apisix/apisix.png
+    maintainers:
+    - name: tao12345666333
+    name: apisix
+    sources:
+    - https://github.com/apache/apisix-helm-chart
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/apisix-2.10.0/apisix-2.10.0.tgz
+    version: 2.10.0
   campaigns:
   - apiVersion: v2
     appVersion: 4.9.0
@@ -6990,4 +7022,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-07-15T06:16:17.401067526Z"
+generated: "2025-07-15T06:21:20.360148688Z"
