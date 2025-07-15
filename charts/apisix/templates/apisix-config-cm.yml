@@ -1,0 +1,16 @@
+{{- if eq .Values.apisix.deployment.mode "standalone" }}
+# This Helm template creates a ConfigMap named 'apisix.yaml'.
+# This ConfigMap provides the static configuration for APISIX when running in standalone mode.
+# The content is dynamically populated from the 'apisixStandalone' section of your values file.
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: apisix.yaml
+data:
+  apisix.yaml: |
+{{- if .Values.apisixStandalone }}
+{{- include "apisix.tplvalues.render" ( dict "value" .Values.apisixStandalone "context" . ) | nindent 4 }}
+    #END
+{{- end }}
+{{- end }}
