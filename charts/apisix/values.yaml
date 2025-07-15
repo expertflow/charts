@@ -15,7 +15,7 @@
 # limitations under the License.
 
 global:
-  ingressRouter: "efcx-dev.expertflow.com"
+  ingressRouter: "devops.ef.com"
   ingressClassName: "nginx"
   ingressTlsCertName: "ef-ingress-tls-secret"
   # The OPA policy is defined here so it can be easily applied to any route.
@@ -945,6 +945,22 @@ apisixStandalone:
          scheme: http
          type: roundrobin
          timeout: { connect: 5, send: 10, read: 10 }
+     - id: svc-cx-load-hub
+       name: svc-cx-load-hub
+       upstream:
+         discovery_type: kubernetes
+         service_name: "expertflow/ef-cx-cx-load-hub-svc:http-l-h-3001"
+         scheme: http
+         type: roundrobin
+         timeout: { connect: 5, send: 10, read: 10 }
+     - id: svc-conversation-studio
+       name: svc-conversation-studio
+       upstream:
+         discovery_type: kubernetes
+         service_name: "expertflow/ef-cx-conversation-studio-svc:http-co-st-1880"
+         scheme: http
+         type: roundrobin
+         timeout: { connect: 5, send: 10, read: 10 }
 
      # From Agent-desk Chart (Release: cx-agent-desk, Namespace: expertflow)
      - id: svc-unified-agent
@@ -1499,6 +1515,24 @@ apisixStandalone:
            enable: true
            regex_uri: ["^/team-announcement/?(.*)", "/$1"]
 
+     # --- conversation-studio ---
+     - id: ef-cx-conversation-studio-main
+       uris: ["/conversation-studio/*"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       priority: 0
+       service_id: svc-conversation-studio
+       enable_websocket: true
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/conversation-studio(/|$)(.*)", "/red/$2"]
+         cors:
+           enable: true
+           allow_origins: "*"
+           allow_methods: "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+           allow_credentials: true
+
      # --- unified-admin  ---
      # =================================================================
      # ROUTES for unified-admin (Translated from working CRDs)
@@ -1675,6 +1709,18 @@ apisixStandalone:
          proxy-rewrite:
            enable: true
            regex_uri: ["^/business-calendar/?(.*)", "/$1"]
+
+     # --- cx-load-hub ---
+     - id: ef-cx-load-hub-main
+       uris: ["/cx-load-hub/*"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       priority: 0
+       service_id: svc-cx-load-hub
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/cx-load-hub/?(.*)", "/$1"]
 
      # --- unified-agent ---
      - id: cx-agent-desk-unified-agent-main
