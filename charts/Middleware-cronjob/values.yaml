@@ -39,7 +39,7 @@ middlewareCronJob:
    backoffLimit: 0
    restartPolicy: OnFailure
    imagePullSecret: ef-gitlab-secret
-   image: gitimages.expertflow.com/voice-recording-solution/recording-link-activities:4.8
+   image: gitimages.expertflow.com/voice-recording-solution/recording-link-activities:4.7_f-CCC-1493
    extraEnvVars:
      - name: LOG_LEVEL
        value: DEBUG
@@ -69,6 +69,7 @@ middlewareCronJob:
        value: "Expertflow123"
      - name: CX_CONVERSATION_MANAGER
        value: "http://{{ .Values.global.efCxReleaseName }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
+   siteEnvVars: []
    resourcesPreset: "none"
    resources: {}
    extraVolumeMounts: 

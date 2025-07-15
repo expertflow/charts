@@ -56,9 +56,7 @@ spec:
             image: {{ .Values.middlewareCronJob.image }}
             imagePullPolicy: IfNotPresent
             env:
-            {{- if .Values.middlewareCronJob.extraEnvVars }}
-               {{- include "common.tplvalues.render" (dict "value" .Values.middlewareCronJob.extraEnvVars "context" $) | nindent 12 }}
-            {{- end }}
+              {{- include "ef.helpers.mergedEnvVars" (dict "context" $ "defaultList" .Values.extraEnvVars "overrideList" .Values.siteEnvVars) | nindent 12 }}
             - name: MONGODB_CERTIFICATE_PATH
               valueFrom:
                  configMapKeyRef:
