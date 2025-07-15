@@ -29,28 +29,6 @@ global:
   imagePullSecrets:
   # --- Added APISIX Global Config ---
     - ef-gitlab-secret
-  apisix:
-    keycloak:
-      discoveryUrl: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration" # Internal URL
-      realm: "expertflow"
-      clientId: "cim" # Verify this Client ID exists and is configured if auth is enabled
-      clientSecret: "ef61df80-061c-4c29-b9ac-387e6bf67052" # Use appropriate secret management
-      bearerOnly: true
-      tokenSigningAlg: "RS256"
-      setAccessTokenHeader: false
-      setUserInfoHeader: false
-      defaultAudience: ["cim", "account", "realm-management"]
-      defaultScopes: ["email", "profile"]
-    plugins:
-      cors:
-        enabled: false # Default CORS disabled unless enabled per route
-        allowOrigins: "*"
-        allowMethods: "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-        allowCredentials: true
-      rewrite:
-        stripPrefix: true # Default rewrite action
-
-  ## The CommonEnvVars are now part of the globals. Selective adaption to components is mandatory.
 #  -- Local Repo running inside the Kubernetes Engine
 #  -- Customer's own Repo requiring all images to be sorted locally
 #
@@ -72,8 +50,8 @@ imageCredentials:
 qm-backend:
   enabled: true
   image:
-    repository: cim/qm-backend
-    tag: 4.8
+    repository: cim/qm-backend/build
+    tag: 4.9.2_f-CIM-27939
   efConnectionVars: false
   efEnvironmentVars: false
   containerPorts:
@@ -94,39 +72,74 @@ qm-backend:
       value: http://{{ .Values.global.efCxReleaseName }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080
     - name: PG_HOST
       value: ef-postgresql.ef-external.svc.cluster.local
+    - name: UNIFIED_ADMIN_URL
+      value: "https://{{ .Values.global.ingressRouter  }}/unified-admin/"
+    - name: KEYCLOAK_TEAM_TYPE
+      value: CX
+    - name: KEYCLOAK_BEARER_ONLY
+      value: "true"
+    - name: KEYCLOAK_CLIENT_DB_ID
+      value: ef61df80-061c-4c29-b9ac-387e6bf67052
+    - name: KEYCLOAK_CLIENT_ID
+      value: cim
+    - name: KEYCLOAK_CONFIDENTIAL_PORT
+      value: "0"
+    - name: KEYCLOAK_CREDENTIALS
+      value: '{"secret": "ef61df80-061c-4c29-b9ac-387e6bf67052"}'
+    - name: KEYCLOAK_GRANT_TYPE
+      value: "password"
+    - name: KEYCLOAK_GRANT_TYPE_PAT
+      value: "client_credentials"
+    - name: KEYCLOAK_HOST
+      value: "https://{{ .Values.global.ingressRouter  }}/auth/"
+    - name: KEYCLOAK_PASSWORD_ADMIN
+      value: admin
+    - name: KEYCLOAK_POLICY_ENFORCER
+      value: "{}"
+    - name: KEYCLOAK_REALM
+      value: expertflow
+    - name: KEYCLOAK_RESOURCE
+      value: cim
+    - name: KEYCLOAK_SCOPE_NAME
+      value: "Any default scope"
+    - name: KEYCLOAK_SSL_REQUIRED
+      value: external
+    - name: KEYCLOAK_USE_RESOURCE_ROLE_MAPPINGS
+      value: "true"
+    - name: KEYCLOAK_USERNAME_ADMIN
+      value: admin
+    - name: KEYCLOAK_VERIFY_TOKEN_AUDIENCE
+      value: "false"
+    - name: MINIMUM_BULK_NOTIFICATION_INTERVAL
+      value: "30"
+  siteEnvVars: []
   service:
     enabled: true
     port: 3000
     portName: "http-qmbe3000"
     targetPort: "http-qmbe3000"
-  ingress: {enabled: false} # <-- Explicitly disable standard Ingress
-  apisixRoutes:
-       # Route 1: SSE (Long Lived) - Higher Priority
-     - nameSuffix: "sse-unsecured"
-       enabled: true
-       priority: 10 # Higher priority than main route
-       paths: ["/qm-backend/notification/*/sse*"] # Using wildcard match
-       backendServicePort: 3000
-       backendScheme: https # <-- From nginx annotation
-       plugins:
-         enableAuth: false # <-- ASSUMPTION: Confirm if SSE needs auth
-         enableRewrite: true
-         rewriteStripPrefix: false # Use custom rewrite
-         rewriteRegexUriFrom: "^/qm-backend/(notification/[^/]+/sse.*)" # Match original SSE path structure
-         rewriteRegexUriTo: "/$1" # Rewrite target from longLivedConnection ingress ($1)
-         enableCors: true # Enable CORS as per parent ingress rule
-         # Note: Nginx proxy buffering/timeout settings may need separate APISIX config
-       # Route 2: Main QM Backend API - Lower Priority
-     - nameSuffix: "main-secured"
-       enabled: true
-       priority: 0 # Lower priority
-       paths: ["/qm-backend/*"] # Catch-all for qm-backend
-       backendServicePort: 3000
-       backendScheme: https # <-- From nginx annotation
-       plugins:
-         enableAuth: false # Assume main API needs auth
-         enableRewrite: true # Use default prefix stripping (strips /qm-backend)
-         enableCors: true # Enable CORS as per parent ingress rule
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS, DELETE,PATCH
+      nginx.ingress.kubernetes.io/enable-cors: "true"
+      nginx.ingress.kubernetes.io/configuration-snippet:
+        'more_set_headers "Access-Control-Allow-Origin:
+          $http_origin";'
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+      nginx.ingress.kubernetes.io/use-regex: "true"
+    longLivedConnection:
+      path: "/qm-backend/(notification/[^/]+/sse)(/|$)"
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /$1
+        nginx.ingress.kubernetes.io/proxy-buffering: "off"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "43200"
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "43200"
+    path: "/qm-backend(/|$)(.*)"
+    pathType: ImplementationSpecific
   extraVolumes:
     - name: ef-postgresql-crt
       secret:
@@ -190,6 +203,7 @@ qm-connector:
       value: "1433"
     - name: DB_DRIVER
       value: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  siteEnvVars: []
   service:
     enabled: false
     port: ""
