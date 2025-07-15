@@ -53,5 +53,8 @@ dependencies:
 - name: cx-load-hub
   repository: file://charts/cx-load-hub
   version: 1.0.14
-digest: sha256:3a324b68e5b440c6a5b8f8676997bb3a967e4c159caab31ada56cec649c55506
-generated: "2025-07-15T11:29:54.774337+05:00"
+- name: conversation-studio
+  repository: file://charts/conversation-studio
+  version: 1.0.0
+digest: sha256:5543770ad78275edbcab09c5400f1210618542fff737254830322f721e2e2d4c
+generated: "2025-07-15T17:14:41.992349+05:00"
