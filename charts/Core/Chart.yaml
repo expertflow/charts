@@ -79,6 +79,10 @@ dependencies:
     version: 1.0.14
     condition: cx-load-hub.enabled
     repository: file://charts/cx-load-hub
+  - name: conversation-studio
+    version: 1.0.0
+    condition: conversation-studio.enabled
+    repository: file://charts/conversation-studio
 # A chart can be either an 'application' or a 'debug' chart.
 
 # Application charts are a collection of templates that can be packaged into versioned archives

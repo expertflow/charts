@@ -19,7 +19,7 @@
 
 
 global:
-  ingressRouter: "efcx-dev.expertflow.com"
+  ingressRouter: "devops234.ef.com"
   ingressCertName: "ef-ingress-tls-secret"
   ingressClassName: "nginx"
   commonIngressAnnotations: {}
@@ -261,7 +261,7 @@ bot-framework:
     replicaCount: 1
     image:
         repository: cim/bot-framework
-        tag: 4.9.4_f-CIM-27802
+        tag: 4.9.4_f-CIM-28240
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -296,6 +296,12 @@ bot-framework:
           value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
         - name: TOPIC_CONCURRENCY_MAX
           value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
+        - name: BUFFERING_ENABLED
+          value: 'true'
+        - name: BUFFERING_EXCLUDED_CHANNEL_NAMES
+          value: 'CX_VOICE,CISCO_CC'
+        - name: BUFFERING_EXPIRY_SECONDS
+          value: '100'
     siteEnvVars: []
     service:
         enabled: true
@@ -446,7 +452,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: 4.9.4_f-CIM-27802
+        tag: 4.9.4_f-CIM-28240
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -481,7 +487,7 @@ conversation-manager:
         - name: BOT_FRAMEWORK_URL
           value: "http://{{ .Release.Name }}-bot-framework-svc.{{ .Release.Namespace }}.svc:8082"
         - name: CONTROLLER_URL
-          value: "http://localhost:5000"
+          value: "http://{{ .Release.Name }}-conversation-studio-svc.{{ .Release.Namespace }}.svc:1880"
         - name: UNIFIED_ADMIN_URL
           value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
         - name: CCM_URL
@@ -569,18 +575,6 @@ conversation-manager:
         - name: activemq-tls
           secret:
             secretName: activemq-tls
-        - name: ef-conversation-controller-actions
-          configMap:
-            name: ef-conversation-controller-actions-cm
-            optional: true
-        - name: ef-conversation-controller-pycache
-          configMap:
-            name: ef-conversation-controller-actions-pycache-cm
-            optional: true
-        - name: ef-conversation-controller-utils
-          configMap:
-            name: ef-conversation-controller-actions-utils-cm
-            optional: true
     extraVolumeMounts:
         - name: redis-crt
           mountPath: /redis
@@ -603,55 +597,6 @@ conversation-manager:
           readOnly: true
         - name: activemq-tls
           mountPath: /activemq
-    conversationControllerEnvVars:
-         - name: IS_WRAP_UP_ENABLED
-           value: '{{ .Values.global.efCommonVars_IS_WRAP_UP_ENABLED }}'
-         - name: WRAPUP_TIME
-           value: '{{ .Values.global.efCommonVars_WRAPUP_TIME  }}'
-         - name: DEFAULT_ROOM_NAME
-           value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_NAME }}'
-         - name: DEFAULT_ROOM_DESCRIPTION
-           value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_DESCRIPTION  }}'
-         - name: DEFAULT_ROOM_LABEL
-           value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_LABEL  }}'
-         - name: ROOM_IS_USER_ID
-           value: '{{ .Values.global.efCommonVars_ROOM_IS_USER_ID }}'
-         - name: TZ
-           value: '{{ .Values.global.efCommonVars_TZ }}'
-         - name: MASK_ATTRIBUTES_PATH
-           value: '{{ .Values.global.efCommonVars_MASK_ATTRIBUTES_PATH }}'
-         - name: LOGGING_CONFIG
-           value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
-         - name: CONVERSATION_SEARCH_WINDOW_HRS
-           value: '{{ .Values.global.efCommonVars_CONVERSATION_SEARCH_WINDOW_HRS  }}'
-         - name: PORT
-           value: "5000"
-         - name: CONVERSATION_MANAGER
-           value: http://localhost:8080
-         - name: REDIS_EXPIRY_SECONDS
-           value: "86400"
-    conversationControllerSiteEnvVars: []
-    sidecars:
-        - image: '{{ .Values.global.imageRegistry }}/cim/conversation-controller:4.7'
-          name: '{{ .Release.Name }}-conversation-controller'
-          imagePullPolicy: IfNotPresent
-          envFrom:
-            - configMapRef:
-                name: '{{ .Release.Name }}-efconnections-cm'
-          ports:
-            - containerPort: 5000
-              name: "http-co-ct-5000"
-          volumeMounts:
-            - name: ef-conversation-controller-actions
-              mountPath: /app/actions
-            - name: ef-conversation-controller-pycache
-              mountPath: /app/actions/__pycache__
-            - name: ef-conversation-controller-utils
-              mountPath: /app/actions/utils
-            - name: redis-crt
-              mountPath: /redis
-
-
 
 
 ##############################conversation-monitor##############################
@@ -1480,6 +1425,47 @@ cx-load-hub:
         - name: mongo-mongodb-ca
           mountPath: /mongo
 
-
-
-
+##############################conversation-studio##############################
+conversation-studio:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: cim/workflow-builder/conversation-controller/build
+    tag: 4.9.2_f-CIM-29695-bfab343a08b635cdd5d1457218ae45d8456484f6
+  efConnectionVars: true
+  efEnvironmentVars: false
+  containerPorts:
+    - name: "http-co-st-1880"
+      containerPort: 1880
+  extraEnvVars:
+    - name: CONVERSATION_MANAGER_INTERNAL_URL
+      value: "http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
+    - name:  CCM_PUBLIC_URL
+      value: "https://{{ .Values.global.ingressRouter  }}/ccm"
+    - name: UNIFIED_ADMIN_URL
+      value: "https://{{ .Values.global.ingressRouter  }}/unified-admin"
+    - name: KEYCLOAK_TEAM_TYPE
+      value: CX
+    - name: TRACKER_EXPIRY_SECONDS
+      value: "60"
+  siteEnvVars: []
+  service:
+    enabled: true
+    port: 1880
+    portName: "http-co-st-1880"
+    targetPort: "http-co-st-1880"
+  ingress: { enabled: false }
+  extraVolumes:
+    - name: redis-crt
+      secret:
+        secretName: redis-crt
+    - name: mongo-mongodb-ca
+      secret:
+        secretName: mongo-mongodb-ca
+  extraVolumeMounts:
+    - name: redis-crt
+      mountPath: /redis
+    - name: mongo-mongodb-ca
+      mountPath: /mongo
+    - name: conversation-studio-flow-vol
+      mountPath: /flows
