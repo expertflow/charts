@@ -50,5 +50,8 @@ dependencies:
 - name: business-calendar
   repository: file://charts/business-calendar
   version: 1.0.14
-digest: sha256:c692626b5bc9add2e1f489cf336870ed3810a8ba4e22291c1f9db275bafcb8c2
-generated: "2025-07-03T11:01:07.580291+05:00"
+- name: cx-load-hub
+  repository: file://charts/cx-load-hub
+  version: 1.0.14
+digest: sha256:3a324b68e5b440c6a5b8f8676997bb3a967e4c159caab31ada56cec649c55506
+generated: "2025-07-15T11:29:54.774337+05:00"

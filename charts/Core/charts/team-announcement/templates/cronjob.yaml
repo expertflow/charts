@@ -54,9 +54,7 @@ spec:
             image: {{ .Values.teamAnnouncementsCronJob.image }}
             imagePullPolicy: IfNotPresent
             env:
-            {{- if .Values.teamAnnouncementsCronJob.extraEnvVars }}
-               {{- include "common.tplvalues.render" (dict "value" .Values.teamAnnouncementsCronJob.extraEnvVars "context" $) | nindent 12 }}
-            {{- end }}
+              {{- include "ef.helpers.mergedEnvVars" (dict "context" $ "defaultList" .Values.extraEnvVars "overrideList" .Values.siteEnvVars) | nindent 12 }}
             {{- if .Values.teamAnnouncementsCronJob.command }}
             command: {{- include "common.tplvalues.render" (dict "value" .Values.teamAnnouncementsCronJob.command "context" $) | nindent 14 }}
             {{- end }}
