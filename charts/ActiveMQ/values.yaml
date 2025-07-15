@@ -20,7 +20,7 @@ global:
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
-  imagePullSecrets: 
+  imagePullSecrets:
     - expertflow-reg-cred
   ## Compatibility adaptations for Kubernetes platforms
   ##
@@ -83,7 +83,7 @@ diagnosticMode:
 image:
   registry: gitimages.expertflow.com
   repository: general/activemq-k8s
-  tag: 6.1.7-alpine-zulu-K8s-4.9.4
+  tag: 6.1.7-alpine-zulu-K8s-4.10
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -117,59 +117,72 @@ args: []
 ##   - name: FOO
 ##     value: BAR
 ##
-extraEnvVars: 
-   - name: ACTIVEMQ_OPTS_MEMORY
-     value: "-Xms512M -Xmx4G"
-   - name: MAX_CONNECTIONS
-     value: "5000"
-   - name: REDIS_HOST
-     value: redis-master.ef-external.svc.cluster.local
-   - name: REDIS_PORT
-     value: "6379"
-   - name: REDIS_PASSWORD
-     value: Expertflow123
-   - name: REDIS_SSL_ENABLED
-     value: "true"
-   - name: REDIS_CLIENT_CERT
-     value: "/redis/tls.crt"
-   - name: REDIS_CLIENT_KEY
-     value: "/redis/tls.key"
-   - name: REDIS_CA_CERT
-     value : "/redis/ca.crt"
-   - name: TRUST_STORE_PASSWORD
-     value: "Expertflow123"
-   - name: KEY_STORE_PASSWORD
-     value: "Expertflow123"
-   - name: REDIS_MAX_ACTIVE
-     value: "200"
-   - name: REDIS_MAX_IDLE
-     value: "200"
-   - name: REDIS_MAX_WAIT
-     value: "-1"
-   - name: REDIS_MIN_IDLE
-     value: "100"
-   - name: REDIS_TIMEOUT
-     value: "2000"
-   - name: REDIS_SENTINEL_ENABLE
-     value: "false"
-   - name : REDIS_SENTINEL_MASTER
-     value: "expertflow"
-   - name : REDIS_SENTINEL_NODES
-     value: "nikka-redis-node-0.nikka-redis-headless.ef-external.svc.cluster.local:26379,nikka-redis-node-1.nikka-redis-headless.ef-external.svc.cluster.local:26379,nikka-redis-node-2.nikka-redis-headless.ef-external.svc.cluster.local:26379"
-   - name : REDIS_SENTINEL_PASSWORD
-     value: "Expertflow123"
-   - name: DB_URL
-     value: ef-postgresql-postgresql-ha-pgpool.ef-external.svc
-   - name: DB_USER
-     value: sa
-   - name: DB_PASSWORD
-     value: Expertflow123
-   - name: DB_DATASOURCE
-     value: postgres
-   - name: DB_NAME
-     value: activemq
-   - name: DB_PORT
-     value: "5432"
+extraEnvVars:
+  - name: ACTIVEMQ_OPTS_MEMORY
+    value: "-Xms512M -Xmx4G"
+  - name: MAX_CONNECTIONS
+    value: "5000"
+  - name: REDIS_HOST
+    value: redis-master.ef-external.svc.cluster.local
+  - name: REDIS_PORT
+    value: "6379"
+  - name: REDIS_PASSWORD
+    value: Expertflow123
+  - name: REDIS_SSL_ENABLED
+    value: "true"
+  - name: REDIS_CLIENT_CERT
+    value: "/redis/tls.crt"
+  - name: REDIS_CLIENT_KEY
+    value: "/redis/tls.key"
+  - name: REDIS_CA_CERT
+    value : "/redis/ca.crt"
+  - name: TRUST_STORE_PASSWORD
+    value: "Expertflow123"
+  - name: KEY_STORE_PASSWORD
+    value: "Expertflow123"
+  - name: REDIS_MAX_ACTIVE
+    value: "200"
+  - name: REDIS_MAX_IDLE
+    value: "200"
+  - name: REDIS_MAX_WAIT
+    value: "-1"
+  - name: REDIS_MIN_IDLE
+    value: "100"
+  - name: REDIS_TIMEOUT
+    value: "2000"
+  - name: REDIS_SENTINEL_ENABLE
+    value: "false"
+  - name : REDIS_SENTINEL_MASTER
+    value: "expertflow"
+  - name : REDIS_SENTINEL_NODES
+    value: "nikka-redis-node-0.nikka-redis-headless.ef-external.svc.cluster.local:26379,nikka-redis-node-1.nikka-redis-headless.ef-external.svc.cluster.local:26379,nikka-redis-node-2.nikka-redis-headless.ef-external.svc.cluster.local:26379"
+  - name : REDIS_SENTINEL_PASSWORD
+    value: "Expertflow123"
+  - name: DB_URL
+    value: ef-postgresql-postgresql-ha-pgpool.ef-external.svc
+  - name: DB_USER
+    value: sa
+  - name: DB_PASSWORD
+    value: Expertflow123
+  - name: DB_DATASOURCE
+    value: postgres
+  - name: DB_NAME
+    value: activemq
+  - name: DB_PORT
+    value: "5432"
+  - name: ACTIVEMQ_USERNAME
+    value: "admin"
+  - name: ACTIVEMQ_PASSWORD
+    value: "RXhwZXJ0ZmxvdzQ2NA"
+  - name: ACTIVEMQ_KEYSTORE
+    value: "/activemq/broker.ks"
+  - name: ACTIVEMQ_KEYSTORE_PASSWORD
+    value: "password"
+  - name: ACTIVEMQ_TRUSTSTORE
+    value: "/activemq/broker.ts"
+  - name: ACTIVEMQ_TRUSTSTORE_PASSWORD
+    value: "password"
+siteEnvVars: []
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
 extraEnvVarsCM: ""
@@ -463,15 +476,20 @@ autoscaling:
   targetMemory: ""
 ## @param extraVolumes Array to add extra volumes
 ##
-extraVolumes: 
-      - name: redis-crt
-        secret:
-          secretName: redis-crt
+extraVolumes:
+  - name: redis-crt
+    secret:
+      secretName: redis-crt
+  - name: activemq-tls
+    secret:
+      secretName: activemq-tls
 ## @param extraVolumeMounts Array to add extra mount
 ##
-extraVolumeMounts: 
-   - name: redis-crt
-     mountPath: "/redis"
+extraVolumeMounts:
+  - name: redis-crt
+    mountPath: "/redis"
+  - name: activemq-tls
+    mountPath: "/activemq"
 #   - name: activemq-claim0
 #     mountPath: /opt/apache-activemq-5.16.1/conf/activemq.xml
 #     subPath: activemq.xml
