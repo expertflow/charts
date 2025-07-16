@@ -684,7 +684,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: 4.9_f-CIM-29737
+        tag: 4.10_f-CIM-29994
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
