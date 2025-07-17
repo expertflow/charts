@@ -54,7 +54,7 @@ global:
   efGrafanaSupervisorDashboardFilename: "Supervisor_Dashboard_CIM.json"
   efGrafanaAgentDashboardConfigMap: "ef-grafana-agent-dashboard"
   efGrafanaAgentDashboardFilename: "Agent_Dashboard_CIM.json"
-  efGrafanaDashboardDroviderCM: "ef-grafana-dashboard-provider-cm"
+  efGrafanaDashboardProviderCM: "ef-grafana-dashboard-provider-cm"
   efGrafanaIniCM: "ef-grafana-ini-cm"
 
 
@@ -245,7 +245,7 @@ grafana:
     pullPolicy: IfNotPresent
   dashboardsProvider:
     enabled: true
-    configMapName: '{{ .Values.global.efGrafanaDashboardDroviderCM }}'
+    configMapName: '{{ .Values.global.efGrafanaDashboardProviderCM }}'
   dashboardsConfigMaps:
     - configMapName: '{{ .Values.global.efGrafanaSupervisorDashboardConfigMap }}'
       folderName: default
