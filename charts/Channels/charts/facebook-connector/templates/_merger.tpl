@@ -45,7 +45,7 @@ Expected input via 'dict':
     {{- if not (eq $value nil) }}
     value: {{ include "common.tplvalues.render" (dict "value" $value "context" $context) | quote }}
     {{- else if $valueFrom }}
-    valueFrom: {{- include "common.tplvalues.render" (dict "value" $valueFrom "context" $context) | nindent 6 }}
+    valueFrom: {{- toYaml $valueFrom | nindent 6 }}
     {{- else }}
     # value: "" # Handle empty value if needed
     {{- end }}
