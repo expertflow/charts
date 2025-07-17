@@ -7048,6 +7048,33 @@ entries:
     - https://github.com/expertflow/charts/releases/download/surveys-4.10.0-rc.1/surveys-4.10.0-rc.1.tgz
     version: 4.10.0-rc.1
   - apiVersion: v2
+    appVersion: 4.10.0
+    created: "2025-07-17T11:07:52.558472683Z"
+    dependencies:
+    - condition: survey-studio.enabled
+      name: survey-studio
+      repository: file://charts/survey-studio
+      version: 1.0.0
+    - condition: survey-backend.enabled
+      name: survey-backend
+      repository: file://charts/survey-backend
+      version: 1.0.0
+    description: Expertflow CX Solution for Surveys
+    digest: 388650658181bbfe51014315ccb91144ea910ad8fcb4920722241a207e7942f4
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: surveys
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/surveys-4.10.0-rc.1/surveys-4.10.0-rc.1.tgz
+    version: 4.10.0-rc.1
+  - apiVersion: v2
     appVersion: 4.9.0
     created: "2025-05-27T05:11:21.281303762Z"
     dependencies:
@@ -7188,33 +7215,6 @@ entries:
     version: 4.7.0
   - apiVersion: v2
     appVersion: 4.7.0
-    created: "2025-01-17T13:50:27.172261819Z"
-    dependencies:
-    - condition: survey-studio.enabled
-      name: survey-studio
-      repository: file://charts/survey-studio
-      version: 1.0.0
-    - condition: survey-backend.enabled
-      name: survey-backend
-      repository: file://charts/survey-backend
-      version: 1.0.0
-    description: Expertflow CX Solution for Surveys
-    digest: 5ecae25a1725e66b79eb6dec6d62a7b4aec35ac22b61b62111635e0b45471346
-    home: https://expertflow.com
-    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
-    keywords:
-    - Expertflow
-    - C2C Communications
-    maintainers:
-    - email: nasir.mehmood@expertflow.com
-      name: NMR Nasir Mehmood Rajput
-    name: surveys
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/surveys-4.7.0-alpha/surveys-4.7.0-alpha.tgz
-    version: 4.7.0-alpha
-  - apiVersion: v2
-    appVersion: 4.7.0
     created: "2025-01-22T10:27:09.175610806Z"
     dependencies:
     - condition: survey-studio.enabled
@@ -7343,6 +7343,33 @@ entries:
       version: 1.0.0
     description: Expertflow CX Solution for Surveys
     digest: 13a08b9fb51fc839597e1603b6e246c33fe61e0d56f838d36732898cba4a2dcc
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: surveys
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/surveys-4.7.0-alpha/surveys-4.7.0-alpha.tgz
+    version: 4.7.0-alpha
+  - apiVersion: v2
+    appVersion: 4.7.0
+    created: "2025-01-17T13:50:27.172261819Z"
+    dependencies:
+    - condition: survey-studio.enabled
+      name: survey-studio
+      repository: file://charts/survey-studio
+      version: 1.0.0
+    - condition: survey-backend.enabled
+      name: survey-backend
+      repository: file://charts/survey-backend
+      version: 1.0.0
+    description: Expertflow CX Solution for Surveys
+    digest: 5ecae25a1725e66b79eb6dec6d62a7b4aec35ac22b61b62111635e0b45471346
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -7973,4 +8000,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-07-17T11:05:18.04420085Z"
+generated: "2025-07-17T11:07:52.558892861Z"
