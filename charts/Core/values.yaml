@@ -223,6 +223,7 @@ agent-manager:
         - name: SOCKET_PING_TIMEOUT
           value: "20000"
     siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 3000
@@ -303,6 +304,7 @@ bot-framework:
         - name: BUFFERING_EXPIRY_SECONDS
           value: '100'
     siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8082
@@ -379,6 +381,7 @@ ccm:
         - name: TOMCAT_MAX_THREADS
           value: "1000"
     siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8081
@@ -431,6 +434,7 @@ cim-customer:
        - name: MONGODB_DATABASE
          value: "cim_customer"
     siteEnvVars: []
+    configKeys: []
     service:
        enabled: true
        port: 8080
@@ -504,6 +508,16 @@ conversation-manager:
           value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
         - name: TOPIC_CONCURRENCY_MAX
           value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
+        - name: ENABLE_ENCRYPTION
+          value: "false"
+        - name: ENCRYPTION_SCHEMA_PATH
+          value: "file:/encryption/encryption-schema.json"
+        - name: GRAPHQL_SCHEMAS_PATH
+          value: /app/schemas/*
+        - name: GRAPHQL_MONGODB_RULES_PATH
+          value: /app/graphql-mongodb-rules.json
+    siteEnvVars: []
+    configKeys:
         - name: VAULT_ROLE_ID
           valueFrom:
             secretKeyRef:
@@ -524,15 +538,6 @@ conversation-manager:
             secretKeyRef:
               name: vault-approle-secret
               key: TRANSIT_KEY
-        - name: ENABLE_ENCRYPTION
-          value: "false"
-        - name: ENCRYPTION_SCHEMA_PATH
-          value: "file:/encryption/encryption-schema.json"
-        - name: GRAPHQL_SCHEMAS_PATH
-          value: /app/schemas/*
-        - name: GRAPHQL_MONGODB_RULES_PATH
-          value: /app/graphql-mongodb-rules.json
-    siteEnvVars: []
     containerPorts:
         - name: "http-co-ma-8080"
           containerPort: 8080
@@ -647,6 +652,7 @@ conversation-monitor:
         - name: TOMCAT_MAX_THREADS
           value: "1000"
     siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8080
@@ -728,6 +734,7 @@ customer-widget:
         - name: IS_DIRECT_WEBRTC_CALL_ENABLED
           value: "true"
     siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 80
@@ -827,6 +834,7 @@ file-engine:
         - name: IS_SCAN_ENABLED
           value: "true"
     siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8080
@@ -858,6 +866,7 @@ historical-reports:
         - name: MONGODB_DATABASE
           value: "conversation-manager_db"
     siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8081
@@ -908,6 +917,7 @@ license-manager:
         - name: CONSUMER_SECRET
           value: cs_6ee59aab70191e2a62863ae2c3560beaa561f6aa
     siteEnvVars: []
+    configKeys: []
     service:
       enabled: true
       port: 8888
@@ -966,6 +976,7 @@ realtime-reports:
         - name: RETRIEVE_PAST_DAY_DATA_ONLY
           value: "true"
     siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8080
@@ -1030,6 +1041,7 @@ routing-engine:
         - name: AGENT_SEIZE_TTL
           value: "86400"
     siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8081
@@ -1084,6 +1096,7 @@ state-events-logger:
         - name: MAX_IDLE_CYCLES
           value: "10"
     siteEnvVars: []
+    configKeys: []
     service:
         enabled: false
     ingress:
@@ -1136,6 +1149,7 @@ team-announcement:
         - name: MONGODB_DATABASE_NAME
           value: "teamAnnouncement"
     siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8080
@@ -1189,6 +1203,7 @@ team-announcement:
          - name: TZ
            value: '{{ .Values.global.efCommonVars_TZ }}'
        siteEnvVars: []
+       configKeys: []
        resourcesPreset: "none"
        resources: {}
        extraVolumeMounts: []
@@ -1282,6 +1297,7 @@ unified-admin:
         - name: RSA_CLIENT_ID
           value: '{{ .Values.global.efCommonVars_RSA_CLIENT_ID }}'
     siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 3000
@@ -1338,6 +1354,7 @@ web-channel-manager:
         - name: KEYCLOAK_PASSWORD_CUSTOMER
           value: "customer"
     siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 7000
@@ -1370,6 +1387,7 @@ business-calendar:
         - name: MASKING_LAYOUT_CLASS
           value: "com.ef.calendar.utils.MaskingPatternLayout"
     siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8443
@@ -1449,6 +1467,7 @@ conversation-studio:
     - name: TRACKER_EXPIRY_SECONDS
       value: "60"
   siteEnvVars: []
+  configKeys: []
   service:
     enabled: true
     port: 1880
@@ -1469,3 +1488,4 @@ conversation-studio:
       mountPath: /mongo
     - name: conversation-studio-flow-vol
       mountPath: /flows
+
