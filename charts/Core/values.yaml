@@ -987,9 +987,14 @@ realtime-reports:
         - name: redis-crt
           secret:
             secretName: redis-crt
+        - name: activemq-tls        
+          secret:
+            secretName: activemq-tls    
     extraVolumeMounts:
         - name: redis-crt
           mountPath: /redis
+        - name: activemq-tls
+          mountPath: /activemq  
 
 
 
