@@ -6352,6 +6352,24 @@ entries:
     - https://github.com/expertflow/charts/releases/download/middleware-cronjob-4.10.0-rc.1/middleware-cronjob-4.10.0-rc.1.tgz
     version: 4.10.0-rc.1
   - apiVersion: v2
+    appVersion: 4.10.0
+    created: "2025-07-22T10:44:48.248056261Z"
+    description: Expertflow CX Solution Reporting Synchronizer
+    digest: d3ecb35be92a45a38d1d5dbb53834cb08262f7d11f6989d1b320213bac301179
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: middleware-cronjob
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/middleware-cronjob-4.10.0-rc.1/middleware-cronjob-4.10.0-rc.1.tgz
+    version: 4.10.0-rc.1
+  - apiVersion: v2
     appVersion: 4.8.0
     created: "2025-03-18T08:32:58.173348357Z"
     description: Expertflow CX Solution Reporting Synchronizer
@@ -8208,4 +8226,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-07-21T08:33:50.876516515Z"
+generated: "2025-07-22T10:44:48.248507623Z"
