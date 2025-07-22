@@ -57,6 +57,9 @@ spec:
             imagePullPolicy: IfNotPresent
             env:
               {{- include "ef.helpers.mergedEnvVars" (dict "context" $ "defaultList" .Values.extraEnvVars "overrideList" .Values.siteEnvVars) | nindent 12 }}
+            {{- if .Values.configKeys }}
+               {{- include "common.tplvalues.render" (dict "value" .Values.configKeys "context" $) | nindent 14 }}
+            {{- end }}
             - name: MONGODB_CERTIFICATE_PATH
               valueFrom:
                  configMapKeyRef:

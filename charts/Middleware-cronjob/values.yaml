@@ -70,6 +70,7 @@ middlewareCronJob:
      - name: CX_CONVERSATION_MANAGER
        value: "http://{{ .Values.global.efCxReleaseName }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
    siteEnvVars: []
+   configKeys: []
    resourcesPreset: "none"
    resources: {}
    extraVolumeMounts: 
