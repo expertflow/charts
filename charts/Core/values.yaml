@@ -841,6 +841,14 @@ file-engine:
         portName: "http-fi-m-8080"
         targetPort: "http-fi-m-8080"
     ingress: { enabled: false }
+    extraVolumes:
+      - name: ef-file-engine-https-certs-vol
+        secret:
+          secretName: ef-file-engine-https-certs-secret
+    extraVolumeMounts:
+      - name: ef-file-engine-https-certs-vol
+        mountPath: /https
+
 
 ##############################historical-reports##############################
 historical-reports:
@@ -889,7 +897,7 @@ license-manager:
     replicaCount: 1
     image:
         repository: license-mangement/license-manager
-        tag: 4.9.4_b-CIM-30057
+        tag: 4.9.2_f-CXIM-482
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -944,7 +952,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: 4.9.4_f-CIM-27802
+        tag: 4.9.4_f-OPS-491
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1434,6 +1442,8 @@ cx-load-hub:
           value: load-hub
         - name: CSV_SIZE_LIMIT
           value: "10"
+        - name: FILE_ENGINE_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/file-engine"
     service:
         enabled: true
         port: 8443
@@ -1454,7 +1464,7 @@ conversation-studio:
   replicaCount: 1
   image:
     repository: cim/workflow-builder/conversation-controller/build
-    tag: 4.9.2_f-CIM-29695-bfab343a08b635cdd5d1457218ae45d8456484f6
+    tag: 4.9.4_f-CIM-28240
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
