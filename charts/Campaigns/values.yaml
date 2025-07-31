@@ -157,7 +157,7 @@ campaign-studio:
    enabled: true
    image:       
       repository: cim/conversation-studio
-      tag: 4.9.3
+      tag: 4.9.5
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
