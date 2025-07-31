@@ -187,7 +187,7 @@ agent-manager:
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: 4.9.4
+        tag: 4.9.5
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -424,7 +424,7 @@ bot-framework:
     replicaCount: 1
     image:
         repository: cim/bot-framework
-        tag: 4.9.4
+        tag: 4.9.5
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -498,7 +498,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: 4.9.4
+        tag: 4.9.5
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -649,7 +649,7 @@ cim-customer:
     replicaCount: 1
     image:
        repository: cim/cim-backend
-       tag: 4.9.3
+       tag: 4.9.5
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -693,7 +693,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: 4.9.4
+        tag: 4.9.5
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -852,7 +852,7 @@ conversation-monitor:
     replicaCount: 1
     image:
         repository: cim/conversation-monitor
-        tag: 4.9.4
+        tag: 4.9.5
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -933,7 +933,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: 4.9.3
+        tag: 4.9.5
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1022,7 +1022,7 @@ file-engine:
     replicaCount: 1
     image:
         repository: chat-solution/file-engine
-        tag: 4.9.3
+        tag: 4.9.5
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1270,7 +1270,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: 4.9.4
+        tag: 4.9.5
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1331,7 +1331,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: 4.9.4
+        tag: 4.9.5
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1445,7 +1445,7 @@ team-announcement:
     replicaCount: 1
     image:
         repository: cim/team-announcement
-        tag: 4.9.3
+        tag: 4.9.5
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1640,15 +1640,64 @@ unified-admin:
        enabled: false
        defaultIngress: false
     apisixRoutes:
-      # Route 1: Main /unified-admin/* path
-      - nameSuffix: "main"
+      # Route 1: UNSECURED GET (API) - Highest priority for the specific unsecured API call.
+      # Previously nameSuffix was get-form-by-id-unsecured but shortened due to APISIX issue. 401.
+      - nameSuffix: "get-form-unsecured"
         enabled: true
-        paths: ["/unified-admin","/unified-admin/*"]
+        priority: 150
+        paths: ["/unified-admin/forms/*"]
+        methods: ["GET"]
+        exprs:
+          - subject:
+              scope: Path
+            op: RegexMatch
+            value: "^/unified-admin/forms/[a-fA-F0-9]{24}$"
         backendServicePort: 3000
         plugins:
           enableAuth: false
           enableRewrite: true
-          rewriteStripPrefix: false # Custom rewrite for slash
+          rewriteStripPrefix: false
+          rewriteRegexUriFrom: "^/unified-admin/forms/([a-fA-F0-9]{24})$"
+          rewriteRegexUriTo: "/forms/$1"
+
+      # Route 2: SECURED APIs - High priority to secure all required backend API endpoints.
+      - nameSuffix: "backend-apis-secured"
+        enabled: true
+        priority: 25
+        paths:
+          - "/unified-admin/users"
+          - "/unified-admin/users/*"
+          - "/unified-admin/health"
+          - "/unified-admin/health/*"
+          - "/unified-admin/team"
+          - "/unified-admin/team/*"
+          - "/unified-admin/forms"
+          - "/unified-admin/forms/*"
+          - "/unified-admin/metrics"
+          - "/unified-admin/metrics/*"
+          - "/unified-admin/reasons"
+          - "/unified-admin/reasons/*"
+          - "/unified-admin/pull-mode-list"
+          - "/unified-admin/pull-mode-list/*"
+        backendServicePort: 3000
+        plugins:
+          enableAuth: false
+          enableRewrite: true
+          rewriteStripPrefix: false
+          rewriteRegexUriFrom: "^/unified-admin/(.*)"
+          rewriteRegexUriTo: "/$1"
+      # Route 3: UNSECURED SPA Handler - Handles the initial page load for the app.
+      - nameSuffix: "frontend-spa-routes"
+        enabled: true
+        priority: 0
+        paths:
+          - "/unified-admin"
+          - "/unified-admin/*"
+        backendServicePort: 3000
+        plugins:
+          enableAuth: false
+          enableRewrite: true
+          rewriteStripPrefix: false
           rewriteRegexUriFrom: "^/unified-admin/?(.*)"
           rewriteRegexUriTo: "/$1"
           enableCors: true
@@ -1657,15 +1706,16 @@ unified-admin:
               enable: true
               config:
                 max_body_size: 6291456
-      # Route 2: Default /* route
-      - nameSuffix: "default"
+      # Route 4: GLOBAL CATCH-ALL - Based on the original working config.
+      # This handles the FQDN root and ALL static assets (.js, .css, etc.) without a rewrite.
+      - nameSuffix: "global-catchall"
         enabled: true
         priority: -10
         paths: ["/*"]
         backendServicePort: 3000
         plugins:
-          enableAuth: false # No auth on default
-          enableRewrite: false # No rewrite needed
+          enableAuth: false
+          enableRewrite: false
       - nameSuffix: "default-404-handler"
         enabled: false
         priority: -200 # Very low priority
@@ -1730,7 +1780,7 @@ web-channel-manager:
     replicaCount: 1
     image:
         repository: cim/web-channel-manager
-        tag: 4.9.3
+        tag: 4.9.5
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
