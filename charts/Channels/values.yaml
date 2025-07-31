@@ -668,7 +668,7 @@ linkedin-connector:
    replicaCount: 1
    image:
       repository: project_dev/linkedinconnector
-      tag: 4.9.3
+      tag: 4.9.5
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -684,9 +684,13 @@ linkedin-connector:
       - name: enable.ssl.env
         value: "false"
       - name: linkedin.scheduler.fixed-rate
-        value: "600000"
+        value: "150"
       - name: LINKEDIN_CIM_SERVICE_ID
         value: "2001"
+      - name: LINKEDIN_CIM_FILE_ENGINE_URL
+        value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
+      - name: FILE_ENGINE_BASE_FQDN
+        value: "https://{{ .Values.global.ingressRouter }}"
       - name: TZ
         value: '{{ .Values.global.efCommonVars_TZ }}'
       - name: LOGGING_CONFIG
@@ -701,6 +705,8 @@ linkedin-connector:
         value: "sa"
       - name: DATABASE_PASSWORD
         value: "Expertflow123"
+      - name: AUTO_SCHEDULER_STARTUP
+        value: "true"
    service:
       enabled: true
       port: 9001
