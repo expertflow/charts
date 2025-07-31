@@ -7265,6 +7265,24 @@ entries:
     - https://github.com/expertflow/charts/releases/download/reporting-4.10.0-rc.1/reporting-4.10.0-rc.1.tgz
     version: 4.10.0-rc.1
   - apiVersion: v2
+    appVersion: 4.9.0
+    created: "2025-07-31T13:14:00.840765076Z"
+    description: Expertflow CX Solution Reporting Synchronizer
+    digest: 3c3ab1b29745608b1b7de22e20db7fac4f19ffb090bd61fe3de875b17b110ca4
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: reporting
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/reporting-4.9.5/reporting-4.9.5.tgz
+    version: 4.9.5
+  - apiVersion: v2
     appVersion: 4.8.0
     created: "2025-03-18T08:09:43.762221978Z"
     description: Expertflow CX Solution Reporting Synchronizer
@@ -8524,4 +8542,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-07-31T13:10:08.897935419Z"
+generated: "2025-07-31T13:14:00.841221586Z"
