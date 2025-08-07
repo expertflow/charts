@@ -67,7 +67,7 @@ unified-agent:
    replicaCount: 1
    image:       
       repository: cim/unified-agent/build
-      tag: 4.9.4_b-CIM-29850
+      tag: 4.10_b-CRM-200
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -207,6 +207,7 @@ unified-agent:
       - name: WEBRTC_SERVICE_IDENTIFIER
         value: "00000"
    siteEnvVars: []
+   configKeys: []
    service:
       enabled: true
       port: 80
