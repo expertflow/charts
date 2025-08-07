@@ -1246,18 +1246,6 @@ apisixStandalone:
        service_id: svc-agent-manager
        status: 1
        plugins:
-         openid-connect:
-           enable: false # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
          proxy-rewrite:
            enable: true
            regex_uri: ["^/agent-manager/?(.*)", "/$1"]
@@ -1432,18 +1420,6 @@ apisixStandalone:
        service_id: svc-file-engine
        status: 1
        plugins:
-         openid-connect:
-           enable: false # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
          proxy-rewrite:
            enable: true
            regex_uri: ["^/file-engine/?(.*)", "/$1"]
@@ -1516,6 +1492,36 @@ apisixStandalone:
            regex_uri: ["^/team-announcement/?(.*)", "/$1"]
 
      # --- conversation-studio ---
+     - id: ef-cx-conversation-studio-redirect
+       uris: ["/conversation-studio"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       priority: 2
+       service_id: svc-conversation-studio
+       methods: ["GET"]
+       status: 1
+       plugins:
+         redirect:
+           enable: true
+           uri: "$uri/"
+           ret_code: 301
+
+     - id: ef-cx-conversation-studio-api-channels
+       uris: ["/conversation-studio/channels", "/conversation-studio/channel-types"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       priority: 1
+       service_id: svc-conversation-studio
+       methods: ["GET"]
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/conversation-studio/(.*)", "/$1"]
+         cors:
+           enable: true
+           allow_origins: "*"
+           allow_methods: "GET, OPTIONS"
+           allow_credentials: true
+
      - id: ef-cx-conversation-studio-main
        uris: ["/conversation-studio/*"]
        hosts: ["{{ .Values.global.ingressRouter }}"]
@@ -1554,18 +1560,6 @@ apisixStandalone:
        service_id: svc-unified-admin
        status: 1
        plugins:
-         openid-connect:
-           enable: false
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
          proxy-rewrite:
            enable: true
            regex_uri: ["^/unified-admin/(.*)", "/$1"]
