@@ -8555,9 +8555,9 @@ entries:
   transflux:
   - apiVersion: v2
     appVersion: 4.10.0
-    created: "2025-08-07T08:47:25.420815432Z"
+    created: "2025-08-07T11:01:54.05845207Z"
     description: CX Data Platform
-    digest: 9f3fd2335935bb902962ec4cf368045a04657942da4cafedeb607f496a0c500f
+    digest: bfd0327c599db248e8502cea761acc22fb74713550c9360e2c93678b5467593c
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -8594,6 +8594,24 @@ entries:
     created: "2025-07-15T06:47:43.231488743Z"
     description: CX Data Platform
     digest: fc9826730b8e5f502a76a52d8080c59cdff85b23778ca7c933b599e1855a4bc2
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: transflux
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/transflux-4.10.0-rc.1/transflux-4.10.0-rc.1.tgz
+    version: 4.10.0-rc.1
+  - apiVersion: v2
+    appVersion: 4.10.0
+    created: "2025-08-07T08:47:25.420815432Z"
+    description: CX Data Platform
+    digest: 9f3fd2335935bb902962ec4cf368045a04657942da4cafedeb607f496a0c500f
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -9056,4 +9074,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-08-07T08:47:25.421325133Z"
+generated: "2025-08-07T11:01:54.059156078Z"
