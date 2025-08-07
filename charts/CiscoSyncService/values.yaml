@@ -172,6 +172,7 @@ extraEnvVars:
       value: "3004"
 
 siteEnvVars: []
+configKeys: []
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
 extraEnvVarsCM: ""
