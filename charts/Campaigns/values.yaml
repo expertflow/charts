@@ -68,8 +68,8 @@ clusterDomain: cluster.local
 campaigns-backend:
    enabled: true
    image:       
-      repository: cim/campaigns
-      tag: 4.9.3
+      repository: cim/campaigns/build
+      tag: 4.10_b-CIM-30594
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -97,6 +97,7 @@ campaigns-backend:
       - name: SCHEDULER_URL
         value: http://{{ .Release.Name }}-scheduled-activities-svc.{{ .Release.Namespace }}.svc:8894
    siteEnvVars: []
+   configKeys: []
    service:
       enabled: true
       port: 3000
@@ -117,8 +118,8 @@ campaigns-backend:
 campaign-studio:
    enabled: true
    image:       
-      repository: cim/conversation-studio
-      tag: 4.9.3
+      repository: cim/conversation-studio/build
+      tag: 4.10_b-CIM-30594
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -156,6 +157,7 @@ campaign-studio:
       - name: CISCO_PROXY
         value: 'https://{{ .Values.global.ingressRouter }}/campaign-studio'
    siteEnvVars: []
+   configKeys: []
    service:
       enabled: true
       port: 1880
@@ -202,6 +204,7 @@ scheduled-activities:
     - name: LOG_LEVEL
       value: "INFO"
   siteEnvVars: []
+  configKeys: []
   service:
     enabled: true
     port: 8894
@@ -220,3 +223,4 @@ scheduled-activities:
       mountPath: /redis
     - name: activemq-tls
       mountPath: /activemq
+
