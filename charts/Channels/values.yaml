@@ -74,7 +74,7 @@ connect360:
    replicaCount: 1
    image:
       repository: cim/360-connector
-      tag: 4.9.4_f-CIM-27802
+      tag: 4.10_b-CRM-232
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -94,6 +94,7 @@ connect360:
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.connector360.utility.MaskingPatternLayout"
    siteEnvVars: []
+   configKeys: []
    service:
       enabled: true
       port: 8080
@@ -134,6 +135,7 @@ facebook-connector:
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.connector.facebookconnector.utility.MaskingPatternLayout"
    siteEnvVars: []
+   configKeys: []
    service:
       enabled: true
       port: 8080
@@ -174,6 +176,7 @@ instagram-connector:
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.connector.instagramconnector.utils.MaskingPatternLayout"
    siteEnvVars: []
+   configKeys: []
    service:
       enabled: true
       port: 8080
@@ -216,6 +219,7 @@ smpp-connector:
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.sms.utils.MaskingPatternLayout"
    siteEnvVars: []
+   configKeys: []
    service:
       enabled: true
       port: 8115
@@ -256,6 +260,7 @@ telegram-connector:
       - name: LOG_LEVEL
         value: "INFO"
    siteEnvVars: []
+   configKeys: []
    service:
       enabled: true
       port: 8664
@@ -295,6 +300,7 @@ twilio-connector:
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.twilio.connector.util.MaskingPatternLayout"
    siteEnvVars: []
+   configKeys: []
    service:
       enabled: true
       port: 8085
@@ -330,6 +336,7 @@ twitter-connector:
       - name: FILE_ENGINE_URL
         value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
    siteEnvVars: []
+   configKeys: []
    service:
       enabled: true
       port: 8080
@@ -361,6 +368,7 @@ viber-connector:
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.connector.utils.MaskingPatternLayout"
    siteEnvVars: []
+   configKeys: []
    service:
       enabled: true
       port: 8080
@@ -397,6 +405,7 @@ email-connector:
      - name: SCHEDULER_FIXED_RATE_IN_MS
        value: "60000"
    siteEnvVars: []
+   configKeys: []
    service:
      enabled: true
      port: 8080
@@ -428,6 +437,7 @@ whatsapp-connector:
      - name: MASKING_LAYOUT_CLASS
        value: "com.ef.connector.whatsappconnector.utils.MaskingPatternLayout"
    siteEnvVars: []
+   configKeys: []
    service:
      enabled: true
      port: 8080
@@ -469,6 +479,7 @@ ms-email-connector:
      - name: SCHEDULER_FIXED_RATE_IN_MS
        value: "60000"
    siteEnvVars: []
+   configKeys: []
    service:
      enabled: true
      port: 8080
@@ -508,6 +519,7 @@ youtube-connector:
     - name: DAYS_TO_KEEP_TOP_LEVEL_COMMENTS
       value: "7"
   siteEnvVars: []
+  configKeys: []
   service:
     enabled: true
     port: 8080
@@ -547,6 +559,10 @@ linkedin-connector:
         value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
       - name: LINKEDIN_CIM_SERVICE_URL
         value: "http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+      - name: LINKEDIN_CIM_FILE_ENGINE_URL
+        value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
+      - name: FILE_ENGINE_BASE_FQDN        
+        value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
       - name: MASKING_LAYOUT_CLASS
         value: "com.linkedin.connector.logging.MaskingPatternLayout"
       - name: DATABASE_URL
@@ -556,6 +572,7 @@ linkedin-connector:
       - name: DATABASE_PASSWORD
         value: "Expertflow123"
    siteEnvVars: []
+   configKeys: []
    service:
       enabled: true
       port: 9001
