@@ -183,6 +183,7 @@ extraEnvVars:
   - name: ACTIVEMQ_TRUSTSTORE_PASSWORD
     value: "password"
 siteEnvVars: []
+configKeys: []
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
 extraEnvVarsCM: ""
