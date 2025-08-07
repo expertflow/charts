@@ -136,6 +136,7 @@ extraEnvVars:
   - name: CX_FQDN
     value: https://{{ .Values.global.ingressRouter }}
 siteEnvVars: []
+configKeys: []
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
 extraEnvVarsCM: ""
