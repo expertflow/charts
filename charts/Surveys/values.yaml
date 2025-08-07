@@ -74,8 +74,8 @@ imageCredentials:
 survey-backend:
    enabled: true
    image:       
-      repository: cim/survey-backend
-      tag: 4.9.3
+      repository: cim/survey-backend/build
+      tag: 4.10_b-CIM-30592
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -89,6 +89,7 @@ survey-backend:
       - name: NODERED_PASSWORD
         value: admin
    siteEnvVars: []
+   configKeys: []
    service:
       enabled: true
       port: 3000
@@ -108,8 +109,8 @@ survey-studio:
    enabled: true
    image:       
       repository: cim/survey-nodes/build
-      tag: 4.9.2_f-CIM-28061-release-candidate
-   efConnectionVars: false
+      tag: 4.10_b-CIM-30592
+   efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "http-su-st-1880"
@@ -121,7 +122,16 @@ survey-studio:
         value: "{{ .Values.global.ingressRouter }}"
       - name: UNIFIED_ADMIN_URL
         value: "http://{{ .Values.global.efCxReleaseName }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
+      - name: SURVEY_STUDIO_PROXY
+        value: 'https://{{ .Values.global.ingressRouter }}/survey-studio'
+      - name: KEYCLOAK_URL_FOR_TOKEN
+        value: http://keycloak.ef-external.svc/auth
+      - name: KEYCLOAK_USERNAME_FOR_TOKEN
+        value: admin
+      - name: KEYCLOAK_PASSWORD_FOR_TOKEN
+        value: admin
    siteEnvVars: []
+   configKeys: []
    service:
       enabled: true
       port: 1880
