@@ -18,7 +18,7 @@ global:
   #   - name: image-pull-secret
 
   # TLS for end-to-end encrypted transport
-  tlsDisable: true
+  tlsDisable: false
 
   # External vault server address for the injector and CSI provider to use.
   # Setting this will disable deployment of a vault server.
@@ -46,7 +46,7 @@ global:
 injector:
   # True if you want to enable vault agent injection.
   # @default: global.enabled
-  enabled: "-"
+  enabled: true
 
   replicas: 1
 
@@ -267,7 +267,13 @@ injector:
     pod: {}
     container: {}
 
-  resources: {}
+  resources:
+    requests:
+      memory: 50Mi
+      cpu: 50m
+    limits:
+      memory: 256Mi
+      cpu: 250m
   # resources:
   #   requests:
   #     memory: 256Mi
@@ -357,7 +363,7 @@ injector:
 server:
   # If true, or "-" with global.enabled true, Vault server will be installed.
   # See vault.mode in _helpers.tpl for implementation details.
-  enabled: "-"
+  enabled: true
 
   # [Enterprise Only] This value refers to a Kubernetes secret that you have
   # created that contains your enterprise license. If you are not using an
@@ -377,7 +383,7 @@ server:
 
   image:
     repository: "hashicorp/vault"
-    tag: "1.16.1"
+    tag: "1.13.3"
     # Overrides the default Image Pull Policy
     pullPolicy: IfNotPresent
 
@@ -393,7 +399,13 @@ server:
   # Supported log formats include: standard, json
   logFormat: ""
 
-  resources: {}
+  resources:
+    requests:
+      memory: 50Mi
+      cpu: 500m
+    limits:
+      memory: 2Gi
+      cpu: 1500m
   # resources:
   #   requests:
   #     memory: 256Mi
@@ -513,6 +525,7 @@ server:
   # Used to define custom readinessProbe settings
   readinessProbe:
     enabled: true
+    path: "/v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204"
     # If you need to use a http path instead of the default exec
     # path: /v1/sys/health?standbyok=true
 
@@ -568,7 +581,10 @@ server:
 
   # extraEnvironmentVars is a list of extra environment variables to set with the stateful set. These could be
   # used to include variables required for auto-unseal.
-  extraEnvironmentVars: {}
+  extraEnvironmentVars:
+    VAULT_CACERT: /vault/userconfig/tls-ca/tls.crt
+    VAULT_TLSCERT: /vault/userconfig/tls-server-vault/tls.crt
+    VAULT_TLSKEY: /vault/userconfig/tls-server-vault/tls.key
     # GOOGLE_REGION: global
     # GOOGLE_PROJECT: myproject
     # GOOGLE_APPLICATION_CREDENTIALS: /vault/userconfig/myproject/myproject-creds.json
@@ -584,7 +600,13 @@ server:
   # extraVolumes is a list of extra volumes to mount. These will be exposed
   # to Vault in the path `/vault/userconfig/<name>/`. The value below is
   # an array of objects, examples are shown below.
-  extraVolumes: []
+  extraVolumes:
+    - type: secret
+      name: tls-server-vault
+    - type: secret
+      name: tls-server-client
+    - type: secret
+      name: tls-ca
     # - type: secret (or "configMap")
     #   name: my-secret
     #   path: null # default is `/vault/userconfig`
@@ -608,15 +630,7 @@ server:
   # Commenting out or setting as empty the affinity variable, will allow
   # deployment to single node services such as Minikube
   # This should be either a multi-line string or YAML matching the PodSpec's affinity field.
-  affinity: |
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: {{ template "vault.name" . }}
-              app.kubernetes.io/instance: "{{ .Release.Name }}"
-              component: server
-          topologyKey: kubernetes.io/hostname
+  affinity: null
 
   # Topology settings for server pods
   # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
@@ -766,7 +780,7 @@ server:
   dataStorage:
     enabled: true
     # Size of the PVC created
-    size: 10Gi
+    size: 1Gi
     # Location where the PVC will be mounted.
     mountPath: "/vault/data"
     # Name of the storage class to use.  If null it will use the
@@ -793,9 +807,9 @@ server:
   # /vault/audit
   # See https://developer.hashicorp.com/vault/docs/audit to know more
   auditStorage:
-    enabled: false
+    enabled: true
     # Size of the PVC created
-    size: 10Gi
+    size: 1Gi
     # Location where the PVC will be mounted.
     mountPath: "/vault/audit"
     # Name of the storage class to use.  If null it will use the
@@ -824,7 +838,7 @@ server:
   # the "file" backend.  This mode is not highly available and should not be scaled
   # past a single replica.
   standalone:
-    enabled: "-"
+    enabled: false
 
     # config is a raw string of default configuration when using a Stateful
     # deployment. Default is to use a PersistentVolumeClaim mounted at /vault/data
@@ -873,8 +887,8 @@ server:
   # Helm project by default.  It is possible to manually configure Vault to use a
   # different HA backend.
   ha:
-    enabled: false
-    replicas: 3
+    enabled: true
+    replicas: 5
 
     # Set the api_addr configuration for Vault HA
     # See https://developer.hashicorp.com/vault/docs/configuration#api_addr
@@ -893,9 +907,9 @@ server:
     raft:
 
       # Enables Raft integrated storage
-      enabled: false
+      enabled: true
       # Set the Node Raft ID to the name of the pod
-      setNodeId: false
+      setNodeId: true
 
       # Note: Configuration files are stored in ConfigMaps so sensitive data
       # such as passwords should be either mounted through extraSecretEnvironmentVars
@@ -903,23 +917,47 @@ server:
       # https://developer.hashicorp.com/vault/docs/platform/k8s/helm/run#protecting-sensitive-vault-configurations
       config: |
         ui = true
-
+        cluster_name = "vault-integrated-storage"
         listener "tcp" {
-          tls_disable = 1
           address = "[::]:8200"
           cluster_address = "[::]:8201"
-          # Enable unauthenticated metrics access (necessary for Prometheus Operator)
-          #telemetry {
-          #  unauthenticated_metrics_access = "true"
-          #}
+          tls_cert_file = "/vault/userconfig/tls-server-vault/tls.crt"
+          tls_key_file = "/vault/userconfig/tls-server-vault/tls.key"
+          tls_client_ca_file = "/vault/userconfig/tls-ca/tls.crt"
         }
-
         storage "raft" {
           path = "/vault/data"
+            retry_join {
+            leader_api_addr = "https://vault-0.vault-internal:8200"
+            leader_ca_cert_file = "/vault/userconfig/tls-ca/tls.crt"
+            leader_client_cert_file = "/vault/userconfig/tls-server-vault/tls.crt"
+            leader_client_key_file = "/vault/userconfig/tls-server-vault/tls.key"
+          }
+          retry_join {
+            leader_api_addr = "https://vault-1.vault-internal:8200"
+            leader_ca_cert_file = "/vault/userconfig/tls-ca/tls.crt"
+            leader_client_cert_file = "/vault/userconfig/tls-server-vault/tls.crt"
+            leader_client_key_file = "/vault/userconfig/tls-server-vault/tls.key"
+          }
+          retry_join {
+            leader_api_addr = "https://vault-2.vault-internal:8200"
+            leader_ca_cert_file = "/vault/userconfig/tls-ca/tls.crt"
+            leader_client_cert_file = "/vault/userconfig/tls-server-vault/tls.crt"
+            leader_client_key_file = "/vault/userconfig/tls-server-vault/tls.key"
+          }
+          retry_join {
+            leader_api_addr = "https://vault-3.vault-internal:8200"
+            leader_ca_cert_file = "/vault/userconfig/tls-ca/tls.crt"
+            leader_client_cert_file = "/vault/userconfig/tls-server-vault/tls.crt"
+            leader_client_key_file = "/vault/userconfig/tls-server-vault/tls.key"
+          }
+          retry_join {
+            leader_api_addr = "https://vault-4.vault-internal:8200"
+            leader_ca_cert_file = "/vault/userconfig/tls-ca/tls.crt"
+            leader_client_cert_file = "/vault/userconfig/tls-server-vault/tls.crt"
+            leader_client_key_file = "/vault/userconfig/tls-server-vault/tls.key"
+          }
         }
-
-        service_registration "kubernetes" {}
-
     # config is a raw string of default configuration when using a Stateful
     # deployment. Default is to use a Consul for its HA storage backend.
     # This should be HCL.
@@ -1032,12 +1070,12 @@ ui:
   # serviceType can be used to control the type of service created. For
   # example, setting this to "LoadBalancer" will create an external load
   # balancer (for supported K8S installations) to access the UI.
-  enabled: false
+  enabled: true
   publishNotReadyAddresses: true
   # The service should only contain selectors for active Vault pod
   activeVaultPodOnly: false
-  serviceType: "ClusterIP"
-  serviceNodePort: null
+  serviceType: "NodePort"
+  serviceNodePort: 31313
   externalPort: 8200
   targetPort: 8200
 
@@ -1083,7 +1121,7 @@ csi:
   # With the driver and provider installed, you can mount Vault secrets into volumes
   # similar to the Vault Agent injector, and you can also sync those secrets into
   # Kubernetes secrets.
-  enabled: false
+  enabled: true
 
   image:
     repository: "hashicorp/vault-csi-provider"
@@ -1093,7 +1131,15 @@ csi:
   # volumes is a list of volumes made available to all containers. These are rendered
   # via toYaml rather than pre-processed like the extraVolumes value.
   # The purpose is to make it easy to share volumes between containers.
-  volumes: null
+  volumes:
+      - name: userconfig-tls-ca
+        secret:
+          defaultMode: 420
+          secretName: tls-ca
+      - name: userconfig-tls-server-vault
+        secret:
+          defaultMode: 420
+          secretName: tls-server-vault
   # - name: tls
   #   secret:
   #     secretName: vault-tls
@@ -1101,7 +1147,13 @@ csi:
   # volumeMounts is a list of volumeMounts for the main server container. These are rendered
   # via toYaml rather than pre-processed like the extraVolumes value.
   # The purpose is to make it easy to share volumes between containers.
-  volumeMounts: null
+  volumeMounts:
+      - name: userconfig-tls-ca
+        mountPath: "/vault/userconfig/tls-ca"
+        readOnly: true
+      - name: userconfig-tls-server-vault
+        mountPath: "/vault/userconfig/tls-server-vault"
+        readOnly: true
   # - name: tls
   #   mountPath: "/vault/tls"
   #   readOnly: true
@@ -1178,7 +1230,14 @@ csi:
     logFormat: standard
     logLevel: info
 
-    resources: {}
+    resources:
+        resources:
+        requests:
+          memory: 256Mi
+          cpu: 250m
+        limits:
+          memory: 256Mi
+          cpu: 250m
     # resources:
     #   requests:
     #     memory: 256Mi
