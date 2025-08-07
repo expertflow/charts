@@ -159,7 +159,7 @@ agent-manager:
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: 4.9.3_f-CIM-29854
+        tag: 4.10_b-CRM-227
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -262,7 +262,7 @@ bot-framework:
     replicaCount: 1
     image:
         repository: cim/bot-framework
-        tag: 4.9.4_f-CIM-28240
+        tag: 4.10_b-CRM-232
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -300,7 +300,7 @@ bot-framework:
         - name: BUFFERING_ENABLED
           value: 'true'
         - name: BUFFERING_EXCLUDED_CHANNEL_NAMES
-          value: 'CX_VOICE,CISCO_CC'
+          value: 'CX_VOICE,CISCO_CC,EMAIL,YOUTUBE,LINKEDIN'
         - name: BUFFERING_EXPIRY_SECONDS
           value: '100'
     siteEnvVars: []
@@ -341,7 +341,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: 4.9.4_f-CIM-27802
+        tag: 4.10_b-CRM-232
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -417,7 +417,7 @@ cim-customer:
     enabled: true
     replicaCount: 1
     image:
-       repository: cim/cim-backend
+       repository: cim/cim-backend/build
        tag: 4.9.3_f-CIM-11686
     efConnectionVars: true
     efEnvironmentVars: false
@@ -456,7 +456,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: 4.9.4_f-CIM-28240
+        tag: 4.9.5_b-CRM-231
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -610,7 +610,7 @@ conversation-monitor:
     replicaCount: 1
     image:
         repository: cim/conversation-monitor
-        tag: 4.9.4_f-CIM-27802
+        tag: 4.10_b-CRM-232
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -690,7 +690,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: 4.10_f-CIM-29994
+        tag: 4.10_b-CIM-29994
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -759,7 +759,7 @@ file-engine:
     replicaCount: 1
     image:
         repository: chat-solution/file-engine
-        tag: 4.9.3_f-CIM-29662
+        tag: 4.10_b-CRM-232
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -784,7 +784,7 @@ file-engine:
         - name: ACCESSKEY
           value: "minioadmin"
         - name: ALLOWEDFILETYPES
-          value: "png,jpeg,jpg,pdf,ppt,doc,docx,xls,xlsx,txt,svg,pptx,css,oga,mpga,webp,mp3,mp4,gif"
+          value: "png,jpeg,jpg,pdf,ppt,doc,docx,xls,xlsx,txt,svg,pptx,css,oga,mpga,webp,mp3,mp4,gif,csv"
         - name: BLOCK_UNKNOWN_FILES
           value: "false"
         - name: BUCKETNAME
@@ -897,7 +897,7 @@ license-manager:
     replicaCount: 1
     image:
         repository: license-mangement/license-manager
-        tag: 4.9.2_f-CXIM-482
+        tag: 4.10_f-CRM-224
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -952,7 +952,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: 4.9.4_f-OPS-491
+        tag: 4.10_b-CRM-221
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1012,7 +1012,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: 4.9.4_f-CIM-27802
+        tag: 4.10_b-CRM-232
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1228,7 +1228,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: 4.9.3_f-CIM-29854
+        tag: 4.10-b-CRM-190
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1341,7 +1341,7 @@ web-channel-manager:
     replicaCount: 1
     image:
         repository: cim/web-channel-manager
-        tag: 4.9.3_b-CIM-29666
+        tag: 4.9.3_f-CIM-29662
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1464,7 +1464,7 @@ conversation-studio:
   replicaCount: 1
   image:
     repository: cim/workflow-builder/conversation-controller/build
-    tag: 4.9.4_f-CIM-28240
+    tag: 4.9.5_f-CIM-30576
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -1473,14 +1473,16 @@ conversation-studio:
   extraEnvVars:
     - name: CONVERSATION_MANAGER_INTERNAL_URL
       value: "http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
-    - name:  CCM_PUBLIC_URL
-      value: "https://{{ .Values.global.ingressRouter  }}/ccm"
+    - name: CCM_INTERNAL_URL
+      value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+    - name: CONVERSATION_STUDIO_PROXY
+      value: "https://{{ .Values.global.ingressRouter  }}/conversation-studio"
     - name: UNIFIED_ADMIN_URL
       value: "https://{{ .Values.global.ingressRouter  }}/unified-admin"
     - name: KEYCLOAK_TEAM_TYPE
       value: CX
     - name: TRACKER_EXPIRY_SECONDS
-      value: "60"
+      value: "86400"
   siteEnvVars: []
   configKeys: []
   service:
