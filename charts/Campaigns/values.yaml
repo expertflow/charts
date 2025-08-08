@@ -68,7 +68,7 @@ clusterDomain: cluster.local
 campaigns-backend:
    enabled: true
    image:       
-      repository: cim/campaigns/build
+      repository: cim/campaigns
       tag: 4.10
    efConnectionVars: true
    efEnvironmentVars: false
@@ -118,7 +118,7 @@ campaigns-backend:
 campaign-studio:
    enabled: true
    image:       
-      repository: cim/conversation-studio/build
+      repository: cim/conversation-studio
       tag: 4.10
    efConnectionVars: false
    efEnvironmentVars: false
