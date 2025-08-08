@@ -84,7 +84,7 @@ diagnosticMode:
 image:
   registry: gitimages.expertflow.com
   repository: cim/cx-data-platform 
-  tag: 4.9.3
+  tag: 4.10
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -168,7 +168,8 @@ extraEnvVars:
     value: "mysql+pymysql://user:Expertflow123@192.168.2.202:3306/hold_db"
     ## For SSL enabled target databases, use the following connection string, make sure to copy the certs in the respective directory
     # value: "mysql+pymysql://user:Expertflow123@192.168.2.202:3306/hold_db?ssl_ca=/transflux/certificates/mysql_certs/ca.pem&ssl_cert=/transflux/certificates/mysql_certs/client-cert.pem&ssl_key=/transflux/certificates/mysql_certs/client-key.pem&ssl_verify_cert=false"
-
+siteEnvVars: []
+configKeys: []
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
 extraEnvVarsCM: ""

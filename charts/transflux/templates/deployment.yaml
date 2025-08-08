@@ -94,8 +94,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
-          {{- if .Values.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- include "ef.helpers.mergedEnvVars" (dict "context" $ "defaultList" .Values.extraEnvVars "overrideList" .Values.siteEnvVars) | nindent 12 }}
+          {{- if .Values.configKeys }}
+             {{- include "common.tplvalues.render" (dict "value" .Values.configKeys "context" $) | nindent 14 }}
           {{- end }}
           envFrom:
           {{- if .Values.extraEnvVarsCM }}
