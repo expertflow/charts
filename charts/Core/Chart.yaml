@@ -75,6 +75,14 @@ dependencies:
     version: 1.0.14
     condition: business-calendar.enabled
     repository: file://charts/business-calendar
+  - name: cx-load-hub
+    version: 1.0.14
+    condition: cx-load-hub.enabled
+    repository: file://charts/cx-load-hub
+  - name: conversation-studio
+    version: 1.0.0
+    condition: conversation-studio.enabled
+    repository: file://charts/conversation-studio
 # A chart can be either an 'application' or a 'debug' chart.
 
 # Application charts are a collection of templates that can be packaged into versioned archives
@@ -88,13 +96,13 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 4.9.4
+version: 4.10.0
 #  
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion:  4.9.0
+appVersion:  4.10.0
 maintainers:
    - name: NMR Nasir Mehmood Rajput
      email: nasir.mehmood@expertflow.com

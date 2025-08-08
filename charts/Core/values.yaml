@@ -19,7 +19,7 @@
 
 
 global:
-  ingressRouter: "devops.ef.com"
+  ingressRouter: "devops234.ef.com"
   ingressCertName: "ef-ingress-tls-secret"
   ingressClassName: "nginx"
   commonIngressAnnotations: {}
@@ -50,40 +50,6 @@ global:
   efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
   efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
   efCommonVars_MEMORY_THRESHOLD_MBS: 1000
-  apisixInternalServiceHostname: "apisix-data-plane.ef-external.svc.cluster.local" # From your 'kubectl get svc -n ef-external'
-  apisixInternalServicePort: 80 # Default HTTP port for APISIX gateway service
-  apisix:
-    # --- Default Keycloak OIDC Config ---
-    # Used IF a route has plugins.enableAuth = true
-    keycloak:
-      discoveryUrl: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration" # Internal URL
-      realm: "expertflow"
-      clientId: "cim"
-      # !! IMPORTANT: Use Helm secrets or external secret management for clientSecret !!
-      clientSecret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-      # Default behavior settings
-      bearerOnly: true
-      tokenSigningAlg: "RS256"
-      setAccessTokenHeader: false # Don't pass token header to backend
-      setUserInfoHeader: false    # Don't pass userinfo header to backend
-      # Default Audience/Scopes (OVERRIDE PER ROUTE if needed)
-      defaultAudience: ["cim", "account", "realm-management"]
-      defaultScopes: ["email", "profile"]
-
-    # --- Default Plugin Settings ---
-    plugins:
-      cors:
-        enabled: false # Default CORS disabled unless enabled per route
-        allowOrigins: "*"
-        allowMethods: "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-        allowCredentials: true
-      rewrite:
-        stripPrefix: true # Default rewrite action
-
-
-
-
-
 # Change the below given paragraph when deploying an offline solution to pick the images from 
 #  -- Local Repo running inside the Kubernetes Engine
 #  -- Customer's own Repo requiring all images to be sorted locally 
@@ -113,21 +79,24 @@ imageCredentials:
 ##
 ## @param: efConnectionVars -- All common connection variables evaluated as template
 efConnectionVars:
-    ACTIVEMQ_KEY_STORE_PASSWORD: ""
-    ACTIVEMQ_KEY_STORE_PATH: ""
+    ACTIVEMQ_KEY_STORE_PASSWORD: "Expertflow123"
+    ACTIVEMQ_KEY_STORE_PATH: "activemq_keystore.p12"
     ACTIVEMQ_MAX_RECONNECT_ATTEMPTS: "-1"
-    ACTIVEMQ_OPEN_WIRE_PORT: "61616"
-    ACTIVEMQ_PASSWORD: password
+    ACTIVEMQ_OPEN_WIRE_PORT: "61617"
+    ACTIVEMQ_PASSWORD: "RXhwZXJ0ZmxvdzQ2NA"
     ACTIVEMQ_PRIMARY_URL: activemq.ef-external.svc
     ACTIVEMQ_PRIORITY_BACKUP: "true"
     ACTIVEMQ_RANDOMIZE: "false"
     ACTIVEMQ_SECONDARY_URL: activemq.ef-external.svc
-    ACTIVEMQ_STOMP_PORT: "61613"
+    ACTIVEMQ_STOMP_PORT: "61615"
     ACTIVEMQ_TIMEOUT: "5000"
-    ACTIVEMQ_TRANSPORT: tcp
-    ACTIVEMQ_TRUST_STORE_PASSWORD: ""
-    ACTIVEMQ_TRUST_STORE_PATH: ""
-    ACTIVEMQ_USERNAME: admin
+    ACTIVEMQ_TRANSPORT: ssl
+    ACTIVEMQ_TRUST_STORE_PASSWORD: "Expertflow123"
+    ACTIVEMQ_TRUST_STORE_PATH: "activemq_truststore.p12"
+    ACTIVEMQ_USERNAME: "admin"
+    ACTIVEMQ_CLIENT_CERT: /activemq/tls.crt
+    ACTIVEMQ_CLIENT_KEY: /activemq/tls.key
+    ACTIVEMQ_CA_CERT: /activemq/ca.crt
     KEYCLOAK_BEARER_ONLY: "true"
     KEYCLOAK_CLIENT_DB_ID: ef61df80-061c-4c29-b9ac-387e6bf67052
     KEYCLOAK_CLIENT_ID: cim
@@ -178,7 +147,10 @@ efConnectionVars:
     REDIS_SENTINEL_MASTER: expertflow
     REDIS_SENTINEL_NODES: redis-ha-node-0.redis-ha-headless.ef-external.svc.cluster.local:26379,redis-ha-node-1.redis-ha-headless.ef-external.svc.cluster.local:26379,redis-ha-node-2.redis-ha-headless.ef-external.svc.cluster.local:26379
     REDIS_SENTINEL_PASSWORD: Expertflow123
-
+    VAULT_URI: https://vault.vault.svc.cluster.local:8200
+    VAULT_CLIENT_CERT: /tls-server-client/tls.crt
+    VAULT_CLIENT_KEY: /tls-server-client/tls.key
+    VAULT_CA_CERT: /tls-ca/tls.crt
 
 
 ##############################agent-manager##############################
@@ -187,7 +159,7 @@ agent-manager:
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: 4.9.4
+        tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -250,153 +222,14 @@ agent-manager:
           value: "25000"
         - name: SOCKET_PING_TIMEOUT
           value: "20000"
+    siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 3000
         portName: "http-ag-ma-3000"
         targetPort: "http-ag-ma-3000"
     ingress: { enabled: false }
-    apisixRoutes:
-      # Route 1: Login Exclusion
-      - nameSuffix: "login-unsecured"
-        enabled: true
-        priority: 10
-        paths: ["/agent-manager/agent/login"]
-        backendServicePort: 3000
-        plugins:
-          enableAuth: false
-          enableRewrite: true
-          rewriteStripPrefix: false
-          rewriteRegexUriFrom: "^/agent-manager/agent/login$"
-          rewriteRegexUriTo: "/agent/login"
-      # Route 2: Socket.IO Exclusion
-      - nameSuffix: "socketio-unsecured"
-        enabled: true
-        priority: 10
-        paths: ["/agent-manager/socket.io/*"]
-        backendServicePort: 3000
-        enableWebsocket: true
-        websocketTimeout: { connect: "5s", send: "3600s", read: "3600s" }
-        plugins:
-          enableAuth: false
-          enableRewrite: true
-          rewriteStripPrefix: false
-          rewriteRegexUriFrom: "^/agent-manager/(socket\\.io/.*)"
-          rewriteRegexUriTo: "/$1"
-      # New Route 4: Send SMS OTP (Unsecured)
-      - nameSuffix: "send-sms-otp-unsecured"
-        enabled: true
-        priority: 10 # Same high priority as other unsecured paths
-        paths: ["/agent-manager/agent/send-sms-otp*"]
-        backendServicePort: 3000
-        plugins:
-          enableAuth: false
-          enableRewrite: true
-          rewriteStripPrefix: false # Use custom rewrite
-          rewriteRegexUriFrom: "^/agent-manager(/agent/send-sms-otp.*)$" # Capture /agent/send-sms-otp...
-          rewriteRegexUriTo: "$1"
-  
-      # New Route 5: Register Phone (Unsecured)
-      - nameSuffix: "register-phone-unsecured"
-        enabled: true
-        priority: 10 # Same high priority
-        paths: ["/agent-manager/agent/register-phone*"]
-        backendServicePort: 3000
-        plugins:
-          enableAuth: false
-          enableRewrite: true
-          rewriteStripPrefix: false # Use custom rewrite
-          rewriteRegexUriFrom: "^/agent-manager(/agent/register-phone.*)$" # Capture /agent/register-phone...
-          rewriteRegexUriTo: "$1"
-      # New Route 6: Validate OTP (Unsecured)
-      - nameSuffix: "validate-otp-unsecured"
-        enabled: true
-        priority: 10 # Same high priority
-        paths: ["/agent-manager/agent/validate-otp*"]
-        backendServicePort: 3000
-        plugins:
-          enableAuth: false
-          enableRewrite: true
-          rewriteStripPrefix: false # Use custom rewrite
-          rewriteRegexUriFrom: "^/agent-manager(/agent/validate-otp.*)$" # Capture /agent/validate-otp...
-          rewriteRegexUriTo: "$1"
-      # Route 3: Main Secured Route
-      - nameSuffix: "secured"
-        enabled: true
-        priority: 0
-        paths: ["/agent-manager/*"]
-        backendServicePort: 3000
-        plugins:
-          enableAuth: false
-          enableRewrite: true # Uses default stripPrefix
-          customPlugins:
-            - name: limit-count # Example 1: Rate Limiting
-              enable: false
-              config:
-                count: 2000
-                time_window: 60
-                key_type: var
-                key: remote_addr
-                rejected_code: 429
-            - name: ip-restriction # Example 2: IP Whitelisting
-              enable: false
-              config:
-                whitelist:
-                  - "192.168.1.0/24"
-                  - "127.0.0.1"
-            - name: response-rewrite # Example 3: Add response header
-              enable: false
-              config:
-                headers:
-                  set:
-                    X-Handled-By: AgentManager-Route
-            # --- START: Added client-control plugin ---
-            - name: client-control
-              enable: false
-              config:
-                max_body_size: 8388608  # Set max request body size to 8 Megabytes
-            # --- END: Added client-control plugin ---
-            - name: "error-page-rewrite"
-              enable: false
-              config:
-                # For each status code you want to override:
-                body: | # Default body if no specific status code matches below
-                  <!DOCTYPE html><html><head><title>Error</title></head><body><h1>An Unexpected Error Occurred</h1><p>Please try again later. Request ID: $request_id</p></body></html>
-                status_codes:
-                  # For a 500 error, redirect to an internal error page service
-                  - 500
-                  # For a 502 error, provide custom content directly
-                  - 502
-                  # For a 503 error, redirect to a different page
-                  - 503
-                # Define what to do for each status code
-                # This is an array of rewrite rules. APISIX will pick the first one that matches.
-                # You can serve content directly or redirect to an error page service.
-                rewrites:
-                  # Rule for 500 errors
-                  - status_code: 500
-                    # Option 1: Redirect to a full HTML page served by another internal service
-                    # This service (e.g., 'error-pages-svc') would serve /error_pages/500.html
-                    # target_uri: "/_internal_error_page_handler" # Path to an internal APISIX route
-                    # target_host: "error-pages-svc.your-namespace.svc" # K8s service for error pages
-                    # target_scheme: "http"
-                    # OR Option 2: Provide the body directly (can be limited in complexity)
-                    body: "<!DOCTYPE html><html><head><title>Internal Server Error</title></head><body><h1>500 - Internal Server Error</h1><p>We are experiencing technical difficulties. Please try again later. Request ID: $request_id</p></body></html>"
-                    headers:
-                      Content-Type: "text/html; charset=utf-8"
-                  # Rule for 502 errors
-                  - status_code: 502
-                    body: "<!DOCTYPE html><html><head><title>Bad Gateway</title></head><body><h1>502 - Bad Gateway</h1><p>The server received an invalid response from an upstream server. Request ID: $request_id</p></body></html>"
-                    headers:
-                      Content-Type: "text/html; charset=utf-8"
-                  # Rule for 503 errors - redirect to a static maintenance page
-                  # - status_code: 503
-                  #   target_uri: "https://status.example.com/maintenance.html" # External redirect
-                  #   is_redirect: true
-  
-          # ######################################################## #
-          # END: Added customPlugins section                         #
-          # ######################################################## #
     extraVolumes:
         - name: mongo-mongodb-ca
           secret:
@@ -407,6 +240,9 @@ agent-manager:
         - name: sensitive-config
           configMap:
             name: ef-node-logback-cm
+        - name: activemq-tls
+          secret:
+            secretName: activemq-tls
     extraVolumeMounts:
         - name: redis-crt
           mountPath: /redis
@@ -415,6 +251,8 @@ agent-manager:
         - name: sensitive-config
           mountPath: /sensitive.js
           subPath: sensitive.js
+        - name: activemq-tls
+          mountPath: /activemq
 
 
 
@@ -424,7 +262,7 @@ bot-framework:
     replicaCount: 1
     image:
         repository: cim/bot-framework
-        tag: 4.9.4
+        tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -459,20 +297,20 @@ bot-framework:
           value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
         - name: TOPIC_CONCURRENCY_MAX
           value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
+        - name: BUFFERING_ENABLED
+          value: 'true'
+        - name: BUFFERING_EXCLUDED_CHANNEL_NAMES
+          value: 'CX_VOICE,CISCO_CC,EMAIL,YOUTUBE,LINKEDIN'
+        - name: BUFFERING_EXPIRY_SECONDS
+          value: '100'
+    siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8082
         portName: "http-bot-f-8082"
         targetPort: "http-bot-f-8082"
     ingress: { enabled: false }
-    apisixRoutes:
-      - nameSuffix: "main"
-        enabled: true
-        paths: ["/bot-framework/*"]
-        backendServicePort: 8082
-        plugins:
-          enableAuth: false
-          enableRewrite: true # Uses default stripPrefix
     extraVolumes:
         - name: mongo-mongodb-ca
           secret:
@@ -483,6 +321,9 @@ bot-framework:
         - name: ef-logback
           configMap:
               name: ef-logback-cm
+        - name: activemq-tls
+          secret:
+            secretName: activemq-tls
     extraVolumeMounts:
         - name: redis-crt
           mountPath: /redis
@@ -490,6 +331,8 @@ bot-framework:
           mountPath: /mongo
         - name: ef-logback
           mountPath: /logback
+        - name: activemq-tls
+          mountPath: /activemq
 
 
 ##############################ccm##############################
@@ -498,7 +341,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: 4.9.4
+        tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -537,93 +380,14 @@ ccm:
           value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
         - name: TOMCAT_MAX_THREADS
           value: "1000"
+    siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8081
         portName: "http-ccm-8081"
         targetPort: "http-ccm-8081"
     ingress: { enabled: false }
-    apisixRoutes:
-      # Route 1: Agents Exclusion
-      - nameSuffix: "agents-unsecured"
-        enabled: true
-        priority: 10
-        paths: ["/ccm/agents/*"] # Path from verified YAML
-        backendServicePort: 8081
-        plugins:
-          enableAuth: false
-          enableRewrite: true
-          rewriteStripPrefix: false
-          rewriteRegexUriFrom: "^/ccm/(.*)"
-          rewriteRegexUriTo: "/$1" # Strip /ccm/
-      # Route 2: Channels Service ID Exclusion
-      - nameSuffix: "channels-svc-id-unsecured"
-        enabled: true
-        priority: 10
-        paths: ["/ccm/channels/service-identifier/*"]
-        backendServicePort: 8081
-        plugins:
-          enableAuth: false
-          enableRewrite: true
-          rewriteStripPrefix: false
-          rewriteRegexUriFrom: "^/ccm/(.*)"
-          rewriteRegexUriTo: "/$1" # Strip /ccm/
-      # Route 3: Widget Configs Exclusion
-      - nameSuffix: "widget-configs-unsecured"
-        enabled: true
-        priority: 10
-        paths: ["/ccm/widget-configs/*"]
-        backendServicePort: 8081
-        plugins:
-          enableAuth: false
-          enableRewrite: true
-          rewriteStripPrefix: false
-          rewriteRegexUriFrom: "^/ccm/(.*)"
-          rewriteRegexUriTo: "/$1" # Strip /ccm/
-      # Route 4: Main Secured Route
-      - nameSuffix: "main-secured"
-        enabled: true
-        priority: 0
-        paths: ["/ccm/*"]
-        backendServicePort: 8081
-        plugins:
-          enableAuth: false # Enable Auth
-          enableRewrite: true # Uses default stripPrefix
-      # Route 5: Internal route for web-channel-manager to ccm
-      - nameSuffix: "internal-wcm-access"
-        enabled: true
-        priority: 20
-        hosts:
-          # This string will be processed by `tpl` (via common.tplvalues.render) in the template
-          - "{{  .Values.global.apisixInternalServiceHostname  }}"
-        paths:
-          - "/internal-wcm-to-ccm/*"
-        #backendServiceName: "ef-cx-ccm-svc" # Adjust if your naming differs
-        backendServicePort: 8081
-        #backendNamespace: "expertflow" # Assuming ccm service is in expertflow namespace
-        plugins:
-          enableAuth: false
-          enableRewrite: true
-          rewriteStripPrefix: false
-          rewriteRegexUriFrom: "^/internal-wcm-to-ccm/(.*)"
-          rewriteRegexUriTo: "/$1"
-          enableCors: false
-          customPlugins:
-            - name: "real-ip"
-              enable: true
-              config:
-                source: "X-Forwarded-For"
-                trusted_addresses: ["10.42.0.0/16"] # Replace with your K8s Pod CIDR
-            - name: "limit-count"
-              enable: true
-              config:
-                count: 10
-                time_window: 1
-                key_type: "var"
-                key: "remote_addr"
-                rejected_code: 429
-                rejected_msg: "{\"error\":\"Internal rate limit exceeded .\"}"
-                show_limit_quota_header: true
     extraVolumes:
         - name: mongo-mongodb-ca
           secret:
@@ -634,6 +398,9 @@ ccm:
         - name: ef-logback
           configMap:
               name: ef-logback-cm
+        - name: activemq-tls
+          secret:
+            secretName: activemq-tls
     extraVolumeMounts:
         - name: redis-crt
           mountPath: /redis
@@ -641,6 +408,8 @@ ccm:
           mountPath: /mongo
         - name: ef-logback
           mountPath: /logback
+        - name: activemq-tls
+          mountPath: /activemq
 
 
 ##############################cim-customer##############################
@@ -649,7 +418,7 @@ cim-customer:
     replicaCount: 1
     image:
        repository: cim/cim-backend
-       tag: 4.9.3
+       tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -664,20 +433,14 @@ cim-customer:
          value: "8080"
        - name: MONGODB_DATABASE
          value: "cim_customer"
+    siteEnvVars: []
+    configKeys: []
     service:
        enabled: true
        port: 8080
        portName: "http-ci-cu-8080"
        targetPort: "http-ci-cu-8080"
     ingress: { enabled: false }
-    apisixRoutes:
-        - nameSuffix: "main"
-          enabled: true
-          paths: [ "/cim-customer/*" ]
-          backendServicePort: 8080
-          plugins:
-            enableAuth: false
-            enableRewrite: true # Uses default stripPrefix
     extraVolumes:
        - name: mongo-mongodb-ca
          secret:
@@ -693,7 +456,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: 4.9.4
+        tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -728,7 +491,7 @@ conversation-manager:
         - name: BOT_FRAMEWORK_URL
           value: "http://{{ .Release.Name }}-bot-framework-svc.{{ .Release.Namespace }}.svc:8082"
         - name: CONTROLLER_URL
-          value: "http://localhost:5000"
+          value: "http://{{ .Release.Name }}-conversation-studio-svc.{{ .Release.Namespace }}.svc:1880"
         - name: UNIFIED_ADMIN_URL
           value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
         - name: CCM_URL
@@ -745,6 +508,36 @@ conversation-manager:
           value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
         - name: TOPIC_CONCURRENCY_MAX
           value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
+        - name: ENABLE_ENCRYPTION
+          value: "false"
+        - name: ENCRYPTION_SCHEMA_PATH
+          value: "file:/encryption/encryption-schema.json"
+        - name: GRAPHQL_SCHEMAS_PATH
+          value: /app/schemas/*
+        - name: GRAPHQL_MONGODB_RULES_PATH
+          value: /app/graphql-mongodb-rules.json
+    siteEnvVars: []
+    configKeys:
+        - name: VAULT_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: ROLE_ID
+        - name: VAULT_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: SECRET_ID
+        - name: VAULT_TRANSIT_PATH
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_PATH
+        - name: VAULT_TRANSIT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_KEY
     containerPorts:
         - name: "http-co-ma-8080"
           containerPort: 8080
@@ -759,14 +552,6 @@ conversation-manager:
             protocol: TCP
             targetPort: "http-co-ct-5000"
     ingress: { enabled: false }
-    apisixRoutes:
-      - nameSuffix: "main"
-        enabled: true
-        paths: ["/conversation-manager/*"]
-        backendServicePort: 8080
-        plugins:
-          enableAuth: false
-          enableRewrite: true # Uses default stripPrefix
     extraVolumes:
         - name: mongo-mongodb-ca
           secret:
@@ -777,18 +562,24 @@ conversation-manager:
         - name: ef-logback
           configMap:
               name: ef-logback-cm
-        - name: ef-conversation-controller-actions
+        - name: tls-ca
+          secret:
+            secretName: tls-ca
+        - name: tls-server-client
+          secret:
+            secretName: tls-server-client
+        - name: conversation-manager-encryption-schema
           configMap:
-            name: ef-conversation-controller-actions-cm
-            optional: true
-        - name: ef-conversation-controller-pycache
+            name: conversation-manager-encryption-schema
+        - name: conversation-manager-graphql-schemas
           configMap:
-            name: ef-conversation-controller-actions-pycache-cm
-            optional: true
-        - name: ef-conversation-controller-utils
+            name: conversation-manager-graphql-schemas
+        - name: conversation-manager-graphql-mongodb-rules
           configMap:
-            name: ef-conversation-controller-actions-utils-cm
-            optional: true
+            name: conversation-manager-graphql-mongodb-rules
+        - name: activemq-tls
+          secret:
+            secretName: activemq-tls
     extraVolumeMounts:
         - name: redis-crt
           mountPath: /redis
@@ -796,54 +587,21 @@ conversation-manager:
           mountPath: /mongo
         - name: ef-logback
           mountPath: /logback
-    sidecars:
-        - image: '{{ .Values.global.imageRegistry }}/cim/conversation-controller:4.7'
-          name: '{{ .Release.Name }}-conversation-controller'
-          imagePullPolicy: IfNotPresent
-          env:
-            - name: IS_WRAP_UP_ENABLED
-              value: '{{ .Values.global.efCommonVars_IS_WRAP_UP_ENABLED }}'
-            - name: WRAPUP_TIME
-              value: '{{ .Values.global.efCommonVars_WRAPUP_TIME  }}'
-            - name: DEFAULT_ROOM_NAME
-              value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_NAME }}'
-            - name: DEFAULT_ROOM_DESCRIPTION
-              value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_DESCRIPTION  }}'
-            - name: DEFAULT_ROOM_LABEL
-              value: '{{ .Values.global.efCommonVars_DEFAULT_ROOM_LABEL  }}'
-            - name: ROOM_IS_USER_ID
-              value: '{{ .Values.global.efCommonVars_ROOM_IS_USER_ID }}'
-            - name: TZ
-              value: '{{ .Values.global.efCommonVars_TZ }}'
-            - name: MASK_ATTRIBUTES_PATH
-              value: '{{ .Values.global.efCommonVars_MASK_ATTRIBUTES_PATH }}'
-            - name: LOGGING_CONFIG
-              value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
-            - name: CONVERSATION_SEARCH_WINDOW_HRS
-              value: '{{ .Values.global.efCommonVars_CONVERSATION_SEARCH_WINDOW_HRS  }}'
-            - name: PORT
-              value: "5000"
-            - name: CONVERSATION_MANAGER
-              value: http://localhost:8080
-            - name: REDIS_EXPIRY_SECONDS
-              value: "86400"
-          envFrom:
-            - configMapRef:
-                name: '{{ .Release.Name }}-efconnections-cm'
-          ports:
-            - containerPort: 5000
-              name: "http-co-ct-5000"
-          volumeMounts:
-            - name: ef-conversation-controller-actions
-              mountPath: /app/actions
-            - name: ef-conversation-controller-pycache
-              mountPath: /app/actions/__pycache__
-            - name: ef-conversation-controller-utils
-              mountPath: /app/actions/utils
-            - name: redis-crt
-              mountPath: /redis
-
-
+        - name: tls-ca
+          mountPath: /tls-ca
+        - name: tls-server-client
+          mountPath: /tls-server-client
+        - name: conversation-manager-encryption-schema
+          mountPath: /encryption
+        - name: conversation-manager-graphql-schemas
+          mountPath: /app/schemas
+          readOnly: true
+        - name: conversation-manager-graphql-mongodb-rules
+          mountPath: /app/graphql-mongodb-rules.json
+          subPath: graphql-mongodb-rules.json
+          readOnly: true
+        - name: activemq-tls
+          mountPath: /activemq
 
 
 ##############################conversation-monitor##############################
@@ -852,7 +610,7 @@ conversation-monitor:
     replicaCount: 1
     image:
         repository: cim/conversation-monitor
-        tag: 4.9.4
+        tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -893,20 +651,14 @@ conversation-monitor:
           value: "com.ef.conversationmonitor.utility.MaskingPatternLayout"
         - name: TOMCAT_MAX_THREADS
           value: "1000"
+    siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8080
         portName: "http-c-m-8080"
         targetPort: "http-c-m-8080"
     ingress: { enabled: false }
-    apisixRoutes:
-      - nameSuffix: "main"
-        enabled: true
-        paths: ["/conversation-monitor/*"]
-        backendServicePort: 8080
-        plugins:
-          enableAuth: false
-          enableRewrite: true # Uses default stripPrefix
     extraVolumes:
         - name: mongo-mongodb-ca
           secret:
@@ -917,6 +669,9 @@ conversation-monitor:
         - name: ef-logback
           configMap:
             name: ef-logback-cm
+        - name: activemq-tls
+          secret:
+            secretName: activemq-tls
     extraVolumeMounts:
         - name: redis-crt
           mountPath: /redis
@@ -924,6 +679,8 @@ conversation-monitor:
           mountPath: /mongo
         - name: ef-logback
           mountPath: /logback
+        - name: activemq-tls
+          mountPath: /activemq
 
 
 
@@ -933,7 +690,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: 4.9.3
+        tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -960,6 +717,8 @@ customer-widget:
           value: "https://{{ .Values.global.ingressRouter  }}/secure-link"
         - name: BUSINESSCALENDAR_URL
           value: "https://{{ .Values.global.ingressRouter  }}/business-calendar"
+        - name: CX_ACTIVITY
+          value: 'https://{{ .Values.global.ingressRouter  }}/conversation-manager'
         - name: CHANNEL_IDENTIFIER
           value: "phone"
         - name: ENABLE_LOGO
@@ -970,6 +729,12 @@ customer-widget:
           value: "true"
         - name: MUTE_NOTIFICATIONS
           value: "false"
+        - name: VIDEO
+          value: "false"
+        - name: IS_DIRECT_WEBRTC_CALL_ENABLED
+          value: "true"
+    siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 80
@@ -979,34 +744,6 @@ customer-widget:
         enabled: false
         ingressAssets:
             enabled: false
-    apisixRoutes:
-      # Route 1: Main path
-      - nameSuffix: "main"
-        enabled: true
-        paths: ["/customer-widget/*"]
-        backendServicePort: 80
-        plugins:
-          enableAuth: false
-          enableRewrite: true # Uses default stripPrefix
-          customPlugins:
-            - name: client-control
-              enable: true
-              config:
-                max_body_size: 6291456
-      # Route 2: Assets path
-      - nameSuffix: "assets"
-        enabled: true
-        paths: ["/widget-assets/*"]
-        backendServicePort: 80
-        plugins:
-          enableAuth: false
-          enableRewrite: false # No rewrite needed
-          enableCors: true
-          customPlugins:
-            - name: client-control
-              enable: false
-              config:
-                max_body_size: 6291456
     extraVolumes:
         - name: ef-widget-translation
           configMap:
@@ -1022,7 +759,7 @@ file-engine:
     replicaCount: 1
     image:
         repository: chat-solution/file-engine
-        tag: 4.9.3
+        tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1047,7 +784,7 @@ file-engine:
         - name: ACCESSKEY
           value: "minioadmin"
         - name: ALLOWEDFILETYPES
-          value: "png,jpeg,jpg,pdf,ppt,doc,docx,xls,xlsx,txt,svg,pptx,css,oga,mpga,webp,mp3,mp4,gif"
+          value: "png,jpeg,jpg,pdf,ppt,doc,docx,xls,xlsx,txt,svg,pptx,css,oga,mpga,webp,mp3,mp4,gif,csv"
         - name: BLOCK_UNKNOWN_FILES
           value: "false"
         - name: BUCKETNAME
@@ -1096,70 +833,22 @@ file-engine:
           value: "false"
         - name: IS_SCAN_ENABLED
           value: "true"
+    siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8080
         portName: "http-fi-m-8080"
         targetPort: "http-fi-m-8080"
     ingress: { enabled: false }
-    apisixRoutes:
-      # Route 1: Unsecured downloads for specific public SVG files
-      - nameSuffix: "public-svg-downloads"
-        enabled: false
-        priority: 10
-        paths:
-          - "/file-engine/api/downloadFileStream"
-        methods: ["GET"]
-        exprs:
-          - subject:
-              scope: Query
-              name: "filename"
-            op: RegexMatch
-            value: "^(_CISCO_CC\\.svg|_CX_VOICE\\.svg|_EMAIL\\.svg|_FACEBOOK\\.svg|_GENERIC\\.svg|_INSTAGRAM\\.svg|_LINKEDIN\\.svg|_SMS\\.svg|_TELEGRAM\\.svg|_TWITTER\\.svg|_VIBER\\.svg|_VOICEh\\.svg|_VOICE\\.svg|_WEB_RTC\\.svg|_WEB\\.svg|_WHATSAPP\\.svg|_YOUTUBE\\.svg)$"
-        backendServicePort: 8080
-        plugins:
-          enableAuth: false
-          enableRewrite: true
-          rewriteStripPrefix: false
-          rewriteRegexUriFrom: "^/file-engine/(api/downloadFileStream.*)$"
-          rewriteRegexUriTo: "/$1"
-          enableCors: true
-          corsAllowOrigins: "*"
-          corsAllowMethods: "GET, OPTIONS"
-          corsAllowCredentials: true
-          customPlugins:
-            - name: response-rewrite
-              enable: true
-              config:
-                headers:
-                  set:
-                    X-XSS-Protection: "1; mode=block"
-      - nameSuffix: "main"
-        enabled: true
-        paths: ["/file-engine/*"]
-        backendServicePort: 8080
-        plugins:
-          enableAuth: false
-          enableRewrite: true # Uses default stripPrefix
-          customPlugins:      # <<< ENSURE THIS LIST IS PRESENT AND POPULATED
-             - name: client-control
-               enable: true
-               config:
-                 max_body_size: 6291456 # 5MB in bytes
-             - name: response-rewrite
-               enable: true
-               config:
-                 headers:
-                   set:
-                     X-XSS-Protection: "1; mode=block"
-             # Note: proxy-body-size needs APISIX global config or maybe a specific plugin if available
     extraVolumes:
       - name: ef-file-engine-https-certs-vol
         secret:
-            secretName: ef-file-engine-https-certs-secret
+          secretName: ef-file-engine-https-certs-secret
     extraVolumeMounts:
       - name: ef-file-engine-https-certs-vol
         mountPath: /https
+
 
 ##############################historical-reports##############################
 historical-reports:
@@ -1167,7 +856,7 @@ historical-reports:
     replicaCount: 1
     image:
         repository: cim/historical-reports-manager
-        tag: 4.9.4
+        tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1184,20 +873,14 @@ historical-reports:
           value: "500"
         - name: MONGODB_DATABASE
           value: "conversation-manager_db"
+    siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8081
         portName: "http-hi-rp-8081"
         targetPort: "http-hi-rp-8081"
     ingress: { enabled: false }
-    apisixRoutes:
-      - nameSuffix: "main"
-        enabled: true
-        paths: ["/historical-reports/*"]
-        backendServicePort: 8081
-        plugins:
-          enableAuth: false
-          enableRewrite: true # Uses default stripPrefix
     extraVolumes:
         - name: mongo-mongodb-ca
           secret:
@@ -1214,7 +897,7 @@ license-manager:
     replicaCount: 1
     image:
         repository: license-mangement/license-manager
-        tag: 4.9.4
+        tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1241,27 +924,26 @@ license-manager:
           value: ck_5722272213436c38d46580a412dca3517d7c7321
         - name: CONSUMER_SECRET
           value: cs_6ee59aab70191e2a62863ae2c3560beaa561f6aa
+    siteEnvVars: []
+    configKeys: []
     service:
       enabled: true
       port: 8888
       portName: "http-li-ma-8888"
       targetPort: "http-li-ma-8888"
     ingress: { enabled: false }
-    apisixRoutes:
-      - nameSuffix: "main"
-        enabled: true
-        paths: ["/license-manager/*"]
-        backendServicePort: 8888
-        plugins:
-          enableAuth: false
-          enableRewrite: true # Uses default stripPrefix
     extraVolumes:
         - name: ef-postgresql-crt-vol
           secret:
             secretName: ef-postgresql-crt
+        - name: activemq-tls
+          secret:
+            secretName: activemq-tls
     extraVolumeMounts:
         - name: ef-postgresql-crt-vol
           mountPath: /postgresql
+        - name: activemq-tls
+          mountPath: /activemq
 
 
 ##############################realtime-reports##############################
@@ -1270,7 +952,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: 4.9.4
+        tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1301,27 +983,26 @@ realtime-reports:
           value:  "com.mysql.cj.jdbc.Driver"
         - name: RETRIEVE_PAST_DAY_DATA_ONLY
           value: "true"
+    siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8080
         portName: "http-re-rp-8080"
         targetPort: "http-re-rp-8080"
     ingress: { enabled: false }
-    apisixRoutes:
-      - nameSuffix: "main"
-        enabled: true
-        paths: ["/realtime-reports/*"]
-        backendServicePort: 8080
-        plugins:
-          enableAuth: false
-          enableRewrite: true # Uses default stripPrefix
     extraVolumes:
         - name: redis-crt
           secret:
             secretName: redis-crt
+        - name: activemq-tls        
+          secret:
+            secretName: activemq-tls    
     extraVolumeMounts:
         - name: redis-crt
           mountPath: /redis
+        - name: activemq-tls
+          mountPath: /activemq  
 
 
 
@@ -1331,7 +1012,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: 4.9.4
+        tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1370,20 +1051,16 @@ routing-engine:
           value: "30"
         - name: CUSTOM_THREAD_QUEUE_CAPACITY
           value: "100"
+        - name: AGENT_SEIZE_TTL
+          value: "86400"
+    siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8081
         portName: "http-ro-en-8081"
         targetPort: "http-ro-en-8081"
     ingress: { enabled: false }
-    apisixRoutes:
-      - nameSuffix: "main"
-        enabled: true
-        paths: ["/routing-engine/*"]
-        backendServicePort: 8081
-        plugins:
-          enableAuth: false
-          enableRewrite: true # Uses default stripPrefix
     extraVolumes:
         - name: mongo-mongodb-ca
           secret:
@@ -1394,6 +1071,9 @@ routing-engine:
         - name: ef-logback
           configMap:
               name: ef-logback-cm
+        - name: activemq-tls
+          secret:
+            secretName: activemq-tls
     extraVolumeMounts:
         - name: redis-crt
           mountPath: /redis
@@ -1401,6 +1081,8 @@ routing-engine:
           mountPath: /mongo
         - name: ef-logback
           mountPath: /logback
+        - name: activemq-tls
+          mountPath: /activemq
 
 
 ##############################state-events-logger##############################
@@ -1409,7 +1091,7 @@ state-events-logger:
     replicaCount: 1
     image:
         repository: cim/state-events-logger
-        tag: 4.9.4
+        tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts: []
@@ -1426,6 +1108,8 @@ state-events-logger:
           value: "5"
         - name: MAX_IDLE_CYCLES
           value: "10"
+    siteEnvVars: []
+    configKeys: []
     service:
         enabled: false
     ingress:
@@ -1434,9 +1118,14 @@ state-events-logger:
         - name: mongo-mongodb-ca
           secret:
             secretName: mongo-mongodb-ca
+        - name: activemq-tls
+          secret:
+            secretName: activemq-tls
     extraVolumeMounts:
         - name: mongo-mongodb-ca
           mountPath: /mongo
+        - name: activemq-tls
+          mountPath: /activemq
 
 
 ##############################team-announcement##############################
@@ -1445,7 +1134,7 @@ team-announcement:
     replicaCount: 1
     image:
         repository: cim/team-announcement
-        tag: 4.9.3
+        tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1472,27 +1161,26 @@ team-announcement:
           value: "info"
         - name: MONGODB_DATABASE_NAME
           value: "teamAnnouncement"
+    siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8080
         portName: "ef-team-a-8080"
         targetPort: "ef-team-a-8080"
     ingress: { enabled: false }
-    apisixRoutes:
-      - nameSuffix: "main"
-        enabled: true
-        paths: ["/team-announcement/*"]
-        backendServicePort: 8080
-        plugins:
-          enableAuth: false
-          enableRewrite: true # Uses default stripPrefix
     extraVolumes:
-        - name: mongo-mongodb-ca
-          secret:
-            secretName: mongo-mongodb-ca
+      - name: mongo-mongodb-ca
+        secret:
+          secretName: mongo-mongodb-ca
+      - name: activemq-tls
+        secret:
+          secretName: activemq-tls
     extraVolumeMounts:
-        - name: mongo-mongodb-ca
-          mountPath: /mongo
+      - name: mongo-mongodb-ca
+        mountPath: /mongo
+      - name: activemq-tls
+        mountPath: /activemq
 
 ####################### Team Annoucement CronJob Definitions ######################
     teamAnnouncementsCronJob:
@@ -1527,6 +1215,8 @@ team-announcement:
        extraEnvVars:
          - name: TZ
            value: '{{ .Values.global.efCommonVars_TZ }}'
+       siteEnvVars: []
+       configKeys: []
        resourcesPreset: "none"
        resources: {}
        extraVolumeMounts: []
@@ -1538,7 +1228,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: 4.9.3
+        tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1561,6 +1251,8 @@ unified-admin:
           value: "https://{{ .Values.global.ingressRouter  }}/ccm"
         - name: FILE_ENGINE_URL
           value: "https://{{ .Values.global.ingressRouter  }}/file-engine"
+        - name: LOAD_HUB_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/cx-load-hub"
         - name: SURVEY_NODERED_URL
           value: "https://{{ .Values.global.ingressRouter  }}/survey-studio"
         - name: SURVEY_API_URL
@@ -1603,34 +1295,22 @@ unified-admin:
           value: 'http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080'
         - name: QM_API_URL
           value: 'https://{{ .Values.global.ingressRouter  }}/qm-backend'
-        - name: KEYCLOAK_URL
-          value: 'https://{{ .Values.global.ingressRouter  }}/auth/realms'
-        - name: KEYCLOAK_URL_ADMIN
-          value: 'https://{{ .Values.global.ingressRouter  }}/auth/admin/realms'
-        - name: ADMIN_USERNAME
-          value: 'admin'
-        - name: ADMIN_PASSWORD
-          value: 'admin'
-        - name: CLIENT_ID
-          value: 'cim'
-        - name: CLIENT_SECRET
-          value: 'ef61df80-061c-4c29-b9ac-387e6bf67052'
-        - name: GRANT_TYPE
-          value: 'password'
-        - name: REALM
-          value: 'expertflow'
         - name: WRAPUP_FORM_ID
           value: '62d07f4f0980a50a91210bef'
         - name: REVIEWING_AGENT_CHAT
           value: 'false'
         - name: LICENSE_EXPIRY_WARNING_DAYS
           value: '170'
+        - name: AI_EVALUATOR_ID
+          value: ''
         - name: RSA_SERVER_URL
           value: '{{ .Values.global.efCommonVars_RSA_SERVER_URL }}'
         - name: RSA_CLIENT_KEY
           value: '{{ .Values.global.efCommonVars_RSA_CLIENT_KEY }}'
         - name: RSA_CLIENT_ID
           value: '{{ .Values.global.efCommonVars_RSA_CLIENT_ID }}'
+    siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 3000
@@ -1639,75 +1319,6 @@ unified-admin:
     ingress:
        enabled: false
        defaultIngress: false
-    apisixRoutes:
-      # Route 1: Main /unified-admin/* path
-      - nameSuffix: "main"
-        enabled: true
-        paths: ["/unified-admin","/unified-admin/*"]
-        backendServicePort: 3000
-        plugins:
-          enableAuth: false
-          enableRewrite: true
-          rewriteStripPrefix: false # Custom rewrite for slash
-          rewriteRegexUriFrom: "^/unified-admin/?(.*)"
-          rewriteRegexUriTo: "/$1"
-          enableCors: true
-          customPlugins:
-            - name: client-control
-              enable: true
-              config:
-                max_body_size: 6291456
-      # Route 2: Default /* route
-      - nameSuffix: "default"
-        enabled: true
-        priority: -10
-        paths: ["/*"]
-        backendServicePort: 3000
-        plugins:
-          enableAuth: false # No auth on default
-          enableRewrite: false # No rewrite needed
-      - nameSuffix: "default-404-handler"
-        enabled: false
-        priority: -200 # Very low priority
-        paths: ["/*"] # Catches all paths not matched by higher priority routes
-        # No backend is needed as the mocking plugin will generate the response
-        backendServicePort: 80 # Dummy, but APISIX schema might require it.
-        backendServiceName: "dummy-service" # Dummy
-        plugins:
-          enableAuth: false # Typically, 404 pages don't require auth
-          enableRewrite: false
-          enableCors: false # Or configure as needed for your 404 page
-          customPlugins:
-            - name: "mocking"
-              enable: false
-              config:
-                response_status: 404
-                response_headers:
-                  Content-Type: "text/html; charset=utf-8"
-                  X-Custom-Error-Page: "true"
-                response_example: |
-                  <!DOCTYPE html>
-                  <html lang="en">
-                  <head>
-                      <meta charset="UTF-8">
-                      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                      <title>Page Not Found</title>
-                      <style>
-                          body { font-family: Arial, sans-serif; text-align: center; padding: 50px; color: #333; }
-                          h1 { font-size: 48px; color: #555; }
-                          p { font-size: 18px; }
-                          a { color: #007bff; text-decoration: none; }
-                      </style>
-                  </head>
-                  <body>
-                      <h1>404 - Page Not Found</h1>
-                      <p>Sorry, the page you are looking for does not exist or has been moved.</p>
-                      <p><a href="/">Return to Homepage</a></p>
-                      <hr>
-                      <p><small>Request ID: $request_id</small></p>
-                      </body>
-                  </html>
-  
     extraVolumes:
         - name: mongo-mongodb-ca
           secret:
@@ -1730,7 +1341,7 @@ web-channel-manager:
     replicaCount: 1
     image:
         repository: cim/web-channel-manager
-        tag: 4.9.3
+        tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1742,7 +1353,7 @@ web-channel-manager:
         - name: TZ
           value: '{{ .Values.global.efCommonVars_TZ }}'
         - name: CCM_URL
-          value: "http://apisix-data-plane.ef-external.svc.cluster.local:80/internal-wcm-to-ccm/"
+          value: "http://apisix-gateway.ef-external.svc.cluster.local:80/internal-wcm-to-ccm/"
         - name: CUSTOMER_RECONNECT_TIME
           value: "200"
         - name: LOG_LEVEL
@@ -1755,21 +1366,14 @@ web-channel-manager:
           value: "customer"
         - name: KEYCLOAK_PASSWORD_CUSTOMER
           value: "customer"
+    siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 7000
         portName: "http-we-ch-7000"
         targetPort: "http-we-ch-7000"
     ingress: { enabled: false }
-    apisixRoutes:
-      - nameSuffix: "main"
-        enabled: true
-        paths: ["/web-channel-manager/*"]
-        backendServicePort: 7000
-        enableWebsocket: true # Enable websocket
-        plugins:
-          enableAuth: false
-          enableRewrite: true # Uses default stripPrefix
 
 
 ##############################business-calendar##############################
@@ -1778,7 +1382,7 @@ business-calendar:
     replicaCount: 1
     image:
         repository: cim/business-calendar
-        tag: 4.9.4
+        tag: 4.10
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1795,21 +1399,14 @@ business-calendar:
           value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
         - name: MASKING_LAYOUT_CLASS
           value: "com.ef.calendar.utils.MaskingPatternLayout"
+    siteEnvVars: []
+    configKeys: []
     service:
         enabled: true
         port: 8443
         portName: "http-bu-ca-8443"
         targetPort: "http-bu-ca-8443"
     ingress: { enabled: false }
-    apisixRoutes:
-      - nameSuffix: "main"
-        enabled: true
-        paths: ["/business-calendar/*"]
-        backendServicePort: 8443
-        # backendScheme: https # Add if needed
-        plugins:
-          enableAuth: false
-          enableRewrite: true # Uses default stripPrefix
     extraVolumes:
         - name: mongo-mongodb-ca
           secret:
@@ -1822,3 +1419,90 @@ business-calendar:
           mountPath: /mongo
         - name: ef-logback
           mountPath: /logback
+##############################cx-load-hub##############################
+cx-load-hub:
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: cim/cx-load-hub
+        tag: 4.10
+    efConnectionVars: true
+    efEnvironmentVars: false
+    containerPorts:
+        - name: "http-l-h-3001"
+          containerPort: 3001
+    extraEnvVars:
+        - name: LOG_LEVEL
+          value: debug
+        - name: NODE_ENV
+          value: production
+        - name: PORT
+          value: "3001"
+        - name: MONGODB_DATABASE_NAME
+          value: load-hub
+        - name: CSV_SIZE_LIMIT
+          value: "10"
+        - name: FILE_ENGINE_URL
+          value: "https://{{ .Values.global.ingressRouter  }}/file-engine"
+    service:
+        enabled: true
+        port: 8443
+        portName: "http-l-h-3001"
+        targetPort: "http-l-h-3001"
+    ingress: { enabled: false }
+    extraVolumes:
+        - name: mongo-mongodb-ca
+          secret:
+            secretName: mongo-mongodb-ca
+    extraVolumeMounts:
+        - name: mongo-mongodb-ca
+          mountPath: /mongo
+
+##############################conversation-studio##############################
+conversation-studio:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: cim/workflow-builder/conversation-controller
+    tag: 4.10
+  efConnectionVars: true
+  efEnvironmentVars: false
+  containerPorts:
+    - name: "http-co-st-1880"
+      containerPort: 1880
+  extraEnvVars:
+    - name: CONVERSATION_MANAGER_INTERNAL_URL
+      value: "http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
+    - name: CCM_INTERNAL_URL
+      value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+    - name: CONVERSATION_STUDIO_PROXY
+      value: "https://{{ .Values.global.ingressRouter  }}/conversation-studio"
+    - name: UNIFIED_ADMIN_URL
+      value: "https://{{ .Values.global.ingressRouter  }}/unified-admin"
+    - name: KEYCLOAK_TEAM_TYPE
+      value: CX
+    - name: TRACKER_EXPIRY_SECONDS
+      value: "86400"
+  siteEnvVars: []
+  configKeys: []
+  service:
+    enabled: true
+    port: 1880
+    portName: "http-co-st-1880"
+    targetPort: "http-co-st-1880"
+  ingress: { enabled: false }
+  extraVolumes:
+    - name: redis-crt
+      secret:
+        secretName: redis-crt
+    - name: mongo-mongodb-ca
+      secret:
+        secretName: mongo-mongodb-ca
+  extraVolumeMounts:
+    - name: redis-crt
+      mountPath: /redis
+    - name: mongo-mongodb-ca
+      mountPath: /mongo
+    - name: conversation-studio-flow-vol
+      mountPath: /flows
+
