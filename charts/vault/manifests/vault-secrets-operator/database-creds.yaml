@@ -1,0 +1,16 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultDynamicSecret
+metadata:
+  namespace: expertflow
+  name: database-creds
+spec:
+  vaultAuthRef: static-auth
+  mount: database
+  path: creds/expertflow-apps-role
+  destination:
+    create: true
+    name: postgres
+  rolloutRestartTargets:
+  - kind: Deployment
+    name: ef-app
+
