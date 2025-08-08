@@ -39,4 +39,4 @@ dependencies:
   repository: file://charts/linkedin-connector
   version: 1.0.14
 digest: sha256:82d0bc8c391f1a0ebf1c9004b35c7fd86050e8c8993308f049377423019477a6
-generated: "2025-07-07T15:02:31.765047+05:00"
+generated: "2025-08-08T17:46:44.927825+05:00"
