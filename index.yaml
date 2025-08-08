@@ -3,9 +3,9 @@ entries:
   activemq:
   - apiVersion: v2
     appVersion: 4.10.0
-    created: "2025-08-07T08:11:00.984514634Z"
+    created: "2025-08-08T12:36:00.167680675Z"
     description: Expertflow CX Solution ActiveMQ
-    digest: e3502180da4c1bbc6ca088c011b9395449f569d76b5ca248bcf6bc500a7928a0
+    digest: 30b83742bfba6875a4de06f256fbcf3b7b3a79bba5bce4d109a723fa25125de1
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -17,8 +17,8 @@ entries:
     name: activemq
     type: application
     urls:
-    - https://github.com/expertflow/charts/releases/download/activemq-4.10.0-rc.1/activemq-4.10.0-rc.1.tgz
-    version: 4.10.0-rc.1
+    - https://github.com/expertflow/charts/releases/download/activemq-4.10.0/activemq-4.10.0.tgz
+    version: 4.10.0
   - apiVersion: v2
     appVersion: 4.10.0
     created: "2025-07-15T06:13:32.575848289Z"
@@ -42,6 +42,24 @@ entries:
     created: "2025-07-17T10:40:11.71821721Z"
     description: Expertflow CX Solution ActiveMQ
     digest: 7b7766eb72704b632018e1acd5dee3b662b51b90f89105b16a40f79d539f642a
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: activemq
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/activemq-4.10.0-rc.1/activemq-4.10.0-rc.1.tgz
+    version: 4.10.0-rc.1
+  - apiVersion: v2
+    appVersion: 4.10.0
+    created: "2025-08-07T08:11:00.984514634Z"
+    description: Expertflow CX Solution ActiveMQ
+    digest: e3502180da4c1bbc6ca088c011b9395449f569d76b5ca248bcf6bc500a7928a0
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -9074,4 +9092,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-08-07T11:01:54.059156078Z"
+generated: "2025-08-08T12:36:00.168158134Z"
