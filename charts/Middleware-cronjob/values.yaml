@@ -39,7 +39,7 @@ middlewareCronJob:
    backoffLimit: 0
    restartPolicy: OnFailure
    imagePullSecret: ef-gitlab-secret
-   image: gitimages.expertflow.com/voice-recording-solution/recording-link-activities:4.8
+   image: gitimages.expertflow.com/voice-recording-solution/recording-link-activities:4.10
    extraEnvVars:
      - name: LOG_LEVEL
        value: DEBUG
@@ -69,6 +69,68 @@ middlewareCronJob:
        value: "Expertflow123"
      - name: CX_CONVERSATION_MANAGER
        value: "http://{{ .Values.global.efCxReleaseName }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
+   siteEnvVars: []
+   configKeys:
+     - name: MONGODB_CERTIFICATE_PATH
+       valueFrom:
+         configMapKeyRef:
+           key: MONGODB_CERTIFICATE_PATH
+           name: "{{ .Values.global.efCxReleaseName }}-efconnections-cm"
+     - name: MONGODB_AUTHENTICATION_DATABASE
+       valueFrom:
+         configMapKeyRef:
+           key: MONGODB_AUTHENTICATION_DATABASE
+           name: "{{ .Values.global.efCxReleaseName }}-efconnections-cm"
+     - name: MONGODB_ENABLE_SSL
+       valueFrom:
+         configMapKeyRef:
+           key: MONGODB_ENABLE_SSL
+           name: "{{ .Values.global.efCxReleaseName }}-efconnections-cm"
+     - name: MONGODB_HOST
+       valueFrom:
+         configMapKeyRef:
+           key: MONGODB_HOST
+           name: "{{ .Values.global.efCxReleaseName }}-efconnections-cm"
+     - name: MONGODB_PASSWORD
+       valueFrom:
+         configMapKeyRef:
+           key: MONGODB_PASSWORD
+           name: "{{ .Values.global.efCxReleaseName }}-efconnections-cm"
+     - name: MONGODB_REPLICASET
+       valueFrom:
+         configMapKeyRef:
+           key: MONGODB_REPLICASET
+           name: "{{ .Values.global.efCxReleaseName }}-efconnections-cm"
+     - name: MONGODB_READ_PREFERENCE
+       valueFrom:
+         configMapKeyRef:
+           key: MONGODB_READ_PREFERENCE
+           name: "{{ .Values.global.efCxReleaseName }}-efconnections-cm"
+     - name: MONGODB_REPLICASET_ENABLED
+       valueFrom:
+         configMapKeyRef:
+           key: MONGODB_REPLICASET_ENABLED
+           name: "{{ .Values.global.efCxReleaseName }}-efconnections-cm"
+     - name: MONGODB_USERNAME
+       valueFrom:
+         configMapKeyRef:
+           key: MONGODB_USERNAME
+           name: "{{ .Values.global.efCxReleaseName }}-efconnections-cm"
+     - name: MONGODB_USERNAME
+       valueFrom:
+         configMapKeyRef:
+           key: MONGODB_USERNAME
+           name: "{{ .Values.global.efCxReleaseName }}-efconnections-cm"
+     - name: MONGODB_CLIENT_CERT
+       valueFrom:
+         configMapKeyRef:
+           key: MONGODB_CLIENT_CERT
+           name: "{{ .Values.global.efCxReleaseName }}-efconnections-cm"
+     - name: MONGODB_CA_CERT
+       valueFrom:
+         configMapKeyRef:
+           key: MONGODB_CA_CERT
+           name: "{{ .Values.global.efCxReleaseName }}-efconnections-cm"
    resourcesPreset: "none"
    resources: {}
    extraVolumeMounts: 
