@@ -39,7 +39,7 @@ reportingConnectorCronJob:
    backoffLimit: 0
    restartPolicy: OnFailure
    imagePullSecret: ef-gitlab-secret
-   image: gitimages.expertflow.com/cim/reporting-connector:4.8
+   image: gitimages.expertflow.com/cim/reporting-connector:4.10
    extraEnvVars: []
    resourcesPreset: "none"
    resources: {}
