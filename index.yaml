@@ -8923,9 +8923,9 @@ entries:
   transflux:
   - apiVersion: v2
     appVersion: 4.10.0
-    created: "2025-08-07T11:01:54.05845207Z"
+    created: "2025-08-08T13:24:50.288968058Z"
     description: CX Data Platform
-    digest: bfd0327c599db248e8502cea761acc22fb74713550c9360e2c93678b5467593c
+    digest: c628c3106c6ed1756ab621d6ff66a7b68640ec7ed51cb6183c94fa7a638217e3
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -8937,8 +8937,8 @@ entries:
     name: transflux
     type: application
     urls:
-    - https://github.com/expertflow/charts/releases/download/transflux-4.10.0-rc.1/transflux-4.10.0-rc.1.tgz
-    version: 4.10.0-rc.1
+    - https://github.com/expertflow/charts/releases/download/transflux-4.10.0/transflux-4.10.0.tgz
+    version: 4.10.0
   - apiVersion: v2
     appVersion: 4.10.0
     created: "2025-07-17T11:10:10.100524067Z"
@@ -8980,6 +8980,24 @@ entries:
     created: "2025-08-07T08:47:25.420815432Z"
     description: CX Data Platform
     digest: 9f3fd2335935bb902962ec4cf368045a04657942da4cafedeb607f496a0c500f
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: transflux
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/transflux-4.10.0-rc.1/transflux-4.10.0-rc.1.tgz
+    version: 4.10.0-rc.1
+  - apiVersion: v2
+    appVersion: 4.10.0
+    created: "2025-08-07T11:01:54.05845207Z"
+    description: CX Data Platform
+    digest: bfd0327c599db248e8502cea761acc22fb74713550c9360e2c93678b5467593c
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -9442,4 +9460,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-08-08T13:23:31.606038665Z"
+generated: "2025-08-08T13:24:50.289465032Z"
