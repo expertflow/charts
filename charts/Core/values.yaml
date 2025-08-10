@@ -159,7 +159,7 @@ agent-manager:
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: 4.10
+        tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -262,7 +262,7 @@ bot-framework:
     replicaCount: 1
     image:
         repository: cim/bot-framework
-        tag: 4.10
+        tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -341,7 +341,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: 4.10
+        tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -418,7 +418,7 @@ cim-customer:
     replicaCount: 1
     image:
        repository: cim/cim-backend
-       tag: 4.10
+       tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -456,7 +456,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: 4.10
+        tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -610,7 +610,7 @@ conversation-monitor:
     replicaCount: 1
     image:
         repository: cim/conversation-monitor
-        tag: 4.10
+        tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -690,7 +690,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: 4.10
+        tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -759,7 +759,7 @@ file-engine:
     replicaCount: 1
     image:
         repository: chat-solution/file-engine
-        tag: 4.10
+        tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -856,7 +856,7 @@ historical-reports:
     replicaCount: 1
     image:
         repository: cim/historical-reports-manager
-        tag: 4.10
+        tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -897,7 +897,7 @@ license-manager:
     replicaCount: 1
     image:
         repository: license-mangement/license-manager
-        tag: 4.10
+        tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -952,7 +952,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: 4.10
+        tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1012,7 +1012,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: 4.10
+        tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1091,7 +1091,7 @@ state-events-logger:
     replicaCount: 1
     image:
         repository: cim/state-events-logger
-        tag: 4.10
+        tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts: []
@@ -1134,7 +1134,7 @@ team-announcement:
     replicaCount: 1
     image:
         repository: cim/team-announcement
-        tag: 4.10
+        tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1228,7 +1228,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: 4.10
+        tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1341,7 +1341,7 @@ web-channel-manager:
     replicaCount: 1
     image:
         repository: cim/web-channel-manager
-        tag: 4.10
+        tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1382,7 +1382,7 @@ business-calendar:
     replicaCount: 1
     image:
         repository: cim/business-calendar
-        tag: 4.10
+        tag: 4.9.4
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1425,7 +1425,7 @@ cx-load-hub:
     replicaCount: 1
     image:
         repository: cim/cx-load-hub
-        tag: 4.10
+        tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1464,7 +1464,7 @@ conversation-studio:
   replicaCount: 1
   image:
     repository: cim/workflow-builder/conversation-controller
-    tag: 4.10
+    tag: "4.10"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
