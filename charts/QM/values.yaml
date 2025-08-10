@@ -51,7 +51,7 @@ qm-backend:
   enabled: true
   image:
     repository: cim/qm-backend
-    tag: 4.10
+    tag: "4.10"
   efConnectionVars: false
   efEnvironmentVars: false
   containerPorts:
@@ -153,7 +153,7 @@ qm-connector:
   enabled: false
   image:
     repository: voice-recording-solution/qm-connector
-    tag: 4.10
+    tag: "4.10"
   containerPorts: []
   extraEnvVars:
     - name: RECORDING_SERVER_FQDN
