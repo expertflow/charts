@@ -117,7 +117,7 @@ efConnectionVars:
     MONGODB_AUTHENTICATION_DATABASE: admin
     MONGODB_CERTIFICATE_PATH: https_things/cert.pem
     MONGODB_ENABLE_SSL: "true"
-    MONGODB_HOST: "mongo-mongodb.ef-external.svc:27017"
+    MONGODB_HOST: "mongo-mongodb.ef-external.svc.cluster.local"
     MONGODB_READ_PREFERENCE: "secondaryPreferred"
     MONGODB_REPLICASET: "expertflow"
     MONGODB_REPLICASET_ENABLED: "false"
