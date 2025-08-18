@@ -1256,25 +1256,25 @@ apisixStandalone:
        service_id: svc-agent-manager
        status: 1
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["cim", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri: ["^/agent-manager/?(.*)", "/$1"]
@@ -1287,25 +1287,25 @@ apisixStandalone:
        service_id: svc-bot-framework
        status: 1
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["cim", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri: ["^/bot-framework/?(.*)", "/$1"]
@@ -1358,25 +1358,25 @@ apisixStandalone:
        service_id: svc-ccm
        status: 1
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["cim", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri: ["^/ccm/?(.*)", "/$1"]
@@ -1412,25 +1412,25 @@ apisixStandalone:
        service_id: svc-cim-customer
        status: 1
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["cim", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri: ["^/cim-customer/?(.*)", "/$1"]
@@ -1443,25 +1443,25 @@ apisixStandalone:
        service_id: svc-conversation-manager
        status: 1
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["cim", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri: ["^/conversation-manager/?(.*)", "/$1"]
@@ -1474,25 +1474,25 @@ apisixStandalone:
        service_id: svc-conversation-monitor
        status: 1
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["cim", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri: ["^/conversation-monitor/?(.*)", "/$1"]
@@ -1554,25 +1554,25 @@ apisixStandalone:
        service_id: svc-file-engine
        status: 1
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["cim", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri: ["^/file-engine/?(.*)", "/$1"]
@@ -1592,25 +1592,25 @@ apisixStandalone:
        service_id: svc-historical-reports
        status: 1
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["cim", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri: ["^/historical-reports/?(.*)", "/$1"]
@@ -1623,25 +1623,25 @@ apisixStandalone:
        service_id: svc-license-manager
        status: 1
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["cim", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri: ["^/license-manager/?(.*)", "/$1"]
@@ -1666,25 +1666,25 @@ apisixStandalone:
        service_id: svc-routing-engine
        status: 1
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["cim", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri: ["^/routing-engine/?(.*)", "/$1"]
@@ -1697,25 +1697,25 @@ apisixStandalone:
        service_id: svc-team-announcement
        status: 1
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["cim", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri: ["^/team-announcement/?(.*)", "/$1"]
@@ -1789,25 +1789,25 @@ apisixStandalone:
        service_id: svc-unified-admin
        status: 1
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["cim", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri: ["^/unified-admin/(.*)", "/$1"]
@@ -1948,25 +1948,25 @@ apisixStandalone:
        service_id: svc-business-calendar
        status: 1
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["cim", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri: ["^/business-calendar/?(.*)", "/$1"]
@@ -2036,25 +2036,25 @@ apisixStandalone:
        service_id: svc-campaigns-backend
        status: 1
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["cim", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri: ["^/campaigns/?(.*)", "/$1"]
@@ -2097,25 +2097,25 @@ apisixStandalone:
        service_id: svc-scheduled-activities
        status: 1
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["cim", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri: ["^/scheduler/?(.*)", "/$1"]
@@ -2282,25 +2282,25 @@ apisixStandalone:
        service_id: svc-survey-backend
        status: 1
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["cim", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri: ["^/survey-backend/?(.*)", "/$1"]
@@ -2353,25 +2353,25 @@ apisixStandalone:
        status: 1
        plugins:
          # strip /qm-backend prefix  →  /$2
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: [ "cim", "account", "realm-management" ]
-           required_scopes: [ "email", "profile" ]
-           authz-keycloak:
-             lazy_load_paths: true
-             http_method_as_scope: true
-             resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-             discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-             client_id: "cim"
-             client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: [ "cim", "account", "realm-management" ]
+#           required_scopes: [ "email", "profile" ]
+#           authz-keycloak:
+#             lazy_load_paths: true
+#             http_method_as_scope: true
+#             resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#             discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#             client_id: "cim"
+#             client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
 
          proxy-rewrite:
            enable: true
@@ -2399,25 +2399,25 @@ apisixStandalone:
          send: 43200          # 12 h
          read: 43200
        plugins:
-         openid-connect:
-           enable: true # Corrected: Disabled by default
-           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
-           realm: "expertflow"
-           client_id: "cim"
-           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: [ "cim", "account", "realm-management" ]
-           required_scopes: [ "email", "profile" ]
-           authz-keycloak:
-             lazy_load_paths: true
-             http_method_as_scope: true
-             resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-             discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
-             client_id: "cim"
-             client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#         openid-connect:
+#           enable: true # Corrected: Disabled by default
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
+#           realm: "expertflow"
+#           client_id: "cim"
+#           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: [ "cim", "account", "realm-management" ]
+#           required_scopes: [ "email", "profile" ]
+#           authz-keycloak:
+#             lazy_load_paths: true
+#             http_method_as_scope: true
+#             resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
+#             discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
+#             client_id: "cim"
+#             client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
            enable: true
            regex_uri:
