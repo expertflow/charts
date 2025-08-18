@@ -69,7 +69,7 @@ campaigns-backend:
    enabled: true
    image:       
       repository: cim/campaigns
-      tag: "4.10"
+      tag: "4.10.1"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -96,6 +96,8 @@ campaigns-backend:
         value: http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081
       - name: SCHEDULER_URL
         value: http://{{ .Release.Name }}-scheduled-activities-svc.{{ .Release.Namespace }}.svc:8894
+      - name: IS_NODERED_AUTH_REQUIRED
+        value: "true"
    siteEnvVars: []
    configKeys: []
    service:
@@ -119,8 +121,8 @@ campaign-studio:
    enabled: true
    image:       
       repository: cim/conversation-studio
-      tag: "4.10"
-   efConnectionVars: false
+      tag: "4.10.1"
+   efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "http-sb-1880"
@@ -155,6 +157,10 @@ campaign-studio:
       - name: ALLOW_CISCO_SELF_SIGNED_CERTS
         value: "true"
       - name: CISCO_PROXY
+        value: 'https://{{ .Values.global.ingressRouter }}/campaign-studio'
+      - name: CCM_URL
+        value: http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081
+      - name: EFCX_PROXY
         value: 'https://{{ .Values.global.ingressRouter }}/campaign-studio'
    siteEnvVars: []
    configKeys: []
