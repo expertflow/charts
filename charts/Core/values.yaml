@@ -418,7 +418,7 @@ cim-customer:
     replicaCount: 1
     image:
        repository: cim/cim-backend
-       tag: "4.10.1"
+       tag: "4.10"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1016,7 +1016,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: "4.10"
+        tag: "4.10.1"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
