@@ -19,7 +19,7 @@
 
 
 global:
-  ingressRouter: "devops234.ef.com"
+  ingressRouter: "devops.ef.com"
   ingressCertName: "ef-ingress-tls-secret"
   ingressClassName: "nginx"
   commonIngressAnnotations: {}
@@ -341,7 +341,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: "4.10"
+        tag: "4.10.1"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -418,7 +418,7 @@ cim-customer:
     replicaCount: 1
     image:
        repository: cim/cim-backend
-       tag: "4.10"
+       tag: "4.10.1"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -690,7 +690,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: "4.10"
+        tag: "4.10.1"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -732,6 +732,10 @@ customer-widget:
         - name: VIDEO
           value: "false"
         - name: IS_DIRECT_WEBRTC_CALL_ENABLED
+          value: "true"
+        - name: ENABLE_TRANSCRIPT_NOTIFICATIONS
+          value: "true"
+        - name: AUTO_RESUME_ON_NEW_TAB
           value: "true"
     siteEnvVars: []
     configKeys: []
@@ -952,7 +956,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: "4.10"
+        tag: "4.10.1"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -995,14 +999,14 @@ realtime-reports:
         - name: redis-crt
           secret:
             secretName: redis-crt
-        - name: activemq-tls        
+        - name: activemq-tls
           secret:
-            secretName: activemq-tls    
+            secretName: activemq-tls
     extraVolumeMounts:
         - name: redis-crt
           mountPath: /redis
         - name: activemq-tls
-          mountPath: /activemq  
+          mountPath: /activemq
 
 
 
@@ -1228,7 +1232,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: "4.10"
+        tag: "4.10.1"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1341,7 +1345,7 @@ web-channel-manager:
     replicaCount: 1
     image:
         repository: cim/web-channel-manager
-        tag: "4.10"
+        tag: "4.10.1"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1366,6 +1370,8 @@ web-channel-manager:
           value: "customer"
         - name: KEYCLOAK_PASSWORD_CUSTOMER
           value: "customer"
+        - name: CM_URL
+          value: "http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
     siteEnvVars: []
     configKeys: []
     service:
@@ -1443,7 +1449,7 @@ cx-load-hub:
         - name: CSV_SIZE_LIMIT
           value: "10"
         - name: FILE_ENGINE_URL
-          value: "https://{{ .Values.global.ingressRouter  }}/file-engine"
+          value: "http://{{ .Release.Name }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
     service:
         enabled: true
         port: 8443
