@@ -159,7 +159,7 @@ extraEnvVars:
     - name: GROUP
       value: default
     - name: EF_SERVER_URL
-      value: "https://{{ .Values.global.ingressRouter }}/unified-admin/"
+      value: "http://{{ .Values.global.efCxReleaseName }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000/"
     - name: FINESSE_USERNAME
       value: administrator
     - name: FINESSE_PASSWORD
