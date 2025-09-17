@@ -978,7 +978,7 @@ realtime-reports:
         - name: DATASOURCE_CONNECTION_TYPE
           value:  "mysql"
         - name: DATASOURCE_URL
-          value:  "jdbc:mysql://192.168.1.182:3306/cim_etl_report"
+          value:  "jdbc:mysql://192.168.1.182:3306/cim_etl_report?useSSL=false"
         - name: DATASOURCE_USERNAME
           value: "elonmusk"
         - name: DATASOURCE_PASSWORD
@@ -987,6 +987,10 @@ realtime-reports:
           value:  "com.mysql.cj.jdbc.Driver"
         - name: RETRIEVE_PAST_DAY_DATA_ONLY
           value: "true"
+        - name: TOPIC_CONCURRENCY_MIN
+          value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
+        - name: TOPIC_CONCURRENCY_MAX
+          value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
     siteEnvVars: []
     configKeys: []
     service:
