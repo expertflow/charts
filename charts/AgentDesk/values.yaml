@@ -54,6 +54,22 @@ global:
   efGrafanaSupervisorDashboardFilename: "Supervisor_Dashboard_CIM.json"
   efGrafanaAgentDashboardConfigMap: "ef-grafana-agent-dashboard"
   efGrafanaAgentDashboardFilename: "Agent_Dashboard_CIM.json"
+  efGrafanaAgentTeamsDashboardConfigMap: "ef-grafana-agent-teams-dashboard"
+  efGrafanaAgentTeamsDashboardFilename: "agent_teams_dashboard.json"
+  efGrafanaAgentViewStatisticsDashboardConfigMap: "ef-grafana-agent-view-statistics-dashboard"
+  efGrafanaAgentViewStatisticsDashboardFilename: "agent_view_statistics_dashboard.json"
+  efGrafanaDateWiseActivityOverviewDashboardConfigMap: "ef-grafana-date-wise-activity-overview-dashboard"
+  efGrafanaDateWiseActivityOverviewDashboardFilename: "date_wise_activity_overview_dashboard.json"
+  efGrafanaDateWiseDailyActivityDashboardConfigMap: "ef-grafana-date-wise-daily-activity-dashboard"
+  efGrafanaDateWiseDailyActivityDashboardFilename: "date_wise_daily_activity_dashboard.json"
+  efGrafanaSocialMediaActivityReasonDashboardConfigMap: "ef-grafana-social-media-activity-reason-dashboard"
+  efGrafanaSocialMediaActivityReasonDashboardFilename: "social_media_activity_reason_dashboard.json"
+  efGrafanaSocialMediaAllChannelsDashboardConfigMap: "ef-grafana-social-media-all-channels-dashboard"
+  efGrafanaSocialMediaAllChannelsDashboardFilename: "social_media_all_channels_dashboard.json"
+  efGrafanaSocialMediaPerformanceTrendDashboardConfigMap: "ef-grafana-social-media-performance-trend-dashboard"
+  efGrafanaSocialMediaPerformanceTrendDashboardFilename: "social_media_performance_trend_dashboard.json"
+  efGrafanaSupervisorDashboardOverallSummaryDashboardConfigMap: "ef-grafana-supervisor-dashboard-overall-summary-dashboard"
+  efGrafanaSupervisorDashboardOverallSummaryDashboardFilename: "supervisor_dashboard_overall_summary_dashboard.json"
   efGrafanaDashboardProviderCM: "ef-grafana-dashboard-provider-cm"
   efGrafanaIniCM: "ef-grafana-ini-cm"
 
@@ -67,7 +83,7 @@ unified-agent:
    replicaCount: 1
    image:       
       repository: cim/unified-agent
-      tag: "4.10.1"
+      tag: "4.10.3_f-30987"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -256,6 +272,30 @@ grafana:
     - configMapName: '{{ .Values.global.efGrafanaAgentDashboardConfigMap }}'
       folderName: default
       fileName: '{{ .Values.global.efGrafanaAgentDashboardFilename }}'
+    - configMapName: '{{ .Values.global.efGrafanaAgentTeamsDashboardConfigMap }}'
+      folderName: default
+      fileName: '{{ .Values.global.efGrafanaAgentTeamsDashboardFilename }}'
+    - configMapName: '{{ .Values.global.efGrafanaAgentViewStatisticsDashboardConfigMap }}'
+      folderName: default
+      fileName: '{{ .Values.global.efGrafanaAgentViewStatisticsDashboardFilename }}'
+    - configMapName: '{{ .Values.global.efGrafanaDateWiseActivityOverviewDashboardConfigMap }}'
+      folderName: default
+      fileName: '{{ .Values.global.efGrafanaDateWiseActivityOverviewDashboardFilename }}'
+    - configMapName: '{{ .Values.global.efGrafanaDateWiseDailyActivityDashboardConfigMap }}'
+      folderName: default
+      fileName: '{{ .Values.global.efGrafanaDateWiseDailyActivityDashboardFilename }}'
+    - configMapName: '{{ .Values.global.efGrafanaSocialMediaActivityReasonDashboardConfigMap }}'
+      folderName: default
+      fileName: '{{ .Values.global.efGrafanaSocialMediaActivityReasonDashboardFilename }}'
+    - configMapName: '{{ .Values.global.efGrafanaSocialMediaAllChannelsDashboardConfigMap }}'
+      folderName: default
+      fileName: '{{ .Values.global.efGrafanaSocialMediaAllChannelsDashboardFilename }}'
+    - configMapName: '{{ .Values.global.efGrafanaSocialMediaPerformanceTrendDashboardConfigMap }}'
+      folderName: default
+      fileName: '{{ .Values.global.efGrafanaSocialMediaPerformanceTrendDashboardFilename }}'
+    - configMapName: '{{ .Values.global.efGrafanaSupervisorDashboardOverallSummaryDashboardConfigMap }}'
+      folderName: default
+      fileName: '{{ .Values.global.efGrafanaSupervisorDashboardOverallSummaryDashboardFilename }}'
   datasources:
     secretName: "{{ .Values.global.efGrafanaDatasourceSecret }}"
   admin:
