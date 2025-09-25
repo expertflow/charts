@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - CX-4.10.3-rc
+      - 4.10.3_f-OPS-554
     paths:
       - 'charts/**'
 jobs:
