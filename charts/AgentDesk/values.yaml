@@ -58,14 +58,6 @@ global:
   efGrafanaAgentTeamsDashboardFilename: "agent_teams_dashboard.json"
   efGrafanaAgentPerformanceDashboardConfigMap: "ef-grafana-agent-performance-dashboard"
   efGrafanaAgentPerformanceDashboardFilename: "agent_performance_dashboard.json"
-  efGrafanaDateWiseActivityOverviewDashboardConfigMap: "ef-grafana-date-wise-activity-overview-dashboard"
-  efGrafanaDateWiseActivityOverviewDashboardFilename: "date_wise_activity_overview_dashboard.json"
-  efGrafanaDateWiseDailyActivityDashboardConfigMap: "ef-grafana-date-wise-daily-activity-dashboard"
-  efGrafanaDateWiseDailyActivityDashboardFilename: "date_wise_daily_activity_dashboard.json"
-  efGrafanaSocialMediaActivityReasonDashboardConfigMap: "ef-grafana-social-media-activity-reason-dashboard"
-  efGrafanaSocialMediaActivityReasonDashboardFilename: "social_media_activity_reason_dashboard.json"
-  efGrafanaSocialMediaAllChannelsDashboardConfigMap: "ef-grafana-social-media-all-channels-dashboard"
-  efGrafanaSocialMediaAllChannelsDashboardFilename: "social_media_all_channels_dashboard.json"
   efGrafanaSocialMediaPerformanceTrendDashboardConfigMap: "ef-grafana-social-media-performance-trend-dashboard"
   efGrafanaSocialMediaPerformanceTrendDashboardFilename: "social_media_performance_trend_dashboard.json"
   efGrafanaTeamStatisticsDashboardConfigMap: "ef-grafana-team-statistics-dashboard"
@@ -83,7 +75,7 @@ unified-agent:
    replicaCount: 1
    image:       
       repository: cim/unified-agent
-      tag: "4.10.3_f-30987"
+      tag: "4.10.3_b-CRM-310"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -278,18 +270,6 @@ grafana:
     - configMapName: '{{ .Values.global.efGrafanaAgentPerformanceDashboardConfigMap }}'
       folderName: default
       fileName: '{{ .Values.global.efGrafanaAgentPerformanceDashboardFilename }}'
-    - configMapName: '{{ .Values.global.efGrafanaDateWiseActivityOverviewDashboardConfigMap }}'
-      folderName: default
-      fileName: '{{ .Values.global.efGrafanaDateWiseActivityOverviewDashboardFilename }}'
-    - configMapName: '{{ .Values.global.efGrafanaDateWiseDailyActivityDashboardConfigMap }}'
-      folderName: default
-      fileName: '{{ .Values.global.efGrafanaDateWiseDailyActivityDashboardFilename }}'
-    - configMapName: '{{ .Values.global.efGrafanaSocialMediaActivityReasonDashboardConfigMap }}'
-      folderName: default
-      fileName: '{{ .Values.global.efGrafanaSocialMediaActivityReasonDashboardFilename }}'
-    - configMapName: '{{ .Values.global.efGrafanaSocialMediaAllChannelsDashboardConfigMap }}'
-      folderName: default
-      fileName: '{{ .Values.global.efGrafanaSocialMediaAllChannelsDashboardFilename }}'
     - configMapName: '{{ .Values.global.efGrafanaSocialMediaPerformanceTrendDashboardConfigMap }}'
       folderName: default
       fileName: '{{ .Values.global.efGrafanaSocialMediaPerformanceTrendDashboardFilename }}'
