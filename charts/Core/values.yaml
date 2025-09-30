@@ -49,6 +49,7 @@ global:
   efCommonVars_RSA_CLIENT_ID: ""
   efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
   efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
+  efCommonVars_RUN_CUSTOMER_SLA_ON_NO_AGENT_AVAILABLE: "true"
   efCommonVars_MEMORY_THRESHOLD_MBS: 1000
 # Change the below given paragraph when deploying an offline solution to pick the images from 
 #  -- Local Repo running inside the Kubernetes Engine
@@ -159,7 +160,7 @@ agent-manager:
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: "4.10"
+        tag: "4.10.3"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -610,7 +611,7 @@ conversation-monitor:
     replicaCount: 1
     image:
         repository: cim/conversation-monitor
-        tag: "4.10.2"
+        tag: "4.10.3"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -651,6 +652,8 @@ conversation-monitor:
           value: "com.ef.conversationmonitor.utility.MaskingPatternLayout"
         - name: TOMCAT_MAX_THREADS
           value: "1000"
+        - name: RUN_CUSTOMER_SLA_ON_NO_AGENT_AVAILABLE
+          value: '{{ .Values.global.efCommonVars_RUN_CUSTOMER_SLA_ON_NO_AGENT_AVAILABLE }}'
     siteEnvVars: []
     configKeys: []
     service:
@@ -956,7 +959,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: "4.10.2"
+        tag: "4.10.3"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1020,7 +1023,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: "4.10.2"
+        tag: "4.10.3"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1236,7 +1239,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: "4.10.1"
+        tag: "4.10.3"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
