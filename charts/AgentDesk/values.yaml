@@ -54,6 +54,14 @@ global:
   efGrafanaSupervisorDashboardFilename: "Supervisor_Dashboard_CIM.json"
   efGrafanaAgentDashboardConfigMap: "ef-grafana-agent-dashboard"
   efGrafanaAgentDashboardFilename: "Agent_Dashboard_CIM.json"
+  efGrafanaAgentTeamsDashboardConfigMap: "ef-grafana-agent-teams-dashboard"
+  efGrafanaAgentTeamsDashboardFilename: "agent_teams_dashboard.json"
+  efGrafanaAgentPerformanceDashboardConfigMap: "ef-grafana-agent-performance-dashboard"
+  efGrafanaAgentPerformanceDashboardFilename: "agent_performance_dashboard.json"
+  efGrafanaSocialMediaPerformanceTrendDashboardConfigMap: "ef-grafana-social-media-performance-trend-dashboard"
+  efGrafanaSocialMediaPerformanceTrendDashboardFilename: "social_media_performance_trend_dashboard.json"
+  efGrafanaTeamStatisticsDashboardConfigMap: "ef-grafana-team-statistics-dashboard"
+  efGrafanaTeamStatisticsDashboardFilename: "team_statistics_dashboard.json"
   efGrafanaDashboardProviderCM: "ef-grafana-dashboard-provider-cm"
   efGrafanaIniCM: "ef-grafana-ini-cm"
 
@@ -67,7 +75,7 @@ unified-agent:
    replicaCount: 1
    image:       
       repository: cim/unified-agent
-      tag: "4.10.1"
+      tag: "4.10.3"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -256,6 +264,18 @@ grafana:
     - configMapName: '{{ .Values.global.efGrafanaAgentDashboardConfigMap }}'
       folderName: default
       fileName: '{{ .Values.global.efGrafanaAgentDashboardFilename }}'
+    - configMapName: '{{ .Values.global.efGrafanaAgentTeamsDashboardConfigMap }}'
+      folderName: default
+      fileName: '{{ .Values.global.efGrafanaAgentTeamsDashboardFilename }}'
+    - configMapName: '{{ .Values.global.efGrafanaAgentPerformanceDashboardConfigMap }}'
+      folderName: default
+      fileName: '{{ .Values.global.efGrafanaAgentPerformanceDashboardFilename }}'
+    - configMapName: '{{ .Values.global.efGrafanaSocialMediaPerformanceTrendDashboardConfigMap }}'
+      folderName: default
+      fileName: '{{ .Values.global.efGrafanaSocialMediaPerformanceTrendDashboardFilename }}'
+    - configMapName: '{{ .Values.global.efGrafanaTeamStatisticsDashboardConfigMap }}'
+      folderName: default
+      fileName: '{{ .Values.global.efGrafanaTeamStatisticsDashboardFilename }}'
   datasources:
     secretName: "{{ .Values.global.efGrafanaDatasourceSecret }}"
   admin:
