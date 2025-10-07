@@ -8606,6 +8606,41 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/postgresql-11.9.7-v1/postgresql-11.9.7-v1.tgz
     version: 11.9.7-v1
+  - annotations:
+      bitnamiVersion: 11.9.8
+      category: Database
+    apiVersion: v2
+    appVersion: 14.5.0
+    created: "2025-10-07T12:45:12.213623215Z"
+    dependencies:
+    - name: common
+      repository: file://charts/common
+      tags:
+      - bitnami-common
+      version: 2.0.3
+    description: PostgreSQL (Postgres) is an open source object-relational database
+      known for reliability and data integrity. ACID-compliant, it supports foreign
+      keys, joins, views, triggers and stored procedures.
+    digest: 301d861d897795e28894252356bfd65f7c0b093fddb34bd3c59fbd64b2605bb1
+    home: https://github.com/bitnami/charts/tree/master/bitnami/postgresql
+    icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    - cluster
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: postgresql
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/postgresql
+    - https://www.postgresql.org/
+    urls:
+    - https://github.com/expertflow/charts/releases/download/postgresql-4.10.4/postgresql-4.10.4.tgz
+    version: 4.10.4
   qm:
   - apiVersion: v2
     appVersion: 4.10.0
@@ -10587,4 +10622,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-10-07T12:42:30.294684546Z"
+generated: "2025-10-07T12:45:12.21402734Z"
