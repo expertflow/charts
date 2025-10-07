@@ -1,5 +1,6 @@
 annotations:
   category: Database
+  bitnamiVersion: 11.9.8
 apiVersion: v2
 appVersion: 14.5.0
 dependencies:
@@ -27,4 +28,4 @@ name: postgresql
 sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/postgresql
 - https://www.postgresql.org/
-version: 11.9.8
+version: 4.10.4
