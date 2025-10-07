@@ -8428,6 +8428,41 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/mongodb-ha-13.1.8/mongodb-ha-13.1.8.tgz
     version: 13.1.8
+  - annotations:
+      bitnamiVersion: 13.1.8
+      category: Database
+    apiVersion: v2
+    appVersion: 6.0.2
+    created: "2025-10-07T12:30:31.100440288Z"
+    dependencies:
+    - name: common
+      repository: file://charts/common
+      tags:
+      - bitnami-common
+      version: 2.0.3
+    description: MongoDB(R) is a relational open source NoSQL database. Easy to use,
+      it stores data in JSON-like documents. Automated scalability and high-performance.
+      Ideal for developing cloud native applications.
+    digest: 485604a6f0841f2a45a56d1b9dcb16590bb0da6db04ff5e83ec95d66df0f6f75
+    home: https://github.com/bitnami/charts/tree/master/bitnami/mongodb
+    icon: https://bitnami.com/assets/stacks/mongodb/img/mongodb-stack-220x234.png
+    keywords:
+    - mongodb
+    - database
+    - nosql
+    - cluster
+    - replicaset
+    - replication
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: mongodb-ha
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/mongodb
+    - https://mongodb.org
+    urls:
+    - https://github.com/expertflow/charts/releases/download/mongodb-ha-4.10.4/mongodb-ha-4.10.4.tgz
+    version: 4.10.4
   opensearch:
   - annotations:
       category: Analytics
@@ -10515,4 +10550,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-10-07T12:27:12.138622756Z"
+generated: "2025-10-07T12:30:31.100856644Z"
