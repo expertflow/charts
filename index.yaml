@@ -7410,6 +7410,47 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/elasticsearch-21.4.1/elasticsearch-21.4.1.tgz
     version: 21.4.1
+  - annotations:
+      bitnamiVersion: 21.4.3
+      category: Analytics
+      images: |
+        - name: elasticsearch
+          image: docker.io/bitnami/elasticsearch:8.17.0-debian-12-r0
+        - name: elasticsearch-exporter
+          image: docker.io/bitnami/elasticsearch-exporter:1.8.0-debian-12-r5
+        - name: os-shell
+          image: docker.io/bitnami/os-shell:12-debian-12-r34
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 8.17.0
+    created: "2025-10-07T12:55:24.875960086Z"
+    dependencies:
+    - condition: global.kibanaEnabled
+      name: kibana
+      repository: file://charts/kibana
+      version: 11.x.x
+    - name: common
+      repository: file://charts/common
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Elasticsearch is a distributed search and analytics engine. It is
+      used for web search, log monitoring, and real-time analytics. Ideal for Big
+      Data applications.
+    digest: 7dde5475221785bb830d09c56539b44fb6cc34edadfcceddd812969eab76fe87
+    home: https://bitnami.com
+    icon: https://bitnami.com/assets/stacks/elasticsearch/img/elasticsearch-stack-220x234.png
+    keywords:
+    - elasticsearch
+    maintainers:
+    - name: Broadcom, Inc. All Rights Reserved.
+      url: https://github.com/bitnami/charts
+    name: elasticsearch
+    sources:
+    - https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch
+    urls:
+    - https://github.com/expertflow/charts/releases/download/elasticsearch-4.10.4/elasticsearch-4.10.4.tgz
+    version: 4.10.4
   eleveo:
   - apiVersion: v2
     appVersion: 4.9.0
@@ -10691,4 +10732,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-10-07T12:52:27.727693528Z"
+generated: "2025-10-07T12:55:24.876411802Z"
