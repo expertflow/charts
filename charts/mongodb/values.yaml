@@ -1,4 +1,4 @@
-# Copyright Broadcom, Inc. All Rights Reserved.
+#Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -19,14 +19,15 @@ global:
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
-  imagePullSecrets: []
+  imagePullSecrets: 
+   - expertflow-reg-cred
   defaultStorageClass: ""
   storageClass: ""
   ## Security parameters
   ##
   security:
     ## @param global.security.allowInsecureImages Allows skipping image verification
-    allowInsecureImages: false
+    allowInsecureImages: true
   namespaceOverride: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
@@ -134,8 +135,8 @@ diagnosticMode:
 ## @param image.debug Set to true if you would like to see extra information on logs
 ##
 image:
-  registry: docker.io
-  repository: bitnami/mongodb
+  registry: gitimages.expertflow.com
+  repository: general/mongodb
   tag: 8.0.4-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
@@ -260,8 +261,8 @@ tls:
   ## @param tls.extraDnsNames Add extra dns names to the CA, can solve x509 auth issue for pod clients
   ##
   image:
-    registry: docker.io
-    repository: bitnami/nginx
+    registry: gitimages.expertflow.com
+    repository: general/nginx
     tag: 1.27.3-debian-12-r5
     digest: ""
     pullPolicy: IfNotPresent
@@ -848,9 +849,9 @@ externalAccess:
     ## @param externalAccess.autoDiscovery.image.pullSecrets Init container auto-discovery image pull secrets
     ##
     image:
-      registry: docker.io
-      repository: bitnami/kubectl
-      tag: 1.32.1-debian-12-r4
+      registry: gitimages.expertflow.com
+      repository: general/kubectl
+      tag: 1.33.0-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -897,9 +898,9 @@ externalAccess:
     ## @param externalAccess.dnsCheck.image.pullSecrets Init container dns-check image pull secrets
     ##
     image:
-      registry: docker.io
-      repository: bitnami/os-shell
-      tag: 12-debian-12-r36
+      registry: gitimages.expertflow.com
+      repository: general/os-shell
+      tag: 12-debian-12-r34
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1623,9 +1624,9 @@ volumePermissions:
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
-    registry: docker.io
-    repository: bitnami/os-shell
-    tag: 12-debian-12-r36
+    registry: gitimages.expertflow.com
+    repository: general/os-shell
+    tag: 12-debian-12-r34
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2423,8 +2424,8 @@ metrics:
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
-    registry: docker.io
-    repository: bitnami/mongodb-exporter
+    registry: gitimages.expertflow.com
+    repository: general/mongodb-exporter
     tag: 0.43.1-debian-12-r3
     digest: ""
     pullPolicy: IfNotPresent
