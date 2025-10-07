@@ -52,8 +52,8 @@ commonAnnotations: {}
 ## @param image.pullSecrets Grafana image pull secrets
 ##
 image:
-  registry: docker.io
-  repository: bitnami/grafana
+  registry: gitimages.expertflow.com
+  repository: general/grafana
   tag: 9.1.7-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
@@ -826,8 +826,8 @@ imageRenderer:
   ## @param imageRenderer.image.pullSecrets Grafana image Renderer pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/grafana-image-renderer
+    registry: gitimages.expertflow.com
+    repository: general/grafana-image-renderer
     tag: 3.6.1-debian-11-r10
     digest: ""
     ## Specify a imagePullPolicy
@@ -1165,9 +1165,9 @@ volumePermissions:
   ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r38
+    registry: gitimages.expertflow.com
+    repository: general/os-shell
+    tag: 11-debian-11-r37
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
