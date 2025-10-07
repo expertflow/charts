@@ -6,4 +6,4 @@ dependencies:
   repository: file://charts/redis
   version: 16.3.1
 digest: sha256:abf35d1c59f8b514066a5109c9a7ad3baef907ba41ab8617d341289b4304d5c6
-generated: "2024-12-20T13:41:58.333380722Z"
+generated: "2025-10-07T17:51:20.573831+05:00"

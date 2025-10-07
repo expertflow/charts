@@ -85,8 +85,8 @@ diagnosticMode:
 ## @param image.debug Specify if debug values should be set
 ##
 image:
-  registry: docker.io
-  repository: bitnami/postgresql
+  registry: gitimages.expertflow.com
+  repository: general/postgresql
   tag: 14.2.0-debian-10-r70
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1049,9 +1049,9 @@ volumePermissions:
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r400
+    registry: gitimages.expertflow.com
+    repository: general/os-shell
+    tag: 11-debian-11-r37
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1134,9 +1134,9 @@ metrics:
   ## @param metrics.image.pullSecrets Specify image pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/postgres-exporter
-    tag: 0.10.1-debian-10-r88
+    registry: gitimages.expertflow.com
+    repository: general/postgres-exporter
+    tag: 0.10.1-debian-11-r0
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
