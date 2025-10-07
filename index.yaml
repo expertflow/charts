@@ -7828,6 +7828,37 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/keycloak-10.1.5-v1/keycloak-10.1.5-v1.tgz
     version: 10.1.5-v1
+  - annotations:
+      bitnamiVersion: 10.1.6
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 19.0.2
+    created: "2025-10-07T12:19:51.358827002Z"
+    dependencies:
+    - name: common
+      repository: file://charts/common
+      tags:
+      - bitnami-common
+      version: 2.0.3
+    description: Keycloak is a high performance Java-based identity and access management
+      solution. It lets developers add an authentication layer to their applications
+      with minimum effort.
+    digest: 01dfa853974ceb682b6914ed5196e4773c56e2378d8364cd8e3d53f62e792133
+    home: https://www.keycloak.org
+    icon: https://bitnami.com/assets/stacks/keycloak/img/keycloak-stack-220x234.png
+    keywords:
+    - keycloak
+    - access-management
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: keycloak
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/keycloak
+    - https://github.com/keycloak/keycloak
+    urls:
+    - https://github.com/expertflow/charts/releases/download/keycloak-4.10.4/keycloak-4.10.4.tgz
+    version: 4.10.4
   kube-prometheus-stack:
   - annotations:
       artifacthub.io/license: Apache-2.0
@@ -10404,4 +10435,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-10-07T10:44:31.862468478Z"
+generated: "2025-10-07T12:19:51.359545351Z"
