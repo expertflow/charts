@@ -19,7 +19,8 @@ global:
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
-  imagePullSecrets: []
+  imagePullSecrets: 
+   - expertflow-reg-cred
   defaultStorageClass: ""
   storageClass: ""
   ## Security parameters
@@ -114,7 +115,7 @@ diagnosticMode:
 image:
   registry: gitimages.expertflow.com
   repository: general/redis
-  tag: OPS-511-7.4.2-debian-12-k8s
+  tag: 7.4.2-debian-12-k8s
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -329,7 +330,7 @@ master:
      limits:
        cpu: 1
        memory: 4096Mi
-
+  ##
 #  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -1202,8 +1203,8 @@ sentinel:
   ## @param sentinel.image.debug Enable image debug mode
   ##
   image:
-    registry: docker.io
-    repository: bitnami/redis-sentinel
+    registry: gitimages.expertflow.com
+    repository: general/redis-sentinel
     tag: 7.4.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
@@ -1801,8 +1802,8 @@ metrics:
   ## @param metrics.image.pullSecrets Redis&reg; Exporter image pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/redis-exporter
+    registry: gitimages.expertflow.com
+    repository: general/redis-exporter
     tag: 1.70.0-debian-12-r2
     digest: ""
     pullPolicy: IfNotPresent
@@ -2173,8 +2174,8 @@ volumePermissions:
   ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/os-shell
+    registry: gitimages.expertflow.com
+    repository: general/os-shell
     tag: 12-debian-12-r43
     digest: ""
     pullPolicy: IfNotPresent
@@ -2237,8 +2238,8 @@ kubectl:
   ## @param kubectl.image.pullSecrets Kubectl pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/kubectl
+    registry: gitimages.expertflow.com
+    repository: general/kubectl
     tag: 1.33.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
@@ -2306,8 +2307,8 @@ sysctl:
   ## @param sysctl.image.pullSecrets OS Shell + Utility image pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/os-shell
+    registry: gitimages.expertflow.com
+    repository: general/os-shell
     tag: 12-debian-12-r43
     digest: ""
     pullPolicy: IfNotPresent
