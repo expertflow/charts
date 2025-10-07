@@ -9405,6 +9405,31 @@ entries:
     - https://github.com/expertflow/charts/releases/download/rke2-ingress-nginx-4.1.005-v1/rke2-ingress-nginx-4.1.005-v1.tgz
     version: 4.1.005-v1
   superset:
+  - annotations:
+      bitnamiVersion: 0.7.5
+    apiVersion: v2
+    appVersion: "1.0"
+    created: "2025-10-07T12:52:27.727226595Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: file://charts/postgresql
+      version: 11.1.22
+    - condition: redis.enabled
+      name: redis
+      repository: file://charts/redis
+      version: 16.3.1
+    description: Apache Superset is a modern, enterprise-ready business intelligence
+      web application
+    digest: 04514a1dc77b87c865dfa70449c3f50c49eb7a07916c30d9eaf927a445f21429
+    maintainers:
+    - email: craig@craigrueda.com
+      name: craig-rueda
+      url: https://github.com/craig-rueda
+    name: superset
+    urls:
+    - https://github.com/expertflow/charts/releases/download/superset-4.10.4/superset-4.10.4.tgz
+    version: 4.10.4
   - apiVersion: v2
     appVersion: "1.0"
     created: "2024-12-20T13:44:41.323974538Z"
@@ -10666,4 +10691,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-10-07T12:47:52.23041825Z"
+generated: "2025-10-07T12:52:27.727693528Z"
