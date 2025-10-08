@@ -1,6 +1,5 @@
 annotations:
   artifacthub.io/prerelease: "false"
-  bitnamiVersion: 2.10.0
 apiVersion: v2
 appVersion: 3.11.0
 dependencies:
