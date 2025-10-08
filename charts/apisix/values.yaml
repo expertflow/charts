@@ -52,7 +52,8 @@ global:
   #   - my-registry-secrets
   #   - other-registry-secrets
   # -- Global Docker registry secret names as an array
-  imagePullSecrets: []
+  imagePullSecrets: 
+   - expertflow-reg-cred
 
 image:
   # -- Apache APISIX image repository

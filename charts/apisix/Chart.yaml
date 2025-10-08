@@ -1,11 +1,12 @@
 annotations:
   artifacthub.io/prerelease: "false"
+  bitnamiVersion: 2.10.0
 apiVersion: v2
 appVersion: 3.11.0
 dependencies:
 - condition: etcd.enabled
   name: etcd
-  repository: https://charts.bitnami.com/bitnami
+  repository: file://charts/etcd
   version: 9.7.3
 - alias: dashboard
   condition: dashboard.enabled
@@ -25,4 +26,4 @@ name: apisix
 sources:
 - https://github.com/apache/apisix-helm-chart
 type: application
-version: 4.10.1
+version: 4.10.4

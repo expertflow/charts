@@ -1,0 +1,12 @@
+dependencies:
+- name: etcd
+  repository: file://charts/etcd
+  version: 9.7.3
+- name: apisix-dashboard
+  repository: https://charts.apiseven.com
+  version: 0.8.2
+- name: apisix-ingress-controller
+  repository: https://charts.apiseven.com
+  version: 0.14.0
+digest: sha256:a89db419c1feae5e2f43e0cd45bf8ace219b98c50e15f55d8d385fda817e3d8d
+generated: "2025-10-08T11:27:28.260723+05:00"
