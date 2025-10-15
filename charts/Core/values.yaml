@@ -693,7 +693,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: "4.10.1"
+        tag: "4.10.3"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1352,7 +1352,7 @@ web-channel-manager:
     replicaCount: 1
     image:
         repository: cim/web-channel-manager
-        tag: "4.10.1"
+        tag: "4.10.3"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
