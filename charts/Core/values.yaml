@@ -127,8 +127,10 @@ efConnectionVars:
     MONGODB_PASSWORD: "Expertflow123"
     MONGODB_RECONNECT_INTERVAL: "500"
     MONGODB_USERNAME: root
+    MONGODB_URI_PREFIX: "mongodb"
     MONGODB_CLIENT_CERT: /mongo/client-pem
     MONGODB_CA_CERT: /mongo/mongodb-ca-cert
+    ENABLE_RETRY_WRITES: "false"
     TRUST_STORE_PASSWORD: "Expertflow123"
     KEY_STORE_PASSWORD: "Expertflow123"
     REDIS_HOST: redis-master.ef-external.svc
@@ -136,7 +138,8 @@ efConnectionVars:
     REDIS_MAX_IDLE: "50"
     REDIS_MAX_WAIT: "-1"
     REDIS_MIN_IDLE: "25"
-    REDIS_PASSWORD: Expertflow123
+    REDIS_USER: "superuser"
+    REDIS_PASSWORD: Expertflow464
     REDIS_PORT: "6379"
     REDIS_SSL_ENABLED: "true"
     REDIS_CLIENT_CERT: /redis/tls.crt
@@ -152,6 +155,10 @@ efConnectionVars:
     VAULT_CLIENT_CERT: /tls-server-client/tls.crt
     VAULT_CLIENT_KEY: /tls-server-client/tls.key
     VAULT_CA_CERT: /tls-ca/tls.crt
+    VAULT_ENABLED: "true"
+    CX_TENANT_URL: "http://ef-cx-cx-tenant-svc:3000"
+    ROOT_DOMAIN: "NIL"
+    ENABLE_CLOUD_MANAGED_CONNECTIONS: "false"
 
 
 ##############################agent-manager##############################
@@ -160,7 +167,7 @@ agent-manager:
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: "4.10.3"
+        tag: "4.10.3_b-CRM-367"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -263,7 +270,7 @@ bot-framework:
     replicaCount: 1
     image:
         repository: cim/bot-framework
-        tag: "4.10.2"
+        tag: "5.0_b-CRM-385"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -305,7 +312,27 @@ bot-framework:
         - name: BUFFERING_EXPIRY_SECONDS
           value: '100'
     siteEnvVars: []
-    configKeys: []
+    configKeys:
+        - name: VAULT_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: ROLE_ID
+        - name: VAULT_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: SECRET_ID
+        - name: VAULT_TRANSIT_PATH
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_PATH
+        - name: VAULT_TRANSIT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_KEY
     service:
         enabled: true
         port: 8082
@@ -325,6 +352,12 @@ bot-framework:
         - name: activemq-tls
           secret:
             secretName: activemq-tls
+        - name: tls-ca
+          secret:
+            secretName: tls-ca
+        - name: tls-server-client
+          secret:
+            secretName: tls-server-client
     extraVolumeMounts:
         - name: redis-crt
           mountPath: /redis
@@ -334,6 +367,10 @@ bot-framework:
           mountPath: /logback
         - name: activemq-tls
           mountPath: /activemq
+        - name: tls-ca
+          mountPath: /tls-ca
+        - name: tls-server-client
+          mountPath: /tls-server-client
 
 
 ##############################ccm##############################
@@ -342,7 +379,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: "4.10.2"
+        tag: "5.0_b-CRM-385"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -382,7 +419,27 @@ ccm:
         - name: TOMCAT_MAX_THREADS
           value: "1000"
     siteEnvVars: []
-    configKeys: []
+    configKeys:
+        - name: VAULT_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: ROLE_ID
+        - name: VAULT_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: SECRET_ID
+        - name: VAULT_TRANSIT_PATH
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_PATH
+        - name: VAULT_TRANSIT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_KEY
     service:
         enabled: true
         port: 8081
@@ -402,6 +459,12 @@ ccm:
         - name: activemq-tls
           secret:
             secretName: activemq-tls
+        - name: tls-ca
+          secret:
+            secretName: tls-ca
+        - name: tls-server-client
+          secret:
+            secretName: tls-server-client
     extraVolumeMounts:
         - name: redis-crt
           mountPath: /redis
@@ -411,6 +474,10 @@ ccm:
           mountPath: /logback
         - name: activemq-tls
           mountPath: /activemq
+        - name: tls-ca
+          mountPath: /tls-ca
+        - name: tls-server-client
+          mountPath: /tls-server-client
 
 
 ##############################cim-customer##############################
@@ -418,8 +485,8 @@ cim-customer:
     enabled: true
     replicaCount: 1
     image:
-       repository: cim/cim-backend
-       tag: "4.10"
+       repository: cim/cim-backend/build
+       tag: "4.10.3_b-CRM-321"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -434,8 +501,30 @@ cim-customer:
          value: "8080"
        - name: MONGODB_DATABASE
          value: "cim_customer"
+       - name: LOG_LEVEL
+         value: debug
     siteEnvVars: []
-    configKeys: []
+    configKeys:
+        - name: VAULT_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: ROLE_ID
+        - name: VAULT_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: SECRET_ID
+        - name: VAULT_TRANSIT_PATH
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_PATH
+        - name: VAULT_TRANSIT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_KEY
     service:
        enabled: true
        port: 8080
@@ -446,9 +535,19 @@ cim-customer:
        - name: mongo-mongodb-ca
          secret:
            secretName: mongo-mongodb-ca
+       - name: tls-ca
+         secret:
+           secretName: tls-ca
+       - name: tls-server-client
+         secret:
+           secretName: tls-server-client
     extraVolumeMounts:
        - name: mongo-mongodb-ca
          mountPath: /mongo
+       - name: tls-ca
+         mountPath: /tls-ca
+       - name: tls-server-client
+         mountPath: /tls-server-client
 
 
 ##############################conversation-manager##############################
@@ -457,7 +556,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: "4.10.2"
+        tag: "4.10.3_b-CRM-373"
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -611,7 +710,7 @@ conversation-monitor:
     replicaCount: 1
     image:
         repository: cim/conversation-monitor
-        tag: "4.10.3"
+        tag: "4.10.3_b-CIM-30640"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -655,7 +754,27 @@ conversation-monitor:
         - name: RUN_CUSTOMER_SLA_ON_NO_AGENT_AVAILABLE
           value: '{{ .Values.global.efCommonVars_RUN_CUSTOMER_SLA_ON_NO_AGENT_AVAILABLE }}'
     siteEnvVars: []
-    configKeys: []
+    configKeys:
+        - name: VAULT_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: ROLE_ID
+        - name: VAULT_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: SECRET_ID
+        - name: VAULT_TRANSIT_PATH
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_PATH
+        - name: VAULT_TRANSIT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_KEY
     service:
         enabled: true
         port: 8080
@@ -675,6 +794,12 @@ conversation-monitor:
         - name: activemq-tls
           secret:
             secretName: activemq-tls
+        - name: tls-ca
+          secret:
+            secretName: tls-ca
+        - name: tls-server-client
+          secret:
+            secretName: tls-server-client
     extraVolumeMounts:
         - name: redis-crt
           mountPath: /redis
@@ -684,6 +809,10 @@ conversation-monitor:
           mountPath: /logback
         - name: activemq-tls
           mountPath: /activemq
+        - name: tls-ca
+          mountPath: /tls-ca
+        - name: tls-server-client
+          mountPath: /tls-server-client
 
 
 
@@ -693,7 +822,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: "4.10.1"
+        tag: "5.0_b-CRM-353"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -766,7 +895,7 @@ file-engine:
     replicaCount: 1
     image:
         repository: chat-solution/file-engine
-        tag: "4.10"
+        tag: "4.10.3_b-CRM-345"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -863,7 +992,7 @@ historical-reports:
     replicaCount: 1
     image:
         repository: cim/historical-reports-manager
-        tag: "4.10"
+        tag: "4.10.3_b-CRM-327"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -881,7 +1010,27 @@ historical-reports:
         - name: MONGODB_DATABASE
           value: "conversation-manager_db"
     siteEnvVars: []
-    configKeys: []
+    configKeys:
+      - name: VAULT_ROLE_ID
+        valueFrom:
+          secretKeyRef:
+            name: vault-approle-secret
+            key: ROLE_ID
+      - name: VAULT_SECRET_ID
+        valueFrom:
+          secretKeyRef:
+            name: vault-approle-secret
+            key: SECRET_ID
+      - name: VAULT_TRANSIT_PATH
+        valueFrom:
+          secretKeyRef:
+            name: vault-approle-secret
+            key: TRANSIT_PATH
+      - name: VAULT_TRANSIT_KEY
+        valueFrom:
+          secretKeyRef:
+            name: vault-approle-secret
+            key: TRANSIT_KEY
     service:
         enabled: true
         port: 8081
@@ -892,9 +1041,19 @@ historical-reports:
         - name: mongo-mongodb-ca
           secret:
             secretName: mongo-mongodb-ca
+        - name: tls-ca
+          secret:
+            secretName: tls-ca
+        - name: tls-server-client
+          secret:
+            secretName: tls-server-client
     extraVolumeMounts:
         - name: mongo-mongodb-ca
           mountPath: /mongo
+        - name: tls-ca
+          mountPath: /tls-ca
+        - name: tls-server-client
+          mountPath: /tls-server-client
 
 
 
@@ -904,7 +1063,7 @@ license-manager:
     replicaCount: 1
     image:
         repository: license-mangement/license-manager
-        tag: "4.10"
+        tag: "5.0_b-CRM-355"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -959,7 +1118,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: "4.10.3"
+        tag: "5.0_b-CRM-339"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -981,19 +1140,22 @@ realtime-reports:
         - name: DATASOURCE_CONNECTION_TYPE
           value:  "mysql"
         - name: DATASOURCE_URL
-          value:  "jdbc:mysql://192.168.1.182:3306/cim_etl_report?useSSL=false"
+          value:  "jdbc:mysql://mysql.ef-mysql.svc.cluster.local:3306"
         - name: DATASOURCE_USERNAME
           value: "elonmusk"
         - name: DATASOURCE_PASSWORD
           value: "68i3nj7t"
         - name: DATASOURCE_DRIVER_CLASS_NAME
           value:  "com.mysql.cj.jdbc.Driver"
+        - name: DATASOURCE_ADDITIONAL_PROPERTIES
+          value: "?useSSL=false"  
         - name: RETRIEVE_PAST_DAY_DATA_ONLY
           value: "true"
         - name: TOPIC_CONCURRENCY_MIN
           value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MIN }}'
         - name: TOPIC_CONCURRENCY_MAX
           value: '{{ .Values.global.efCommonVars_TOPIC_CONCURRENCY_MAX }}'
+
     siteEnvVars: []
     configKeys: []
     service:
@@ -1023,7 +1185,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: "4.10.3"
+        tag: "4.10.3_b-CRM-374"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1064,8 +1226,38 @@ routing-engine:
           value: "100"
         - name: AGENT_SEIZE_TTL
           value: "86400"
+        - name: GRAPHQL_MEMORY_RULES_PATH
+          value: /app/graphql-memory-rules.json
+        - name: GRAPHQL_SCHEMAS_PATH
+          value: /app/schemas/*
+        - name: AGENT_SEARCH_SCAN_COUNT
+          value: "500"
+        - name: AGENT_SEARCH_MAX_RESULTS
+          value: "50000"
+        - name: GRAPHQL_REDIS_RULES_PATH
+          value: /app/graphql-redis-rules.json
     siteEnvVars: []
-    configKeys: []
+    configKeys:
+        - name: VAULT_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: ROLE_ID
+        - name: VAULT_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: SECRET_ID
+        - name: VAULT_TRANSIT_PATH
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_PATH
+        - name: VAULT_TRANSIT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_KEY
     service:
         enabled: true
         port: 8081
@@ -1085,6 +1277,21 @@ routing-engine:
         - name: activemq-tls
           secret:
             secretName: activemq-tls
+        - name: tls-ca
+          secret:
+            secretName: tls-ca
+        - name: tls-server-client
+          secret:
+            secretName: tls-server-client
+        - name: routing-engine-graphql-memory-rules
+          configMap:
+            name: routing-engine-graphql-memory-rules
+        - name: routing-engine-graphql-schemas
+          configMap:
+            name: routing-engine-graphql-schemas
+        - name: routing-engine-graphql-redis-rules
+          configMap:
+            name: routing-engine-graphql-redis-rules
     extraVolumeMounts:
         - name: redis-crt
           mountPath: /redis
@@ -1094,6 +1301,20 @@ routing-engine:
           mountPath: /logback
         - name: activemq-tls
           mountPath: /activemq
+        - name: tls-ca
+          mountPath: /tls-ca
+        - name: tls-server-client
+          mountPath: /tls-server-client
+        - name: routing-engine-graphql-memory-rules
+          mountPath: /app/graphql-memory-rules.json
+          subPath: graphql-memory-rules.json
+          readOnly: true
+        - name: routing-engine-graphql-schemas
+          mountPath: /app/schemas
+        - name: routing-engine-graphql-redis-rules
+          mountPath: /app/graphql-redis-rules.json
+          subPath: graphql-redis-rules.json
+          readOnly: true
 
 
 ##############################state-events-logger##############################
@@ -1102,7 +1323,7 @@ state-events-logger:
     replicaCount: 1
     image:
         repository: cim/state-events-logger
-        tag: "4.10"
+        tag: "4.10.3_f-CIM-31010"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts: []
@@ -1120,7 +1341,27 @@ state-events-logger:
         - name: MAX_IDLE_CYCLES
           value: "10"
     siteEnvVars: []
-    configKeys: []
+    configKeys:
+        - name: VAULT_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: ROLE_ID
+        - name: VAULT_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: SECRET_ID
+        - name: VAULT_TRANSIT_PATH
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_PATH
+        - name: VAULT_TRANSIT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_KEY
     service:
         enabled: false
     ingress:
@@ -1132,11 +1373,21 @@ state-events-logger:
         - name: activemq-tls
           secret:
             secretName: activemq-tls
+        - name: tls-ca
+          secret:
+            secretName: tls-ca
+        - name: tls-server-client
+          secret:
+            secretName: tls-server-client
     extraVolumeMounts:
         - name: mongo-mongodb-ca
           mountPath: /mongo
         - name: activemq-tls
           mountPath: /activemq
+        - name: tls-ca
+          mountPath: /tls-ca
+        - name: tls-server-client
+          mountPath: /tls-server-client
 
 
 ##############################team-announcement##############################
@@ -1145,7 +1396,7 @@ team-announcement:
     replicaCount: 1
     image:
         repository: cim/team-announcement
-        tag: "4.10"
+        tag: "4.10.1_f-CLCC-319"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1172,8 +1423,32 @@ team-announcement:
           value: "info"
         - name: MONGODB_DATABASE_NAME
           value: "teamAnnouncement"
+        - name: ANNOUNCEMENT_CHECK_URL
+          value: "http://{{ .Release.Name }}-team-announcement-svc.{{ .Release.Namespace }}.svc:8080/announcement"
+        - name: ANNOUNCEMENT_CRON_SCHEDULE
+          value: "*/1 * * * *"
     siteEnvVars: []
-    configKeys: []
+    configKeys:
+        - name: VAULT_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: ROLE_ID
+        - name: VAULT_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: SECRET_ID
+        - name: VAULT_TRANSIT_PATH
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_PATH
+        - name: VAULT_TRANSIT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_KEY
     service:
         enabled: true
         port: 8080
@@ -1187,15 +1462,25 @@ team-announcement:
       - name: activemq-tls
         secret:
           secretName: activemq-tls
+      - name: tls-ca
+        secret:
+          secretName: tls-ca
+      - name: tls-server-client
+        secret:
+          secretName: tls-server-client
     extraVolumeMounts:
       - name: mongo-mongodb-ca
         mountPath: /mongo
       - name: activemq-tls
         mountPath: /activemq
+      - name: tls-ca
+        mountPath: /tls-ca
+      - name: tls-server-client
+        mountPath: /tls-server-client
 
 ####################### Team Annoucement CronJob Definitions ######################
     teamAnnouncementsCronJob:
-       enabled: true
+       enabled: false
        labels: {}
        containerSecurityContext:
          enabled: false
@@ -1238,8 +1523,8 @@ unified-admin:
     enabled: true
     replicaCount: 1
     image:
-        repository: cim/unified-admin
-        tag: "4.10.3"
+        repository: cim/unified-admin/build
+        tag: "5.0_b-CRM-419"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1321,7 +1606,27 @@ unified-admin:
         - name: RSA_CLIENT_ID
           value: '{{ .Values.global.efCommonVars_RSA_CLIENT_ID }}'
     siteEnvVars: []
-    configKeys: []
+    configKeys:
+        - name: VAULT_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: ROLE_ID
+        - name: VAULT_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: SECRET_ID
+        - name: VAULT_TRANSIT_PATH
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_PATH
+        - name: VAULT_TRANSIT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_KEY
     service:
         enabled: true
         port: 3000
@@ -1337,11 +1642,21 @@ unified-admin:
         - name: ef-unified-admin-https-certs-vol
           secret:
               secretName: ef-unified-admin-https-certs-secret
+        - name: tls-ca
+          secret:
+            secretName: tls-ca
+        - name: tls-server-client
+          secret:
+            secretName: tls-server-client
     extraVolumeMounts:
         - name: mongo-mongodb-ca
           mountPath: /mongo
         - name: ef-unified-admin-https-certs-vol
           mountPath: /httpsCerts
+        - name: tls-ca
+          mountPath: /tls-ca
+        - name: tls-server-client
+          mountPath: /tls-server-client
 
 
 
@@ -1352,7 +1667,7 @@ web-channel-manager:
     replicaCount: 1
     image:
         repository: cim/web-channel-manager
-        tag: "4.10.1"
+        tag: "4.10.3_b-CRM-341"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1395,7 +1710,7 @@ business-calendar:
     replicaCount: 1
     image:
         repository: cim/business-calendar
-        tag: 4.9.4
+        tag: "4.10.1_f-CLCC-173"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1413,7 +1728,27 @@ business-calendar:
         - name: MASKING_LAYOUT_CLASS
           value: "com.ef.calendar.utils.MaskingPatternLayout"
     siteEnvVars: []
-    configKeys: []
+    configKeys:
+      - name: VAULT_ROLE_ID
+        valueFrom:
+          secretKeyRef:
+            name: vault-approle-secret
+            key: ROLE_ID
+      - name: VAULT_SECRET_ID
+        valueFrom:
+          secretKeyRef:
+            name: vault-approle-secret
+            key: SECRET_ID
+      - name: VAULT_TRANSIT_PATH
+        valueFrom:
+          secretKeyRef:
+            name: vault-approle-secret
+            key: TRANSIT_PATH
+      - name: VAULT_TRANSIT_KEY
+        valueFrom:
+          secretKeyRef:
+            name: vault-approle-secret
+            key: TRANSIT_KEY
     service:
         enabled: true
         port: 8443
@@ -1427,18 +1762,29 @@ business-calendar:
         - name: ef-logback
           configMap:
               name: ef-logback-cm
+        - name: tls-ca
+          secret:
+            secretName: tls-ca
+        - name: tls-server-client
+          secret:
+            secretName: tls-server-client
     extraVolumeMounts:
         - name: mongo-mongodb-ca
           mountPath: /mongo
         - name: ef-logback
           mountPath: /logback
+        - name: tls-ca
+          mountPath: /tls-ca
+        - name: tls-server-client
+          mountPath: /tls-server-client
+
 ##############################cx-load-hub##############################
 cx-load-hub:
     enabled: true
     replicaCount: 1
     image:
         repository: cim/cx-load-hub
-        tag: "4.10"
+        tag: "4.10.3_b-CRM-365"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1457,6 +1803,27 @@ cx-load-hub:
           value: "10"
         - name: FILE_ENGINE_URL
           value: "http://{{ .Release.Name }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
+    configKeys:
+        - name: VAULT_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: ROLE_ID
+        - name: VAULT_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: SECRET_ID
+        - name: VAULT_TRANSIT_PATH
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_PATH
+        - name: VAULT_TRANSIT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: vault-approle-secret
+              key: TRANSIT_KEY
     service:
         enabled: true
         port: 8443
@@ -1467,17 +1834,125 @@ cx-load-hub:
         - name: mongo-mongodb-ca
           secret:
             secretName: mongo-mongodb-ca
+        - name: tls-ca
+          secret:
+            secretName: tls-ca
+        - name: tls-server-client
+          secret:
+            secretName: tls-server-client
     extraVolumeMounts:
         - name: mongo-mongodb-ca
           mountPath: /mongo
+        - name: tls-ca
+          mountPath: /tls-ca
+        - name: tls-server-client
+          mountPath: /tls-server-client
+
+##############################cx-tenant##############################
+cx-tenant:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: cim/cx-tenant
+    tag: "4.10.3_b-CRM-335"
+  efConnectionVars: true
+  efEnvironmentVars: false
+  containerPorts:
+    - name: "http-c-t-3000"
+      containerPort: 3000
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: debug
+    - name: NODE_ENV
+      value: production
+    - name: PORT
+      value: "3000"
+    - name: MONGODB_DATABASE_NAME
+      value: cim-tenant
+    - name: AZURE_STORAGE_ACCOUNT
+      value: "efcxblobstorage"
+    - name: AZURE_STORAGE_KEY
+      value: "R/RYZ+knJWlYKr6fzWSLRSoauiY7/62K1n7kZ80d0zWPYqaZabokDCbJjFMgL20YhYYmGD4LxDre+AStFhKsqA=="
+    - name: LOGO_UPLOAD_PATH
+      value: /icons/default
+    - name: MINIO_ENDPOINT
+      value: "minio.ef-external.svc"
+    - name: MINIO_PORT
+      value: "9000"
+    - name: MINIO_ACCESS_KEY
+      value: "minioadmin"
+    - name: MINIO_SECRET_KEY
+      value: "minioadmin"
+    - name: MINIO_USE_SSL
+      value: "true"
+    - name: ENCRYPTION_KEY
+      value: "6f3a2f95b7c0e4b1f37c0a9df8b68d7ea7d5bfbf41e2d88b3b9b55f4a6d1c2f3"
+    - name: NODE_TLS_REJECT_UNAUTHORIZED
+      value: "0"
+    - name: FS_URL
+      value: "http://20.123.60.36:8000/add-domain"
+  configKeys:
+    - name: VAULT_ROLE_ID
+      valueFrom:
+        secretKeyRef:
+          name: vault-approle-secret
+          key: ROLE_ID
+    - name: VAULT_SECRET_ID
+      valueFrom:
+        secretKeyRef:
+          name: vault-approle-secret
+          key: SECRET_ID
+    - name: VAULT_TRANSIT_PATH
+      valueFrom:
+        secretKeyRef:
+          name: vault-approle-secret
+          key: TRANSIT_PATH
+    - name: VAULT_TRANSIT_KEY
+      valueFrom:
+        secretKeyRef:
+          name: vault-approle-secret
+          key: TRANSIT_KEY
+  service:
+    enabled: true
+    port: 3000
+    portName: "http-c-t-3000"
+    targetPort: "http-c-t-3000"
+  ingress: { enabled: false }
+  extraVolumes:
+    - name: mongo-mongodb-ca
+      secret:
+        secretName: mongo-mongodb-ca
+    - name: redis-crt
+      secret:
+        secretName: redis-crt
+    - name: cx-tenant-data
+      persistentVolumeClaim:
+        claimName: cx-tenant-pvc
+    - name: tls-ca
+      secret:
+        secretName: tls-ca
+    - name: tls-server-client
+      secret:
+        secretName: tls-server-client
+  extraVolumeMounts:
+    - name: mongo-mongodb-ca
+      mountPath: /mongo
+    - name: redis-crt
+      mountPath: /redis
+    - name: cx-tenant-data
+      mountPath: /icons
+    - name: tls-ca
+      mountPath: /tls-ca
+    - name: tls-server-client
+      mountPath: /tls-server-client
 
 ##############################conversation-studio##############################
 conversation-studio:
   enabled: true
   replicaCount: 1
   image:
-    repository: cim/workflow-builder/conversation-controller
-    tag: "4.10.2"
+    repository: cim/workflow-builder/conversation-controller/build
+    tag: "4.10.3_b-CRM-349"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -1488,14 +1963,23 @@ conversation-studio:
       value: "http://{{ .Release.Name }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080"
     - name: CCM_INTERNAL_URL
       value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
-    - name: CONVERSATION_STUDIO_PROXY
-      value: "https://{{ .Values.global.ingressRouter  }}/conversation-studio"
     - name: UNIFIED_ADMIN_URL
       value: "https://{{ .Values.global.ingressRouter  }}/unified-admin"
     - name: KEYCLOAK_TEAM_TYPE
       value: CX
     - name: TRACKER_EXPIRY_SECONDS
       value: "86400"
+    - name: KEYCLOAK_URL_FOR_TOKEN
+      value: http://keycloak.ef-external.svc/auth
+    # The link in UNIFIED_ADMIN_PUBLIC_URL variable is sent to the customer, so it must be publically accessible
+    - name: UNIFIED_ADMIN_PUBLIC_URL
+      value: "{{ .Values.global.ingressRouter }}/unified-admin"
+    # Following credentials are used to generate a keycloak token, to be used by customer for submitting survey form
+    # this user with below credentials should have minimum permissions to avoid privilege escalation
+    - name: KEYCLOAK_USERNAME_FOR_TOKEN
+      value: admin
+    - name: KEYCLOAK_PASSWORD_FOR_TOKEN
+      value: admin
   siteEnvVars: []
   configKeys: []
   service:
