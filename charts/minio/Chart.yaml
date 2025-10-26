@@ -27,4 +27,4 @@ name: minio
 sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/minio
 - https://min.io
-version: 4.10.4
+version: 5.0-alpha
