@@ -1,0 +1,12 @@
+dependencies:
+- name: conversation-studio
+  repository: file://charts/conversation-studio
+  version: 5.0-alpha
+- name: campaign-studio
+  repository: file://charts/campaign-studio
+  version: 5.0-alpha
+- name: qm-backend
+  repository: file://charts/qm-backend
+  version: 5.0-alpha
+digest: sha256:1a265b84a581e7a4ddbdc68751155247732635095b4d14e76462dd643c06fcbd
+generated: "2025-10-26T16:03:26.180109+05:00"

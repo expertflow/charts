@@ -1,0 +1,415 @@
+# Default values for ef-cx.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+#
+# ███████ ██   ██ ██████  ███████ ██████  ████████ ███████ ██       ██████  ██     ██ 
+# ██       ██ ██  ██   ██ ██      ██   ██    ██    ██      ██      ██    ██ ██     ██ 
+# █████     ███   ██████  █████   ██████     ██    █████   ██      ██    ██ ██  █  ██ 
+# ██       ██ ██  ██      ██      ██   ██    ██    ██      ██      ██    ██ ██ ███ ██ 
+# ███████ ██   ██ ██      ███████ ██   ██    ██    ██      ███████  ██████   ███ ███  
+#
+# Globals Section:
+#
+# global.ingressRouter: Provides a central location for the FQDN that will be used \
+#                       across the EF CX solution
+# global.registry: when deploying solution with limited access to internet, \
+#                  changing this will cause all subsequent image pulls from this registry. \
+#                  Used as Variable in all sub-charts
+#
+
+
+global:
+  tenantId: "rm-02"
+  ingressRouter: "rm-02.expertflow.com"
+  ingressCertName: "ef-ingress-tls-secret"
+  ingressClassName: "nginx"
+  efCxReleaseName: "ef-cx"
+  commonIngressAnnotations: {}
+  ##    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  ##    nginx.ingress.kubernetes.io/use-regex: "true"
+  imageRegistry: "gitimages.expertflow.com"
+  imagePullSecrets: 
+   - ef-gitlab-secret
+  ## The CommonEnvVars are now part of the globals. Selective adaption to components is mandatory.
+  efCommonVars_IS_WRAP_UP_ENABLED: false
+  efCommonVars_WRAPUP_TIME: "60"
+  efCommonVars_DEFAULT_ROOM_NAME: CC
+  efCommonVars_DEFAULT_ROOM_DESCRIPTION: Contact Center Room
+  efCommonVars_DEFAULT_ROOM_LABEL: CC
+  efCommonVars_ROOM_IS_USER_ID: false
+  efCommonVars_CONVERSATION_SEARCH_WINDOW_HRS: "24"
+  efCommonVars_TZ: UTC
+  efCommonVars_MASK_ATTRIBUTES_PATH: /sensitive.js
+  efCommonVars_LOGGING_CONFIG: /logback/logback-spring.xml
+  efCommonVars_IS_ENABLED_2FA: "false"
+  efCommonVars_CHANNEL_2FA: "app"
+  efCommonVars_TWILIO_SID: ""
+  efCommonVars_TWILIO_VERIFY_SID: ""
+  efCommonVars_TWILIO_AUTH_TOKEN: ""
+  efCommonVars_RSA_SERVER_URL: ""
+  efCommonVars_RSA_CLIENT_KEY: ""
+  efCommonVars_RSA_CLIENT_ID: ""
+  efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
+  efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
+  efCommonVars_MEMORY_THRESHOLD_MBS: 1000
+  apisixInternalServiceHostname: "apisix-data-plane.ef-external.svc.cluster.local" # From your 'kubectl get svc -n ef-external'
+  apisixInternalServicePort: 80 # Default HTTP port for APISIX gateway service
+  apisix:
+    # --- Default Keycloak OIDC Config ---
+    # Used IF a route has plugins.enableAuth = true
+    keycloak:
+      discoveryUrl: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration" # Internal URL
+      realm: "expertflow"
+      clientId: "cim"
+      # !! IMPORTANT: Use Helm secrets or external secret management for clientSecret !!
+      clientSecret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+      # Default behavior settings
+      bearerOnly: true
+      tokenSigningAlg: "RS256"
+      setAccessTokenHeader: false # Don't pass token header to backend
+      setUserInfoHeader: false    # Don't pass userinfo header to backend
+      # Default Audience/Scopes (OVERRIDE PER ROUTE if needed)
+      defaultAudience: ["cim", "account", "realm-management"]
+      defaultScopes: ["email", "profile"]
+
+    # --- Default Plugin Settings ---
+    plugins:
+      cors:
+        enabled: false # Default CORS disabled unless enabled per route
+        allowOrigins: "*"
+        allowMethods: "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+        allowCredentials: true
+      rewrite:
+        stripPrefix: true # Default rewrite action
+
+
+
+
+
+# Change the below given paragraph when deploying an offline solution to pick the images from 
+#  -- Local Repo running inside the Kubernetes Engine
+#  -- Customer's own Repo requiring all images to be sorted locally 
+#
+# imageCredentials:
+# imageCredentials.registry: provides the registry URL
+# imageCredentials.username: username to use
+# imageCredentials.password: Password for the user
+# imageCredentials.email: an email address for the user
+#
+clusterDomain: cluster.local
+
+
+imageCredentials:
+  registry: gitimages.expertflow.com
+  username: efcx
+  password: RecRpsuH34yqp56YRFUb
+  email: devops@expertflow.com
+##############################conversation-studio##############################
+conversation-studio:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: cim/workflow-builder/conversation-controller/build
+    tag: "4.10.3_b-CRM-349"
+  efConnectionVars: true
+  efEnvironmentVars: false
+  containerPorts:
+    - name: "http-co-st-1880"
+      containerPort: 1880
+  extraEnvVars:
+    - name: CONVERSATION_MANAGER_INTERNAL_URL
+      value: "http://ef-cx-conversation-manager-svc.expertflow.svc:8080"
+    - name: CCM_INTERNAL_URL
+      value: "http://ef-cx-ccm-svc.expertflow.svc:8081"
+    - name: CONVERSATION_STUDIO_PROXY
+      value: "https://{{ .Values.global.ingressRouter  }}/conversation-studio"
+      #value: "https://tenant3.expertflow.com/conversation-studio/"
+    - name: UNIFIED_ADMIN_URL
+      value: "https://{{ .Values.global.ingressRouter  }}/unified-admin"
+    - name: KEYCLOAK_TEAM_TYPE
+      value: CX
+    - name: TRACKER_EXPIRY_SECONDS
+      value: "86400"
+    - name: KEYCLOAK_URL_FOR_TOKEN
+      value: http://keycloak.ef-external.svc/auth
+    # The link in UNIFIED_ADMIN_PUBLIC_URL variable is sent to the customer, so it must be publically accessible
+    - name: UNIFIED_ADMIN_PUBLIC_URL
+      value: "{{ .Values.global.ingressRouter }}/unified-admin"
+    # Following credentials are used to generate a keycloak token, to be used by customer for submitting survey form
+    # this user with below credentials should have minimum permissions to avoid privilege escalation
+    - name: KEYCLOAK_USERNAME_FOR_TOKEN
+      value: admin
+    - name: KEYCLOAK_PASSWORD_FOR_TOKEN
+      value: admin
+    - name: TENANT_ID
+      value: "{{ .Values.global.tenantId }}"
+    - name: UNIFIED_ADMIN_URL
+      value: "https://{{ .Values.global.ingressRouter  }}/unified-admin/"
+    - name: KEYCLOAK_TEAM_TYPE
+      value: CX
+    - name: KEYCLOAK_BEARER_ONLY
+      value: "true"
+    - name: KEYCLOAK_CLIENT_DB_ID
+      value: ef61df80-061c-4c29-b9ac-387e6bf67052
+    - name: KEYCLOAK_CLIENT_ID
+      value: cim
+    - name: KEYCLOAK_CONFIDENTIAL_PORT
+      value: "0"
+    - name: KEYCLOAK_CREDENTIALS
+      value: '{"secret": "ef61df80-061c-4c29-b9ac-387e6bf67052"}'
+    - name: KEYCLOAK_GRANT_TYPE
+      value: "password"
+    - name: KEYCLOAK_GRANT_TYPE_PAT
+      value: "client_credentials"
+    - name: KEYCLOAK_HOST
+      value: "https://{{ .Values.global.ingressRouter  }}/auth/"
+    - name: KEYCLOAK_PASSWORD_ADMIN
+      value: admin
+    - name: KEYCLOAK_POLICY_ENFORCER
+      value: "{}"
+    - name: KEYCLOAK_REALM
+      value: "{{ .Values.global.tenantId }}"
+    - name: KEYCLOAK_RESOURCE
+      value: cim
+    - name: KEYCLOAK_SCOPE_NAME
+      value: "Any default scope"
+    - name: KEYCLOAK_SSL_REQUIRED
+      value: external
+    - name: KEYCLOAK_USE_RESOURCE_ROLE_MAPPINGS
+      value: "true"
+    - name: KEYCLOAK_USERNAME_ADMIN
+      value: admin
+    - name: KEYCLOAK_VERIFY_TOKEN_AUDIENCE
+      value: "false"
+  siteEnvVars: []
+  configKeys: []
+  service:
+    enabled: true
+    port: 1880
+    portName: "http-co-st-1880"
+    targetPort: "http-co-st-1880"
+  ingress: { enabled: false }
+  extraVolumes:
+    - name: redis-crt
+      secret: 
+         secretName: redis-crt
+    - name: mongo-mongodb-ca
+      secret:
+        secretName: mongo-mongodb-ca
+  extraVolumeMounts:
+    - name: redis-crt
+      mountPath: /redis
+    - name: mongo-mongodb-ca
+      mountPath: /mongo
+    - name: conversation-studio-flow-vol
+      mountPath: /flows
+
+##############################campaign-studio##############################
+campaign-studio:
+   enabled: true
+   image:       
+      repository: cim/conversation-studio/build
+      tag: "4.10.3_f-CIM-31595"
+   efConnectionVars: true
+   efEnvironmentVars: false
+   containerPorts:
+      - name: "http-sb-1880"
+        containerPort: 1880
+   extraEnvVars:
+      - name: TZ
+        value: Asia/Karachi
+      - name: FQDN
+        value: '{{ .Values.global.ingressRouter }}' 
+      - name: CAMPAIGNS_BACKEND
+        value: http://cx-campaigns-campaigns-backend-svc.expertflow.svc:3000
+      - name: SCHEDULER_URL
+        value:  http://cx-campaigns-scheduled-activities-svc.expertflow.svc:8894
+      - name: URIForWebhook
+        value: http://{{ .Release.Name }}-campaign-studio-svc.{{ .Release.Namespace }}.svc:1880
+      - name: GATEWAY_ID
+        value: 52952a5a-e7b0-40bc-aae2-f0819446c968
+      - name: IVR_EXTENSION
+        value: "*9664"
+      - name: UCCE_FQDN
+        value: 192.168.1.89
+      - name: UCCE_USERNAME
+        value: administrator@ucce.ipcc
+      - name: UCCE_PASSWORD
+        value: Expertflow464
+      - name: UCCX_FQDN
+        value: 192.168.1.33
+      - name: UCCX_USERNAME
+        value: Administrator
+      - name: UCCX_PASSWORD
+        value: Expertflow464
+      - name: ALLOW_CISCO_SELF_SIGNED_CERTS
+        value: "true"
+      - name: CISCO_PROXY
+        value: 'https://{{ .Values.global.ingressRouter }}/campaign-studio'
+      - name: CCM_URL
+        value: http://{{ .Values.global.efCxReleaseName }}-ccm-svc.expertflow.svc:8081
+      - name: EFCX_PROXY
+        value: 'https://{{ .Values.global.ingressRouter }}/campaign-studio'
+      - name: BATCH_PULL_INTERVAL
+        value: "60"
+      - name: LOG_LEVEL
+        value: "info"
+      - name: BATCH_HANDLER_SAVE_INTERVAL_SEC
+        value: "30"
+      - name: IS_MULTITENANCY_ENABLED
+        value: "true"
+      - name: TENANT_NAME
+        value: "{{ .Values.global.tenantId }}"
+      - name: DOMAIN_NAME
+        value: expertflow.com
+      - name: UNIFIED_ADMIN_URL
+        value: "https://{{ .Values.global.ingressRouter  }}/unified-admin/"
+      - name: KEYCLOAK_TEAM_TYPE
+        value: CX
+      - name: KEYCLOAK_BEARER_ONLY
+        value: "true"
+      - name: KEYCLOAK_CLIENT_DB_ID
+        value: ef61df80-061c-4c29-b9ac-387e6bf67052
+      - name: KEYCLOAK_CLIENT_ID
+        value: cim
+      - name: KEYCLOAK_CONFIDENTIAL_PORT
+        value: "0"
+      - name: KEYCLOAK_CREDENTIALS
+        value: '{"secret": "ef61df80-061c-4c29-b9ac-387e6bf67052"}'
+      - name: KEYCLOAK_GRANT_TYPE
+        value: "password"
+      - name: KEYCLOAK_GRANT_TYPE_PAT
+        value: "client_credentials"
+      - name: KEYCLOAK_HOST
+        value: "https://{{ .Values.global.ingressRouter  }}/auth/"
+      - name: KEYCLOAK_PASSWORD_ADMIN
+        value: admin
+      - name: KEYCLOAK_POLICY_ENFORCER
+        value: "{}"
+      - name: KEYCLOAK_REALM
+        value: "{{ .Values.global.tenantId }}"
+      - name: KEYCLOAK_RESOURCE
+        value: cim
+      - name: KEYCLOAK_SCOPE_NAME
+        value: "Any default scope"
+      - name: KEYCLOAK_SSL_REQUIRED
+        value: external
+      - name: KEYCLOAK_USE_RESOURCE_ROLE_MAPPINGS
+        value: "true"
+      - name: KEYCLOAK_USERNAME_ADMIN
+        value: admin
+      - name: KEYCLOAK_VERIFY_TOKEN_AUDIENCE
+        value: "false"
+   siteEnvVars: []
+   configKeys: []
+   service:
+      enabled: true
+      port: 1880
+      portName: "http-sb-1880"
+      targetPort: "http-sb-1880"
+   ingress: { enabled: false } # Using APISIX
+   extraVolumes:
+      - name: ef-logback
+        configMap:
+           name: ef-logback-cm
+      - name: mongo-mongodb-ca
+        secret:
+          secretName: mongo-mongodb-ca
+   extraVolumeMounts:
+      - name: ef-logback
+        mountPath: /logback
+      - name: cx-campaigns-studio-flow-vol
+        mountPath: /flows
+      - name: mongo-mongodb-ca
+        mountPath: /mongo
+
+##############################qm-backend##############################
+qm-backend:
+  enabled: true
+  image:
+    repository: cim/qm-backend/build
+    tag: "4.10.3_f-CIM-31595"
+  efConnectionVars: false
+  efEnvironmentVars: false
+  containerPorts:
+    - name: "http-qmbe3000"
+      containerPort: 3000
+  extraEnvVars:
+    - name: PG_PORT
+      value: "5432"
+    - name: LOG_LEVEL
+      value: debug
+    - name: PG_USERNAME
+      value: sa
+    - name: PG_PASSWORD
+      value: "Expertflow123"
+    - name: PG_DATABASE
+#      value: "rm_02"
+#      value: "rm_02sub"
+#      value: "rm_02tenant1"
+#      value: "rm_02tenant2"
+      value: "rm_02tenant3"
+    - name: CONVERSATION_MANAGER_URL
+      value: http://{{ .Values.global.efCxReleaseName }}-conversation-manager-svc.expertflow.svc:8080
+    - name: PG_HOST
+      value: ef-postgresql.ef-external.svc.cluster.local
+    - name: UNIFIED_ADMIN_URL
+      value: "https://{{ .Values.global.ingressRouter  }}/unified-admin/"
+    - name: KEYCLOAK_TEAM_TYPE
+      value: CX
+    - name: KEYCLOAK_BEARER_ONLY
+      value: "true"
+    - name: KEYCLOAK_CLIENT_DB_ID
+      value: ef61df80-061c-4c29-b9ac-387e6bf67052
+    - name: KEYCLOAK_CLIENT_ID
+      value: cim
+    - name: KEYCLOAK_CONFIDENTIAL_PORT
+      value: "0"
+    - name: KEYCLOAK_CREDENTIALS
+      value: '{"secret": "ef61df80-061c-4c29-b9ac-387e6bf67052"}'
+    - name: KEYCLOAK_GRANT_TYPE
+      value: "password"
+    - name: KEYCLOAK_GRANT_TYPE_PAT
+      value: "client_credentials"
+    - name: KEYCLOAK_HOST
+      value: "https://{{ .Values.global.ingressRouter  }}/auth/"
+    - name: KEYCLOAK_PASSWORD_ADMIN
+      value: admin
+    - name: KEYCLOAK_POLICY_ENFORCER
+      value: "{}"
+    - name: KEYCLOAK_REALM
+      value: "{{ .Values.global.tenantId }}"
+    - name: KEYCLOAK_RESOURCE
+      value: cim
+    - name: KEYCLOAK_SCOPE_NAME
+      value: "Any default scope"
+    - name: KEYCLOAK_SSL_REQUIRED
+      value: external
+    - name: KEYCLOAK_USE_RESOURCE_ROLE_MAPPINGS
+      value: "true"
+    - name: KEYCLOAK_USERNAME_ADMIN
+      value: admin
+    - name: KEYCLOAK_VERIFY_TOKEN_AUDIENCE
+      value: "false"
+    - name: MINIMUM_BULK_NOTIFICATION_INTERVAL
+      value: "30"
+    - name: IS_MULTITENANCY_ENABLED
+      value: true
+    - name: TENANT_NAME
+      value: "{{ .Values.global.tenantId }}"
+  siteEnvVars: []
+  configKeys: []
+  service:
+    enabled: true
+    port: 3000
+    portName: "http-qmbe3000"
+    targetPort: "http-qmbe3000"
+  ingress:
+    enabled: false
+  extraVolumes:
+    - name: ef-postgresql-crt
+      secret:
+        secretName: ef-postgresql-crt
+  extraVolumeMounts:
+    - name: ef-postgresql-crt
+      mountPath: /postgresql
