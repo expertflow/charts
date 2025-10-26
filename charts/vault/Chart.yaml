@@ -1,5 +1,6 @@
 annotations:
   charts.openshift.io/name: HashiCorp Vault
+  hashiCorpVersion: 0.28.0
 apiVersion: v2
 appVersion: 1.16.1
 description: Official HashiCorp Vault Chart
@@ -20,4 +21,4 @@ sources:
 - https://github.com/hashicorp/vault-helm
 - https://github.com/hashicorp/vault-k8s
 - https://github.com/hashicorp/vault-csi-provider
-version: 0.28.0
+version: 5.0-alpha
