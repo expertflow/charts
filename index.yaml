@@ -8874,6 +8874,52 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 8.0.4
+    created: "2025-10-26T10:59:56.959227088Z"
+    dependencies:
+    - name: common
+      repository: file://charts/common
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: MongoDB(R) is a relational open source NoSQL database. Easy to use,
+      it stores data in JSON-like documents. Automated scalability and high-performance.
+      Ideal for developing cloud native applications.
+    digest: 90527fa84f2dfc09deaf110883975e6ef0776d18c73ee3d4f8eaeb0bd54c8966
+    home: https://bitnami.com
+    icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/mongodb/img/mongodb-stack-220x234.png
+    keywords:
+    - mongodb
+    - database
+    - nosql
+    - cluster
+    - replicaset
+    - replication
+    maintainers:
+    - name: Broadcom, Inc. All Rights Reserved.
+      url: https://github.com/bitnami/charts
+    name: mongodb
+    sources:
+    - https://github.com/bitnami/charts/tree/main/bitnami/mongodb
+    urls:
+    - https://github.com/expertflow/charts/releases/download/mongodb-5.0-alpha/mongodb-5.0-alpha.tgz
+    version: 5.0-alpha
+  - annotations:
+      bitnamiVersion: 16.4.4
+      category: Database
+      images: |
+        - name: kubectl
+          image: docker.io/bitnami/kubectl:1.32.1-debian-12-r4
+        - name: mongodb
+          image: docker.io/bitnami/mongodb:8.0.4-debian-12-r3
+        - name: mongodb-exporter
+          image: docker.io/bitnami/mongodb-exporter:0.43.1-debian-12-r3
+        - name: nginx
+          image: docker.io/bitnami/nginx:1.27.3-debian-12-r5
+        - name: os-shell
+          image: docker.io/bitnami/os-shell:12-debian-12-r36
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 8.0.4
     created: "2025-10-07T12:27:12.138174247Z"
     dependencies:
     - name: common
@@ -11236,4 +11282,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-10-26T10:57:36.403168912Z"
+generated: "2025-10-26T10:59:56.959689871Z"
