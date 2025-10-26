@@ -9725,6 +9725,50 @@ entries:
       tanzuCategory: service
     apiVersion: v2
     appVersion: 7.4.3
+    created: "2025-10-26T11:09:25.736584016Z"
+    dependencies:
+    - name: common
+      repository: file://charts/common
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Redis(R) is an open source, advanced key-value store. It is often
+      referred to as a data structure server since keys can contain strings, hashes,
+      lists, sets and sorted sets.
+    digest: dd66a2ba4b258481796ce4f80e9d0b17cfc706915affceeb3ce274199bad2b16
+    home: https://bitnami.com
+    icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/redis/img/redis-stack-220x234.png
+    keywords:
+    - redis
+    - keyvalue
+    - database
+    maintainers:
+    - name: Broadcom, Inc. All Rights Reserved.
+      url: https://github.com/bitnami/charts
+    name: redis
+    sources:
+    - https://github.com/bitnami/charts/tree/main/bitnami/redis
+    urls:
+    - https://github.com/expertflow/charts/releases/download/redis-5.0-alpha/redis-5.0-alpha.tgz
+    version: 5.0-alpha
+  - annotations:
+      bitnamiVersion: 20.13.4
+      category: Database
+      images: |
+        - name: kubectl
+          image: docker.io/bitnami/kubectl:1.33.0-debian-12-r0
+        - name: os-shell
+          image: docker.io/bitnami/os-shell:12-debian-12-r43
+        - name: redis
+          image: docker.io/bitnami/redis:7.4.3-debian-12-r0
+        - name: redis-exporter
+          image: docker.io/bitnami/redis-exporter:1.70.0-debian-12-r2
+        - name: redis-sentinel
+          image: docker.io/bitnami/redis-sentinel:7.4.3-debian-12-r0
+      licenses: Apache-2.0
+      tanzuCategory: service
+    apiVersion: v2
+    appVersion: 7.4.3
     created: "2025-10-07T12:47:52.229949943Z"
     dependencies:
     - name: common
@@ -11341,4 +11385,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-10-26T11:07:16.74924575Z"
+generated: "2025-10-26T11:09:25.737361936Z"
