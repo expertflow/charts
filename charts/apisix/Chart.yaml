@@ -25,4 +25,4 @@ name: apisix
 sources:
 - https://github.com/apache/apisix-helm-chart
 type: application
-version: 4.10.4
+version: 5.0-alpha

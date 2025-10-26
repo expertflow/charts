@@ -15,7 +15,7 @@
 # limitations under the License.
 
 global:
-  ingressRouter: "devops.ef.com"
+  ingressRouter: "*.expertflow.com"
   ingressClassName: "nginx"
   ingressTlsCertName: "ef-ingress-tls-secret"
   # The OPA policy is defined here so it can be easily applied to any route.
@@ -262,7 +262,8 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-body-size: "6m"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -898,6 +899,14 @@ apisixStandalone:
          scheme: http
          type: roundrobin
          timeout: { connect: 5, send: 10, read: 10 }
+     - id: svc-metabase
+       name: svc-metabase
+       upstream: 
+         discovery_type: kubernetes
+         service_name: "metabase/metabase:http-cx-mb-3000"
+         scheme: http
+         type: roundrobin
+         timeout: { connect: 5, send: 10, read: 10 }
      - id: svc-realtime-reports
        name: svc-realtime-reports
        upstream:
@@ -1175,6 +1184,23 @@ apisixStandalone:
          scheme: https             # change to https if the pod’s containerPort is TLS
          type: roundrobin
          timeout: { connect: 5000, send: 10000, read: 10000 }
+     # Service for the Tenant Router
+     - id: svc-tenant-router
+       name: svc-tenant-router
+       upstream:
+         discovery_type: kubernetes
+         service_name: "expertflow/tenant-router-svc:http"
+         scheme: http
+         type: roundrobin
+         timeout: { connect: 5, send: 10, read: 10 }
+     - id: svc-cx-tenant
+       name: svc-cx-tenant
+       upstream:
+         discovery_type: kubernetes
+         service_name: "expertflow/ef-cx-cx-tenant-svc:http-c-t-3000"
+         scheme: http
+         type: roundrobin
+         timeout: { connect: 5, send: 10, read: 10 }
 
    # =================================================================
    # ROUTES
@@ -1183,6 +1209,67 @@ apisixStandalone:
    # Plugins for auth, rewrite, cors, etc., are applied here.
    #------------------------------------------------------------------
    routes:
+     # Passthrough route for Campaign Studio to Tenant Router
+     - id: campaigns-passthrough-to-router-route
+       uris:
+         - /campaign-studio
+         - /campaign-studio/*
+       hosts:
+         - "*.expertflow.com"
+       priority: 10
+       service_id: svc-tenant-router
+       enable_websocket: true
+       status: 1
+       
+     # Passthrough route for Conversation Studio to Tenant Router
+     - id: conversation-passthrough-to-router-route
+       uris:
+         - /conversation-studio
+         - /conversation-studio/*
+       hosts:
+         - "*.expertflow.com"
+       priority: 10
+       service_id: svc-tenant-router
+       enable_websocket: true
+       status: 1
+       
+    # Passthrough route for Survey Studio to Tenant Router
+     - id: survey-passthrough-to-router-route
+       uris:
+         - /survey-studio
+         - /survey-studio/*
+       hosts:
+         - "*.expertflow.com"
+       priority: 10
+       service_id: svc-tenant-router
+       enable_websocket: true
+       status: 1
+
+    # Passthrough route for qm-backend to Tenant Router
+     - id: qm-backend-passthrough-to-router-route
+       uris:
+         - /qm-backend
+         - /qm-backend/*
+       hosts:
+         - "*.expertflow.com"
+       priority: 10
+       service_id: svc-tenant-router
+       status: 1
+
+     # Passthrough route for qm-backend-sse to Tenant Router
+     - id: qm-backend-sse-passthrough-to-router-route
+       uris:
+         - /qm-backend/notification/*/sse
+       hosts:
+         - "*.expertflow.com"
+       priority: 10
+       service_id: svc-tenant-router
+       status: 1
+       timeout:
+         connect: 5
+         send: 43200          # 12h
+         read: 43200
+       
      # --- agent-manager ---
      - id: agent-manager-refresh-token-unsecured
        uris: ["/agent-manager/agent/refresh-token*"]
@@ -1647,6 +1734,19 @@ apisixStandalone:
            enable: true
            regex_uri: ["^/license-manager/?(.*)", "/$1"]
 
+     # --- metabase---
+     - id: metabase-main
+       uris: ["/metabase*", "/metabase/*"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       priority: 25
+       service_id: svc-metabase
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/metabase/?(.*)", "/$1"]
+
+
      # --- realtime-reports ---
      - id: ef-cx-realtime-reports-main
        uris: ["/realtime-reports/*"]
@@ -1734,23 +1834,6 @@ apisixStandalone:
            enable: true
            uri: "$uri/"
            ret_code: 301
-
-     - id: ef-cx-conversation-studio-api-channels
-       uris: ["/conversation-studio/channels", "/conversation-studio/channel-types"]
-       hosts: ["{{ .Values.global.ingressRouter }}"]
-       priority: 1
-       service_id: svc-conversation-studio
-       methods: ["GET"]
-       status: 1
-       plugins:
-         proxy-rewrite:
-           enable: true
-           regex_uri: ["^/conversation-studio/(.*)", "/$1"]
-         cors:
-           enable: true
-           allow_origins: "*"
-           allow_methods: "GET, OPTIONS"
-           allow_credentials: true
 
      - id: ef-cx-conversation-studio-main
        uris: ["/conversation-studio/*"]
@@ -2015,20 +2098,25 @@ apisixStandalone:
          client-control:
            enable: true
            config: { max_body_size: 6291456 }
-
      # --- grafana ---
      - id: cx-agent-desk-grafana-main
        uris: ["/grafana", "/grafana/*"]
        hosts: ["{{ .Values.global.ingressRouter }}"]
        priority: 0
        service_id: svc-grafana
-       enable_websocket: true
        status: 1
        plugins:
          proxy-rewrite:
-           enable: true
-           regex_uri: ["^/grafana/?(.*)", "/$1"]
-
+         #enable: true
+         regex_uri:
+           - "^/grafana(/|$)(.*)"
+           - "/$2"
+         headers:
+           X-Forwarded-Proto: "https"
+           X-Forwarded-Host: "{{ .Values.global.ingressRouter }}"
+           X-Forwarded-Prefix: "/grafana"
+           Upgrade: "$http_upgrade"
+           Connection: "upgrade"
      # --- campaigns-backend ---
      - id: cx-campaigns-campaigns-backend-main
        uris: ["/campaigns/*"]
@@ -2432,4 +2520,14 @@ apisixStandalone:
            allow_headers: "*"
            allow_credential: false
            max_age: 5
- 
+           
+     - id: cx-tenant
+       uris: ["/cx-tenant/*"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       priority: 0
+       service_id: svc-cx-tenant
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/cx-tenant/?(.*)", "/$1"]
