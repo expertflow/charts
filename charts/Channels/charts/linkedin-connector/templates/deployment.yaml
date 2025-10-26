@@ -109,7 +109,7 @@ spec:
           {{- end }}
           {{- if .Values.efConnectionVars }}
             - configMapRef:
-                 name: {{ .Release.Name }}-efconnections-cm
+                 name: {{ .Values.global.efCxReleaseName }}-efconnections-cm
           {{- end }}
           {{- if .Values.efEnvironmentVars }}
             - configMapRef:

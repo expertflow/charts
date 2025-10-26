@@ -19,7 +19,7 @@
 
 
 global:
-  ingressRouter: "devops243.ef.com"
+  ingressRouter: "*.expertflow.com"
   ingressCertName: "ef-ingress-tls-secret"
   ingressClassName: "nginx"
   efCxReleaseName: "ef-cx"
@@ -74,7 +74,7 @@ connect360:
    replicaCount: 1
    image:
       repository: cim/360-connector
-      tag: "4.10"
+      tag: "4.10.3_f-CIM-31034"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -117,8 +117,8 @@ facebook-connector:
    replicaCount: 1
    image:       
       repository: cim/facebook-connector
-      tag: "4.10"
-   efConnectionVars: false
+      tag: "4.10.3_f-CIM-31034"
+   efConnectionVars: true
    efEnvironmentVars: true 
    containerPorts:
       - name: "http-fb-co-8080"
@@ -158,8 +158,8 @@ instagram-connector:
    replicaCount: 1
    image:       
       repository: cim/instagram-connector
-      tag: "4.10"
-   efConnectionVars: false
+      tag: "4.10.3_f-CIM-31034"
+   efConnectionVars: true
    efEnvironmentVars: false 
    containerPorts:
       - name: "http-in-co-8080"
@@ -199,7 +199,7 @@ smpp-connector:
    replicaCount: 1
    image:       
       repository: cti/hc_smpp_connector
-      tag: "4.10"
+      tag: "4.10.3_f-CIM-31034"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -210,12 +210,12 @@ smpp-connector:
         value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
       - name: TZ
         value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: CCM_CONFIG_URL
+      - name: CCM_URL
         value: "https://{{ .Values.global.ingressRouter  }}/ccm/channel-connectors/configurations/"
+      - name: CX_TENANT_URL
+        value: "https://{{ .Values.global.ingressRouter  }}/cx-tenant/"
       - name: SPRING_PORT
         value: "8115"
-      - name: SERVICE_IDENTIFIER
-        value: "195"
       - name: MASKING_LAYOUT_CLASS
         value: "com.ef.sms.utils.MaskingPatternLayout"
    siteEnvVars: []
@@ -240,8 +240,8 @@ telegram-connector:
    replicaCount: 1
    image:       
       repository: cim/telegram-connector
-      tag: "4.10"
-   efConnectionVars: false
+      tag: "4.10.3_f-CIM-31034"
+   efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "http-te-co-8664"
@@ -282,7 +282,7 @@ twilio-connector:
    replicaCount: 1
    image:       
       repository: cim/twilio-connector
-      tag: "4.10"
+      tag: "4.10.3_f-CIM-31034"
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -322,7 +322,7 @@ twitter-connector:
    replicaCount: 1
    image:       
       repository: cim/twitter-connector
-      tag: "4.10"
+      tag: "4.10.3_f-CIM-31034"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -350,8 +350,8 @@ viber-connector:
    replicaCount: 1
    image:       
       repository: cim/viber-connector
-      tag: "4.10"
-   efConnectionVars: false
+      tag: "4.10.3_f-CIM-31034"
+   efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "http-vb-co-8080"
@@ -389,7 +389,7 @@ email-connector:
    replicaCount: 1
    image:
      repository: cim/email-connector
-     tag: "4.10"
+     tag: "4.10.3_f-CIM-31034"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -419,8 +419,8 @@ whatsapp-connector:
    replicaCount: 1
    image:
      repository: cim/whatsapp-connector
-     tag: "4.10"
-   efConnectionVars: false
+     tag: "4.10.3_f-CIM-31034"
+   efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
      - name: "http-wa-co-8080"
@@ -459,7 +459,7 @@ ms-email-connector:
    replicaCount: 1
    image:
      repository: cim/ms-exchange-email-connector
-     tag: "4.10.3"
+     tag: "4.10.3_f-CLCC-173"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -501,7 +501,7 @@ youtube-connector:
   replicaCount: 1
   image:
     repository: cim/youtube-connector
-    tag: "4.10"
+    tag: "4.10.3_f-CLCC-173"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -534,7 +534,7 @@ linkedin-connector:
    replicaCount: 1
    image:
       repository: project_dev/linkedinconnector
-      tag: "4.10.1"
+      tag: "4.10.3_f-CIM-31034"
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
