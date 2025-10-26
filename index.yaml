@@ -8459,6 +8459,28 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/logging-operator-4.11.2/logging-operator-4.11.2.tgz
     version: 4.11.2
+  metabase:
+  - annotations:
+      category: DeveloperTools
+      metabaseVersion: 1.0.14
+    apiVersion: v2
+    appVersion: "5"
+    created: "2025-10-26T10:53:29.668472095Z"
+    description: Expertflow CX Solution
+    digest: b1fcd9b9466775538f5c5f25ca9f9d3859563f7deba030daa76d06e921335238
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: metabase
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/metabase-5.0-alpha/metabase-5.0-alpha.tgz
+    version: 5.0-alpha
   middleware-cronjob:
   - apiVersion: v2
     appVersion: 4.10.0
@@ -11162,4 +11184,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-10-26T10:47:04.63240829Z"
+generated: "2025-10-26T10:53:29.668971643Z"
