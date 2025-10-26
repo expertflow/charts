@@ -73,9 +73,9 @@ clusterDomain: cluster.local
 unified-agent:
    enabled: true
    replicaCount: 1
-   image:       
-      repository: cim/unified-agent
-      tag: "4.10.3"
+   image:
+      repository: cim/unified-agent/build
+      tag: "4.10.3_b-CRM-394"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -216,6 +216,8 @@ unified-agent:
         value: "00000"
       - name: isSpellCheckEnabled
         value: "true"
+      - name: ROOT_DOMAIN
+        value: "expertflow.com"
    siteEnvVars: []
    configKeys: []
    service:
@@ -252,7 +254,7 @@ grafana:
   image:
     registry: gitimages.expertflow.com
     repository: general/grafana
-    tag: 9-debian11.2
+    tag: 12.0.2-debian-12-r0
     pullPolicy: IfNotPresent
   dashboardsProvider:
     enabled: true
@@ -286,6 +288,8 @@ grafana:
     grafanaIniConfigMap: "{{ .Values.global.efGrafanaIniCM }}"
   grafana:
     extraEnvVars:
+      - name: GF_SERVER_HTTP_PORT
+        value: "3000"
       - name: GF_SERVER_DOMAIN
         value: "{{ .Values.global.ingressRouter }}"
       - name: GF_SERVER_ROOT_URL
@@ -298,4 +302,19 @@ grafana:
         value: "true"
       - name: GF_AUTH_ANONYMOUS_ENABLED
         value: "true"
+      - name: GF_INSTALL_PLUGINS
+        value: "marcusolsson-json-datasource,yesoreyeram-infinity-datasource"
+      - name: GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS
+        value: "true"
+      - name: GF_LIVE_ENABLED
+        value: "false"
+  serviceAccount:
+    create: true
+    name: ""
+    automountServiceAccountToken: true
+  hostAliases:
+    - ip: "<IP>"
+      hostnames:
+        - "{{ .Values.global.ingressRouter }}"
   ingress: { enabled: false } # Disabled in favor of APISIX
+
