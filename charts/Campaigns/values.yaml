@@ -19,7 +19,7 @@
 
 
 global:
-  ingressRouter: "devops.ef.com"
+  ingressRouter: "*.expertflow.com"
   ingressCertName: "ef-ingress-tls-secret"
   ingressClassName: "nginx"
   efCxReleaseName: "ef-cx"
@@ -68,8 +68,8 @@ clusterDomain: cluster.local
 campaigns-backend:
    enabled: true
    image:       
-      repository: cim/campaigns
-      tag: "4.10.1"
+      repository: cim/campaigns/build
+      tag: "4.10.3_f-CIM-31595"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -120,8 +120,8 @@ campaigns-backend:
 campaign-studio:
    enabled: true
    image:       
-      repository: cim/conversation-studio
-      tag: "4.10.1"
+      repository: cim/conversation-studio/build
+      tag: "4.10.3_f-CIM-31595"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -162,6 +162,18 @@ campaign-studio:
         value: http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081
       - name: EFCX_PROXY
         value: 'https://{{ .Values.global.ingressRouter }}/campaign-studio'
+      - name: BATCH_PULL_INTERVAL
+        value: "60"
+      - name: LOG_LEVEL
+        value: "info"
+      - name: BATCH_HANDLER_SAVE_INTERVAL_SEC
+        value: "30"
+      - name: IS_MULTITENANCY_ENABLED
+        value: false
+      - name: TENANT_NAME
+        value: rm-02
+      - name: DOMAIN_NAME
+        value: expertflow.com
    siteEnvVars: []
    configKeys: []
    service:
@@ -174,11 +186,16 @@ campaign-studio:
       - name: ef-logback
         configMap:
            name: ef-logback-cm
+      - name: mongo-mongodb-ca
+        secret:
+          secretName: mongo-mongodb-ca
    extraVolumeMounts:
       - name: ef-logback
         mountPath: /logback
       - name: cx-campaigns-studio-flow-vol
         mountPath: /flows
+      - name: mongo-mongodb-ca
+        mountPath: /mongo
 
 
 
@@ -188,7 +205,7 @@ scheduled-activities:
   replicaCount: 1
   image:
     repository: campaign-manager/campaign-scheduler
-    tag: "4.10"
+    tag: "4.10.3_b-CIM-31589"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
