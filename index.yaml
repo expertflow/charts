@@ -1,5 +1,37 @@
 apiVersion: v1
 entries:
+  MTT-single:
+  - apiVersion: v2
+    appVersion: "5"
+    created: "2025-10-26T11:04:42.095508677Z"
+    dependencies:
+    - condition: conversation-studio.enabled
+      name: conversation-studio
+      repository: file://charts/conversation-studio
+      version: 5.0-alpha
+    - condition: campaign-studio.enabled
+      name: campaign-studio
+      repository: file://charts/campaign-studio
+      version: 5.0-alpha
+    - condition: qm-backend.enabled
+      name: qm-backend
+      repository: file://charts/qm-backend
+      version: 5.0-alpha
+    description: Expertflow CX Solution
+    digest: 7ca9ba6ee003e539f6eecca715c48b6c4ee9a6b13c9e9ea5b4d0e5dcfa45dfef
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: MTT-single
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/MTT-single-5.0-alpha/MTT-single-5.0-alpha.tgz
+    version: 5.0-alpha
   activemq:
   - apiVersion: v2
     appVersion: "5"
@@ -11282,4 +11314,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-10-26T10:59:56.959689871Z"
+generated: "2025-10-26T11:04:42.096663558Z"
