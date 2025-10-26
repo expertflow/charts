@@ -11191,6 +11191,34 @@ entries:
   vault:
   - annotations:
       charts.openshift.io/name: HashiCorp Vault
+      hashiCorpVersion: 0.28.0
+    apiVersion: v2
+    appVersion: 1.16.1
+    created: "2025-10-26T11:16:56.843974034Z"
+    description: Official HashiCorp Vault Chart
+    digest: 1ab23cd5faa06197b10c8ab85389daa6841397120fb9344102d67b46b6da8049
+    home: https://www.vaultproject.io
+    icon: https://github.com/hashicorp/vault/raw/f22d202cde2018f9455dec755118a9b84586e082/Vault_PrimaryLogo_Black.png
+    keywords:
+    - vault
+    - security
+    - encryption
+    - secrets
+    - management
+    - automation
+    - infrastructure
+    kubeVersion: '>= 1.20.0-0'
+    name: vault
+    sources:
+    - https://github.com/hashicorp/vault
+    - https://github.com/hashicorp/vault-helm
+    - https://github.com/hashicorp/vault-k8s
+    - https://github.com/hashicorp/vault-csi-provider
+    urls:
+    - https://github.com/expertflow/charts/releases/download/vault-5.0-alpha/vault-5.0-alpha.tgz
+    version: 5.0-alpha
+  - annotations:
+      charts.openshift.io/name: HashiCorp Vault
     apiVersion: v2
     appVersion: 1.16.1
     created: "2025-07-15T08:13:07.796164162Z"
@@ -11421,4 +11449,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-10-26T11:13:05.158902295Z"
+generated: "2025-10-26T11:16:56.844444786Z"
