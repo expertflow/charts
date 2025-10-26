@@ -10829,6 +10829,24 @@ entries:
     version: 16.0.0-v1
   transflux:
   - apiVersion: v2
+    appVersion: "5"
+    created: "2025-10-26T11:13:05.158247002Z"
+    description: CX Data Platform
+    digest: 5238711574fcabbcf02b12c9236ba072e2b44b04f8ed333f051eef11cd7438a9
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: transflux
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/transflux-5.0-alpha/transflux-5.0-alpha.tgz
+    version: 5.0-alpha
+  - apiVersion: v2
     appVersion: 4.10.0
     created: "2025-09-30T07:38:09.124000304Z"
     description: CX Data Platform
@@ -11403,4 +11421,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-10-26T11:11:39.100936633Z"
+generated: "2025-10-26T11:13:05.158902295Z"
