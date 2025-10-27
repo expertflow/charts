@@ -1523,7 +1523,7 @@ unified-admin:
     enabled: true
     replicaCount: 1
     image:
-        repository: cim/unified-admin/build
+        repository: cim/unified-admin
         tag: "5.0_b-CRM-419"
     efConnectionVars: true
     efEnvironmentVars: false
@@ -1853,8 +1853,8 @@ cx-tenant:
   enabled: true
   replicaCount: 1
   image:
-    repository: cim/cx-tenant
-    tag: "4.10.3_b-CRM-335"
+    repository: cim/cx-tenant/build
+    tag: "4.10.3_b-CRM-422"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
