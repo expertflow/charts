@@ -1853,7 +1853,7 @@ cx-tenant:
   enabled: true
   replicaCount: 1
   image:
-    repository: cim/cx-tenant/build
+    repository: cim/cx-tenant
     tag: "4.10.3_b-CRM-422"
   efConnectionVars: true
   efEnvironmentVars: false
