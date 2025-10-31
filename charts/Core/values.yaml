@@ -933,7 +933,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: 4.9.5
+        tag: 4.9.6
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -970,6 +970,8 @@ customer-widget:
           value: "true"
         - name: MUTE_NOTIFICATIONS
           value: "false"
+        - name: SURVEY_FORM_LINK
+          value: "https://solution.domain.com/Base_URL/"
     service:
         enabled: true
         port: 80
