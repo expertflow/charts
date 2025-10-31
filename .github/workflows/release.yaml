@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - CX-4.9.5
+      - CX-4.9.6
     paths:
       - 'charts/**'
 jobs:
