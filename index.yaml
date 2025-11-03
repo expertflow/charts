@@ -9528,6 +9528,52 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 8.0.4
+    created: "2025-11-03T10:03:01.851183913Z"
+    dependencies:
+    - name: common
+      repository: file://charts/common
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: MongoDB(R) is a relational open source NoSQL database. Easy to use,
+      it stores data in JSON-like documents. Automated scalability and high-performance.
+      Ideal for developing cloud native applications.
+    digest: 175edb51f7ef5cbd67225422cba943f2f66ab10b9b25e64aed877fd8cd0b7092
+    home: https://bitnami.com
+    icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/mongodb/img/mongodb-stack-220x234.png
+    keywords:
+    - mongodb
+    - database
+    - nosql
+    - cluster
+    - replicaset
+    - replication
+    maintainers:
+    - name: Broadcom, Inc. All Rights Reserved.
+      url: https://github.com/bitnami/charts
+    name: mongodb
+    sources:
+    - https://github.com/bitnami/charts/tree/main/bitnami/mongodb
+    urls:
+    - https://github.com/expertflow/charts/releases/download/mongodb-5.0/mongodb-5.0.tgz
+    version: "5.0"
+  - annotations:
+      bitnamiVersion: 16.4.4
+      category: Database
+      images: |
+        - name: kubectl
+          image: docker.io/bitnami/kubectl:1.32.1-debian-12-r4
+        - name: mongodb
+          image: docker.io/bitnami/mongodb:8.0.4-debian-12-r3
+        - name: mongodb-exporter
+          image: docker.io/bitnami/mongodb-exporter:0.43.1-debian-12-r3
+        - name: nginx
+          image: docker.io/bitnami/nginx:1.27.3-debian-12-r5
+        - name: os-shell
+          image: docker.io/bitnami/os-shell:12-debian-12-r36
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 8.0.4
     created: "2025-10-26T10:59:56.959227088Z"
     dependencies:
     - name: common
@@ -12071,4 +12117,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-11-03T10:01:33.539476773Z"
+generated: "2025-11-03T10:03:01.851715071Z"
