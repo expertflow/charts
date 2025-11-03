@@ -68,8 +68,8 @@ clusterDomain: cluster.local
 campaigns-backend:
    enabled: true
    image:       
-      repository: cim/campaigns/build
-      tag: "4.10.3_f-CIM-31595"
+      repository: cim/campaigns
+      tag: "5.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -120,8 +120,8 @@ campaigns-backend:
 campaign-studio:
    enabled: true
    image:       
-      repository: cim/conversation-studio/build
-      tag: "4.10.3_f-CIM-31595"
+      repository: cim/conversation-studio
+      tag: "5.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -205,7 +205,7 @@ scheduled-activities:
   replicaCount: 1
   image:
     repository: campaign-manager/campaign-scheduler
-    tag: "4.10.3_b-CIM-31589"
+    tag: "5.0"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
