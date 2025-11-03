@@ -3,4 +3,4 @@ dependencies:
   repository: file://charts/common
   version: 2.0.3
 digest: sha256:be5d68f79f41e968d4811c787fae038c827730f7f20731fcec669aea3455936f
-generated: "2025-11-03T14:43:11.040498+05:00"
+generated: "2025-11-03T14:46:52.211853+05:00"
