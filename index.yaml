@@ -9300,6 +9300,40 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 2022.10.5
+    created: "2025-11-03T10:01:33.538944498Z"
+    dependencies:
+    - name: common
+      repository: file://charts/common
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: MinIO(R) is an object storage server, compatible with Amazon S3 cloud
+      storage service, mainly used for storing unstructured data (such as photos,
+      videos, log files, etc.).
+    digest: 217f6f208b2a3505de4f83d1387f4a3d0a4190690c01ec4e9fb7a4f08ea811bf
+    home: https://github.com/bitnami/charts/tree/master/bitnami/minio
+    icon: https://bitnami.com/assets/stacks/minio/img/minio-stack-220x234.png
+    keywords:
+    - minio
+    - storage
+    - object-storage
+    - s3
+    - cluster
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: minio
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/minio
+    - https://min.io
+    urls:
+    - https://github.com/expertflow/charts/releases/download/minio-5.0/minio-5.0.tgz
+    version: "5.0"
+  - annotations:
+      bitnamiVersion: 11.10.6
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 2022.10.5
     created: "2025-10-26T10:57:36.402683394Z"
     dependencies:
     - name: common
@@ -12037,4 +12071,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-11-03T09:58:47.525157477Z"
+generated: "2025-11-03T10:01:33.539476773Z"
