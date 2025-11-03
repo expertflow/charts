@@ -4180,8 +4180,8 @@ entries:
     version: 4.9.0
   cx:
   - apiVersion: v2
-    appVersion: "5"
-    created: "2025-10-27T11:49:12.941012759Z"
+    appVersion: "5.0"
+    created: "2025-11-03T09:31:44.733245032Z"
     dependencies:
     - condition: agent-manager.enabled
       name: agent-manager
@@ -4264,7 +4264,7 @@ entries:
       repository: file://charts/conversation-studio
       version: 1.0.0
     description: Expertflow CX Solution
-    digest: e0bd2b9833485a51b8cb5c2d631206db923ee4a5ba642813f2e2b4f6575dd26c
+    digest: 28c7fba197e0cad25ec474d02517527fcd2b6969f21e7a62a9641ff7d1d2f780
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -4276,8 +4276,8 @@ entries:
     name: cx
     type: application
     urls:
-    - https://github.com/expertflow/charts/releases/download/cx-5.0-alpha/cx-5.0-alpha.tgz
-    version: 5.0-alpha
+    - https://github.com/expertflow/charts/releases/download/cx-5.0/cx-5.0.tgz
+    version: "5.0"
   - apiVersion: v2
     appVersion: "5"
     created: "2025-10-26T10:36:02.448002473Z"
@@ -4364,6 +4364,105 @@ entries:
       version: 1.0.0
     description: Expertflow CX Solution
     digest: e3d8b5da04a91e59b8cfec44de662c96edee4513ed54732bb3ba32753168c119
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: cx
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/cx-5.0-alpha/cx-5.0-alpha.tgz
+    version: 5.0-alpha
+  - apiVersion: v2
+    appVersion: "5"
+    created: "2025-10-27T11:49:12.941012759Z"
+    dependencies:
+    - condition: agent-manager.enabled
+      name: agent-manager
+      repository: file://charts/agent-manager
+      version: 1.0.0
+    - condition: bot-framework.enabled
+      name: bot-framework
+      repository: file://charts/bot-framework
+      version: 1.0.0
+    - condition: ccm.enabled
+      name: ccm
+      repository: file://charts/ccm
+      version: 1.0.0
+    - condition: cim-customer.enabled
+      name: cim-customer
+      repository: file://charts/cim-customer
+      version: 1.0.0
+    - condition: conversation-manager.enabled
+      name: conversation-manager
+      repository: file://charts/conversation-manager
+      version: 1.0.0
+    - condition: conversation-monitor.enabled
+      name: conversation-monitor
+      repository: file://charts/conversation-monitor
+      version: 1.0.0
+    - condition: customer-widget.enabled
+      name: customer-widget
+      repository: file://charts/customer-widget
+      version: 1.0.0
+    - condition: file-engine.enabled
+      name: file-engine
+      repository: file://charts/file-engine
+      version: 1.0.0
+    - condition: historical-reports.enabled
+      name: historical-reports
+      repository: file://charts/historical-reports
+      version: 1.0.0
+    - condition: license-manager.enabled
+      name: license-manager
+      repository: file://charts/license-manager
+      version: 1.0.0
+    - condition: realtime-reports.enabled
+      name: realtime-reports
+      repository: file://charts/realtime-reports
+      version: 1.0.0
+    - condition: routing-engine.enabled
+      name: routing-engine
+      repository: file://charts/routing-engine
+      version: 1.0.0
+    - condition: state-events-logger.enabled
+      name: state-events-logger
+      repository: file://charts/state-events-logger
+      version: 1.0.0
+    - condition: team-announcement.enabled
+      name: team-announcement
+      repository: file://charts/team-announcement
+      version: 1.0.0
+    - condition: unified-admin.enabled
+      name: unified-admin
+      repository: file://charts/unified-admin
+      version: 1.0.0
+    - condition: web-channel-manager.enabled
+      name: web-channel-manager
+      repository: file://charts/web-channel-manager
+      version: 1.0.0
+    - condition: business-calendar.enabled
+      name: business-calendar
+      repository: file://charts/business-calendar
+      version: 1.0.14
+    - condition: cx-load-hub.enabled
+      name: cx-load-hub
+      repository: file://charts/cx-load-hub
+      version: 1.0.14
+    - condition: cx-tenant.enabled
+      name: cx-tenant
+      repository: file://charts/cx-tenant
+      version: 1.0.14
+    - condition: conversation-studio.enabled
+      name: conversation-studio
+      repository: file://charts/conversation-studio
+      version: 1.0.0
+    description: Expertflow CX Solution
+    digest: e0bd2b9833485a51b8cb5c2d631206db923ee4a5ba642813f2e2b4f6575dd26c
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -4854,6 +4953,97 @@ entries:
     version: 4.10.0
   - apiVersion: v2
     appVersion: 4.10.0
+    created: "2025-07-15T06:31:12.122342519Z"
+    dependencies:
+    - condition: agent-manager.enabled
+      name: agent-manager
+      repository: file://charts/agent-manager
+      version: 1.0.0
+    - condition: bot-framework.enabled
+      name: bot-framework
+      repository: file://charts/bot-framework
+      version: 1.0.0
+    - condition: ccm.enabled
+      name: ccm
+      repository: file://charts/ccm
+      version: 1.0.0
+    - condition: cim-customer.enabled
+      name: cim-customer
+      repository: file://charts/cim-customer
+      version: 1.0.0
+    - condition: conversation-manager.enabled
+      name: conversation-manager
+      repository: file://charts/conversation-manager
+      version: 1.0.0
+    - condition: conversation-monitor.enabled
+      name: conversation-monitor
+      repository: file://charts/conversation-monitor
+      version: 1.0.0
+    - condition: customer-widget.enabled
+      name: customer-widget
+      repository: file://charts/customer-widget
+      version: 1.0.0
+    - condition: file-engine.enabled
+      name: file-engine
+      repository: file://charts/file-engine
+      version: 1.0.0
+    - condition: historical-reports.enabled
+      name: historical-reports
+      repository: file://charts/historical-reports
+      version: 1.0.0
+    - condition: license-manager.enabled
+      name: license-manager
+      repository: file://charts/license-manager
+      version: 1.0.0
+    - condition: realtime-reports.enabled
+      name: realtime-reports
+      repository: file://charts/realtime-reports
+      version: 1.0.0
+    - condition: routing-engine.enabled
+      name: routing-engine
+      repository: file://charts/routing-engine
+      version: 1.0.0
+    - condition: state-events-logger.enabled
+      name: state-events-logger
+      repository: file://charts/state-events-logger
+      version: 1.0.0
+    - condition: team-announcement.enabled
+      name: team-announcement
+      repository: file://charts/team-announcement
+      version: 1.0.0
+    - condition: unified-admin.enabled
+      name: unified-admin
+      repository: file://charts/unified-admin
+      version: 1.0.0
+    - condition: web-channel-manager.enabled
+      name: web-channel-manager
+      repository: file://charts/web-channel-manager
+      version: 1.0.0
+    - condition: business-calendar.enabled
+      name: business-calendar
+      repository: file://charts/business-calendar
+      version: 1.0.14
+    - condition: cx-load-hub.enabled
+      name: cx-load-hub
+      repository: file://charts/cx-load-hub
+      version: 1.0.14
+    description: Expertflow CX Solution
+    digest: 4a80d973cf8c11486f56a1fbec5f10836ec2fcabeccbfe9cf8dbce204b3fbffe
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: cx
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/cx-4.10.0-rc.1/cx-4.10.0-rc.1.tgz
+    version: 4.10.0-rc.1
+  - apiVersion: v2
+    appVersion: 4.10.0
     created: "2025-07-17T10:53:11.904031131Z"
     dependencies:
     - condition: agent-manager.enabled
@@ -5029,192 +5219,6 @@ entries:
       version: 1.0.0
     description: Expertflow CX Solution
     digest: 28a1706955e4043962cb5f1a4b7933b32b301383770fc3b21906220181397b45
-    home: https://expertflow.com
-    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
-    keywords:
-    - Expertflow
-    - C2C Communications
-    maintainers:
-    - email: nasir.mehmood@expertflow.com
-      name: NMR Nasir Mehmood Rajput
-    name: cx
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/cx-4.10.0-rc.1/cx-4.10.0-rc.1.tgz
-    version: 4.10.0-rc.1
-  - apiVersion: v2
-    appVersion: 4.10.0
-    created: "2025-07-16T06:03:16.926563766Z"
-    dependencies:
-    - condition: agent-manager.enabled
-      name: agent-manager
-      repository: file://charts/agent-manager
-      version: 1.0.0
-    - condition: bot-framework.enabled
-      name: bot-framework
-      repository: file://charts/bot-framework
-      version: 1.0.0
-    - condition: ccm.enabled
-      name: ccm
-      repository: file://charts/ccm
-      version: 1.0.0
-    - condition: cim-customer.enabled
-      name: cim-customer
-      repository: file://charts/cim-customer
-      version: 1.0.0
-    - condition: conversation-manager.enabled
-      name: conversation-manager
-      repository: file://charts/conversation-manager
-      version: 1.0.0
-    - condition: conversation-monitor.enabled
-      name: conversation-monitor
-      repository: file://charts/conversation-monitor
-      version: 1.0.0
-    - condition: customer-widget.enabled
-      name: customer-widget
-      repository: file://charts/customer-widget
-      version: 1.0.0
-    - condition: file-engine.enabled
-      name: file-engine
-      repository: file://charts/file-engine
-      version: 1.0.0
-    - condition: historical-reports.enabled
-      name: historical-reports
-      repository: file://charts/historical-reports
-      version: 1.0.0
-    - condition: license-manager.enabled
-      name: license-manager
-      repository: file://charts/license-manager
-      version: 1.0.0
-    - condition: realtime-reports.enabled
-      name: realtime-reports
-      repository: file://charts/realtime-reports
-      version: 1.0.0
-    - condition: routing-engine.enabled
-      name: routing-engine
-      repository: file://charts/routing-engine
-      version: 1.0.0
-    - condition: state-events-logger.enabled
-      name: state-events-logger
-      repository: file://charts/state-events-logger
-      version: 1.0.0
-    - condition: team-announcement.enabled
-      name: team-announcement
-      repository: file://charts/team-announcement
-      version: 1.0.0
-    - condition: unified-admin.enabled
-      name: unified-admin
-      repository: file://charts/unified-admin
-      version: 1.0.0
-    - condition: web-channel-manager.enabled
-      name: web-channel-manager
-      repository: file://charts/web-channel-manager
-      version: 1.0.0
-    - condition: business-calendar.enabled
-      name: business-calendar
-      repository: file://charts/business-calendar
-      version: 1.0.14
-    - condition: cx-load-hub.enabled
-      name: cx-load-hub
-      repository: file://charts/cx-load-hub
-      version: 1.0.14
-    - condition: conversation-studio.enabled
-      name: conversation-studio
-      repository: file://charts/conversation-studio
-      version: 1.0.0
-    description: Expertflow CX Solution
-    digest: 5ba974e7110325db2c56d19ca62ca4eb1e28957ac6506c02200dd8847dea9309
-    home: https://expertflow.com
-    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
-    keywords:
-    - Expertflow
-    - C2C Communications
-    maintainers:
-    - email: nasir.mehmood@expertflow.com
-      name: NMR Nasir Mehmood Rajput
-    name: cx
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/cx-4.10.0-rc.1/cx-4.10.0-rc.1.tgz
-    version: 4.10.0-rc.1
-  - apiVersion: v2
-    appVersion: 4.10.0
-    created: "2025-07-15T06:31:12.122342519Z"
-    dependencies:
-    - condition: agent-manager.enabled
-      name: agent-manager
-      repository: file://charts/agent-manager
-      version: 1.0.0
-    - condition: bot-framework.enabled
-      name: bot-framework
-      repository: file://charts/bot-framework
-      version: 1.0.0
-    - condition: ccm.enabled
-      name: ccm
-      repository: file://charts/ccm
-      version: 1.0.0
-    - condition: cim-customer.enabled
-      name: cim-customer
-      repository: file://charts/cim-customer
-      version: 1.0.0
-    - condition: conversation-manager.enabled
-      name: conversation-manager
-      repository: file://charts/conversation-manager
-      version: 1.0.0
-    - condition: conversation-monitor.enabled
-      name: conversation-monitor
-      repository: file://charts/conversation-monitor
-      version: 1.0.0
-    - condition: customer-widget.enabled
-      name: customer-widget
-      repository: file://charts/customer-widget
-      version: 1.0.0
-    - condition: file-engine.enabled
-      name: file-engine
-      repository: file://charts/file-engine
-      version: 1.0.0
-    - condition: historical-reports.enabled
-      name: historical-reports
-      repository: file://charts/historical-reports
-      version: 1.0.0
-    - condition: license-manager.enabled
-      name: license-manager
-      repository: file://charts/license-manager
-      version: 1.0.0
-    - condition: realtime-reports.enabled
-      name: realtime-reports
-      repository: file://charts/realtime-reports
-      version: 1.0.0
-    - condition: routing-engine.enabled
-      name: routing-engine
-      repository: file://charts/routing-engine
-      version: 1.0.0
-    - condition: state-events-logger.enabled
-      name: state-events-logger
-      repository: file://charts/state-events-logger
-      version: 1.0.0
-    - condition: team-announcement.enabled
-      name: team-announcement
-      repository: file://charts/team-announcement
-      version: 1.0.0
-    - condition: unified-admin.enabled
-      name: unified-admin
-      repository: file://charts/unified-admin
-      version: 1.0.0
-    - condition: web-channel-manager.enabled
-      name: web-channel-manager
-      repository: file://charts/web-channel-manager
-      version: 1.0.0
-    - condition: business-calendar.enabled
-      name: business-calendar
-      repository: file://charts/business-calendar
-      version: 1.0.14
-    - condition: cx-load-hub.enabled
-      name: cx-load-hub
-      repository: file://charts/cx-load-hub
-      version: 1.0.14
-    description: Expertflow CX Solution
-    digest: 4a80d973cf8c11486f56a1fbec5f10836ec2fcabeccbfe9cf8dbce204b3fbffe
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -5595,6 +5599,101 @@ entries:
       version: 1.0.0
     description: Expertflow CX Solution
     digest: c6047b2e40eb70c23196a1b92cf773ccc618f68edef567d4c7713bb2dd7ea8e1
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: cx
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/cx-4.10.0-rc.1/cx-4.10.0-rc.1.tgz
+    version: 4.10.0-rc.1
+  - apiVersion: v2
+    appVersion: 4.10.0
+    created: "2025-07-16T06:03:16.926563766Z"
+    dependencies:
+    - condition: agent-manager.enabled
+      name: agent-manager
+      repository: file://charts/agent-manager
+      version: 1.0.0
+    - condition: bot-framework.enabled
+      name: bot-framework
+      repository: file://charts/bot-framework
+      version: 1.0.0
+    - condition: ccm.enabled
+      name: ccm
+      repository: file://charts/ccm
+      version: 1.0.0
+    - condition: cim-customer.enabled
+      name: cim-customer
+      repository: file://charts/cim-customer
+      version: 1.0.0
+    - condition: conversation-manager.enabled
+      name: conversation-manager
+      repository: file://charts/conversation-manager
+      version: 1.0.0
+    - condition: conversation-monitor.enabled
+      name: conversation-monitor
+      repository: file://charts/conversation-monitor
+      version: 1.0.0
+    - condition: customer-widget.enabled
+      name: customer-widget
+      repository: file://charts/customer-widget
+      version: 1.0.0
+    - condition: file-engine.enabled
+      name: file-engine
+      repository: file://charts/file-engine
+      version: 1.0.0
+    - condition: historical-reports.enabled
+      name: historical-reports
+      repository: file://charts/historical-reports
+      version: 1.0.0
+    - condition: license-manager.enabled
+      name: license-manager
+      repository: file://charts/license-manager
+      version: 1.0.0
+    - condition: realtime-reports.enabled
+      name: realtime-reports
+      repository: file://charts/realtime-reports
+      version: 1.0.0
+    - condition: routing-engine.enabled
+      name: routing-engine
+      repository: file://charts/routing-engine
+      version: 1.0.0
+    - condition: state-events-logger.enabled
+      name: state-events-logger
+      repository: file://charts/state-events-logger
+      version: 1.0.0
+    - condition: team-announcement.enabled
+      name: team-announcement
+      repository: file://charts/team-announcement
+      version: 1.0.0
+    - condition: unified-admin.enabled
+      name: unified-admin
+      repository: file://charts/unified-admin
+      version: 1.0.0
+    - condition: web-channel-manager.enabled
+      name: web-channel-manager
+      repository: file://charts/web-channel-manager
+      version: 1.0.0
+    - condition: business-calendar.enabled
+      name: business-calendar
+      repository: file://charts/business-calendar
+      version: 1.0.14
+    - condition: cx-load-hub.enabled
+      name: cx-load-hub
+      repository: file://charts/cx-load-hub
+      version: 1.0.14
+    - condition: conversation-studio.enabled
+      name: conversation-studio
+      repository: file://charts/conversation-studio
+      version: 1.0.0
+    description: Expertflow CX Solution
+    digest: 5ba974e7110325db2c56d19ca62ca4eb1e28957ac6506c02200dd8847dea9309
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -6986,7 +7085,7 @@ entries:
     version: 4.7.0
   - apiVersion: v2
     appVersion: 4.7.0
-    created: "2025-01-06T11:41:47.959410878Z"
+    created: "2025-01-22T10:35:38.268550174Z"
     dependencies:
     - condition: agent-manager.enabled
       name: agent-manager
@@ -7053,90 +7152,7 @@ entries:
       repository: file://charts/web-channel-manager
       version: 1.0.0
     description: Expertflow CX Solution
-    digest: 2cece96426ae69cb2805813ca44bc2406b9f2de769c4daddf79ac4ed64ee6130
-    home: https://expertflow.com
-    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
-    keywords:
-    - Expertflow
-    - C2C Communications
-    maintainers:
-    - email: nasir.mehmood@expertflow.com
-      name: NMR Nasir Mehmood Rajput
-    name: cx
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/cx-4.7.0-alpha/cx-4.7.0-alpha.tgz
-    version: 4.7.0-alpha
-  - apiVersion: v2
-    appVersion: 4.7.0
-    created: "2025-01-14T11:57:08.192581922Z"
-    dependencies:
-    - condition: agent-manager.enabled
-      name: agent-manager
-      repository: file://charts/agent-manager
-      version: 1.0.0
-    - condition: bot-framework.enabled
-      name: bot-framework
-      repository: file://charts/bot-framework
-      version: 1.0.0
-    - condition: ccm.enabled
-      name: ccm
-      repository: file://charts/ccm
-      version: 1.0.0
-    - condition: cim-customer.enabled
-      name: cim-customer
-      repository: file://charts/cim-customer
-      version: 1.0.0
-    - condition: conversation-manager.enabled
-      name: conversation-manager
-      repository: file://charts/conversation-manager
-      version: 1.0.0
-    - condition: conversation-monitor.enabled
-      name: conversation-monitor
-      repository: file://charts/conversation-monitor
-      version: 1.0.0
-    - condition: customer-widget.enabled
-      name: customer-widget
-      repository: file://charts/customer-widget
-      version: 1.0.0
-    - condition: file-engine.enabled
-      name: file-engine
-      repository: file://charts/file-engine
-      version: 1.0.0
-    - condition: historical-reports.enabled
-      name: historical-reports
-      repository: file://charts/historical-reports
-      version: 1.0.0
-    - condition: license-manager.enabled
-      name: license-manager
-      repository: file://charts/license-manager
-      version: 1.0.0
-    - condition: realtime-reports.enabled
-      name: realtime-reports
-      repository: file://charts/realtime-reports
-      version: 1.0.0
-    - condition: routing-engine.enabled
-      name: routing-engine
-      repository: file://charts/routing-engine
-      version: 1.0.0
-    - condition: state-events-logger.enabled
-      name: state-events-logger
-      repository: file://charts/state-events-logger
-      version: 1.0.0
-    - condition: team-announcement.enabled
-      name: team-announcement
-      repository: file://charts/team-announcement
-      version: 1.0.0
-    - condition: unified-admin.enabled
-      name: unified-admin
-      repository: file://charts/unified-admin
-      version: 1.0.0
-    - condition: web-channel-manager.enabled
-      name: web-channel-manager
-      repository: file://charts/web-channel-manager
-      version: 1.0.0
-    description: Expertflow CX Solution
-    digest: 0419fdc3ed2080e166b8259551289584762dffb79cf3403139c7c2ad55f2e080
+    digest: 51dd56b09a2b0cc314fd9238fa12c6e820634e4059b59de535b6bc2abbe5ba7b
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -7235,7 +7251,7 @@ entries:
     version: 4.7.0-alpha
   - apiVersion: v2
     appVersion: 4.7.0
-    created: "2025-01-22T10:35:38.268550174Z"
+    created: "2025-01-14T11:57:08.192581922Z"
     dependencies:
     - condition: agent-manager.enabled
       name: agent-manager
@@ -7302,7 +7318,7 @@ entries:
       repository: file://charts/web-channel-manager
       version: 1.0.0
     description: Expertflow CX Solution
-    digest: 51dd56b09a2b0cc314fd9238fa12c6e820634e4059b59de535b6bc2abbe5ba7b
+    digest: 0419fdc3ed2080e166b8259551289584762dffb79cf3403139c7c2ad55f2e080
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -7552,6 +7568,89 @@ entries:
       version: 1.0.0
     description: Expertflow CX Solution
     digest: 7094b3f7bc4f363937899e93bc8152cdfa70556455a9273f8fa71b909287e96e
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: cx
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/cx-4.7.0-alpha/cx-4.7.0-alpha.tgz
+    version: 4.7.0-alpha
+  - apiVersion: v2
+    appVersion: 4.7.0
+    created: "2025-01-06T11:41:47.959410878Z"
+    dependencies:
+    - condition: agent-manager.enabled
+      name: agent-manager
+      repository: file://charts/agent-manager
+      version: 1.0.0
+    - condition: bot-framework.enabled
+      name: bot-framework
+      repository: file://charts/bot-framework
+      version: 1.0.0
+    - condition: ccm.enabled
+      name: ccm
+      repository: file://charts/ccm
+      version: 1.0.0
+    - condition: cim-customer.enabled
+      name: cim-customer
+      repository: file://charts/cim-customer
+      version: 1.0.0
+    - condition: conversation-manager.enabled
+      name: conversation-manager
+      repository: file://charts/conversation-manager
+      version: 1.0.0
+    - condition: conversation-monitor.enabled
+      name: conversation-monitor
+      repository: file://charts/conversation-monitor
+      version: 1.0.0
+    - condition: customer-widget.enabled
+      name: customer-widget
+      repository: file://charts/customer-widget
+      version: 1.0.0
+    - condition: file-engine.enabled
+      name: file-engine
+      repository: file://charts/file-engine
+      version: 1.0.0
+    - condition: historical-reports.enabled
+      name: historical-reports
+      repository: file://charts/historical-reports
+      version: 1.0.0
+    - condition: license-manager.enabled
+      name: license-manager
+      repository: file://charts/license-manager
+      version: 1.0.0
+    - condition: realtime-reports.enabled
+      name: realtime-reports
+      repository: file://charts/realtime-reports
+      version: 1.0.0
+    - condition: routing-engine.enabled
+      name: routing-engine
+      repository: file://charts/routing-engine
+      version: 1.0.0
+    - condition: state-events-logger.enabled
+      name: state-events-logger
+      repository: file://charts/state-events-logger
+      version: 1.0.0
+    - condition: team-announcement.enabled
+      name: team-announcement
+      repository: file://charts/team-announcement
+      version: 1.0.0
+    - condition: unified-admin.enabled
+      name: unified-admin
+      repository: file://charts/unified-admin
+      version: 1.0.0
+    - condition: web-channel-manager.enabled
+      name: web-channel-manager
+      repository: file://charts/web-channel-manager
+      version: 1.0.0
+    description: Expertflow CX Solution
+    digest: 2cece96426ae69cb2805813ca44bc2406b9f2de769c4daddf79ac4ed64ee6130
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -11850,4 +11949,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-11-03T09:25:27.218184768Z"
+generated: "2025-11-03T09:31:44.733939923Z"
