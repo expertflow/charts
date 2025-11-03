@@ -9,4 +9,4 @@ dependencies:
   repository: file://charts/qm-backend
   version: 5.0-alpha
 digest: sha256:1a265b84a581e7a4ddbdc68751155247732635095b4d14e76462dd643c06fcbd
-generated: "2025-10-26T16:03:26.180109+05:00"
+generated: "2025-11-03T15:10:43.580371+05:00"

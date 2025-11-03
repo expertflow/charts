@@ -109,8 +109,8 @@ conversation-studio:
   enabled: true
   replicaCount: 1
   image:
-    repository: cim/workflow-builder/conversation-controller/build
-    tag: "4.10.3_b-CRM-349"
+    repository: cim/workflow-builder/conversation-controller
+    tag: "5.0"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -134,7 +134,7 @@ conversation-studio:
       value: http://keycloak.ef-external.svc/auth
     # The link in UNIFIED_ADMIN_PUBLIC_URL variable is sent to the customer, so it must be publically accessible
     - name: UNIFIED_ADMIN_PUBLIC_URL
-      value: "{{ .Values.global.ingressRouter }}/unified-admin"
+      value: "https://{{ .Values.global.ingressRouter }}/unified-admin"
     # Following credentials are used to generate a keycloak token, to be used by customer for submitting survey form
     # this user with below credentials should have minimum permissions to avoid privilege escalation
     - name: KEYCLOAK_USERNAME_FOR_TOKEN
@@ -208,8 +208,8 @@ conversation-studio:
 campaign-studio:
    enabled: true
    image:       
-      repository: cim/conversation-studio/build
-      tag: "4.10.3_f-CIM-31595"
+      repository: cim/conversation-studio
+      tag: "5.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -327,8 +327,8 @@ campaign-studio:
 qm-backend:
   enabled: true
   image:
-    repository: cim/qm-backend/build
-    tag: "4.10.3_f-CIM-31595"
+    repository: cim/qm-backend
+    tag: "5.0"
   efConnectionVars: false
   efEnvironmentVars: false
   containerPorts:
