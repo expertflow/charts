@@ -83,7 +83,7 @@ diagnosticMode:
 image:
   registry: gitimages.expertflow.com
   repository: general/activemq-k8s
-  tag: 6.1.7-alpine-zulu-K8s--4.10_f-CLCC-173
+  tag: 6.1.7-alpine-zulu-K8s-5.0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
