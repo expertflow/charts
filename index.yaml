@@ -4125,6 +4125,24 @@ entries:
     version: 4.10.0-rc.1
   clamav:
   - apiVersion: v2
+    appVersion: "5.0"
+    created: "2025-11-03T09:25:27.217687952Z"
+    description: Expertflow CX Solution
+    digest: 6ff2158cb4ff6216db4b553315604e93de1a1b85fe4c39965c134d8eed3637d2
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: clamav
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/clamav-5.0/clamav-5.0.tgz
+    version: "5.0"
+  - apiVersion: v2
     appVersion: "5"
     created: "2025-10-26T10:22:05.801588803Z"
     description: Expertflow CX Solution
@@ -11832,4 +11850,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-11-03T09:22:34.442445405Z"
+generated: "2025-11-03T09:25:27.218184768Z"
