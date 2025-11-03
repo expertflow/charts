@@ -4016,6 +4016,24 @@ entries:
     version: 1.0.15
   cisco-sync-service:
   - apiVersion: v2
+    appVersion: "5.0"
+    created: "2025-11-03T09:22:34.441642646Z"
+    description: Expertflow CX Solution
+    digest: 808502365648de269a8c664fdd61ab548731a4fbbbfb49de9aca7cb3a90610b9
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: cisco-sync-service
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/cisco-sync-service-5.0/cisco-sync-service-5.0.tgz
+    version: "5.0"
+  - apiVersion: v2
     appVersion: "5"
     created: "2025-10-26T10:19:50.96284482Z"
     description: Expertflow CX Solution
@@ -11814,4 +11832,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-11-03T09:20:09.534181521Z"
+generated: "2025-11-03T09:22:34.442445405Z"
