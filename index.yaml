@@ -324,6 +324,33 @@ entries:
   agent-desk:
   - apiVersion: v2
     appVersion: "5"
+    created: "2025-11-03T06:43:30.692025098Z"
+    dependencies:
+    - condition: unified-agent.enabled
+      name: unified-agent
+      repository: file://charts/unified-agent
+      version: 1.0.0
+    - condition: grafana.enabled
+      name: grafana
+      repository: file://charts/grafana
+      version: 12.0.8
+    description: Expertflow CX Solution AgentDesk
+    digest: 29c425d1fed2ff2a32677dfea8d3cc4ef1a25c3601ecf75a67cbcd555fb02a99
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: agent-desk
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/agent-desk-5/agent-desk-5.tgz
+    version: "5"
+  - apiVersion: v2
+    appVersion: "5"
     created: "2025-10-26T10:07:29.433484204Z"
     dependencies:
     - condition: unified-agent.enabled
@@ -567,33 +594,6 @@ entries:
     version: 4.10.0-rc.1
   - apiVersion: v2
     appVersion: 4.10.0
-    created: "2025-07-15T06:16:17.400727106Z"
-    dependencies:
-    - condition: unified-agent.enabled
-      name: unified-agent
-      repository: file://charts/unified-agent
-      version: 1.0.0
-    - condition: grafana.enabled
-      name: grafana
-      repository: file://charts/grafana
-      version: 8.2.11
-    description: Expertflow CX Solution AgentDesk
-    digest: 3f37db94ff303750723ba6df1563fcd665cae911b3c5d019ec91a2e7298e2c97
-    home: https://expertflow.com
-    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
-    keywords:
-    - Expertflow
-    - C2C Communications
-    maintainers:
-    - email: nasir.mehmood@expertflow.com
-      name: NMR Nasir Mehmood Rajput
-    name: agent-desk
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/agent-desk-4.10.0-rc.1/agent-desk-4.10.0-rc.1.tgz
-    version: 4.10.0-rc.1
-  - apiVersion: v2
-    appVersion: 4.10.0
     created: "2025-07-16T06:01:38.961012621Z"
     dependencies:
     - condition: unified-agent.enabled
@@ -633,6 +633,33 @@ entries:
       version: 8.2.11
     description: Expertflow CX Solution AgentDesk
     digest: 9d17c45556e4a229b48e9b25317fde29d3f6b297a492647be1e9a68d0626701a
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: agent-desk
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/agent-desk-4.10.0-rc.1/agent-desk-4.10.0-rc.1.tgz
+    version: 4.10.0-rc.1
+  - apiVersion: v2
+    appVersion: 4.10.0
+    created: "2025-07-15T06:16:17.400727106Z"
+    dependencies:
+    - condition: unified-agent.enabled
+      name: unified-agent
+      repository: file://charts/unified-agent
+      version: 1.0.0
+    - condition: grafana.enabled
+      name: grafana
+      repository: file://charts/grafana
+      version: 8.2.11
+    description: Expertflow CX Solution AgentDesk
+    digest: 3f37db94ff303750723ba6df1563fcd665cae911b3c5d019ec91a2e7298e2c97
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -1053,7 +1080,7 @@ entries:
     version: 4.7.0-alpha.1
   - apiVersion: v2
     appVersion: 4.7.0
-    created: "2025-01-06T11:28:29.254495211Z"
+    created: "2025-01-22T10:33:00.111260956Z"
     dependencies:
     - condition: unified-agent.enabled
       name: unified-agent
@@ -1064,7 +1091,7 @@ entries:
       repository: file://charts/grafana
       version: 8.2.11
     description: Expertflow CX Solution AgentDesk
-    digest: 276eb4bc32d424dfeccf284e13e1c26758e6bcab994ec45b515bba1977a0991d
+    digest: d74169af0aff7c2cebea920aefa4d9305a7418e9755c5045eea6c6b032f2b771
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -1080,7 +1107,7 @@ entries:
     version: 4.7.0-alpha
   - apiVersion: v2
     appVersion: 4.7.0
-    created: "2025-01-22T10:33:00.111260956Z"
+    created: "2025-01-06T11:28:29.254495211Z"
     dependencies:
     - condition: unified-agent.enabled
       name: unified-agent
@@ -1091,7 +1118,7 @@ entries:
       repository: file://charts/grafana
       version: 8.2.11
     description: Expertflow CX Solution AgentDesk
-    digest: d74169af0aff7c2cebea920aefa4d9305a7418e9755c5045eea6c6b032f2b771
+    digest: 276eb4bc32d424dfeccf284e13e1c26758e6bcab994ec45b515bba1977a0991d
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -11635,4 +11662,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2025-10-31T10:27:11.76966352Z"
+generated: "2025-11-03T06:43:30.692674793Z"
