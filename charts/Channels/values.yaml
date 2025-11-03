@@ -74,7 +74,7 @@ connect360:
    replicaCount: 1
    image:
       repository: cim/360-connector
-      tag: "4.10.3_f-CIM-31034"
+      tag: "5.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -117,7 +117,7 @@ facebook-connector:
    replicaCount: 1
    image:       
       repository: cim/facebook-connector
-      tag: "4.10.3_f-CIM-31034"
+      tag: "5.0"
    efConnectionVars: true
    efEnvironmentVars: true 
    containerPorts:
@@ -158,7 +158,7 @@ instagram-connector:
    replicaCount: 1
    image:       
       repository: cim/instagram-connector
-      tag: "4.10.3_f-CIM-31034"
+      tag: "5.0"
    efConnectionVars: true
    efEnvironmentVars: false 
    containerPorts:
@@ -199,7 +199,7 @@ smpp-connector:
    replicaCount: 1
    image:       
       repository: cti/hc_smpp_connector
-      tag: "4.10.3_f-CIM-31034"
+      tag: "5.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -240,7 +240,7 @@ telegram-connector:
    replicaCount: 1
    image:       
       repository: cim/telegram-connector
-      tag: "4.10.3_f-CIM-31034"
+      tag: "5.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -282,7 +282,7 @@ twilio-connector:
    replicaCount: 1
    image:       
       repository: cim/twilio-connector
-      tag: "4.10.3_f-CIM-31034"
+      tag: "5.0"
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -322,7 +322,7 @@ twitter-connector:
    replicaCount: 1
    image:       
       repository: cim/twitter-connector
-      tag: "4.10.3_f-CIM-31034"
+      tag: "5.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -350,7 +350,7 @@ viber-connector:
    replicaCount: 1
    image:       
       repository: cim/viber-connector
-      tag: "4.10.3_f-CIM-31034"
+      tag: "5.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -389,7 +389,7 @@ email-connector:
    replicaCount: 1
    image:
      repository: cim/email-connector
-     tag: "4.10.3_f-CIM-31034"
+     tag: "5.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -419,7 +419,7 @@ whatsapp-connector:
    replicaCount: 1
    image:
      repository: cim/whatsapp-connector
-     tag: "4.10.3_f-CIM-31034"
+     tag: "5.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -459,7 +459,7 @@ ms-email-connector:
    replicaCount: 1
    image:
      repository: cim/ms-exchange-email-connector
-     tag: "4.10.3_f-CLCC-173"
+     tag: "5.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -501,7 +501,7 @@ youtube-connector:
   replicaCount: 1
   image:
     repository: cim/youtube-connector
-    tag: "4.10.3_f-CLCC-173"
+    tag: "5.0"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -534,7 +534,7 @@ linkedin-connector:
    replicaCount: 1
    image:
       repository: project_dev/linkedinconnector
-      tag: "4.10.3_f-CIM-31034"
+      tag: "5.0"
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
