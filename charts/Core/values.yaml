@@ -167,7 +167,7 @@ agent-manager:
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: "4.10.3_b-CRM-367"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -270,7 +270,7 @@ bot-framework:
     replicaCount: 1
     image:
         repository: cim/bot-framework
-        tag: "5.0_b-CRM-385"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -379,7 +379,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: "5.0_b-CRM-385"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -485,8 +485,8 @@ cim-customer:
     enabled: true
     replicaCount: 1
     image:
-       repository: cim/cim-backend/build
-       tag: "4.10.3_b-CRM-321"
+       repository: cim/cim-backend
+       tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -556,7 +556,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: "4.10.3_b-CRM-373"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -710,7 +710,7 @@ conversation-monitor:
     replicaCount: 1
     image:
         repository: cim/conversation-monitor
-        tag: "4.10.3_b-CIM-30640"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -822,7 +822,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: "5.0_b-CRM-353"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -895,7 +895,7 @@ file-engine:
     replicaCount: 1
     image:
         repository: chat-solution/file-engine
-        tag: "4.10.3_b-CRM-345"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -992,7 +992,7 @@ historical-reports:
     replicaCount: 1
     image:
         repository: cim/historical-reports-manager
-        tag: "4.10.3_b-CRM-327"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1063,7 +1063,7 @@ license-manager:
     replicaCount: 1
     image:
         repository: license-mangement/license-manager
-        tag: "5.0_b-CRM-355"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1118,7 +1118,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: "5.0_b-CRM-339"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1185,7 +1185,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: "4.10.3_b-CRM-374"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1323,7 +1323,7 @@ state-events-logger:
     replicaCount: 1
     image:
         repository: cim/state-events-logger
-        tag: "4.10.3_f-CIM-31010"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts: []
@@ -1396,7 +1396,7 @@ team-announcement:
     replicaCount: 1
     image:
         repository: cim/team-announcement
-        tag: "4.10.1_f-CLCC-319"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1524,7 +1524,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: "5.0_b-CRM-419"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1667,7 +1667,7 @@ web-channel-manager:
     replicaCount: 1
     image:
         repository: cim/web-channel-manager
-        tag: "4.10.3_b-CRM-341"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1710,7 +1710,7 @@ business-calendar:
     replicaCount: 1
     image:
         repository: cim/business-calendar
-        tag: "4.10.1_f-CLCC-173"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1784,7 +1784,7 @@ cx-load-hub:
     replicaCount: 1
     image:
         repository: cim/cx-load-hub
-        tag: "4.10.3_b-CRM-365"
+        tag: "5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1854,7 +1854,7 @@ cx-tenant:
   replicaCount: 1
   image:
     repository: cim/cx-tenant
-    tag: "4.10.3_b-CRM-422"
+    tag: "5.0"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -1951,8 +1951,8 @@ conversation-studio:
   enabled: true
   replicaCount: 1
   image:
-    repository: cim/workflow-builder/conversation-controller/build
-    tag: "4.10.3_b-CRM-349"
+    repository: cim/workflow-builder/conversation-controller
+    tag: "5.0"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -1973,7 +1973,7 @@ conversation-studio:
       value: http://keycloak.ef-external.svc/auth
     # The link in UNIFIED_ADMIN_PUBLIC_URL variable is sent to the customer, so it must be publically accessible
     - name: UNIFIED_ADMIN_PUBLIC_URL
-      value: "{{ .Values.global.ingressRouter }}/unified-admin"
+      value: "https://{{ .Values.global.ingressRouter }}/unified-admin"
     # Following credentials are used to generate a keycloak token, to be used by customer for submitting survey form
     # this user with below credentials should have minimum permissions to avoid privilege escalation
     - name: KEYCLOAK_USERNAME_FOR_TOKEN
