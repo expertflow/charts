@@ -115,7 +115,7 @@ qm-backend:
     - name: IS_MULTITENANCY_ENABLED
       value: true
     - name: TENANT_NAME
-      value: tenant3
+      value: "expertflow"
   siteEnvVars: []
   configKeys: []
   service:
