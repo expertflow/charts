@@ -535,7 +535,7 @@ linkedin-connector:
    image:
       repository: project_dev/linkedinconnector
       tag: "5.0"
-   efConnectionVars: false
+   efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "http-li-9001"
