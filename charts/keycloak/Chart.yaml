@@ -1,5 +1,6 @@
 annotations:
   category: DeveloperTools
+  bitnamiVersion: 10.1.6
 apiVersion: v2
 appVersion: 19.0.2
 dependencies:
@@ -21,4 +22,4 @@ name: keycloak
 sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/keycloak
 - https://github.com/keycloak/keycloak
-version: 10.1.6
+version: "5.0"

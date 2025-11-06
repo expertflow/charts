@@ -83,7 +83,7 @@ diagnosticMode:
 image:
   registry: gitimages.expertflow.com
   repository: general/activemq-k8s
-  tag: 6.1.7-alpine-zulu-K8s-4.10
+  tag: 6.1.7-alpine-zulu-K8s-5.0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -182,6 +182,11 @@ extraEnvVars:
     value: "/activemq/broker.ts"
   - name: ACTIVEMQ_TRUSTSTORE_PASSWORD
     value: "password"
+  - name: REDIS_USERNAME
+    value: "superuser"
+  - name: ENABLE_CLOUD_MANAGED_CONNECTIONS
+    value: "false"
+    
 siteEnvVars: []
 configKeys: []
 ## @param extraEnvVarsCM ConfigMap with extra environment variables

@@ -202,8 +202,8 @@ useIstioLabels: true
 ## @param image.debug Enable Elasticsearch image debug mode
 ##
 image:
-  registry: docker.io
-  repository: bitnami/elasticsearch
+  registry: gitimages.expertflow.com
+  repository: general/elasticsearch
   tag: 8.17.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
@@ -2211,8 +2211,8 @@ metrics:
   ## @param metrics.image.pullSecrets Metrics exporter image pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/elasticsearch-exporter
+    registry: gitimages.expertflow.com
+    repository: general/elasticsearch-exporter
     tag: 1.8.0-debian-12-r5
     digest: ""
     pullPolicy: IfNotPresent
@@ -2641,8 +2641,8 @@ volumePermissions:
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/os-shell
+    registry: gitimages.expertflow.com
+    repository: general/os-shell
     tag: 12-debian-12-r34
     digest: ""
     pullPolicy: IfNotPresent
@@ -2688,8 +2688,8 @@ sysctlImage:
   ## @param sysctlImage.pullPolicy Kernel settings modifier image pull policy
   ## @param sysctlImage.pullSecrets Kernel settings modifier image pull secrets
   ##
-  registry: docker.io
-  repository: bitnami/os-shell
+  registry: gitimages.expertflow.com
+  repository: general/os-shell
   tag: 12-debian-12-r34
   digest: ""
   ## Specify a imagePullPolicy
@@ -2737,8 +2737,8 @@ copyTlsCerts:
   ## @param copyTlsCerts.image.pullSecrets Copy TLS certificates image pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/os-shell
+    registry: gitimages.expertflow.com
+    repository: general/os-shell
     tag: 12-debian-12-r34
     digest: ""
     ## Specify a imagePullPolicy

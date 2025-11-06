@@ -607,6 +607,8 @@ server:
       name: tls-server-client
     - type: secret
       name: tls-ca
+    - type: secret
+      name: mongo-mongodb-ca
     # - type: secret (or "configMap")
     #   name: my-secret
     #   path: null # default is `/vault/userconfig`
@@ -1140,6 +1142,7 @@ csi:
         secret:
           defaultMode: 420
           secretName: tls-server-vault
+
   # - name: tls
   #   secret:
   #     secretName: vault-tls
@@ -1154,6 +1157,7 @@ csi:
       - name: userconfig-tls-server-vault
         mountPath: "/vault/userconfig/tls-server-vault"
         readOnly: true
+
   # - name: tls
   #   mountPath: "/vault/tls"
   #   readOnly: true

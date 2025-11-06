@@ -192,8 +192,8 @@ useIstioLabels: true
 ## @param image.debug Enable OpenSearch image debug mode
 ##
 image:
-  registry: docker.io
-  repository: bitnami/opensearch
+  registry: gitimages.expertflow.com
+  repository: general/opensearch
   tag: 2.18.0-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
@@ -2727,8 +2727,8 @@ volumePermissions:
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/os-shell
+    registry: gitimages.expertflow.com
+    repository: general/os-shell
     tag: 12-debian-12-r34
     digest: ""
     pullPolicy: IfNotPresent
@@ -2774,8 +2774,8 @@ sysctlImage:
   ## @param sysctlImage.pullPolicy Kernel settings modifier image pull policy
   ## @param sysctlImage.pullSecrets Kernel settings modifier image pull secrets
   ##
-  registry: docker.io
-  repository: bitnami/os-shell
+  registry: gitimages.expertflow.com
+  repository: general/os-shell
   tag: 12-debian-12-r34
   digest: ""
   ## Specify a imagePullPolicy
@@ -2826,8 +2826,8 @@ dashboards:
   ## @param dashboards.image.debug Enable OpenSearch Dashboards image debug mode
   ##
   image:
-    registry: docker.io
-    repository: bitnami/opensearch-dashboards
+    registry: gitimages.expertflow.com
+    repository: general/opensearch-dashboards
     tag: 2.18.0-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
@@ -3515,8 +3515,8 @@ snapshots:
   ## @param snapshots.image.debug Enable OpenSearch Snapshots image debug mode
   ##
   image:
-    registry: docker.io
-    repository: bitnami/os-shell
+    registry: gitimages.expertflow.com
+    repository: general/os-shell
     tag: 12-debian-12-r34
     digest: ""
     ## Specify a imagePullPolicy

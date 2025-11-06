@@ -9,7 +9,7 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  ingressRouter: "devops.ef.com"
+  ingressRouter: "devops52.ef.com"
   ingressCertName: "ef-ingress-tls-secret"
   ingressClassName: "nginx"
   imageRegistry: ""
@@ -17,7 +17,8 @@ global:
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
-  imagePullSecrets: []
+  imagePullSecrets: 
+   - expertflow-reg-cred
   storageClass: ""
 
 ## @section Common parameters
@@ -75,8 +76,8 @@ diagnosticMode:
 ## @param image.debug Specify if debug logs should be enabled
 ##
 image:
-  registry: docker.io
-  repository: bitnami/keycloak
+  registry: gitimages.expertflow.com
+  repository: general/keycloak
   tag: 19.0.2-debian-11-r7
   digest: ""
   ## Specify a imagePullPolicy
@@ -871,8 +872,8 @@ keycloakConfigCli:
   ## @param keycloakConfigCli.image.pullSecrets keycloak-config-cli container image pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/keycloak-config-cli
+    registry: gitimages.expertflow.com
+    repository: general/keycloak-config-cli
     tag: 5.3.1-debian-11-r21
     digest: ""
     ## Specify a imagePullPolicy

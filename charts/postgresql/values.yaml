@@ -10,7 +10,8 @@ global:
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
-  imagePullSecrets: []
+  imagePullSecrets: 
+   - expertflow-reg-cred
   ## @param global.storageClass Global StorageClass for Persistent Volume(s)
   ##
   storageClass: ""
@@ -93,8 +94,8 @@ diagnosticMode:
 ## @param image.debug Specify if debug values should be set
 ##
 image:
-  registry: docker.io
-  repository: bitnami/postgresql
+  registry: gitimages.expertflow.com
+  repository: general/postgresql
   tag: 14.5.0-debian-11-r21
   digest: ""
   ## Specify a imagePullPolicy
@@ -1119,8 +1120,8 @@ volumePermissions:
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/os-shell
+    registry: gitimages.expertflow.com
+    repository: general/os-shell
     tag: 11-debian-11-r37
     digest: ""
     pullPolicy: IfNotPresent
@@ -1206,9 +1207,9 @@ metrics:
   ## @param metrics.image.pullSecrets Specify image pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/postgres-exporter
-    tag: 0.11.1-debian-11-r13
+    registry: gitimages.expertflow.com
+    repository: general/postgres-exporter
+    tag: 0.10.1-debian-11-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

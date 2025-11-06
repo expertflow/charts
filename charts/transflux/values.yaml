@@ -11,7 +11,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  ingressRouter: "devops.ef.com"
+  ingressRouter: "data-platform-tenants.expertflow.com"
   ingressCertName: "ef-ingress-tls-secret"
   ingressClassName: "nginx"
   efCxReleaseName: "ef-cx"
@@ -83,8 +83,8 @@ diagnosticMode:
 ##
 image:
   registry: gitimages.expertflow.com
-  repository: cim/cx-data-platform 
-  tag: "4.10.3"
+  repository: cim/cx-data-platform
+  tag: "5.0"
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -726,3 +726,4 @@ ingress:
   ## Useful when looking for additional customization, such as using different backend
   ##
   extraRules: []
+

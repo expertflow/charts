@@ -51,7 +51,7 @@ qm-backend:
   enabled: true
   image:
     repository: cim/qm-backend
-    tag: "4.10"
+    tag: "5.0"
   efConnectionVars: false
   efEnvironmentVars: false
   containerPorts:
@@ -112,6 +112,10 @@ qm-backend:
       value: "false"
     - name: MINIMUM_BULK_NOTIFICATION_INTERVAL
       value: "30"
+    - name: IS_MULTITENANCY_ENABLED
+      value: true
+    - name: TENANT_NAME
+      value: "expertflow"
   siteEnvVars: []
   configKeys: []
   service:
@@ -133,7 +137,7 @@ qm-connector:
   enabled: false
   image:
     repository: voice-recording-solution/qm-connector
-    tag: "4.10"
+    tag: "5.0"
   containerPorts: []
   extraEnvVars:
     - name: RECORDING_SERVER_FQDN
@@ -184,6 +188,10 @@ qm-connector:
       value: "1433"
     - name: DB_DRIVER
       value: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    - name: CALL_START_DATE
+      value: '2025-09-01'
+    - name: MAX_BATCH_SIZE
+      value: 30000
   siteEnvVars: []
   configKeys: []
   service:

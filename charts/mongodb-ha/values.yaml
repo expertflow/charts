@@ -104,8 +104,8 @@ diagnosticMode:
 ## @param image.debug Set to true if you would like to see extra information on logs
 ##
 image:
-  registry: docker.io
-  repository: bitnami/mongodb
+  registry: gitimages.expertflow.com
+  repository: general/mongodb
   tag: 6.0.2-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
@@ -197,8 +197,8 @@ tls:
   ## @param tls.extraDnsNames Add extra dns names to the CA, can solve x509 auth issue for pod clients
   ##
   image:
-    registry: docker.io
-    repository: bitnami/nginx
+    registry: gitimages.expertflow.com
+    repository: general/nginx
     tag: 1.23.1-debian-11-r26
     digest: ""
     pullPolicy: IfNotPresent
@@ -751,9 +751,9 @@ externalAccess:
     ## @param externalAccess.autoDiscovery.image.pullSecrets Init container auto-discovery image pull secrets
     ##
     image:
-      registry: docker.io
-      repository: bitnami/kubectl
-      tag: 1.25.2-debian-11-r2
+      registry: gitimages.expertflow.com
+      repository: general/kubectl
+      tag: 1.33.0-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1100,8 +1100,8 @@ volumePermissions:
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
+    registry: gitimages.expertflow.com
+    repository: general/os-shell
     tag: 11-debian-11-r37
     digest: ""
     ## Specify a imagePullPolicy
@@ -1846,8 +1846,8 @@ metrics:
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
-    registry: docker.io
-    repository: bitnami/mongodb-exporter
+    registry: gitimages.expertflow.com
+    repository: general/mongodb-exporter
     tag: 0.34.0-debian-11-r19
     digest: ""
     pullPolicy: IfNotPresent
