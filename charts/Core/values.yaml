@@ -850,7 +850,7 @@ customer-widget:
         - name: BUSINESSCALENDAR_URL
           value: "https://{{ .Values.global.ingressRouter  }}/business-calendar"
         - name: CX_ACTIVITY
-          value: 'https://{{ .Values.global.ingressRouter  }}/conversation-manager'
+          value: 'https://{{ .Values.global.ingressRouter  }}/conversation-manager/activities'
         - name: CHANNEL_IDENTIFIER
           value: "phone"
         - name: ENABLE_LOGO
