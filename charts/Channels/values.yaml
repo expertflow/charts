@@ -211,9 +211,7 @@ smpp-connector:
       - name: TZ
         value: '{{ .Values.global.efCommonVars_TZ }}'
       - name: CCM_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/ccm/channel-connectors/configurations/"
-      - name: CX_TENANT_URL
-        value: "https://{{ .Values.global.ingressRouter  }}/cx-tenant/"
+        value: "http://{{ .Values.global.efCxReleaseName  }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
       - name: SPRING_PORT
         value: "8115"
       - name: MASKING_LAYOUT_CLASS
