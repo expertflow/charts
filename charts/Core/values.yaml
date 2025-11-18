@@ -1980,6 +1980,8 @@ conversation-studio:
       value: admin
     - name: KEYCLOAK_PASSWORD_FOR_TOKEN
       value: admin
+    - name: TENANT_ID
+      value: "expertflow"
   siteEnvVars: []
   configKeys: []
   service:
