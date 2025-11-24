@@ -216,8 +216,6 @@ unified-agent:
         value: "00000"
       - name: isSpellCheckEnabled
         value: "true"
-      - name: ROOT_DOMAIN
-        value: "expertflow.com"
    siteEnvVars: []
    configKeys: []
    service:
