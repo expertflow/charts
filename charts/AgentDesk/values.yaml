@@ -216,6 +216,10 @@ unified-agent:
         value: "00000"
       - name: isSpellCheckEnabled
         value: "true"
+      - name: isKnowledgeBaseEnabled
+        value: "false"
+      - name: KNOWLEDGE_BASE_URL
+        value: ""
    siteEnvVars: []
    configKeys: []
    service:
