@@ -217,7 +217,7 @@ unified-agent:
       - name: isSpellCheckEnabled
         value: "true"
       - name: isKnowledgeBaseEnabled
-        value: "false"
+        value: false
       - name: KNOWLEDGE_BASE_URL
         value: ""
    siteEnvVars: []
