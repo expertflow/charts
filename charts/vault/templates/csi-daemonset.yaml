@@ -76,10 +76,10 @@ spec:
             - name: VAULT_CACERT
             {{- if eq (.Values.csi.agent.enabled | toString) "true" }}
               value: "/vault/userconfig/tls-ca/tls.crt"
-            {{- else if .Values.global.vaultCaCert } }
+            {{- else if .Values.global.vaultCaCert }}
               value: "{{ .Values.global.vaultCaCert }}"
             {{- else }}
-            value: ""
+              value: ""
             {{- end }}
           volumeMounts:
             - name: providervol
