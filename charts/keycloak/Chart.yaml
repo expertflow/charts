@@ -22,4 +22,4 @@ name: keycloak
 sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/keycloak
 - https://github.com/keycloak/keycloak
-version: 4.10.4
+version: 4.10.5-rc.1
