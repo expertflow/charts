@@ -170,10 +170,6 @@ extraEnvVars:
     value: activemq
   - name: DB_PORT
     value: "5432"
-  - name: ACTIVEMQ_USERNAME
-    value: "admin"
-  - name: ACTIVEMQ_PASSWORD
-    value: "RXhwZXJ0ZmxvdzQ2NA"
   - name: ACTIVEMQ_KEYSTORE
     value: "/activemq/broker.ks"
   - name: ACTIVEMQ_KEYSTORE_PASSWORD
@@ -189,7 +185,7 @@ configKeys: []
 extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
-extraEnvVarsSecret: ""
+extraEnvVarsSecret: "activemq-env"
 ## @param efConnectionVars Configmap true false
 ##
 efConnectionVars: false
@@ -360,7 +356,7 @@ containerSecurityContext:
 ##   - name: grpc # Generic Name of the ContainerPORT Max-10 Chars
 ##     containerPort: 4317 # Digit
 ##
-containerPorts: 
+containerPorts:
   - name: tcp-amq8162
     containerPort: 8162
   - name: tcp-amq61613
@@ -484,6 +480,12 @@ extraVolumes:
   - name: activemq-tls
     secret:
       secretName: activemq-tls
+  - name: vault-secrets
+    csi:
+      driver: secrets-store.csi.k8s.io
+      readOnly: true
+      volumeAttributes:
+        secretProviderClass: activemq-vault-kv
 ## @param extraVolumeMounts Array to add extra mount
 ##
 extraVolumeMounts:
@@ -491,6 +493,9 @@ extraVolumeMounts:
     mountPath: "/redis"
   - name: activemq-tls
     mountPath: "/activemq"
+  - name: vault-secrets
+    mountPath: "/vault/secrets"
+    readOnly: true
 #   - name: activemq-claim0
 #     mountPath: /opt/apache-activemq-5.16.1/conf/activemq.xml
 #     subPath: activemq.xml
@@ -692,7 +697,7 @@ ingress:
   apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
-  hostname: fqdn.com 
+  hostname: fqdn.com
   ## @param ingress.path The Path to Nginx. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: ""
@@ -728,7 +733,7 @@ ingress:
   ##     serviceName: ssl-redirect
   ##     servicePort: use-annotation
   ##
-  extraPaths: 
+  extraPaths:
   ##   - path: /_COMPONENT_INGRESS_PATH_EXTRA
   ##     pathType: ImplementationSpecific
   ##     backend:
