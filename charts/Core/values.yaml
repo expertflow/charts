@@ -136,7 +136,7 @@ efConnectionVars:
     REDIS_MAX_IDLE: "50"
     REDIS_MAX_WAIT: "-1"
     REDIS_MIN_IDLE: "25"
-    REDIS_USERNAME: superuser
+    REDIS_USER: superuser
     REDIS_PASSWORD: Expertflow464
     REDIS_PORT: "6379"
     REDIS_SSL_ENABLED: "true"
@@ -482,6 +482,8 @@ cim-customer:
        - name: "http-ci-cu-8080"
          containerPort: 8080
     extraEnvVars:
+       - name: LOG_LEVEL
+         value: "info"
        - name: MEMORY_THRESHOLD_MBS
          value: '{{ .Values.global.efCommonVars_MEMORY_THRESHOLD_MBS }}'
        - name: TZ
@@ -1590,7 +1592,7 @@ business-calendar:
         - name: MONGODB_ROLE_PATH
           value: "database/creds/mongodb-business-calendar-role"
         - name: MONGODB_AUTHENTICATION_DATABASE
-          value: "business-calendars_db"
+          value: "business_calendars_db"
     siteEnvVars: []
     configKeys: []
     extraEnvVarsSecret: "business-calendar-approle-secret"
