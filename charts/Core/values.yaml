@@ -341,7 +341,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: "4.10.1"
+        tag: "4.10.1.1"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -456,7 +456,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: "4.10"
+        tag: "4.10.1.1"
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -788,7 +788,7 @@ file-engine:
         - name: ACCESSKEY
           value: "minioadmin"
         - name: ALLOWEDFILETYPES
-          value: "png,jpeg,jpg,pdf,ppt,doc,docx,xls,xlsx,txt,svg,pptx,css,oga,mpga,webp,mp3,mp4,gif,csv"
+          value: "png,jpeg,jpg,pdf,ppt,doc,docx,xls,xlsx,txt,svg,pptx,css,oga,mpga,webp,mp3,mp4,gif,csv,eml"
         - name: BLOCK_UNKNOWN_FILES
           value: "false"
         - name: BUCKETNAME
@@ -956,7 +956,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: "4.10.1"
+        tag: "4.10.1.1"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1016,7 +1016,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: "4.10"
+        tag: "4.10.1.1"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1470,7 +1470,7 @@ conversation-studio:
   replicaCount: 1
   image:
     repository: cim/workflow-builder/conversation-controller
-    tag: "4.10"
+    tag: "4.10.1.1"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
