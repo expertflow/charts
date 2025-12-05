@@ -117,7 +117,7 @@ facebook-connector:
    replicaCount: 1
    image:       
       repository: cim/facebook-connector
-      tag: "4.10"
+      tag: "4.10.1.1"
    efConnectionVars: false
    efEnvironmentVars: true 
    containerPorts:
@@ -158,7 +158,7 @@ instagram-connector:
    replicaCount: 1
    image:       
       repository: cim/instagram-connector
-      tag: "4.10"
+      tag: "4.10.1.1"
    efConnectionVars: false
    efEnvironmentVars: false 
    containerPorts:
@@ -459,7 +459,7 @@ ms-email-connector:
    replicaCount: 1
    image:
      repository: cim/ms-exchange-email-connector
-     tag: "4.10"
+     tag: "4.10.1.1"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
