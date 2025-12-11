@@ -159,7 +159,7 @@ agent-manager:
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: "4.10"
+        tag: "4.10.1.2"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -222,6 +222,8 @@ agent-manager:
           value: "25000"
         - name: SOCKET_PING_TIMEOUT
           value: "20000"
+        - name: SOCKET_MAX_HTTP_BUFFER_SIZE_IN_MBS
+          value: "1"
     siteEnvVars: []
     configKeys: []
     service:
@@ -456,7 +458,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: "4.10.1.1"
+        tag: "4.10.1.2"
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -1016,7 +1018,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: "4.10.1.1"
+        tag: "4.10.1.2"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
