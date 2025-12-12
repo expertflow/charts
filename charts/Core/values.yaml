@@ -160,7 +160,7 @@ agent-manager:
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: "4.10.3_b-CIM-32137"
+        tag: "4.10.3.1"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -344,7 +344,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: "4.10.3.1_b-CIM-32043"
+        tag: "4.10.3.1"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -420,8 +420,8 @@ cim-customer:
     enabled: true
     replicaCount: 1
     image:
-       repository: cim/cim-backend/build
-       tag: "4.10_b-CIM-32111"
+       repository: cim/cim-backend
+       tag: "4.10.3.1"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -459,7 +459,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: "4.10.3.1_b-CIM-30826"
+        tag: "4.10.3.1"
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -961,7 +961,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: "4.10.3.1_b-CIM-32110"
+        tag: "4.10.3.1"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1025,7 +1025,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: "4.10.3.1_f-CIM-30826"
+        tag: "4.10.3.1"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1147,7 +1147,7 @@ team-announcement:
     replicaCount: 1
     image:
         repository: cim/team-announcement
-        tag: "4.10.1_b-CIM-32158"
+        tag: "4.10.3.1"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1478,8 +1478,8 @@ conversation-studio:
   enabled: true
   replicaCount: 1
   image:
-    repository: cim/workflow-builder/conversation-controller/build
-    tag: "4.10.3_b-CIM-32145"
+    repository: cim/workflow-builder/conversation-controller
+    tag: "4.10.3.1"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
