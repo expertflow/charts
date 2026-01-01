@@ -188,7 +188,7 @@ scheduled-activities:
   replicaCount: 1
   image:
     repository: campaign-manager/campaign-scheduler
-    tag: "4.10.3_f-CIM-31672"
+    tag: "4.10.5_f-ReleaseCandidateBranch"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:

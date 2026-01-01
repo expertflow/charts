@@ -74,8 +74,8 @@ imageCredentials:
 survey-backend:
    enabled: true
    image:       
-      repository: cim/survey-backend
-      tag: "4.10"
+      repository: cim/survey-backend/build
+      tag: "4.10.5_f-CIM-32325"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -88,6 +88,8 @@ survey-backend:
         value: admin
       - name: NODERED_PASSWORD
         value: admin
+      - name: BODY_LIMIT
+        value: 5mb
    siteEnvVars: []
    configKeys: []
    service:
