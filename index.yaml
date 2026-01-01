@@ -1881,6 +1881,37 @@ entries:
     version: 5.0-alpha
   - apiVersion: v2
     appVersion: 4.10.0
+    created: "2026-01-01T08:33:11.093552841Z"
+    dependencies:
+    - condition: campaigns-backend.enabled
+      name: campaigns-backend
+      repository: file://charts/campaigns-backend
+      version: 1.0.0
+    - condition: campaign-studio.enabled
+      name: campaign-studio
+      repository: file://charts/campaign-studio
+      version: 1.0.0
+    - condition: scheduled-activities.enabled
+      name: scheduled-activities
+      repository: file://charts/scheduled-activities
+      version: 1.0.0
+    description: Expertflow CX Solution Campaigns
+    digest: 9627e2fc42bb08c1d0c4e4654d1e3597b038410d90ee0af6c8d13581677ce0fb
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: campaigns
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/campaigns-4.10.5-rc.1/campaigns-4.10.5-rc.1.tgz
+    version: 4.10.5-rc.1
+  - apiVersion: v2
+    appVersion: 4.10.0
     created: "2025-11-27T09:55:30.57115719Z"
     dependencies:
     - condition: campaigns-backend.enabled
@@ -1974,37 +2005,6 @@ entries:
     version: 4.10.0
   - apiVersion: v2
     appVersion: 4.10.0
-    created: "2025-08-07T08:15:32.935817894Z"
-    dependencies:
-    - condition: campaigns-backend.enabled
-      name: campaigns-backend
-      repository: file://charts/campaigns-backend
-      version: 1.0.0
-    - condition: campaign-studio.enabled
-      name: campaign-studio
-      repository: file://charts/campaign-studio
-      version: 1.0.0
-    - condition: scheduled-activities.enabled
-      name: scheduled-activities
-      repository: file://charts/scheduled-activities
-      version: 1.0.0
-    description: Expertflow CX Solution Campaigns
-    digest: 2ab24656cefae17363fb1a5838f10176a865cb6c1d6ddadf069b4ec416fc6f6a
-    home: https://expertflow.com
-    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
-    keywords:
-    - Expertflow
-    - C2C Communications
-    maintainers:
-    - email: nasir.mehmood@expertflow.com
-      name: NMR Nasir Mehmood Rajput
-    name: campaigns
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/campaigns-4.10.0-rc.1/campaigns-4.10.0-rc.1.tgz
-    version: 4.10.0-rc.1
-  - apiVersion: v2
-    appVersion: 4.10.0
     created: "2025-07-15T06:23:27.662645588Z"
     dependencies:
     - condition: campaigns-backend.enabled
@@ -2052,6 +2052,37 @@ entries:
       version: 1.0.0
     description: Expertflow CX Solution Campaigns
     digest: 2be44cc53d08f356300c78e3cb3cdcf96d715828bbe3d064af0336c928f86744
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: campaigns
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/campaigns-4.10.0-rc.1/campaigns-4.10.0-rc.1.tgz
+    version: 4.10.0-rc.1
+  - apiVersion: v2
+    appVersion: 4.10.0
+    created: "2025-08-07T08:15:32.935817894Z"
+    dependencies:
+    - condition: campaigns-backend.enabled
+      name: campaigns-backend
+      repository: file://charts/campaigns-backend
+      version: 1.0.0
+    - condition: campaign-studio.enabled
+      name: campaign-studio
+      repository: file://charts/campaign-studio
+      version: 1.0.0
+    - condition: scheduled-activities.enabled
+      name: scheduled-activities
+      repository: file://charts/scheduled-activities
+      version: 1.0.0
+    description: Expertflow CX Solution Campaigns
+    digest: 2ab24656cefae17363fb1a5838f10176a865cb6c1d6ddadf069b4ec416fc6f6a
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -2783,6 +2814,77 @@ entries:
     version: 5.0-alpha
   - apiVersion: v2
     appVersion: 4.10.0
+    created: "2026-01-01T08:33:11.413861038Z"
+    dependencies:
+    - condition: connect360.enabled
+      name: connect360
+      repository: file://charts/connect360
+      version: 1.0.0
+    - condition: facebook-connector.enabled
+      name: facebook-connector
+      repository: file://charts/facebook-connector
+      version: 1.0.0
+    - condition: instagram-connector.enabled
+      name: instagram-connector
+      repository: file://charts/instagram-connector
+      version: 1.0.0
+    - condition: smpp-connector.enabled
+      name: smpp-connector
+      repository: file://charts/smpp-connector
+      version: 1.0.0
+    - condition: telegram-connector.enabled
+      name: telegram-connector
+      repository: file://charts/telegram-connector
+      version: 1.0.0
+    - condition: twilio-connector.enabled
+      name: twilio-connector
+      repository: file://charts/twilio-connector
+      version: 1.0.0
+    - condition: twitter-connector.enabled
+      name: twitter-connector
+      repository: file://charts/twitter-connector
+      version: 1.0.0
+    - condition: viber-connector.enabled
+      name: viber-connector
+      repository: file://charts/viber-connector
+      version: 1.0.0
+    - condition: youtube-connector.enabled
+      name: youtube-connector
+      repository: file://charts/youtube-connector
+      version: 1.0.0
+    - condition: email-connector.enabled
+      name: email-connector
+      repository: file://charts/email-connector
+      version: 1.0.0
+    - condition: ms-email-connector.enabled
+      name: ms-email-connector
+      repository: file://charts/ms-email-connector
+      version: 1.0.0
+    - condition: whatsapp-connector.enabled
+      name: whatsapp-connector
+      repository: file://charts/whatsapp-connector
+      version: 1.0.0
+    - condition: linkedin-connector.enabled
+      name: linkedin-connector
+      repository: file://charts/linkedin-connector
+      version: 1.0.14
+    description: Expertflow CX Solution Channels
+    digest: b905ec5d75af398868681804048246e45810f95b1ed2dcb1dfb677667cf12afb
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: channels
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/channels-4.10.5-rc.1/channels-4.10.5-rc.1.tgz
+    version: 4.10.5-rc.1
+  - apiVersion: v2
+    appVersion: 4.10.0
     created: "2025-09-30T07:35:27.225275946Z"
     dependencies:
     - condition: connect360.enabled
@@ -2854,7 +2956,7 @@ entries:
     version: 4.10.3
   - apiVersion: v2
     appVersion: 4.10.0
-    created: "2025-12-09T10:32:00.118170196Z"
+    created: "2025-12-12T11:49:01.928108014Z"
     dependencies:
     - condition: connect360.enabled
       name: connect360
@@ -2909,78 +3011,7 @@ entries:
       repository: file://charts/linkedin-connector
       version: 1.0.14
     description: Expertflow CX Solution Channels
-    digest: d256e8e5a4870bde36216014a0bd8011f6f80904d6e2fbf377eec5b4dc36d4c5
-    home: https://expertflow.com
-    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
-    keywords:
-    - Expertflow
-    - C2C Communications
-    maintainers:
-    - email: nasir.mehmood@expertflow.com
-      name: NMR Nasir Mehmood Rajput
-    name: channels
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/channels-4.10.3-1/channels-4.10.3-1.tgz
-    version: 4.10.3-1
-  - apiVersion: v2
-    appVersion: 4.10.0
-    created: "2025-12-11T12:37:55.824879696Z"
-    dependencies:
-    - condition: connect360.enabled
-      name: connect360
-      repository: file://charts/connect360
-      version: 1.0.0
-    - condition: facebook-connector.enabled
-      name: facebook-connector
-      repository: file://charts/facebook-connector
-      version: 1.0.0
-    - condition: instagram-connector.enabled
-      name: instagram-connector
-      repository: file://charts/instagram-connector
-      version: 1.0.0
-    - condition: smpp-connector.enabled
-      name: smpp-connector
-      repository: file://charts/smpp-connector
-      version: 1.0.0
-    - condition: telegram-connector.enabled
-      name: telegram-connector
-      repository: file://charts/telegram-connector
-      version: 1.0.0
-    - condition: twilio-connector.enabled
-      name: twilio-connector
-      repository: file://charts/twilio-connector
-      version: 1.0.0
-    - condition: twitter-connector.enabled
-      name: twitter-connector
-      repository: file://charts/twitter-connector
-      version: 1.0.0
-    - condition: viber-connector.enabled
-      name: viber-connector
-      repository: file://charts/viber-connector
-      version: 1.0.0
-    - condition: youtube-connector.enabled
-      name: youtube-connector
-      repository: file://charts/youtube-connector
-      version: 1.0.0
-    - condition: email-connector.enabled
-      name: email-connector
-      repository: file://charts/email-connector
-      version: 1.0.0
-    - condition: ms-email-connector.enabled
-      name: ms-email-connector
-      repository: file://charts/ms-email-connector
-      version: 1.0.0
-    - condition: whatsapp-connector.enabled
-      name: whatsapp-connector
-      repository: file://charts/whatsapp-connector
-      version: 1.0.0
-    - condition: linkedin-connector.enabled
-      name: linkedin-connector
-      repository: file://charts/linkedin-connector
-      version: 1.0.14
-    description: Expertflow CX Solution Channels
-    digest: 6df86f65447fa9001480dab6e4b7dc10f3dbea58583eb2f290894e84259786ae
+    digest: 8dd189389808e379e041f650d6cb9e5c86d779b6b990f029e34e66696ed731b1
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -3067,7 +3098,7 @@ entries:
     version: 4.10.3-1
   - apiVersion: v2
     appVersion: 4.10.0
-    created: "2025-12-12T11:49:01.928108014Z"
+    created: "2025-12-11T12:37:55.824879696Z"
     dependencies:
     - condition: connect360.enabled
       name: connect360
@@ -3122,7 +3153,78 @@ entries:
       repository: file://charts/linkedin-connector
       version: 1.0.14
     description: Expertflow CX Solution Channels
-    digest: 8dd189389808e379e041f650d6cb9e5c86d779b6b990f029e34e66696ed731b1
+    digest: 6df86f65447fa9001480dab6e4b7dc10f3dbea58583eb2f290894e84259786ae
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: channels
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/channels-4.10.3-1/channels-4.10.3-1.tgz
+    version: 4.10.3-1
+  - apiVersion: v2
+    appVersion: 4.10.0
+    created: "2025-12-09T10:32:00.118170196Z"
+    dependencies:
+    - condition: connect360.enabled
+      name: connect360
+      repository: file://charts/connect360
+      version: 1.0.0
+    - condition: facebook-connector.enabled
+      name: facebook-connector
+      repository: file://charts/facebook-connector
+      version: 1.0.0
+    - condition: instagram-connector.enabled
+      name: instagram-connector
+      repository: file://charts/instagram-connector
+      version: 1.0.0
+    - condition: smpp-connector.enabled
+      name: smpp-connector
+      repository: file://charts/smpp-connector
+      version: 1.0.0
+    - condition: telegram-connector.enabled
+      name: telegram-connector
+      repository: file://charts/telegram-connector
+      version: 1.0.0
+    - condition: twilio-connector.enabled
+      name: twilio-connector
+      repository: file://charts/twilio-connector
+      version: 1.0.0
+    - condition: twitter-connector.enabled
+      name: twitter-connector
+      repository: file://charts/twitter-connector
+      version: 1.0.0
+    - condition: viber-connector.enabled
+      name: viber-connector
+      repository: file://charts/viber-connector
+      version: 1.0.0
+    - condition: youtube-connector.enabled
+      name: youtube-connector
+      repository: file://charts/youtube-connector
+      version: 1.0.0
+    - condition: email-connector.enabled
+      name: email-connector
+      repository: file://charts/email-connector
+      version: 1.0.0
+    - condition: ms-email-connector.enabled
+      name: ms-email-connector
+      repository: file://charts/ms-email-connector
+      version: 1.0.0
+    - condition: whatsapp-connector.enabled
+      name: whatsapp-connector
+      repository: file://charts/whatsapp-connector
+      version: 1.0.0
+    - condition: linkedin-connector.enabled
+      name: linkedin-connector
+      repository: file://charts/linkedin-connector
+      version: 1.0.14
+    description: Expertflow CX Solution Channels
+    digest: d256e8e5a4870bde36216014a0bd8011f6f80904d6e2fbf377eec5b4dc36d4c5
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -11627,6 +11729,33 @@ entries:
     version: 5.0-alpha
   - apiVersion: v2
     appVersion: 4.10.0
+    created: "2026-01-01T08:33:11.656523989Z"
+    dependencies:
+    - condition: qm-backend.enabled
+      name: qm-backend
+      repository: file://charts/qm-backend
+      version: 1.0.0
+    - condition: qm-connector.enabled
+      name: qm-connector
+      repository: file://charts/qm-connector
+      version: 1.0.0
+    description: Expertflow CX Solution
+    digest: 83b778427bbe7707fd2934633b0509e4e8e2d94f76bccf1f569b6fa6dea89c21
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: qm
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/qm-4.10.5-rc.1/qm-4.10.5-rc.1.tgz
+    version: 4.10.5-rc.1
+  - apiVersion: v2
+    appVersion: 4.10.0
     created: "2025-08-18T11:25:13.111496216Z"
     dependencies:
     - condition: qm-backend.enabled
@@ -12630,6 +12759,33 @@ entries:
   surveys:
   - apiVersion: v2
     appVersion: 4.10.0
+    created: "2026-01-01T08:33:11.894979327Z"
+    dependencies:
+    - condition: survey-studio.enabled
+      name: survey-studio
+      repository: file://charts/survey-studio
+      version: 1.0.0
+    - condition: survey-backend.enabled
+      name: survey-backend
+      repository: file://charts/survey-backend
+      version: 1.0.0
+    description: Expertflow CX Solution for Surveys
+    digest: 72d2858d16d2c5b1d747d6795599fd77a7c34372ae50dccee99854ea69c8a608
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: surveys
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/surveys-4.10.5-rc.1/surveys-4.10.5-rc.1.tgz
+    version: 4.10.5-rc.1
+  - apiVersion: v2
+    appVersion: 4.10.0
     created: "2025-08-08T13:23:31.605457629Z"
     dependencies:
     - condition: survey-studio.enabled
@@ -12931,37 +13087,6 @@ entries:
     version: 4.7.0
   - apiVersion: v2
     appVersion: 4.7.0
-    created: "2025-01-07T12:03:45.491047591Z"
-    dependencies:
-    - condition: survey-studio.enabled
-      name: survey-studio
-      repository: file://charts/survey-studio
-      version: 1.0.0
-    - condition: survey-backend.enabled
-      name: survey-backend
-      repository: file://charts/survey-backend
-      version: 1.0.0
-    - condition: scheduled-activities.enabled
-      name: scheduled-activities
-      repository: file://charts/scheduled-activities
-      version: 1.0.0
-    description: Expertflow CX Solution for Surveys
-    digest: 73cd3f75efcc870363f520686b834909d84263536fa2136ed922f1a6622c0fe1
-    home: https://expertflow.com
-    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
-    keywords:
-    - Expertflow
-    - C2C Communications
-    maintainers:
-    - email: nasir.mehmood@expertflow.com
-      name: NMR Nasir Mehmood Rajput
-    name: surveys
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/surveys-4.7.0-alpha/surveys-4.7.0-alpha.tgz
-    version: 4.7.0-alpha
-  - apiVersion: v2
-    appVersion: 4.7.0
     created: "2025-01-06T11:41:48.996144028Z"
     dependencies:
     - condition: survey-studio.enabled
@@ -13086,6 +13211,37 @@ entries:
       version: 1.0.0
     description: Expertflow CX Solution for Surveys
     digest: dc837492c288e97e4961806230a9778b1021267f47a3d427aae456a1582b6c9e
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: surveys
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/surveys-4.7.0-alpha/surveys-4.7.0-alpha.tgz
+    version: 4.7.0-alpha
+  - apiVersion: v2
+    appVersion: 4.7.0
+    created: "2025-01-07T12:03:45.491047591Z"
+    dependencies:
+    - condition: survey-studio.enabled
+      name: survey-studio
+      repository: file://charts/survey-studio
+      version: 1.0.0
+    - condition: survey-backend.enabled
+      name: survey-backend
+      repository: file://charts/survey-backend
+      version: 1.0.0
+    - condition: scheduled-activities.enabled
+      name: scheduled-activities
+      repository: file://charts/scheduled-activities
+      version: 1.0.0
+    description: Expertflow CX Solution for Surveys
+    digest: 73cd3f75efcc870363f520686b834909d84263536fa2136ed922f1a6622c0fe1
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -14018,4 +14174,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2026-01-01T08:24:16.127084275Z"
+generated: "2026-01-01T08:33:11.896601258Z"
