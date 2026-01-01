@@ -74,8 +74,8 @@ unified-agent:
    enabled: true
    replicaCount: 1
    image:       
-      repository: cim/unified-agent
-      tag: "4.10.3"
+      repository: cim/unified-agent/build
+      tag: "4.10.5_b-CRM-508"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -216,6 +216,8 @@ unified-agent:
         value: "00000"
       - name: isSpellCheckEnabled
         value: "true"
+      - name: QM_URL
+        value: "https://{{ .Values.global.ingressRouter  }}/qm-backend"
    siteEnvVars: []
    configKeys: []
    service:
