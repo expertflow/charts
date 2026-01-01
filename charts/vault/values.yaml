@@ -401,13 +401,8 @@ server:
   # Supported log formats include: standard, json
   logFormat: ""
 
-  resources:
-    requests:
-      memory: 50Mi
-      cpu: 500m
-    limits:
-      memory: 2Gi
-      cpu: 1500m
+  resources: {}
+
   # resources:
   #   requests:
   #     memory: 256Mi

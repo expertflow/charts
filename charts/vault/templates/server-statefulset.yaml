@@ -1,8 +1,4 @@
-{{/*
-Copyright (c) HashiCorp, Inc.
-SPDX-License-Identifier: MPL-2.0
-*/}}
-
+{{/* Copyright (c) HashiCorp, Inc. SPDX-License-Identifier: MPL-2.0 */}}
 {{ template "vault.mode" . }}
 {{- if ne .mode "external" }}
 {{- if ne .mode "" }}
@@ -25,7 +21,8 @@ spec:
   updateStrategy:
     type: {{ .Values.server.updateStrategyType }}
   {{- if and (semverCompare ">= 1.23-0" .Capabilities.KubeVersion.Version) (.Values.server.persistentVolumeClaimRetentionPolicy) }}
-  persistentVolumeClaimRetentionPolicy: {{ toYaml .Values.server.persistentVolumeClaimRetentionPolicy | nindent 4 }}
+  persistentVolumeClaimRetentionPolicy:
+    {{ toYaml .Values.server.persistentVolumeClaimRetentionPolicy | nindent 4 }}
   {{- end }}
   selector:
     matchLabels:
@@ -39,7 +36,7 @@ spec:
         app.kubernetes.io/name: {{ template "vault.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         component: server
-        {{- if  .Values.server.extraLabels -}}
+        {{- if .Values.server.extraLabels -}}
           {{- toYaml .Values.server.extraLabels | nindent 8 -}}
         {{- end -}}
       {{ template "vault.annotations" . }}
@@ -53,7 +50,7 @@ spec:
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.server.terminationGracePeriodSeconds }}
       serviceAccountName: {{ template "vault.serviceAccount.name" . }}
-      {{ if  .Values.server.shareProcessNamespace }}
+      {{ if .Values.server.shareProcessNamespace }}
       shareProcessNamespace: true
       {{ end }}
       {{- template "server.statefulSet.securityContext.pod" . }}
@@ -74,7 +71,10 @@ spec:
       {{- end }}
       containers:
         - name: vault
-          {{ template "vault.resources" . }}
+          {{- if .Values.server.resources }}
+          resources:
+            {{- toYaml .Values.server.resources | nindent 12 }}
+          {{- end }}
           image: {{ .Values.server.image.repository }}:{{ .Values.server.image.tag | default "latest" }}
           imagePullPolicy: {{ .Values.server.image.pullPolicy }}
           command:
@@ -168,9 +168,9 @@ spec:
             {{- else }}
             # Check status; unsealed vault servers return 0
             # The exit code reflects the seal status:
-            #   0 - unsealed
-            #   1 - error
-            #   2 - sealed
+            # 0 - unsealed
+            # 1 - error
+            # 2 - sealed
             exec:
               command: ["/bin/sh", "-ec", "vault status -tls-skip-verify"]
             {{- end }}
@@ -202,7 +202,7 @@ spec:
           {{- end }}
           lifecycle:
             # Vault container doesn't receive SIGTERM from Kubernetes
-            # and after the grace period ends, Kube sends SIGKILL.  This
+            # and after the grace period ends, Kube sends SIGKILL. This
             # causes issues with graceful shutdowns such as deregistering itself
             # from Consul (zombie services).
             preStop:
