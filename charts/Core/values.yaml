@@ -160,7 +160,7 @@ agent-manager:
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: "4.10.3_f-CIM-31672"
+        tag: "4.10.5_f-CIM-30512"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -244,6 +244,8 @@ agent-manager:
           value: "25000"
         - name: SOCKET_PING_TIMEOUT
           value: "20000"
+        - name: SOCKET_MAX_HTTP_BUFFER_SIZE_IN_MBS
+          value: "1"
     siteEnvVars: []
     service:
         enabled: true
@@ -291,7 +293,7 @@ bot-framework:
     replicaCount: 1
     image:
         repository: cim/bot-framework
-        tag: "4.10.3_f-CIM-31672"
+        tag: "4.10.5_f-ReleaseCandidateBranch"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -384,7 +386,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: "4.10.3_f-CIM-31672"
+        tag: "4.10.5_f-ReleaseCandidateBranch"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -427,6 +429,10 @@ ccm:
           value: "database/creds/mongodb-ccm-role"
         - name: MONGODB_AUTHENTICATION_DATABASE
           value: "ccm_db"
+        - name: IS_PASSWORD_MASKING_ENABLED
+          value: "true"
+        - name: PASSWORD_MASKING_ENABLED_FIELDS
+          value: "client-id,client_id,client-secret,client_secret,refresh-token,refresh_token,username,password,whatsapp-api-key,facebook-api-key,instagram-api-key,imap-username,imap-password,smtp-username,smtp-password,exchange-uri,consumer-key,consumer-secret,token-key,token-secret,bearer-token"
     siteEnvVars: []
     configKeys: []
     extraEnvVarsSecret: "ccm-approle-secret"
@@ -474,8 +480,8 @@ cim-customer:
     enabled: true
     replicaCount: 1
     image:
-       repository: cim/cim-backend
-       tag: "4.10.3_f-CIM-31672"
+       repository: cim/cim-backend/build
+       tag: "4.10.5_f-ReleaseCandidateBranch"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -529,7 +535,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: "4.10.3_f-CIM-31672"
+        tag: "4.10.5_b-CRM-527"
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -667,7 +673,7 @@ conversation-monitor:
     replicaCount: 1
     image:
         repository: cim/conversation-monitor
-        tag: "4.10.3_f-CIM-31672"
+        tag: "4.10.5_f-ReleaseCandidateBranch"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -762,7 +768,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: "4.10.3"
+        tag: "4.10.5_b-CRM-506"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -790,7 +796,7 @@ customer-widget:
         - name: BUSINESSCALENDAR_URL
           value: "https://{{ .Values.global.ingressRouter  }}/business-calendar"
         - name: CX_ACTIVITY
-          value: 'https://{{ .Values.global.ingressRouter  }}/conversation-manager'
+          value: 'https://{{ .Values.global.ingressRouter  }}/conversation-manager/activities'
         - name: CHANNEL_IDENTIFIER
           value: "phone"
         - name: ENABLE_LOGO
@@ -809,6 +815,8 @@ customer-widget:
           value: "true"
         - name: AUTO_RESUME_ON_NEW_TAB
           value: "true"
+        - name: WIDGET_END_VIEW_TIMEOUT_SECONDS
+          value: "60"
     siteEnvVars: []
     configKeys: []
     service:
@@ -860,7 +868,7 @@ file-engine:
         - name: ACCESSKEY
           value: "minioadmin"
         - name: ALLOWEDFILETYPES
-          value: "png,jpeg,jpg,pdf,ppt,doc,docx,xls,xlsx,txt,svg,pptx,css,oga,mpga,webp,mp3,mp4,gif,csv"
+          value: "png,jpeg,jpg,pdf,ppt,doc,docx,xls,xlsx,txt,svg,pptx,css,oga,mpga,webp,mp3,mp4,gif,csv,eml"
         - name: BLOCK_UNKNOWN_FILES
           value: "false"
         - name: BUCKETNAME
@@ -931,7 +939,7 @@ historical-reports:
     replicaCount: 1
     image:
         repository: cim/historical-reports-manager
-        tag: "4.10.3_f-CIM-31672"
+        tag: "4.10.5_f-ReleaseCandidateBranch"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -985,7 +993,7 @@ license-manager:
     replicaCount: 1
     image:
         repository: license-mangement/license-manager
-        tag: "4.10.3_f-CIM-31672"
+        tag: "4.10.5_f-ReleaseCandidateBranch"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1048,7 +1056,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: "4.10.3_f-CIM-31672"
+        tag: "4.10.5_f-ReleaseCandidateBranch"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1140,7 +1148,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: "4.10.3_f-CIM-31672"
+        tag: "4.10.5_f-ReleaseCandidateBranch"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1234,7 +1242,7 @@ state-events-logger:
     replicaCount: 1
     image:
         repository: cim/state-events-logger
-        tag: "4.10.3_f-CIM-31672"
+        tag: "4.10.5_f-ReleaseCandidateBranch"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts: []
@@ -1292,7 +1300,7 @@ team-announcement:
     replicaCount: 1
     image:
         repository: cim/team-announcement
-        tag: "4.10.3_f-CIM-31672"
+        tag: "4.10.5_f-ReleaseCandidateBranch"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1401,7 +1409,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: "4.10.3_f-CIM-31672"
+        tag: "4.10.5_b-CRM-557"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1529,7 +1537,7 @@ web-channel-manager:
     replicaCount: 1
     image:
         repository: cim/web-channel-manager
-        tag: "4.10.3"
+        tag: "4.10.5_f-ReleaseCandidateBranch"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1572,7 +1580,7 @@ business-calendar:
     replicaCount: 1
     image:
         repository: cim/business-calendar
-        tag: "4.10.3_f-CIM-31672"
+        tag: "4.10.5_f-ReleaseCandidateBranch"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1631,7 +1639,7 @@ cx-load-hub:
     replicaCount: 1
     image:
         repository: cim/cx-load-hub
-        tag: "4.10.3_f-CIM-31672"
+        tag: "4.10.5_f-ReleaseCandidateBranch"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1684,8 +1692,8 @@ conversation-studio:
   enabled: true
   replicaCount: 1
   image:
-    repository: cim/workflow-builder/conversation-controller
-    tag: "4.10.3_f-CIM-31672"
+    repository: cim/workflow-builder/conversation-controller/build
+    tag: "4.10.5_b-CRM-28622"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
