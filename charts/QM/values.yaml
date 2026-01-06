@@ -18,7 +18,7 @@
 #
 
 global:
-  ingressRouter: "devops234.ef.com"
+  ingressRouter: "devops.ef.com"
   ingressCertName: "ef-ingress-tls-secret"
   ingressClassName: "nginx"
   efCxReleaseName: "ef-cx"
@@ -50,8 +50,8 @@ imageCredentials:
 qm-backend:
   enabled: true
   image:
-    repository: cim/qm-backend/build
-    tag: "4.10.5_f-CIM-30512"
+    repository: cim/qm-backend
+    tag: "4.10.5"
   efConnectionVars: false
   efEnvironmentVars: false
   containerPorts:
@@ -141,7 +141,7 @@ qm-connector:
   enabled: false
   image:
     repository: voice-recording-solution/qm-connector
-    tag: "4.10_f-CIM-31918"
+    tag: "4.10.5"
   containerPorts: []
   extraEnvVars:
     - name: RECORDING_SERVER_FQDN
@@ -196,6 +196,8 @@ qm-connector:
       value: http://ef-cx-conversation-manager-svc:8080
     - name: KEYCLOAK_FQDN
       value: http://keycloak.ef-external.svc
+    - name: TZ
+      value: Asia/Karachi
   siteEnvVars: []
   configKeys: []
   service:
