@@ -12544,6 +12544,50 @@ entries:
       tanzuCategory: service
     apiVersion: v2
     appVersion: 7.4.3
+    created: "2026-01-06T10:05:06.39262323Z"
+    dependencies:
+    - name: common
+      repository: file://charts/common
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Redis(R) is an open source, advanced key-value store. It is often
+      referred to as a data structure server since keys can contain strings, hashes,
+      lists, sets and sorted sets.
+    digest: 0c1234586802d78662793ce93f21c33722ab446e5f05ef609ed1dbec44c187e7
+    home: https://bitnami.com
+    icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/redis/img/redis-stack-220x234.png
+    keywords:
+    - redis
+    - keyvalue
+    - database
+    maintainers:
+    - name: Broadcom, Inc. All Rights Reserved.
+      url: https://github.com/bitnami/charts
+    name: redis
+    sources:
+    - https://github.com/bitnami/charts/tree/main/bitnami/redis
+    urls:
+    - https://github.com/expertflow/charts/releases/download/redis-4.10.5/redis-4.10.5.tgz
+    version: 4.10.5
+  - annotations:
+      bitnamiVersion: 20.13.4
+      category: Database
+      images: |
+        - name: kubectl
+          image: docker.io/bitnami/kubectl:1.33.0-debian-12-r0
+        - name: os-shell
+          image: docker.io/bitnami/os-shell:12-debian-12-r43
+        - name: redis
+          image: docker.io/bitnami/redis:7.4.3-debian-12-r0
+        - name: redis-exporter
+          image: docker.io/bitnami/redis-exporter:1.70.0-debian-12-r2
+        - name: redis-sentinel
+          image: docker.io/bitnami/redis-sentinel:7.4.3-debian-12-r0
+      licenses: Apache-2.0
+      tanzuCategory: service
+    apiVersion: v2
+    appVersion: 7.4.3
     created: "2025-11-27T10:08:05.338218539Z"
     dependencies:
     - name: common
@@ -14470,4 +14514,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2026-01-06T06:39:24.17619819Z"
+generated: "2026-01-06T10:05:06.393127896Z"
