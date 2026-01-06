@@ -74,8 +74,8 @@ imageCredentials:
 survey-backend:
    enabled: true
    image:       
-      repository: cim/survey-backend/build
-      tag: "4.10.5_f-CIM-32325"
+      repository: cim/survey-backend
+      tag: "4.10.5"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
