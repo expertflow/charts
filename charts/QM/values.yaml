@@ -147,7 +147,7 @@ qm-connector:
     - name: RECORDING_SERVER_FQDN
       value: https://192.168.1.126
     - name: EFCX_FQDN
-      value: https://efcx-frontend.expertflow.com
+      value: "https://{{ .Values.global.ingressRouter}}"
     - name: CALL_BACK_URL
       value: http://webhook.site/5ba1c6f9-d086-48cb-8341-c76cd13e4a80
     - name: UCCE_ENGINE
