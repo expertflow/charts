@@ -387,7 +387,7 @@ email-connector:
    replicaCount: 1
    image:
      repository: cim/email-connector
-     tag: "5.0"
+     tag: "5.0.1"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -402,6 +402,8 @@ email-connector:
        value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
      - name: SCHEDULER_FIXED_RATE_IN_MS
        value: "60000"
+     - name: EMAIL_BATCH_SIZE
+       value: "10"
    siteEnvVars: []
    configKeys: []
    service:

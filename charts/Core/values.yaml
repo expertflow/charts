@@ -379,7 +379,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: "5.0"
+        tag: "5.0.1"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -556,7 +556,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: "5.0"
+        tag: "5.0.1"
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -1185,7 +1185,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: "5.0"
+        tag: "5.0.1"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
