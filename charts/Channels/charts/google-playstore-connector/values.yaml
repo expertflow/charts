@@ -15,13 +15,12 @@ global:
   ingressCertName: ""
   ingressClassName: ""
   commonIngressAnnotations: {}
-  imageRegistry: "gitimages.expertflow.com"
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
-  imagePullSecrets:
-    - expertflow-reg-cred
+  imagePullSecrets: [] 
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -33,10 +32,10 @@ global:
       adaptSecurityContext: auto
 ## @section Common parameters
 
-## @param nameOverride String to partially override activemq.fullname template (will maintain the release name)
+## @param nameOverride String to partially override google-playstore-connector.fullname template (will maintain the release name)
 ##
 nameOverride: ""
-## @param fullnameOverride String to fully override activemq.fullname template
+## @param fullnameOverride String to fully override google-playstore-connector.fullname template
 ##
 fullnameOverride: ""
 ## @param namespaceOverride String to fully override common.names.namespace
@@ -71,19 +70,19 @@ diagnosticMode:
   ##
   args:
     - infinity
-## @section activemq parameters
+## @section google-playstore-connector parameters
 
-## @param image.registry [default: REGISTRY_NAME] activemq image registry
-## @param image.repository [default: REPOSITORY_NAME/activemq] activemq image repository
-## @skip image.tag activemq image tag (immutable tags are recommended)
-## @param image.digest activemq image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-## @param image.pullPolicy activemq image pull policy
+## @param image.registry [default: REGISTRY_NAME] google-playstore-connector image registry
+## @param image.repository [default: REPOSITORY_NAME/google-playstore-connector] google-playstore-connector image repository
+## @skip image.tag google-playstore-connector image tag (immutable tags are recommended)
+## @param image.digest google-playstore-connector image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy google-playstore-connector image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ##
 image:
   registry: gitimages.expertflow.com
-  repository: general/activemq-k8s
-  tag: 6.1.7-alpine-zulu-K8s-5.0.2
+  repository: ""
+  tag: ""
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -111,84 +110,20 @@ hostAliases: []
 ##
 command: []
 args: []
-## @param extraEnvVars Extra environment variables to be set on activemq containers
+## @param extraEnvVars Extra environment variables to be set on google-playstore-connector containers
 ## E.g:
 ## extraEnvVars:
 ##   - name: FOO
 ##     value: BAR
 ##
-extraEnvVars:
-  - name: ACTIVEMQ_OPTS_MEMORY
-    value: "-Xms512M -Xmx4G"
-  - name: MAX_CONNECTIONS
-    value: "5000"
-  - name: REDIS_HOST
-    value: redis-master.ef-external.svc.cluster.local
-  - name: REDIS_PORT
-    value: "6379"
-  - name: REDIS_PASSWORD
-    value: Expertflow123
-  - name: REDIS_SSL_ENABLED
-    value: "true"
-  - name: REDIS_CLIENT_CERT
-    value: "/redis/tls.crt"
-  - name: REDIS_CLIENT_KEY
-    value: "/redis/tls.key"
-  - name: REDIS_CA_CERT
-    value : "/redis/ca.crt"
-  - name: TRUST_STORE_PASSWORD
-    value: "Expertflow123"
-  - name: KEY_STORE_PASSWORD
-    value: "Expertflow123"
-  - name: REDIS_MAX_ACTIVE
-    value: "200"
-  - name: REDIS_MAX_IDLE
-    value: "200"
-  - name: REDIS_MAX_WAIT
-    value: "-1"
-  - name: REDIS_MIN_IDLE
-    value: "100"
-  - name: REDIS_TIMEOUT
-    value: "2000"
-  - name: REDIS_SENTINEL_ENABLE
-    value: "false"
-  - name : REDIS_SENTINEL_MASTER
-    value: "expertflow"
-  - name : REDIS_SENTINEL_NODES
-    value: "nikka-redis-node-0.nikka-redis-headless.ef-external.svc.cluster.local:26379,nikka-redis-node-1.nikka-redis-headless.ef-external.svc.cluster.local:26379,nikka-redis-node-2.nikka-redis-headless.ef-external.svc.cluster.local:26379"
-  - name : REDIS_SENTINEL_PASSWORD
-    value: "Expertflow123"
-  - name: DB_URL
-    value: ef-postgresql-postgresql-ha-pgpool.ef-external.svc
-  - name: DB_USER
-    value: sa
-  - name: DB_PASSWORD
-    value: Expertflow123
-  - name: DB_DATASOURCE
-    value: postgres
-  - name: DB_NAME
-    value: activemq
-  - name: DB_PORT
-    value: "5432"
-  - name: ACTIVEMQ_USERNAME
-    value: "admin"
-  - name: ACTIVEMQ_PASSWORD
-    value: "RXhwZXJ0ZmxvdzQ2NA"
-  - name: ACTIVEMQ_KEYSTORE
-    value: "/activemq/broker.ks"
-  - name: ACTIVEMQ_KEYSTORE_PASSWORD
-    value: "password"
-  - name: ACTIVEMQ_TRUSTSTORE
-    value: "/activemq/broker.ts"
-  - name: ACTIVEMQ_TRUSTSTORE_PASSWORD
-    value: "password"
-  - name: REDIS_USERNAME
-    value: "superuser"
-  - name: ENABLE_CLOUD_MANAGED_CONNECTIONS
-    value: "false"
-    
+extraEnvVars: []
+## @param siteEnvVars Extra environment variables to be set on google-playstore-connector containers
+## E.g:
+## siteEnvVars:
+##   - name: FOO
+##     value: BAR
+##
 siteEnvVars: []
-configKeys: []
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
 extraEnvVarsCM: ""
@@ -201,26 +136,26 @@ efConnectionVars: false
 ## @param efEnvironmentVars ConfigMap true false
 ##
 efEnvironmentVars: false
-## @section activemq deployment parameters
+## @section google-playstore-connector deployment parameters
 
-## @param replicaCount Number of activemq replicas to deploy
+## @param replicaCount Number of google-playstore-connector replicas to deploy
 ##
 replicaCount: 1
 ## @param revisionHistoryLimit The number of old history to retain to allow rollback
 ##
 revisionHistoryLimit: 10
-## @param updateStrategy.type activemq deployment strategy type
-## @param updateStrategy.rollingUpdate activemq deployment rolling update configuration parameters
+## @param updateStrategy.type google-playstore-connector deployment strategy type
+## @param updateStrategy.rollingUpdate google-playstore-connector deployment rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ##
 updateStrategy:
   type: RollingUpdate
   rollingUpdate: {}
-## @param podLabels Additional labels for activemq pods
+## @param podLabels Additional labels for google-playstore-connector pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-## @param podAnnotations Annotations for activemq pods
+## @param podAnnotations Annotations for google-playstore-connector pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
@@ -256,15 +191,15 @@ nodeAffinityPreset:
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-## @param hostNetwork Specify if host network should be enabled for activemq pod
+## @param hostNetwork Specify if host network should be enabled for google-playstore-connector pod
 ##
 hostNetwork: false
-## @param hostIPC Specify if host IPC should be enabled for activemq pod
+## @param hostIPC Specify if host IPC should be enabled for google-playstore-connector pod
 ##
 hostIPC: false
 ## DNS-Pod services
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
-## @param dnsPolicy Specifies the DNS policy for the activemq pod
+## @param dnsPolicy Specifies the DNS policy for the google-playstore-connector pod
 ## DNS policies can be set on a per-Pod basis. Currently Kubernetes supports the following Pod-specific DNS policies.
 ## Available options: Default, ClusterFirst, ClusterFirstWithHostNet, None
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
@@ -292,14 +227,14 @@ nodeSelector: {}
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-## @param priorityClassName activemq pods' priorityClassName
+## @param priorityClassName google-playstore-connector pods' priorityClassName
 ##
 priorityClassName: ""
 ## @param schedulerName Name of the k8s scheduler (other than default)
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
-## @param terminationGracePeriodSeconds In seconds, time the given to the activemq pod needs to terminate gracefully
+## @param terminationGracePeriodSeconds In seconds, time the given to the google-playstore-connector pod needs to terminate gracefully
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
 ##
 terminationGracePeriodSeconds: ""
@@ -308,13 +243,13 @@ terminationGracePeriodSeconds: ""
 ## The value is evaluated as a template
 ##
 topologySpreadConstraints: []
-## activemq pods' Security Context.
+## google-playstore-connector pods' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enabled activemq pods' Security Context
+## @param podSecurityContext.enabled Enabled google-playstore-connector pods' Security Context
 ## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
 ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
-## @param podSecurityContext.fsGroup Set activemq pod's Security Context fsGroup
-## @param podSecurityContext.sysctls sysctl settings of the activemq pods
+## @param podSecurityContext.fsGroup Set google-playstore-connector pod's Security Context fsGroup
+## @param podSecurityContext.sysctls sysctl settings of the google-playstore-connector pods
 ##
 podSecurityContext:
   enabled: false
@@ -328,7 +263,7 @@ podSecurityContext:
   ##   value: "10000"
   ##
   sysctls: []
-## activemq containers' Security Context.
+## google-playstore-connector containers' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
@@ -354,9 +289,9 @@ containerSecurityContext:
     drop: ["ALL"]
   seccompProfile:
     type: "RuntimeDefault"
-## Configures the ports activemq listens on
+## Configures the ports google-playstore-connector listens on
 ##
-## containerPort: "activemqPORT_NUMBER"
+## containerPort: "google-playstore-connectorPORT_NUMBER"
 ## containerPortName: "_COMPONENT_PORT_NAME"
 
 ## @param containerPorts Array of additional container ports for the Nginx container
@@ -365,23 +300,10 @@ containerSecurityContext:
 ##   - name: grpc # Generic Name of the ContainerPORT Max-10 Chars
 ##     containerPort: 4317 # Digit
 ##
-containerPorts: 
-  - name: tcp-amq8162
-    containerPort: 8162
-  - name: tcp-amq61613
-    containerPort: 61613
-  - name: tcp-amq61614
-    containerPort: 61614
-  - name: tcp-amq61615
-    containerPort: 61615
-  - name: tcp-amq61616
-    containerPort: 61616
-  - name: tcp-amq61617
-    containerPort: 61617
-
+containerPorts: []
 ##  - name: _COMPONENT_CONTAINER_PORT_NAME_
 ##    containerPort: _COMPONENT_CONTAINER_PORT_NUMBER_
-## activemq containers' resource requests and limits
+## google-playstore-connector containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
@@ -402,12 +324,12 @@ resourcesPreset: "none"
 ##     memory: 1024Mi
 ##
 resources: {}
-## activemq containers' lifecycleHooks
+## google-playstore-connector containers' lifecycleHooks
 ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
 ## If you do want to specify lifecycleHooks, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces on 'lifecycle:{}'.
-## @param lifecycleHooks Optional lifecycleHooks for the activemq container
+## @param lifecycleHooks Optional lifecycleHooks for the google-playstore-connector container
 lifecycleHooks: {}
 ## Example:
 ## postStart:
@@ -419,7 +341,7 @@ lifecycleHooks: {}
 ##     command: ["/bin/sleep", "20"]
 ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
 
-## activemq containers' startup probe.
+## google-playstore-connector containers' startup probe.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param startupProbe.enabled Enable startupProbe
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
@@ -435,7 +357,7 @@ startupProbe:
   periodSeconds: 10
   failureThreshold: 6
   successThreshold: 1
-## activemq containers' liveness probe.
+## google-playstore-connector containers' liveness probe.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -445,13 +367,13 @@ startupProbe:
 ## @param livenessProbe.successThreshold Success threshold for livenessProbe
 ##
 livenessProbe:
-  enabled: false
+  enabled: true
   initialDelaySeconds: 30
   timeoutSeconds: 5
   periodSeconds: 10
   failureThreshold: 6
   successThreshold: 1
-## activemq containers' readiness probe.
+## google-playstore-connector containers' readiness probe.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param readinessProbe.enabled Enable readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -461,14 +383,14 @@ livenessProbe:
 ## @param readinessProbe.successThreshold Success threshold for readinessProbe
 ##
 readinessProbe:
-  enabled: false
+  enabled: true
   initialDelaySeconds: 5
   timeoutSeconds: 3
   periodSeconds: 5
   failureThreshold: 3
   successThreshold: 1
 ## Autoscaling parameters
-## @param autoscaling.enabled Enable autoscaling for activemq deployment
+## @param autoscaling.enabled Enable autoscaling for google-playstore-connector deployment
 ## @param autoscaling.minReplicas Minimum number of replicas to scale back
 ## @param autoscaling.maxReplicas Maximum number of replicas to scale out
 ## @param autoscaling.targetCPU Target CPU utilization percentage
@@ -482,29 +404,15 @@ autoscaling:
   targetMemory: ""
 ## @param extraVolumes Array to add extra volumes
 ##
-extraVolumes:
-  - name: redis-crt
-    secret:
-      secretName: redis-crt
-  - name: activemq-tls
-    secret:
-      secretName: activemq-tls
+extraVolumes: []
 ## @param extraVolumeMounts Array to add extra mount
 ##
-extraVolumeMounts:
-  - name: redis-crt
-    mountPath: "/redis"
-  - name: activemq-tls
-    mountPath: "/activemq"
-#   - name: activemq-claim0
-#     mountPath: /opt/apache-activemq-5.16.1/conf/activemq.xml
-#     subPath: activemq.xml
-
+extraVolumeMounts: []
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
 serviceAccount:
-  ## @param serviceAccount.create Enable creation of ServiceAccount for activemq pod
+  ## @param serviceAccount.create Enable creation of ServiceAccount for google-playstore-connector pod
   ##
   create: false
   ## @param serviceAccount.name The name of the ServiceAccount to use.
@@ -552,7 +460,7 @@ pdb:
   maxUnavailable: ""
 ## @section Traffic Exposure parameters
 
-## activemq Service properties
+## google-playstore-connector Service properties
 ##
 ## @param service.type Service type
 ## 
@@ -566,14 +474,14 @@ pdb:
 service:
   enabled: true
   type: ClusterIP
-  port: "8182"
-  targetPort: "tcp-amq8162"
-  portName: "amq-svc-8162"
+  port: ""
+  targetPort: ""
+  portName: ""
   protocol: TCP
   ## @param service.nodePort Valid if the type is set to NodePort -- range 30000 to 32676
   ## NOTE: if 
   nodePort: ""
-  ## @param service.clusterIP activemq service Cluster IP
+  ## @param service.clusterIP google-playstore-connector service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
@@ -585,27 +493,11 @@ service:
   ###      protocol: TCP
   ###      targetPort: "http-360c-8080"
   ###
-  extraPorts:
-    - name: "amq-svc-61613"
-      port: 61613
-      protocol: TCP
-      targetPort: "tcp-amq61613"
-    - name: "amq-svc-61614"
-      port: 61614
-      protocol: TCP
-      targetPort: "tcp-amq61614"
-    - name: "amq-svc-61615"
-      port: 61615
-      protocol: TCP
-      targetPort: "tcp-amq61615"
-    - name: "amq-svc-61616"
-      port: 61616
-      protocol: TCP
-      targetPort: "tcp-amq61616"
-    - name: "amq-svc-61617"
-      port: 61617
-      protocol: TCP
-      targetPort: "tcp-amq61617"
+  extraPorts: []
+  ##  - name: "ef-bot-framework-svc-8082"
+  ##    port: 8082
+  ##    protocol: TCP
+  ##    targetPort: "http-360c-8080"
   ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
   ## If "ClientIP", consecutive client requests will be directed to the same Pod
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
@@ -688,7 +580,7 @@ networkPolicy:
 ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
-  enabled: false
+  enabled: true
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
