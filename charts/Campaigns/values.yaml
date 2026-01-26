@@ -205,7 +205,7 @@ scheduled-activities:
   replicaCount: 1
   image:
     repository: campaign-manager/campaign-scheduler
-    tag: "5.0.1_f-PLAY_STORE_OM"
+    tag: "5.0.2"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:

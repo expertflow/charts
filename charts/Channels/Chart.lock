@@ -42,4 +42,4 @@ dependencies:
   repository: file://charts/google-playstore-connector
   version: 1.0.0
 digest: sha256:7bbbe2bff84c80607e9a148379f8b7929992737925ce3d235a3be1a0d7c03b54
-generated: "2026-01-22T11:59:04.770868+05:00"
+generated: "2026-01-26T17:54:18.049729+05:00"
