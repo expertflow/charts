@@ -38,5 +38,8 @@ dependencies:
 - name: linkedin-connector
   repository: file://charts/linkedin-connector
   version: 1.0.14
-digest: sha256:82d0bc8c391f1a0ebf1c9004b35c7fd86050e8c8993308f049377423019477a6
-generated: "2026-01-20T11:50:29.58235+05:00"
+- name: google-playstore-connector
+  repository: file://charts/google-playstore-connector
+  version: 1.0.0
+digest: sha256:7bbbe2bff84c80607e9a148379f8b7929992737925ce3d235a3be1a0d7c03b54
+generated: "2026-01-26T17:54:18.049729+05:00"

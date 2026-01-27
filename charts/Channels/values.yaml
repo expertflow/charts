@@ -74,7 +74,7 @@ connect360:
    replicaCount: 1
    image:
       repository: cim/360-connector
-      tag: "5.0"
+      tag: "5.0.2"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -117,7 +117,7 @@ facebook-connector:
    replicaCount: 1
    image:       
       repository: cim/facebook-connector
-      tag: "5.0"
+      tag: "5.0.2"
    efConnectionVars: true
    efEnvironmentVars: true 
    containerPorts:
@@ -158,7 +158,7 @@ instagram-connector:
    replicaCount: 1
    image:       
       repository: cim/instagram-connector
-      tag: "5.0"
+      tag: "5.0.2"
    efConnectionVars: true
    efEnvironmentVars: false 
    containerPorts:
@@ -199,7 +199,7 @@ smpp-connector:
    replicaCount: 1
    image:       
       repository: cti/hc_smpp_connector
-      tag: "5.0"
+      tag: "5.0.2"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -238,7 +238,7 @@ telegram-connector:
    replicaCount: 1
    image:       
       repository: cim/telegram-connector
-      tag: "5.0"
+      tag: "5.0.2"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -280,7 +280,7 @@ twilio-connector:
    replicaCount: 1
    image:       
       repository: cim/twilio-connector
-      tag: "5.0"
+      tag: "5.0.2"
    efConnectionVars: false
    efEnvironmentVars: false
    containerPorts:
@@ -320,7 +320,7 @@ twitter-connector:
    replicaCount: 1
    image:       
       repository: cim/twitter-connector
-      tag: "5.0"
+      tag: "5.0.2"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -348,7 +348,7 @@ viber-connector:
    replicaCount: 1
    image:       
       repository: cim/viber-connector
-      tag: "5.0"
+      tag: "5.0.2"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -419,7 +419,7 @@ whatsapp-connector:
    replicaCount: 1
    image:
      repository: cim/whatsapp-connector
-     tag: "5.0"
+     tag: "5.0.2"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -459,7 +459,7 @@ ms-email-connector:
    replicaCount: 1
    image:
      repository: cim/ms-exchange-email-connector
-     tag: "5.0"
+     tag: "5.0.2"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -501,7 +501,7 @@ youtube-connector:
   replicaCount: 1
   image:
     repository: cim/youtube-connector
-    tag: "5.0"
+    tag: "5.0.2"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -534,7 +534,7 @@ linkedin-connector:
    replicaCount: 1
    image:
       repository: project_dev/linkedinconnector
-      tag: "5.0"
+      tag: "5.0.2"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -593,3 +593,33 @@ linkedin-connector:
         mountPath: /logback
       - name: ef-postgresql-crt-vol
         mountPath: /postgresql
+
+
+##############################Google-PlayStore-Connector##############################
+google-playstore-connector:
+   enabled: true
+   replicaCount: 1
+   image:
+      repository: cim/google-playstore-connector
+      tag: "5.0.2"
+   efConnectionVars: true
+   efEnvironmentVars: false
+   containerPorts:
+      - name: "http-gpc-8080"
+        containerPort: 8080
+   extraEnvVars:
+     - name: TZ
+       value: '{{ .Values.global.efCommonVars_TZ }}'
+     - name: CCM_URL
+       value: "http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+     - name: FILE_ENGINE_URL
+       value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
+     - name: SCHEDULER_FIXED_RATE_IN_MS
+       value: "60000"
+   service:
+      enabled: true
+      port: 8080
+      portName: "http-gpc-8080"
+      targetPort: "http-gpc-8080"
+   ingress: { enabled: false }
+ 
