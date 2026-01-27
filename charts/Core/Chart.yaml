@@ -87,6 +87,10 @@ dependencies:
     version: 1.0.0
     condition: conversation-studio.enabled
     repository: file://charts/conversation-studio
+  - name: otp-manager
+    version: 1.0.0
+    condition: otp-manager.enabled
+    repository: file://charts/otp-manager
 # A chart can be either an 'application' or a 'debug' chart.
 
 # Application charts are a collection of templates that can be packaged into versioned archives
@@ -100,7 +104,7 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: "5.0.2"
+version: "5.0.3-rc.1"
 #  
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
