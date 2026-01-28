@@ -486,7 +486,7 @@ cim-customer:
     replicaCount: 1
     image:
        repository: cim/cim-backend
-       tag: "5.0"
+       tag: "5.0.2"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
