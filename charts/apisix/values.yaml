@@ -1209,14 +1209,6 @@ apisixStandalone:
          type: roundrobin
          timeout: { connect: 5, send: 10, read: 10 }
 
-     - id: svc-otp-manager
-       name: svc-otp-manager
-       upstream:
-         discovery_type: kubernetes
-         service_name: "expertflow/ef-cx-otp-manager-svc:http-ot-ma-3000"
-         scheme: http
-         type: roundrobin
-         timeout: { connect: 5, send: 10, read: 10 }
 
    # =================================================================
    # ROUTES
@@ -2557,13 +2549,3 @@ apisixStandalone:
            enable: true
            regex_uri: ["^/cx-tenant/?(.*)", "/$1"]
 
-     - id: otp-manager
-       uris: ["/otp-manager/*"]
-       hosts: ["{{ .Values.global.ingressRouter }}"]
-       priority: 0
-       service_id: svc-otp-manager
-       status: 1
-       plugins:
-         proxy-rewrite:
-           enable: true
-           regex_uri: ["^/otp-manager/?(.*)", "/$1"]
