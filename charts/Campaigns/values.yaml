@@ -69,7 +69,7 @@ campaigns-backend:
    enabled: true
    image:       
       repository: cim/campaigns
-      tag: "5.0"
+      tag: "5.0_f-CIM-32066"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -121,7 +121,7 @@ campaign-studio:
    enabled: true
    image:       
       repository: cim/conversation-studio
-      tag: "5.0"
+      tag: "5.0_f-CIM-32066"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -205,7 +205,7 @@ scheduled-activities:
   replicaCount: 1
   image:
     repository: campaign-manager/campaign-scheduler
-    tag: "5.0.2"
+    tag: "5.1_f-Candidate"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -227,7 +227,27 @@ scheduled-activities:
     - name: LOG_LEVEL
       value: "INFO"
   siteEnvVars: []
-  configKeys: []
+  configKeys:
+      - name: VAULT_ROLE_ID
+        valueFrom:
+          secretKeyRef:
+            name: vault-approle-secret
+            key: ROLE_ID
+      - name: VAULT_SECRET_ID
+        valueFrom:
+          secretKeyRef:
+            name: vault-approle-secret
+            key: SECRET_ID
+      - name: VAULT_TRANSIT_PATH
+        valueFrom:
+          secretKeyRef:
+            name: vault-approle-secret
+            key: TRANSIT_PATH
+      - name: VAULT_TRANSIT_KEY
+        valueFrom:
+          secretKeyRef:
+            name: vault-approle-secret
+            key: TRANSIT_KEY
   service:
     enabled: true
     port: 8894
@@ -241,9 +261,18 @@ scheduled-activities:
     - name: activemq-tls
       secret:
         secretName: activemq-tls
+    - name: tls-ca
+      secret:
+        secretName: tls-ca
+    - name: tls-server-client
+      secret:
+        secretName: tls-server-client
   extraVolumeMounts:
     - name: redis-crt
       mountPath: /redis
     - name: activemq-tls
       mountPath: /activemq
-
+    - name: tls-ca
+      mountPath: /tls-ca
+    - name: tls-server-client
+      mountPath: /tls-server-client

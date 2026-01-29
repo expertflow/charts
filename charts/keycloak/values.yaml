@@ -105,7 +105,7 @@ auth:
   adminUser: admin
   ## @param auth.adminPassword Keycloak administrator password for the new user
   ##
-  adminPassword: "admin"
+  adminPassword: ""
   ## @param auth.existingSecret An already existing secret containing auth info
   ## e.g:
   ## existingSecret:
@@ -115,7 +115,10 @@ auth:
   ##     tls-keystore-password: myTlsKeystorePasswordKey
   ##     tls-truststore-password: myTlsTruststorePasswordKey
   ##
-  existingSecret: ""
+  existingSecret: 
+    name: "vault-keycloak"
+    keyMapping:
+      admin-password: "admin-password"
   ## @param auth.existingSecretPerPassword Override `existingSecret` and other secret values
   ## e.g:
   ## existingSecretPerPassword:
@@ -458,11 +461,20 @@ extraVolumes:
   - name: ef-postgresql-crt
     secret:
       secretName: ef-postgresql-crt
+  - name: secrets-store-inline
+    csi:
+      driver: secrets-store.csi.k8s.io
+      readOnly: true
+      volumeAttributes:
+        secretProviderClass: "vault-keycloak"
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Keycloak container(s)
 ##
 extraVolumeMounts: 
   - name: ef-postgresql-crt
     mountPath: /opt/keycloak/certs/
+    readOnly: true
+  - name: secrets-store-inline
+    mountPath: /mnt/secrets-store
     readOnly: true
 ## @param initContainers Add additional init containers to the Keycloak pods
 ## Example:
@@ -697,11 +709,11 @@ networkPolicy:
 serviceAccount:
   ## @param serviceAccount.create Enable the creation of a ServiceAccount for Keycloak pods
   ##
-  create: true
+  create: false
   ## @param serviceAccount.name Name of the created ServiceAccount
   ## If not set and create is true, a name is generated using the fullname template
   ##
-  name: ""
+  name: "default"
   ## @param serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod
   ##
   automountServiceAccountToken: true
@@ -1039,9 +1051,9 @@ externalDatabase:
   port: 5432
   user: sa
   database: keycloak_db
-  password: "Expertflow123"
-  existingSecret: ""
-  existingSecretPasswordKey: ""
+  password: ""
+  existingSecret: "vault-keycloak"
+  existingSecretPasswordKey: "sa-password"
 
 ## @section Keycloak Cache parameters
 

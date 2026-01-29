@@ -74,8 +74,8 @@ unified-agent:
    enabled: true
    replicaCount: 1
    image:
-      repository: cim/unified-agent
-      tag: "5.0.2"
+      repository: cim/unified-agent/build
+      tag: "5.1_f-CIM-32339"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -90,6 +90,8 @@ unified-agent:
         value: "https://{{ .Values.global.ingressRouter  }}/realtime-reports"
       - name: CIM_CUSTOMER_URL
         value: "https://{{ .Values.global.ingressRouter  }}/cim-customer"
+      - name: CX_TENANT_URL
+        value: "https://{{ .Values.global.ingressRouter  }}/cx-tenant"
       - name: UNIFIED_ADMIN_URL
         value: "https://{{ .Values.global.ingressRouter  }}/unified-admin"
       - name: CCM_URL
@@ -220,6 +222,8 @@ unified-agent:
         value: false
       - name: KNOWLEDGE_BASE_URL
         value: ""
+      - name: QM_URL
+        value: "https://{{ .Values.global.ingressRouter  }}/qm-backend"
    siteEnvVars: []
    configKeys: []
    service:

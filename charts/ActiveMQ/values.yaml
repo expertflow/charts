@@ -83,7 +83,7 @@ diagnosticMode:
 image:
   registry: gitimages.expertflow.com
   repository: general/activemq-k8s
-  tag: 6.1.7-alpine-zulu-K8s-5.0.2
+  tag: 6.1.7-alpine-zulu-K8s-5.1_f-Candidate-5.1-SR1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -170,10 +170,6 @@ extraEnvVars:
     value: activemq
   - name: DB_PORT
     value: "5432"
-  - name: ACTIVEMQ_USERNAME
-    value: "admin"
-  - name: ACTIVEMQ_PASSWORD
-    value: "RXhwZXJ0ZmxvdzQ2NA"
   - name: ACTIVEMQ_KEYSTORE
     value: "/activemq/broker.ks"
   - name: ACTIVEMQ_KEYSTORE_PASSWORD
@@ -194,7 +190,7 @@ configKeys: []
 extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
-extraEnvVarsSecret: ""
+extraEnvVarsSecret: "activemq-env"
 ## @param efConnectionVars Configmap true false
 ##
 efConnectionVars: false
@@ -489,6 +485,13 @@ extraVolumes:
   - name: activemq-tls
     secret:
       secretName: activemq-tls
+  - name: vault-secrets
+    csi:
+      driver: secrets-store.csi.k8s.io
+      readOnly: true
+      volumeAttributes:
+        secretProviderClass: activemq-vault-kv
+
 ## @param extraVolumeMounts Array to add extra mount
 ##
 extraVolumeMounts:
@@ -496,6 +499,9 @@ extraVolumeMounts:
     mountPath: "/redis"
   - name: activemq-tls
     mountPath: "/activemq"
+  - name: vault-secrets
+    mountPath: "/vault/secrets"
+    readOnly: true
 #   - name: activemq-claim0
 #     mountPath: /opt/apache-activemq-5.16.1/conf/activemq.xml
 #     subPath: activemq.xml

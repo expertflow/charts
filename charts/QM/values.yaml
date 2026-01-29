@@ -50,8 +50,8 @@ imageCredentials:
 qm-backend:
   enabled: true
   image:
-    repository: cim/qm-backend
-    tag: "5.0"
+    repository: cim/qm-backend/build
+    tag: "5.1_f-CIM-32339"
   efConnectionVars: false
   efEnvironmentVars: false
   containerPorts:
@@ -91,7 +91,7 @@ qm-backend:
     - name: KEYCLOAK_GRANT_TYPE_PAT
       value: "client_credentials"
     - name: KEYCLOAK_HOST
-      value: "https://{{ .Values.global.ingressRouter  }}/auth/"
+      value: "http://keycloak.ef-external.svc/auth/"
     - name: KEYCLOAK_PASSWORD_ADMIN
       value: admin
     - name: KEYCLOAK_POLICY_ENFORCER
@@ -116,6 +116,10 @@ qm-backend:
       value: true
     - name: TENANT_NAME
       value: "expertflow"
+    - name: AGENT_MANAGER_SVC
+      value: "http://{{ .Values.global.efCxReleaseName }}-agent-manager-svc.{{ .Release.Namespace }}.svc:3000/"
+    - name: SSE_MAX_LISTENERS
+      value: "200"
   siteEnvVars: []
   configKeys: []
   service:
@@ -137,13 +141,13 @@ qm-connector:
   enabled: false
   image:
     repository: voice-recording-solution/qm-connector
-    tag: "5.0"
+    tag: "4.10.5"
   containerPorts: []
   extraEnvVars:
     - name: RECORDING_SERVER_FQDN
       value: https://192.168.1.126
     - name: EFCX_FQDN
-      value: https://efcx-frontend.expertflow.com
+      value: "https://{{ .Values.global.ingressRouter}}"
     - name: CALL_BACK_URL
       value: http://webhook.site/5ba1c6f9-d086-48cb-8341-c76cd13e4a80
     - name: UCCE_ENGINE
@@ -192,6 +196,12 @@ qm-connector:
       value: '2025-09-01'
     - name: MAX_BATCH_SIZE
       value: 30000
+    - name: CONVERSATION_MANAGER_FQDN
+      value: http://ef-cx-conversation-manager-svc:8080
+    - name: KEYCLOAK_FQDN
+      value: http://keycloak.ef-external.svc
+    - name: TZ
+      value: Asia/Karachi
   siteEnvVars: []
   configKeys: []
   service:

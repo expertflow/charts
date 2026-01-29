@@ -327,8 +327,8 @@ campaign-studio:
 qm-backend:
   enabled: true
   image:
-    repository: cim/qm-backend
-    tag: "5.0"
+    repository: cim/qm-backend/build
+    tag: "5.1_f-CIM-32339"
   efConnectionVars: false
   efEnvironmentVars: false
   containerPorts:
@@ -372,7 +372,7 @@ qm-backend:
     - name: KEYCLOAK_GRANT_TYPE_PAT
       value: "client_credentials"
     - name: KEYCLOAK_HOST
-      value: "https://{{ .Values.global.ingressRouter  }}/auth/"
+      value: "http://keycloak.ef-external.svc/auth/"
     - name: KEYCLOAK_PASSWORD_ADMIN
       value: admin
     - name: KEYCLOAK_POLICY_ENFORCER
@@ -397,6 +397,10 @@ qm-backend:
       value: true
     - name: TENANT_NAME
       value: "{{ .Values.global.tenantId }}"
+    - name: AGENT_MANAGER_SVC
+      value: "http://{{ .Values.global.efCxReleaseName }}-agent-manager-svc.{{ .Release.Namespace }}.svc:3000/"
+    - name: SSE_MAX_LISTENERS
+      value: "200"
   siteEnvVars: []
   configKeys: []
   service:
