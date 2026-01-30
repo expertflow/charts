@@ -2547,3 +2547,34 @@ apisixStandalone:
          proxy-rewrite:
            enable: true
            regex_uri: ["^/cx-tenant/?(.*)", "/$1"]
+
+     # Tenant API secure path: /cx-tenant/tenant
+     - id: cx-tenant-tenant-secured
+       uris: ["/cx-tenant/tenant*"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       priority: 10
+       service_id: svc-cx-tenant
+       status: 1
+       plugins:
+#         openid-connect:
+#           enable: true
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/master/.well-known/openid-configuration"
+#           realm: "master"
+#           client_id: "multitenancy"
+#           client_secret: "6YBV9HqdGqOTrHVf6TkS0uzlWxHDxacm"
+#           bearer_only: true
+#           token_signing_alg_values_expected: "RS256"
+#           set_access_token_header: false
+#           set_userinfo_header: false
+#           audience: ["multitenancy", "account", "realm-management"]
+#           required_scopes: ["email", "profile"]
+#         authz-keycloak:
+#           lazy_load_paths: true
+#           http_method_as_scope: true
+#           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/master/authz/protection/resource_set"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/master/.well-known/uma2-configuration"
+#           client_id: "multitenancy"
+#           client_secret: "6YBV9HqdGqOTrHVf6TkS0uzlWxHDxacm"
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/cx-tenant/?(.*)", "/$1"]
