@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-      - CX-5.0.3-rc
+      - CX-5.0.4-rc
     paths:
       - 'charts/**'
 jobs:
@@ -28,5 +28,7 @@ jobs:
           helm repo update
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.6.0
+        with:
+          skip_existing: true
         env:
           CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
