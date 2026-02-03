@@ -59,5 +59,8 @@ dependencies:
 - name: conversation-studio
   repository: file://charts/conversation-studio
   version: 1.0.0
-digest: sha256:8fa2a76015b3f4474d87d02dffad66f75097e15691382627df0ab8936fc8b066
-generated: "2026-01-26T18:01:59.135759+05:00"
+- name: otp-manager
+  repository: file://charts/otp-manager
+  version: 1.0.0
+digest: sha256:e4b8d2469813040697d01ccefac811b1beb91789406cb713cca28af4c572a403
+generated: "2026-01-29T12:43:59.187185+05:00"

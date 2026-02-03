@@ -160,14 +160,13 @@ efConnectionVars:
     ROOT_DOMAIN: "NIL"
     ENABLE_CLOUD_MANAGED_CONNECTIONS: "false"
 
-
 ##############################agent-manager##############################
 agent-manager:
     enabled: true
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: "5.0"
+        tag: "5.0.3"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1524,7 +1523,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: "5.0"
+        tag: "5.0.3"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1854,7 +1853,7 @@ cx-tenant:
   replicaCount: 1
   image:
     repository: cim/cx-tenant
-    tag: "5.0"
+    tag: "5.0.3"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -2005,3 +2004,63 @@ conversation-studio:
     - name: conversation-studio-flow-vol
       mountPath: /flows
 
+##############################otp-manager##############################
+otp-manager:
+    enabled: true
+    replicaCount: 1
+    image:
+        repository: cim/otp-manager
+        tag: "5.0.3"
+    efConnectionVars: true
+    efEnvironmentVars: true
+    containerPorts:
+        - name: "http-ot-ma-3000"
+          containerPort: 3000
+    extraEnvVars:
+        - name: NODE_ENV
+          value: "production"
+        - name: TZ
+          value: '{{ .Values.global.efCommonVars_TZ }}'
+        - name: LOG_LEVEL
+          value: "info"
+        - name: PORT
+          value: "3000"
+        - name: OTP_SALT_ROUNDS
+          value: "10"
+        - name: SEND_MESSAGE_URL
+          value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081/message/send"
+    siteEnvVars: []
+    configKeys: []
+    service:
+      enabled: true
+      port: 3000
+      portName: "http-ot-ma-3000"
+      targetPort: "http-ot-ma-3000"
+    ingress: { enabled: false }
+    extraVolumes:
+      - name: mongo-mongodb-ca
+        secret:
+          secretName: mongo-mongodb-ca
+      - name: redis-crt
+        secret:
+          secretName: redis-crt
+      - name: cx-tenant-data
+        persistentVolumeClaim:
+          claimName: cx-tenant-pvc
+      - name: tls-ca
+        secret:
+          secretName: tls-ca
+      - name: tls-server-client
+        secret:
+          secretName: tls-server-client
+    extraVolumeMounts:
+      - name: mongo-mongodb-ca
+        mountPath: /mongo
+      - name: redis-crt
+        mountPath: /redis
+      - name: cx-tenant-data
+        mountPath: /icons
+      - name: tls-ca
+        mountPath: /tls-ca
+      - name: tls-server-client
+        mountPath: /tls-server-client

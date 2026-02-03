@@ -40,8 +40,6 @@ global:
   efCommonVars_TZ: UTC
   efCommonVars_MASK_ATTRIBUTES_PATH: /sensitive.js
   efCommonVars_LOGGING_CONFIG: /logback/logback-spring.xml
-  efCommonVars_IS_ENABLED_2FA: "false"
-  efCommonVars_CHANNEL_2FA: "app"
   efCommonVars_TWILIO_SID: ""
   efCommonVars_TWILIO_VERIFY_SID: ""
   efCommonVars_TWILIO_AUTH_TOKEN: ""
@@ -75,7 +73,7 @@ unified-agent:
    replicaCount: 1
    image:
       repository: cim/unified-agent
-      tag: "5.0.2"
+      tag: "5.0.3"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
