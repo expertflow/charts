@@ -1209,7 +1209,6 @@ apisixStandalone:
          type: roundrobin
          timeout: { connect: 5, send: 10, read: 10 }
 
-
    # =================================================================
    # ROUTES
    # =================================================================
@@ -2548,4 +2547,3 @@ apisixStandalone:
          proxy-rewrite:
            enable: true
            regex_uri: ["^/cx-tenant/?(.*)", "/$1"]
-
