@@ -601,7 +601,7 @@ google-playstore-connector:
    replicaCount: 1
    image:
       repository: cim/google-playstore-connector
-      tag: "5.0.2"
+      tag: "5.1_f-Candidate"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:

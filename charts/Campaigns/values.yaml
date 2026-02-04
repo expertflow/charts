@@ -120,7 +120,7 @@ campaigns-backend:
 campaign-studio:
    enabled: true
    image:       
-      repository: cim/conversation-studio
+      repository: cim/conversation-studio/build
       tag: "5.0_f-CIM-32066"
    efConnectionVars: true
    efEnvironmentVars: false
