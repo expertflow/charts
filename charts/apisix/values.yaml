@@ -315,6 +315,8 @@ ingress:
       more_clear_headers 'Access-Control-Allow-Methods';
       more_clear_headers 'Access-Control-Allow-Headers';
       more_clear_headers 'Access-Control-Max-Age';
+     nginx.ingress.kubernetes.io/proxy-cookie-path: "/ /"
+     nginx.ingress.kubernetes.io/proxy-cookie-flags: "secure httponly samesite=lax"
      nginx.ingress.kubernetes.io/configuration-snippet: |
       add_header X-Frame-Options "DENY" always;
       add_header X-Content-Type-Options "nosniff" always;
@@ -322,8 +324,6 @@ ingress:
       add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, OPTIONS" always;
       add_header Access-Control-Allow-Headers "*" always;
       add_header Access-Control-Max-Age "600" always;
-      add_header proxy_cookie_path / "/; Secure; HttpOnly; SameSite=Lax";
-      proxy_buffering off;
       proxy_cache off;
       proxy_no_cache $http_authorization $http_cookie $args;
       proxy_cache_bypass 1;
