@@ -1801,7 +1801,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 3.11.0
-    created: "2026-02-10T13:05:43.876441475Z"
+    created: "2026-02-11T08:02:28.734706659Z"
     dependencies:
     - condition: etcd.enabled
       name: etcd
@@ -1818,7 +1818,7 @@ entries:
       repository: https://charts.apiseven.com
       version: 0.14.0
     description: A Helm chart for Apache APISIX v3
-    digest: e3d50e4440bf2bf9a9fc640f19696b72ab8ff886a21be9d37ae0388d62aa8d8c
+    digest: b3d17c0c8a45fb51191bb05728894808aef347d045298ebeb21d6c5f967142b6
     icon: https://apache.org/logos/res/apisix/apisix.png
     maintainers:
     - name: tao12345666333
@@ -1883,6 +1883,38 @@ entries:
       version: 0.14.0
     description: A Helm chart for Apache APISIX v3
     digest: 899acff13fd9a94578d7d2b4b84740face9eeedcc2231f530e648494ec95925b
+    icon: https://apache.org/logos/res/apisix/apisix.png
+    maintainers:
+    - name: tao12345666333
+    name: apisix
+    sources:
+    - https://github.com/apache/apisix-helm-chart
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/apisix-5.1.0-rc.1/apisix-5.1.0-rc.1.tgz
+    version: 5.1.0-rc.1
+  - annotations:
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
+    appVersion: 3.11.0
+    created: "2026-02-10T13:05:43.876441475Z"
+    dependencies:
+    - condition: etcd.enabled
+      name: etcd
+      repository: file://charts/etcd
+      version: 9.7.3
+    - alias: dashboard
+      condition: dashboard.enabled
+      name: apisix-dashboard
+      repository: https://charts.apiseven.com
+      version: 0.8.2
+    - alias: ingress-controller
+      condition: ingress-controller.enabled
+      name: apisix-ingress-controller
+      repository: https://charts.apiseven.com
+      version: 0.14.0
+    description: A Helm chart for Apache APISIX v3
+    digest: e3d50e4440bf2bf9a9fc640f19696b72ab8ff886a21be9d37ae0388d62aa8d8c
     icon: https://apache.org/logos/res/apisix/apisix.png
     maintainers:
     - name: tao12345666333
@@ -16078,6 +16110,34 @@ entries:
       hashiCorpVersion: 0.28.0
     apiVersion: v2
     appVersion: 1.16.1
+    created: "2026-02-11T08:02:29.00355168Z"
+    description: Official HashiCorp Vault Chart
+    digest: b2473dd35b37104cbc25984296763024786e607c383a8cc01795483586c04f2c
+    home: https://www.vaultproject.io
+    icon: https://github.com/hashicorp/vault/raw/f22d202cde2018f9455dec755118a9b84586e082/Vault_PrimaryLogo_Black.png
+    keywords:
+    - vault
+    - security
+    - encryption
+    - secrets
+    - management
+    - automation
+    - infrastructure
+    kubeVersion: '>= 1.20.0-0'
+    name: vault
+    sources:
+    - https://github.com/hashicorp/vault
+    - https://github.com/hashicorp/vault-helm
+    - https://github.com/hashicorp/vault-k8s
+    - https://github.com/hashicorp/vault-csi-provider
+    urls:
+    - https://github.com/expertflow/charts/releases/download/vault-5.1.0-rc.1/vault-5.1.0-rc.1.tgz
+    version: 5.1.0-rc.1
+  - annotations:
+      charts.openshift.io/name: HashiCorp Vault
+      hashiCorpVersion: 0.28.0
+    apiVersion: v2
+    appVersion: 1.16.1
     created: "2025-11-03T10:33:18.392312462Z"
     description: Official HashiCorp Vault Chart
     digest: 3bf727f1bbc712511fb9132dc287f7cf783721183585becde1ea9e5dca239a63
@@ -16473,4 +16533,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2026-02-10T13:44:26.867472622Z"
+generated: "2026-02-11T08:02:29.005149545Z"
