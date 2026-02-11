@@ -47,59 +47,13 @@ global:
             role in allowed_roles
         }
 
-        # Restrict /sensitive-data to admin only
-        allow {
-            input.request.path == "/sensitive-data"
-            jwt := input.request.headers.authorization
-            startswith(jwt, "Bearer ")
-            token := split(jwt, " ")[1]
-            [valid, _, payload] := io.jwt.decode_verify(token, {"cert": ""})
-            valid
-            "admin" in payload.realm_access.roles
-        }
-#=============================================================
-# Global rules security headers
-# ============================================================
-
-global_rules:
-  - id: add-security-headers
-    plugins:
-      response-rewrite:
-        enable: true
-        headers:
-          add:
-            X-Frame-Options: "DENY"
-            Content-Security-Policy: "frame-ancestors 'none';"
-#============================================================
-# Global Plugins
-#============================================================
-global_plugins:
-  
-  - name: opa
-    enable: true
-    config:
-      policy: "{{ global.policies.opa.restrictivePolicy }}"
-
-  
-  - name: response-rewrite
-    enable: true
-    config:
-      headers:
-        set:
-          Set-Cookie: "${http_set_cookie}; Secure; HttpOnly; SameSite=Strict"
-  - name: proxy-rewrite
-    enable: true
-    config:
-      headers:
-        remove:
-          - Cookie
   # e.g.
   # imagePullSecrets:
   #   - my-registry-secrets
   #   - other-registry-secrets
   # -- Global Docker registry secret names as an array
-imagePullSecrets: 
-  - expertflow-reg-cred
+  imagePullSecrets: 
+   - expertflow-reg-cred
 
 image:
   # -- Apache APISIX image repository
@@ -301,48 +255,14 @@ ingress:
   className: "{{ .Values.global.ingressClassName }}"
   # -- (number) Service port to send traffic. Defaults to `service.http.servicePort`.
   servicePort:
-  annotations:
-     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-     nginx.ingress.kubernetes.io/proxy-body-size: "6m"
-     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
-     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
-     nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
-     nginx.ingress.kubernetes.io/proxy-buffering: "off"
-     nginx.ingress.kubernetes.io/server-snippet: |
-      more_clear_headers 'X-Powered-By';
-      more_clear_headers 'Access-Control-Allow-Origin';
-      more_clear_headers 'Access-Control-Allow-Methods';
-      more_clear_headers 'Access-Control-Allow-Headers';
-      more_clear_headers 'Access-Control-Max-Age';
-     nginx.ingress.kubernetes.io/proxy-cookie-path: "/ /"
-     nginx.ingress.kubernetes.io/proxy-cookie-flags: "secure httponly samesite=lax"
-     nginx.ingress.kubernetes.io/configuration-snippet: |
-      add_header X-Frame-Options "DENY" always;
-      add_header X-Content-Type-Options "nosniff" always;
-      add_header Access-Control-Allow-Origin "http://{{ .Values.global.ingressRouter }}" always;
-      add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, OPTIONS" always;
-      add_header Access-Control-Allow-Headers "*" always;
-      add_header Access-Control-Max-Age "600" always;
-      proxy_cache off;
-      proxy_no_cache $http_authorization $http_cookie $args;
-      proxy_cache_bypass 1;
-      add_header Cache-Control "private, no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" always;
-      add_header Pragma "no-cache" always;
-      add_header Expires "0" always;
-      more_set_headers "Content-Security-Policy: \
-        default-src 'self'; \
-        script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; \
-        style-src 'self' 'unsafe-inline' https:; \
-        img-src 'self' data: https:; \
-        font-src 'self' https: data:; \
-        connect-src 'self' https: wss:; \
-        frame-src 'self' https:; \
-        object-src 'none'; \
-        base-uri 'self'; \
-        form-action 'self'; \
-        frame-ancestors 'none'; \
-        upgrade-insecure-requests;";
+  # -- Ingress annotations
+  annotations: 
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "6m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
     #cert-manager.io/cluster-issuer: "ef-letsencrypt-prod"
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
@@ -1433,7 +1353,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -1447,7 +1367,7 @@ apisixStandalone:
 #           lazy_load_paths: true
 #           http_method_as_scope: true
 #           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
@@ -1464,7 +1384,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -1478,7 +1398,7 @@ apisixStandalone:
 #           lazy_load_paths: true
 #           http_method_as_scope: true
 #           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
@@ -1535,7 +1455,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -1549,7 +1469,7 @@ apisixStandalone:
 #           lazy_load_paths: true
 #           http_method_as_scope: true
 #           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
@@ -1589,7 +1509,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -1603,7 +1523,7 @@ apisixStandalone:
 #           lazy_load_paths: true
 #           http_method_as_scope: true
 #           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
@@ -1620,7 +1540,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -1634,7 +1554,7 @@ apisixStandalone:
 #           lazy_load_paths: true
 #           http_method_as_scope: true
 #           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
@@ -1651,7 +1571,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -1665,7 +1585,7 @@ apisixStandalone:
 #           lazy_load_paths: true
 #           http_method_as_scope: true
 #           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
@@ -1731,7 +1651,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -1745,7 +1665,7 @@ apisixStandalone:
 #           lazy_load_paths: true
 #           http_method_as_scope: true
 #           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
@@ -1769,7 +1689,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -1783,7 +1703,7 @@ apisixStandalone:
 #           lazy_load_paths: true
 #           http_method_as_scope: true
 #           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
@@ -1800,7 +1720,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -1814,7 +1734,7 @@ apisixStandalone:
 #           lazy_load_paths: true
 #           http_method_as_scope: true
 #           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
@@ -1856,7 +1776,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -1870,7 +1790,7 @@ apisixStandalone:
 #           lazy_load_paths: true
 #           http_method_as_scope: true
 #           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
@@ -1887,7 +1807,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -1901,7 +1821,7 @@ apisixStandalone:
 #           lazy_load_paths: true
 #           http_method_as_scope: true
 #           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
@@ -1962,7 +1882,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -1976,7 +1896,7 @@ apisixStandalone:
 #           lazy_load_paths: true
 #           http_method_as_scope: true
 #           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
@@ -2121,7 +2041,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -2135,7 +2055,7 @@ apisixStandalone:
 #           lazy_load_paths: true
 #           http_method_as_scope: true
 #           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
@@ -2194,32 +2114,16 @@ apisixStandalone:
        status: 1
        plugins:
          proxy-rewrite:
-           regex_uri:
-             - "^/grafana(/|$)(.*)"
-             - "/$2"
-           headers:
-             X-Forwarded-Proto: "https"
-             X-Forwarded-Host: "{{ .Values.global.ingressRouter }}"
-             X-Forwarded-Prefix: "/grafana"
-             Upgrade: "$http_upgrade"
-             Connection: "upgrade"
-
-         opa:
-           enable: true
-           config:
-             policy: |
-               package apisix.authz
-               default allow := false
-
-               # Only allow admin users to access Grafana
-               allow {
-                   jwt := input.request.headers.authorization
-                   startswith(jwt, "Bearer ")
-                   token := split(jwt, " ")[1]
-                   [valid, _, payload] := io.jwt.decode_verify(token, {"cert": ""})
-                   valid
-                   "admin" in payload.realm_access.roles
-               }
+         #enable: true
+         regex_uri:
+           - "^/grafana(/|$)(.*)"
+           - "/$2"
+         headers:
+           X-Forwarded-Proto: "https"
+           X-Forwarded-Host: "{{ .Values.global.ingressRouter }}"
+           X-Forwarded-Prefix: "/grafana"
+           Upgrade: "$http_upgrade"
+           Connection: "upgrade"
      # --- campaigns-backend ---
      - id: cx-campaigns-campaigns-backend-main
        uris: ["/campaigns/*"]
@@ -2230,7 +2134,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -2244,7 +2148,7 @@ apisixStandalone:
 #           lazy_load_paths: true
 #           http_method_as_scope: true
 #           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
@@ -2291,7 +2195,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -2305,7 +2209,7 @@ apisixStandalone:
 #           lazy_load_paths: true
 #           http_method_as_scope: true
 #           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
@@ -2485,7 +2389,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -2499,7 +2403,7 @@ apisixStandalone:
 #           lazy_load_paths: true
 #           http_method_as_scope: true
 #           resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
@@ -2556,7 +2460,7 @@ apisixStandalone:
          # strip /qm-backend prefix  →  /$2
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -2570,7 +2474,7 @@ apisixStandalone:
 #             lazy_load_paths: true
 #             http_method_as_scope: true
 #             resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#             discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#             discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #             client_id: "cim"
 #             client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
 
@@ -2602,7 +2506,7 @@ apisixStandalone:
        plugins:
 #         openid-connect:
 #           enable: true # Corrected: Disabled by default
-#           discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/openid-configuration"
+#           discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/openid-configuration"
 #           realm: "expertflow"
 #           client_id: "cim"
 #           client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
@@ -2616,7 +2520,7 @@ apisixStandalone:
 #             lazy_load_paths: true
 #             http_method_as_scope: true
 #             resource_registration_endpoint: "http://keycloak.ef-external.svc/auth/realms/expertflow/authz/protection/resource_set"
-#             discovery: "https://{{ .Values.global.ingressRouter }}/cx-tenant/tenant/auth?action=.well-known/uma2-configuration"
+#             discovery: "http://keycloak.ef-external.svc/auth/realms/expertflow/.well-known/uma2-configuration"
 #             client_id: "cim"
 #             client_secret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
          proxy-rewrite:
