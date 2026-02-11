@@ -188,7 +188,7 @@ scheduled-activities:
   replicaCount: 1
   image:
     repository: campaign-manager/campaign-scheduler
-    tag: "4.10.5"
+    tag: "4.10.6"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
