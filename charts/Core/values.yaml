@@ -1409,7 +1409,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: "4.10.5"
+        tag: "4.10.6"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
