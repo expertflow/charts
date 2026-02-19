@@ -1703,6 +1703,8 @@ cx-load-hub:
           value: "10"
         - name: FILE_ENGINE_URL
           value: "http://{{ .Release.Name }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
+        - name: CIM_CUSTOMER_URL
+          value: "http://{{ .Release.Name }}-cim-customer-svc.{{ .Release.Namespace }}.svc:8080"
         - name: MONGODB_ROLE_PATH
           value: "database/creds/mongodb-role"
         - name: MONGODB_AUTHENTICATION_DATABASE

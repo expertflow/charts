@@ -141,7 +141,7 @@ qm-connector:
   enabled: false
   image:
     repository: voice-recording-solution/qm-connector
-    tag: "4.10.5"
+    tag: "5.1_f-Candidate"
   containerPorts: []
   extraEnvVars:
     - name: RECORDING_SERVER_FQDN
@@ -202,6 +202,8 @@ qm-connector:
       value: http://keycloak.ef-external.svc
     - name: TZ
       value: Asia/Karachi
+    - name: TENANT_NAME
+      value: "expertflow"
   siteEnvVars: []
   configKeys: []
   service:
