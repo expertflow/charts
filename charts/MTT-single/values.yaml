@@ -109,8 +109,8 @@ conversation-studio:
   enabled: true
   replicaCount: 1
   image:
-    repository: cim/workflow-builder/conversation-controller
-    tag: "5.0"
+    repository: cim/workflow-builder/conversation-controller/build
+    tag: "5.1_f-Candidate"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -143,8 +143,6 @@ conversation-studio:
       value: admin
     - name: TENANT_ID
       value: "{{ .Values.global.tenantId }}"
-    - name: UNIFIED_ADMIN_URL
-      value: "https://{{ .Values.global.ingressRouter  }}/unified-admin/"
     - name: KEYCLOAK_TEAM_TYPE
       value: CX
     - name: KEYCLOAK_BEARER_ONLY
@@ -181,6 +179,12 @@ conversation-studio:
       value: admin
     - name: KEYCLOAK_VERIFY_TOKEN_AUDIENCE
       value: "false"
+    - name: MONGODB_ROLE_PATH
+      value: "database/creds/mongodb-role"
+    - name: MONGODB_AUTHENTICATION_DATABASE
+      value: "admin"
+    - name: VAULT_ENABLED
+      value: "true"
   siteEnvVars: []
   configKeys: []
   service:
@@ -208,8 +212,8 @@ conversation-studio:
 campaign-studio:
    enabled: true
    image:       
-      repository: cim/conversation-studio
-      tag: "5.0"
+      repository: cim/conversation-studio/build
+      tag: "5.0_f-CIM-32066"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -417,3 +421,82 @@ qm-backend:
   extraVolumeMounts:
     - name: ef-postgresql-crt
       mountPath: /postgresql
+##############################qm-connector##############################
+qm-connector:
+  enabled: false
+  image:
+    repository: voice-recording-solution/qm-connector
+    tag: "5.1_f-Candidate"
+  containerPorts: []
+  extraEnvVars:
+    - name: RECORDING_SERVER_FQDN
+      value: https://192.168.1.126
+    - name: EFCX_FQDN
+      value: "https://{{ .Values.global.ingressRouter}}"
+    - name: CALL_BACK_URL
+      value: http://webhook.site/5ba1c6f9-d086-48cb-8341-c76cd13e4a80
+    - name: UCCE_ENGINE
+      value: sqlserver
+    - name: UCCE_IP
+      value: "192.168.1.72"
+    - name: UCCE_PORT
+      value: "1433"
+    - name: UCCE_DATABASE
+      value: uc126_awdb
+    - name: UCCE_USERNAME
+      value: sa
+    - name: UCCE_PASSWORD
+      value: Expertflow464
+    - name: UCCE_OB_SERVICE_IDENTIFIER
+      value: "8899"
+    - name: KEYCLOAK_REALM_NAME
+      value: expertflow
+    - name: KEYCLOAK_CLIENT_ID
+      value: cim
+    - name: KEYCLOAK_CLIENT_SECRET
+      value: ef61df80-061c-4c29-b9ac-387e6bf67052
+    - name: KEYCLOAK_USERNAME
+      value: vrs
+    - name: KEYCLOAK_PASSWORD
+      value: vrs
+    - name: KEYCLOAK_AGENT_ROLE_NAME
+      value: agent
+    - name: KEYCLOAK_AGENT_ROLE_ID
+      value: 1903735d-5bcc-4253-a05e-ea1487195c9c
+    - name: DB_NAME
+      value: vrs5
+    - name: DB_USER
+      value: sa
+    - name: DB_PASSWORD
+      value: Expertflow123
+    - name: DB_ENGINE
+      value: sqlserver
+    - name: DB_HOST
+      value: 192.168.1.126
+    - name: DB_PORT
+      value: "1433"
+    - name: DB_DRIVER
+      value: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    - name: CALL_START_DATE
+      value: '2025-09-01'
+    - name: MAX_BATCH_SIZE
+      value: 30000
+    - name: CONVERSATION_MANAGER_FQDN
+      value: http://ef-cx-conversation-manager-svc:8080
+    - name: KEYCLOAK_FQDN
+      value: http://keycloak.ef-external.svc
+    - name: TZ
+      value: Asia/Karachi
+    - name: TENANT_NAME
+      value: "expertflow"
+  siteEnvVars: []
+  configKeys: []
+  service:
+    enabled: false
+    port: ""
+    portName: ""
+    targetPort: ""
+  ingress: {enabled: false} # <-- Explicitly disable standard ingress, replacing old block
+  # No apisixRoutes defined as component is disabled and
+  extraVolumes: []
+  extraVolumeMounts: []
