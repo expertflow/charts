@@ -1877,7 +1877,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 3.11.0
-    created: "2026-02-11T08:02:28.734706659Z"
+    created: "2026-02-23T11:44:40.209296703Z"
     dependencies:
     - condition: etcd.enabled
       name: etcd
@@ -1894,7 +1894,7 @@ entries:
       repository: https://charts.apiseven.com
       version: 0.14.0
     description: A Helm chart for Apache APISIX v3
-    digest: b3d17c0c8a45fb51191bb05728894808aef347d045298ebeb21d6c5f967142b6
+    digest: 5656b4f67c45bd21721c9d2aed9ac4634075e91ae8e805182caa0dc1327a1185
     icon: https://apache.org/logos/res/apisix/apisix.png
     maintainers:
     - name: tao12345666333
@@ -1991,6 +1991,38 @@ entries:
       version: 0.14.0
     description: A Helm chart for Apache APISIX v3
     digest: e3d50e4440bf2bf9a9fc640f19696b72ab8ff886a21be9d37ae0388d62aa8d8c
+    icon: https://apache.org/logos/res/apisix/apisix.png
+    maintainers:
+    - name: tao12345666333
+    name: apisix
+    sources:
+    - https://github.com/apache/apisix-helm-chart
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/apisix-5.1.0-rc.1/apisix-5.1.0-rc.1.tgz
+    version: 5.1.0-rc.1
+  - annotations:
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
+    appVersion: 3.11.0
+    created: "2026-02-11T08:02:28.734706659Z"
+    dependencies:
+    - condition: etcd.enabled
+      name: etcd
+      repository: file://charts/etcd
+      version: 9.7.3
+    - alias: dashboard
+      condition: dashboard.enabled
+      name: apisix-dashboard
+      repository: https://charts.apiseven.com
+      version: 0.8.2
+    - alias: ingress-controller
+      condition: ingress-controller.enabled
+      name: apisix-ingress-controller
+      repository: https://charts.apiseven.com
+      version: 0.14.0
+    description: A Helm chart for Apache APISIX v3
+    digest: b3d17c0c8a45fb51191bb05728894808aef347d045298ebeb21d6c5f967142b6
     icon: https://apache.org/logos/res/apisix/apisix.png
     maintainers:
     - name: tao12345666333
@@ -16959,4 +16991,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2026-02-19T10:11:10.312250857Z"
+generated: "2026-02-23T11:44:40.210014391Z"
