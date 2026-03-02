@@ -85,11 +85,12 @@ efConnectionVars:
     ACTIVEMQ_MAX_RECONNECT_ATTEMPTS: "-1"
     ACTIVEMQ_OPEN_WIRE_PORT: "61617"
     ACTIVEMQ_PASSWORD: "RXhwZXJ0ZmxvdzQ2NA"
-    ACTIVEMQ_PRIMARY_URL: activemq.ef-external.svc
-    ACTIVEMQ_PRIORITY_BACKUP: "true"
-    ACTIVEMQ_RANDOMIZE: "false"
-    ACTIVEMQ_SECONDARY_URL: activemq.ef-external.svc
-    ACTIVEMQ_STOMP_PORT: "61615"
+    ACTIVEMQ_PRIMARY_URL: "10.192.11.21"
+    ACTIVEMQ_SECONDARY_URL: "10.192.11.21"
+    ACTIVEMQ_STOMP_PORT: "61612"
+    ACTIVEMQ_REJECT_UNAUTHORIZED: "true"
+    ACTIVEMQ_RETRY_INTERVAL: "1000"
+    ACTIVEMQ_HA: "true"
     ACTIVEMQ_TIMEOUT: "5000"
     ACTIVEMQ_TRANSPORT: ssl
     ACTIVEMQ_TRUST_STORE_PASSWORD: "Expertflow123"
@@ -167,7 +168,7 @@ agent-manager:
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: "5.1_f-Candidate"
+        tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -300,7 +301,7 @@ bot-framework:
     replicaCount: 1
     image:
         repository: cim/bot-framework
-        tag: "5.1_f-Candidate"
+        tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -393,7 +394,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: "5.1_f-Candidate"
+        tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -490,7 +491,7 @@ cim-customer:
     replicaCount: 1
     image:
        repository: cim/cim-backend/build
-       tag: "5.1_f-Candidate"
+       tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -544,7 +545,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: "5.1_f-Candidate"
+        tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -683,7 +684,7 @@ conversation-monitor:
     replicaCount: 1
     image:
         repository: cim/conversation-monitor
-        tag: "5.1_f-Candidate"
+        tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -853,7 +854,7 @@ file-engine:
     replicaCount: 1
     image:
         repository: chat-solution/file-engine
-        tag: "5.0"
+        tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -949,7 +950,7 @@ historical-reports:
     replicaCount: 1
     image:
         repository: cim/historical-reports-manager
-        tag: "5.1_f-Candidate"
+        tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1003,7 +1004,7 @@ license-manager:
     replicaCount: 1
     image:
         repository: license-mangement/license-manager
-        tag: "5.1_f-Candidate"
+        tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1066,7 +1067,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: "5.1_f-Candidate"
+        tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1160,7 +1161,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: "5.1_f-Candidate"
+        tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1282,7 +1283,7 @@ state-events-logger:
     replicaCount: 1
     image:
         repository: cim/state-events-logger
-        tag: "5.1_f-Candidate"
+        tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts: []
@@ -1339,7 +1340,7 @@ team-announcement:
     replicaCount: 1
     image:
         repository: cim/team-announcement
-        tag: "5.1_f-Candidate"
+        tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1452,7 +1453,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: "5.1_f-Candidate"
+        tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1582,7 +1583,7 @@ web-channel-manager:
     replicaCount: 1
     image:
         repository: cim/web-channel-manager
-        tag: "5.1_f-Candidate"
+        tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1625,7 +1626,7 @@ business-calendar:
     replicaCount: 1
     image:
         repository: cim/business-calendar
-        tag: "5.1_f-Candidate"
+        tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1684,7 +1685,7 @@ cx-load-hub:
     replicaCount: 1
     image:
         repository: cim/cx-load-hub
-        tag: "5.1_f-Candidate"
+        tag: "5.1_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1741,7 +1742,7 @@ cx-tenant:
   replicaCount: 1
   image:
     repository: cim/cx-tenant
-    tag: "5.1_f-Candidate"
+    tag: "5.1_f-CIM-13375"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -1839,7 +1840,7 @@ conversation-studio:
   replicaCount: 1
   image:
     repository: cim/workflow-builder/conversation-controller/build
-    tag: "5.1_f-Candidate"
+    tag: "5.1_f-CIM-13375"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
