@@ -96,6 +96,37 @@ entries:
     version: 5.1.0-rc.1
   - apiVersion: v2
     appVersion: "5.0"
+    created: "2026-03-11T16:02:49.12332772Z"
+    dependencies:
+    - condition: conversation-studio.enabled
+      name: conversation-studio
+      repository: file://charts/conversation-studio
+      version: 5.0-alpha
+    - condition: campaign-studio.enabled
+      name: campaign-studio
+      repository: file://charts/campaign-studio
+      version: 5.0-alpha
+    - condition: qm-backend.enabled
+      name: qm-backend
+      repository: file://charts/qm-backend
+      version: 5.0-alpha
+    description: Expertflow CX Solution
+    digest: 3a10da9ec692797d7d3df43f3b5df598c433fedf0e306e905903968e5bbe557b
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: MTT-single
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/MTT-single-5.1.0-rc.1/MTT-single-5.1.0-rc.1.tgz
+    version: 5.1.0-rc.1
+  - apiVersion: v2
+    appVersion: "5.0"
     created: "2026-02-03T13:32:20.843729874Z"
     dependencies:
     - condition: conversation-studio.enabled
@@ -14614,6 +14645,33 @@ entries:
     version: 5.2.0-rc.1
   - apiVersion: v2
     appVersion: "5.0"
+    created: "2026-03-11T16:02:49.295116986Z"
+    dependencies:
+    - condition: qm-backend.enabled
+      name: qm-backend
+      repository: file://charts/qm-backend
+      version: 1.0.0
+    - condition: qm-connector.enabled
+      name: qm-connector
+      repository: file://charts/qm-connector
+      version: 1.0.0
+    description: Expertflow CX Solution
+    digest: 5af5a7e352695d7c4d47262b7480c522afbb6796fa810236b89dee97d5e61798
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: qm
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/qm-5.1.0-rc.1/qm-5.1.0-rc.1.tgz
+    version: 5.1.0-rc.1
+  - apiVersion: v2
+    appVersion: "5.0"
     created: "2026-01-29T12:16:49.554361604Z"
     dependencies:
     - condition: qm-backend.enabled
@@ -16587,6 +16645,24 @@ entries:
   transflux:
   - apiVersion: v2
     appVersion: "5.0"
+    created: "2026-03-11T16:02:49.490150175Z"
+    description: CX Data Platform
+    digest: 379341f6142da502661058a2ad33c30a23e33a910ecd6f8809b965ae9b3caeb6
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: transflux
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/transflux-5.1.0-rc.1/transflux-5.1.0-rc.1.tgz
+    version: 5.1.0-rc.1
+  - apiVersion: v2
+    appVersion: "5.0"
     created: "2026-02-10T13:44:26.86656983Z"
     description: CX Data Platform
     digest: 1f126ec7ee648ef21127156e0250e649d88de32af460e47ad68904347669feab
@@ -17466,4 +17542,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2026-03-11T15:42:10.934882193Z"
+generated: "2026-03-11T16:02:49.491243531Z"
