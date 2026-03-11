@@ -51,7 +51,7 @@ qm-backend:
   enabled: true
   image:
     repository: cim/qm-backend/build
-    tag: "5.1_f-CIM-32339"
+    tag: "5.1_f-Candidate"
   efConnectionVars: false
   efEnvironmentVars: false
   containerPorts:
