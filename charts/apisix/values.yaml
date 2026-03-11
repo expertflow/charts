@@ -1670,6 +1670,25 @@ apisixStandalone: |
            enable: true
            config:
              headers: { set: { "X-XSS-Protection": "1; mode=block" } }
+     - id: ef-cx-file-engine-getTenantLogo
+       uris: ["/file-engine/api/getTenantLogo"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       priority: 10
+       service_id: svc-file-engine
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/file-engine/?(.*)", "/$1"]
+         cors:
+           enable: true
+           allow_origins: "*"
+           allow_methods: "GET, POST, OPTIONS"
+           allow_credentials: true
+         response-rewrite:
+           enable: true
+           config:
+             headers: { set: { "X-XSS-Protection": "1; mode=block" } }
      - id: ef-cx-file-engine-main
        uris: ["/file-engine/*"]
        hosts: ["{{ .Values.global.ingressRouter }}"]
