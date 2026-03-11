@@ -853,7 +853,7 @@ file-engine:
     replicaCount: 1
     image:
         repository: chat-solution/file-engine
-        tag: "5.0"
+        tag: "5.1_f-Candidate"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:

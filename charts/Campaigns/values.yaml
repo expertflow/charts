@@ -69,7 +69,7 @@ campaigns-backend:
    enabled: true
    image:       
       repository: cim/campaigns
-      tag: "5.0_f-CIM-32066"
+      tag: "5.1_f-Candidate"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -121,7 +121,7 @@ campaign-studio:
    enabled: true
    image:       
       repository: cim/conversation-studio/build
-      tag: "5.0_f-CIM-32066"
+      tag: "5.1_f-Candidate"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
