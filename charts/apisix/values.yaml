@@ -2168,7 +2168,7 @@ apisixStandalone: |
        status: 1
        plugins:
          proxy-rewrite:
-         #enable: true
+         enable: true
          regex_uri:
            - "^/grafana(/|$)(.*)"
            - "/$2"
