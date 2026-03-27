@@ -313,7 +313,7 @@ grafana:
       - name: GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS
         value: "true"
       - name: GF_LIVE_ENABLED
-        value: "false"
+        value: "true"
   serviceAccount:
     create: true
     name: ""
