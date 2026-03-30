@@ -75,7 +75,7 @@ unified-agent:
    replicaCount: 1
    image:
       repository: cim/unified-agent/build
-      tag: "5.1_b-CRM-630"
+      tag: "5.1_b-CRM-615"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:

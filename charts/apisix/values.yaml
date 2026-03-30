@@ -1311,6 +1311,39 @@ apisixStandalone: |
          proxy-rewrite:
            enable: true
            regex_uri: ["^/agent-manager/agent/refresh-token$", "/agent/refresh-token"]
+     - id: agent-manager-register-2FA-unsecured
+       uris: ["/agent-manager/agent/register-2FA*"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       methods: ["POST"]
+       priority: 100
+       service_id: svc-agent-manager
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/agent-manager/agent/register-2FA$", "/agent/register-2FA"]
+     - id: agent-manager-reset-pswd-unsecured
+       uris: ["/agent-manager/agent/reset-pswd*"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       methods: ["POST"]
+       priority: 100
+       service_id: svc-agent-manager
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/agent-manager/agent/reset-pswd$", "/agent/reset-pswd"]
+     - id: agent-manager-pswd-policies-unsecured
+       uris: ["/agent-manager/agent/pswd-policies*"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       methods: ["GET"]
+       priority: 100
+       service_id: svc-agent-manager
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/agent-manager/agent/pswd-policies$", "/agent/pswd-policies"]
      - id: ef-cx-agent-manager-login-unsecured
        uris: ["/agent-manager/agent/login"]
        hosts: ["{{ .Values.global.ingressRouter }}"]
