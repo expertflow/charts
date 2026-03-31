@@ -25,6 +25,7 @@ jobs:
       - name: Add Repo
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm repo add apisix https://charts.apiseven.com
           helm repo update
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.6.0
