@@ -10,12 +10,12 @@ dependencies:
 - alias: dashboard
   condition: dashboard.enabled
   name: apisix-dashboard
-  repository: https://charts.apiseven.com
+  repository: https://apache.github.io/apisix-helm-chart
   version: 0.8.2
 - alias: ingress-controller
   condition: ingress-controller.enabled
   name: apisix-ingress-controller
-  repository: https://charts.apiseven.com
+  repository: https://apache.github.io/apisix-helm-chart
   version: 0.14.0
 description: A Helm chart for Apache APISIX v3
 icon: https://apache.org/logos/res/apisix/apisix.png
