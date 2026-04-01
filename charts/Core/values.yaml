@@ -393,7 +393,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: "5.1_b-CRM-681"
+        tag: "5.1_f-CIM-CampaignsAndSurvey"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -544,7 +544,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: "5.1_b-CRM-681"
+        tag: "5.1_f-CIM-CampaignsAndSurvey"
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -1160,7 +1160,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: "5.1_b-CRM-681"
+        tag: "5.1_f-CIM-CampaignsAndSurvey"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1215,6 +1215,12 @@ routing-engine:
           value: "database/creds/mongodb-role"
         - name: MONGODB_AUTHENTICATION_DATABASE
           value: "admin"
+        - name: CAMPAIGN_RESERVATION_TIMEOUT
+          value: "300"
+        - name: CAMPAIGN_CALLBACK_RETRY_MAX_ATTEMPTS
+          value: "3"
+        - name: CAMPAIGN_CALLBACK_RETRY_DELAY
+          value: "2000"
     siteEnvVars: []
     configKeys: []
     extraEnvVarsSecret: "routing-engine-approle-secret"
