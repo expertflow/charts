@@ -300,7 +300,7 @@ bot-framework:
     replicaCount: 1
     image:
         repository: cim/bot-framework
-        tag: "5.1_b-CRM-607"
+        tag: "5.1_b-CRM-681"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -393,7 +393,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: "5.1_b-CIM-32822"
+        tag: "5.1_b-CRM-681"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -544,7 +544,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: "5.1_b-CRM-672"
+        tag: "5.1_b-CRM-681"
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -683,7 +683,7 @@ conversation-monitor:
     replicaCount: 1
     image:
         repository: cim/conversation-monitor
-        tag: "5.1_f-Candidate"
+        tag: "5.1_b-CRM-681"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -778,7 +778,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: "5.1_f-Candidate"
+        tag: "5.1_b-CIM-32977"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -949,7 +949,7 @@ historical-reports:
     replicaCount: 1
     image:
         repository: cim/historical-reports-manager
-        tag: "5.1_f-Candidate"
+        tag: "5.1_b-CRM-681"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1066,7 +1066,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: "5.1_f-Candidate"
+        tag: "5.1_b-CRM-681"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1160,7 +1160,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: "5.1_f-Candidate"
+        tag: "5.1_b-CRM-681"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1282,7 +1282,7 @@ state-events-logger:
     replicaCount: 1
     image:
         repository: cim/state-events-logger
-        tag: "5.1_f-Candidate"
+        tag: "5.1_b-CRM-681"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts: []
@@ -1452,7 +1452,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: "5.1_b-CRM-674"
+        tag: "5.1.0_f-32684"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
