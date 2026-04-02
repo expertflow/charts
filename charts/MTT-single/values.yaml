@@ -323,6 +323,9 @@ campaign-studio:
       - name: mongo-mongodb-ca
         secret:
           secretName: mongo-mongodb-ca
+      - name: redis-crt
+        secret:
+          secretName: redis-crt
    extraVolumeMounts:
       - name: ef-logback
         mountPath: /logback
@@ -330,6 +333,8 @@ campaign-studio:
         mountPath: /flows
       - name: mongo-mongodb-ca
         mountPath: /mongo
+      - name: redis-crt
+        mountPath: /redis
 
 ##############################qm-backend##############################
 qm-backend:
