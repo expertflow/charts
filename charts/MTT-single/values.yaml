@@ -252,6 +252,8 @@ campaign-studio:
         value: 'https://{{ .Values.global.ingressRouter }}/campaign-studio'
       - name: CCM_URL
         value: http://{{ .Values.global.efCxReleaseName }}-ccm-svc.expertflow.svc:8081
+      - name: ROUTING_ENGINE_URL
+        value: http://{{ .Values.global.efCxReleaseName }}-routing-engine-svc.expertflow.svc:8081
       - name: EFCX_PROXY
         value: 'https://{{ .Values.global.ingressRouter }}/campaign-studio'
       - name: BATCH_PULL_INTERVAL
@@ -305,7 +307,7 @@ campaign-studio:
       - name: KEYCLOAK_VERIFY_TOKEN_AUDIENCE
         value: "false"
       - name: CX_CUSTOMER_URL
-        value: http://{{ .Values.global.efCxReleaseName }}-cim-customer-svc.{{ .Release.Namespace }}.svc:8080
+        value: http://{{ .Values.global.efCxReleaseName }}-cim-customer-svc.expertflow.svc:8080
       - name: PROMETHEUS_URL
         value: http://{{ .Release.Name }}-prometheus-svc.{{ .Release.Namespace }}.svc:9090
    siteEnvVars: []

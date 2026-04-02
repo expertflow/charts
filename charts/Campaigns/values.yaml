@@ -162,6 +162,8 @@ campaign-studio:
         value: 'https://{{ .Values.global.ingressRouter }}/campaign-studio'
       - name: CCM_URL
         value: http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081
+      - name: ROUTING_ENGINE_URL
+        value: http://{{ .Values.global.efCxReleaseName }}-routing-engine-svc.{{ .Release.Namespace }}.svc:8081
       - name: EFCX_PROXY
         value: 'https://{{ .Values.global.ingressRouter }}/campaign-studio'
       - name: BATCH_PULL_INTERVAL
