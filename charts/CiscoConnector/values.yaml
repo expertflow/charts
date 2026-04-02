@@ -120,7 +120,7 @@ args: []
 ##
 extraEnvVars:
   - name: DB_URL
-    value: jdbc:postgresql://ef-postgresql.ef-external.svc:5432/ciscoConnector?sslmode=verify-ca&sslrootcert=/postgresql/ca.crt
+    value: jdbc:postgresql://ef-postgresql.ef-external.svc:5432/cisco_connector?sslmode=verify-ca&sslrootcert=/postgresql/ca.crt
   - name: POSTGRES_ROLE_PATH
     value: "database/creds/postgres-cisco-connector-role"
   - name: CUCM_APPLICATION_USER_NAME
@@ -147,8 +147,6 @@ extraEnvVars:
     value: "Expertflow123"
   - name: EFCX_FQDN
     value: "https://chatsolution.expertflow.com"
-  - name: CALL_BACK_URL
-    value: "https://webhook.site/f42ab03e-8618-42ba-9a81-1ab621e1e6af"
   - name: CONVERSATION_BATCH_SIZE
     value: "50"
   - name: CONVERSATION_BATCH_INTERVAL_MS
