@@ -34,6 +34,41 @@ entries:
     version: 5.2.0-rc.1
   - apiVersion: v2
     appVersion: "5.0"
+    created: "2026-04-02T08:09:02.424283194Z"
+    dependencies:
+    - condition: conversation-studio.enabled
+      name: conversation-studio
+      repository: file://charts/conversation-studio
+      version: 5.0-alpha
+    - condition: campaign-studio.enabled
+      name: campaign-studio
+      repository: file://charts/campaign-studio
+      version: 5.0-alpha
+    - condition: qm-backend.enabled
+      name: qm-backend
+      repository: file://charts/qm-backend
+      version: 5.0-alpha
+    - condition: prometheus.enabled
+      name: prometheus
+      repository: file://charts/prometheus
+      version: 5.0-alpha
+    description: Expertflow CX Solution
+    digest: b771039ad9bf589c09a29614f2c64ba72af3bd85564093e16e95197c830ba2d7
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: MTT-single
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/MTT-single-5.1.0-rc.5/MTT-single-5.1.0-rc.5.tgz
+    version: 5.1.0-rc.5
+  - apiVersion: v2
+    appVersion: "5.0"
     created: "2026-04-01T13:34:41.917228862Z"
     dependencies:
     - condition: conversation-studio.enabled
@@ -2956,6 +2991,41 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/campaigns-5.2.0-rc.1/campaigns-5.2.0-rc.1.tgz
     version: 5.2.0-rc.1
+  - apiVersion: v2
+    appVersion: "5.0"
+    created: "2026-04-02T08:09:02.678947261Z"
+    dependencies:
+    - condition: campaigns-backend.enabled
+      name: campaigns-backend
+      repository: file://charts/campaigns-backend
+      version: 1.0.0
+    - condition: campaign-studio.enabled
+      name: campaign-studio
+      repository: file://charts/campaign-studio
+      version: 1.0.0
+    - condition: scheduled-activities.enabled
+      name: scheduled-activities
+      repository: file://charts/scheduled-activities
+      version: 1.0.0
+    - condition: prometheus.enabled
+      name: prometheus
+      repository: file://charts/prometheus
+      version: 1.0.0
+    description: Expertflow CX Solution Campaigns
+    digest: 89d8eb48b5b3acbaa093846ae9b2347e8cd46d7ee7a5e16659bfa378c6159127
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: campaigns
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/campaigns-5.1.0-rc.4/campaigns-5.1.0-rc.4.tgz
+    version: 5.1.0-rc.4
   - apiVersion: v2
     appVersion: "5.0"
     created: "2026-04-01T13:34:42.116866883Z"
@@ -18638,4 +18708,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2026-04-02T06:36:27.24535679Z"
+generated: "2026-04-02T08:09:02.680320341Z"
