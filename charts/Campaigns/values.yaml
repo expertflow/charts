@@ -100,6 +100,8 @@ campaigns-backend:
         value: "true"
       - name: CX_CUSTOMER_URL
         value: http://{{ .Values.global.efCxReleaseName }}-cim-customer-svc.{{ .Release.Namespace }}.svc:8080
+      - name: CX_CUSTOMER_SYNC_INTERVAL_IN_MINUTES
+        value: "60"
    siteEnvVars: []
    configKeys: []
    service:

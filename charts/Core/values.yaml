@@ -490,7 +490,7 @@ cim-customer:
     replicaCount: 1
     image:
        repository: cim/cim-backend/build
-       tag: "5.1_f-Candidate"
+       tag: "5.1_f-CIM-CampaignsAndSurvey"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
