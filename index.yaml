@@ -6834,6 +6834,24 @@ entries:
   cisco-connector:
   - apiVersion: v2
     appVersion: "5.1"
+    created: "2026-04-02T06:36:27.07297713Z"
+    description: Expertflow CX Solution
+    digest: 4a36d463b0a98f04bf69209168ad6b3ea077d9d53ad3973052d95bc4a2f0a32a
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: cisco-connector
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/cisco-connector-5.1.0-rc.2/cisco-connector-5.1.0-rc.2.tgz
+    version: 5.1.0-rc.2
+  - apiVersion: v2
+    appVersion: "5.1"
     created: "2026-04-01T13:34:42.260540058Z"
     description: Expertflow CX Solution
     digest: 6674f9394e60b73ef9a5a477026141cb155840a971dfc08c237bddeee2566624
@@ -17705,6 +17723,24 @@ entries:
   transflux:
   - apiVersion: v2
     appVersion: "5.0"
+    created: "2026-04-02T06:36:27.244331793Z"
+    description: CX Data Platform
+    digest: 7d1a2e967e239f40c26c88761d8c046bae7957808935115c8d3d98ed56476cb7
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: transflux
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/transflux-5.1.0-rc.2/transflux-5.1.0-rc.2.tgz
+    version: 5.1.0-rc.2
+  - apiVersion: v2
+    appVersion: "5.0"
     created: "2026-03-11T16:02:49.490150175Z"
     description: CX Data Platform
     digest: 379341f6142da502661058a2ad33c30a23e33a910ecd6f8809b965ae9b3caeb6
@@ -17831,24 +17867,6 @@ entries:
     version: 4.10.0
   - apiVersion: v2
     appVersion: 4.10.0
-    created: "2025-07-17T11:10:10.100524067Z"
-    description: CX Data Platform
-    digest: d46abf08cd09ca9d6a976a6625e946d6a169601778a29083f5489933eb189cf0
-    home: https://expertflow.com
-    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
-    keywords:
-    - Expertflow
-    - C2C Communications
-    maintainers:
-    - email: nasir.mehmood@expertflow.com
-      name: NMR Nasir Mehmood Rajput
-    name: transflux
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/transflux-4.10.0-rc.1/transflux-4.10.0-rc.1.tgz
-    version: 4.10.0-rc.1
-  - apiVersion: v2
-    appVersion: 4.10.0
     created: "2025-07-15T06:47:43.231488743Z"
     description: CX Data Platform
     digest: fc9826730b8e5f502a76a52d8080c59cdff85b23778ca7c933b599e1855a4bc2
@@ -17888,6 +17906,24 @@ entries:
     created: "2025-08-07T11:01:54.05845207Z"
     description: CX Data Platform
     digest: bfd0327c599db248e8502cea761acc22fb74713550c9360e2c93678b5467593c
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: transflux
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/transflux-4.10.0-rc.1/transflux-4.10.0-rc.1.tgz
+    version: 4.10.0-rc.1
+  - apiVersion: v2
+    appVersion: 4.10.0
+    created: "2025-07-17T11:10:10.100524067Z"
+    description: CX Data Platform
+    digest: d46abf08cd09ca9d6a976a6625e946d6a169601778a29083f5489933eb189cf0
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -18602,4 +18638,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2026-04-01T13:34:42.639269157Z"
+generated: "2026-04-02T06:36:27.24535679Z"
