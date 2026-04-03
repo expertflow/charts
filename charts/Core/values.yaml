@@ -587,7 +587,7 @@ conversation-manager:
           value: "http://{{ .Release.Name }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
         - name: CIM_CUSTOMER_URL
           value: "http://{{ .Release.Name }}-cim-customer-svc.{{ .Release.Namespace }}.svc:8080"
-        - name: CONVERSATION_STUDIO_URL
+        - name: CAMPAIGN_STUDIO_URL
           value: "http://{{ .Values.global.campaignsReleaseName }}-campaign-studio-svc.{{ .Release.Namespace }}.svc:1880"
         - name: PROCESS_EVENTS
           value: "false"
