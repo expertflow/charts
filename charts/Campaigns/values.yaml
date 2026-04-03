@@ -224,7 +224,7 @@ scheduled-activities:
   replicaCount: 1
   image:
     repository: campaign-manager/campaign-scheduler
-    tag: "5.1_f-CIM-CampaignsAndSurvey"
+    tag: "5.1_b-CRM-0681"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
