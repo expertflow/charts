@@ -109,8 +109,8 @@ conversation-studio:
   enabled: true
   replicaCount: 1
   image:
-    repository: cim/workflow-builder/conversation-controller/build
-    tag: "5.1_f-Candidate"
+    repository: cim/workflow-builder/conversation-controller
+    tag: "5.1.0"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -212,8 +212,8 @@ conversation-studio:
 campaign-studio:
    enabled: true
    image:       
-      repository: cim/conversation-studio/build
-      tag: "5.1_f-CIM-CampaignsAndSurvey"
+      repository: cim/conversation-studio
+      tag: "5.1.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -346,8 +346,8 @@ campaign-studio:
 qm-backend:
   enabled: true
   image:
-    repository: cim/qm-backend/build
-    tag: "5.1_f-Candidate"
+    repository: cim/qm-backend
+    tag: "5.1.0"
   efConnectionVars: false
   efEnvironmentVars: false
   containerPorts:
@@ -441,7 +441,7 @@ qm-connector:
   enabled: false
   image:
     repository: voice-recording-solution/qm-connector
-    tag: "5.1_b-CRM-0681"
+    tag: "5.1.0"
   containerPorts: []
   extraEnvVars:
     - name: RECORDING_SERVER_FQDN
