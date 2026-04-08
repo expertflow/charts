@@ -193,6 +193,7 @@ conversation-studio:
     portName: "http-co-st-1880"
     targetPort: "http-co-st-1880"
   ingress: { enabled: false }
+  extraEnvVarsSecret: "conversation-studio-approle-secret"
   extraVolumes:
     - name: redis-crt
       secret: 
@@ -200,6 +201,12 @@ conversation-studio:
     - name: mongo-mongodb-ca
       secret:
         secretName: mongo-mongodb-ca
+    - name: tls-ca
+      secret:
+        secretName: tls-ca
+    - name: tls-server-client
+      secret:
+        secretName: tls-server-client
   extraVolumeMounts:
     - name: redis-crt
       mountPath: /redis
@@ -207,7 +214,10 @@ conversation-studio:
       mountPath: /mongo
     - name: conversation-studio-flow-vol
       mountPath: /flows
-
+    - name: tls-ca
+      mountPath: /tls-ca
+    - name: tls-server-client
+      mountPath: /tls-server-client
 ##############################campaign-studio##############################
 campaign-studio:
    enabled: true
