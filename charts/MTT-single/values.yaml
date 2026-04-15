@@ -475,7 +475,7 @@ qm-connector:
     - name: UCCE_OB_SERVICE_IDENTIFIER
       value: "8899"
     - name: KEYCLOAK_REALM_NAME
-      value: expertflow
+      value: "{{ .Values.global.tenantId }}"
     - name: KEYCLOAK_CLIENT_ID
       value: cim
     - name: KEYCLOAK_CLIENT_SECRET
@@ -513,7 +513,7 @@ qm-connector:
     - name: TZ
       value: Asia/Karachi
     - name: TENANT_NAME
-      value: "expertflow"
+      value: "{{ .Values.global.tenantId }}"
   siteEnvVars: []
   configKeys: []
   service:
