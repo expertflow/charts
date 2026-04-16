@@ -68,6 +68,45 @@ entries:
     - https://github.com/expertflow/charts/releases/download/MTT-single-5.1.0/MTT-single-5.1.0.tgz
     version: 5.1.0
   - apiVersion: v2
+    appVersion: 5.1.0
+    created: "2026-04-16T10:34:31.31478882Z"
+    dependencies:
+    - condition: conversation-studio.enabled
+      name: conversation-studio
+      repository: file://charts/conversation-studio
+      version: 5.0-alpha
+    - condition: campaign-studio.enabled
+      name: campaign-studio
+      repository: file://charts/campaign-studio
+      version: 5.0-alpha
+    - condition: qm-connector.enabled
+      name: qm-connector
+      repository: file://charts/qm-connector
+      version: 1.0.0
+    - condition: qm-backend.enabled
+      name: qm-backend
+      repository: file://charts/qm-backend
+      version: 5.0-alpha
+    - condition: prometheus.enabled
+      name: prometheus
+      repository: file://charts/prometheus
+      version: 5.0-alpha
+    description: Expertflow CX Solution
+    digest: 6740bb55c99f22618f03ebd3063d8091cee419475b5d2e2968c83734123ca2ad
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: MTT-single
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/MTT-single-5.1.0-rc.9/MTT-single-5.1.0-rc.9.tgz
+    version: 5.1.0-rc.9
+  - apiVersion: v2
     appVersion: "5.0"
     created: "2026-04-03T13:51:39.967984776Z"
     dependencies:
@@ -306,37 +345,6 @@ entries:
     version: 5.1.0-rc.2
   - apiVersion: v2
     appVersion: "5.0"
-    created: "2026-03-11T16:02:49.12332772Z"
-    dependencies:
-    - condition: conversation-studio.enabled
-      name: conversation-studio
-      repository: file://charts/conversation-studio
-      version: 5.0-alpha
-    - condition: campaign-studio.enabled
-      name: campaign-studio
-      repository: file://charts/campaign-studio
-      version: 5.0-alpha
-    - condition: qm-backend.enabled
-      name: qm-backend
-      repository: file://charts/qm-backend
-      version: 5.0-alpha
-    description: Expertflow CX Solution
-    digest: 3a10da9ec692797d7d3df43f3b5df598c433fedf0e306e905903968e5bbe557b
-    home: https://expertflow.com
-    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
-    keywords:
-    - Expertflow
-    - C2C Communications
-    maintainers:
-    - email: nasir.mehmood@expertflow.com
-      name: NMR Nasir Mehmood Rajput
-    name: MTT-single
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/MTT-single-5.1.0-rc.1/MTT-single-5.1.0-rc.1.tgz
-    version: 5.1.0-rc.1
-  - apiVersion: v2
-    appVersion: "5.0"
     created: "2026-02-19T10:11:10.311385429Z"
     dependencies:
     - condition: conversation-studio.enabled
@@ -384,6 +392,37 @@ entries:
       version: 5.0-alpha
     description: Expertflow CX Solution
     digest: a153cb05cdb870c9b2646c85e52a0d52ce5183e37017066bf617a77c44a51493
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: MTT-single
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/MTT-single-5.1.0-rc.1/MTT-single-5.1.0-rc.1.tgz
+    version: 5.1.0-rc.1
+  - apiVersion: v2
+    appVersion: "5.0"
+    created: "2026-03-11T16:02:49.12332772Z"
+    dependencies:
+    - condition: conversation-studio.enabled
+      name: conversation-studio
+      repository: file://charts/conversation-studio
+      version: 5.0-alpha
+    - condition: campaign-studio.enabled
+      name: campaign-studio
+      repository: file://charts/campaign-studio
+      version: 5.0-alpha
+    - condition: qm-backend.enabled
+      name: qm-backend
+      repository: file://charts/qm-backend
+      version: 5.0-alpha
+    description: Expertflow CX Solution
+    digest: 3a10da9ec692797d7d3df43f3b5df598c433fedf0e306e905903968e5bbe557b
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -20158,4 +20197,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2026-04-14T08:29:14.95511163Z"
+generated: "2026-04-16T10:34:31.315967181Z"
