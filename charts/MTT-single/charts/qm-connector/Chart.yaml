@@ -1,5 +1,5 @@
 apiVersion: v2
-name: MTT-single
+name: qm-connector
 description: Expertflow CX Solution
 home: https://expertflow.com
 icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
@@ -12,27 +12,8 @@ keywords:
 #    version: 1.0.0
 #    condition: web-channel-manager.enabled
 #    repository: file://charts/web-channel-manager
-dependencies:  
-  - name: conversation-studio
-    version: 5.0-alpha
-    condition: conversation-studio.enabled
-    repository: file://charts/conversation-studio
-  - name: campaign-studio
-    version: 5.0-alpha
-    condition: campaign-studio.enabled
-    repository: file://charts/campaign-studio
-  - name: qm-connector
-    version: 1.0.0
-    condition: qm-connector.enabled
-    repository: file://charts/qm-connector
-  - name: qm-backend
-    version: 5.0-alpha
-    condition: qm-backend.enabled
-    repository: file://charts/qm-backend
-  - name: prometheus
-    version: 5.0-alpha
-    condition: prometheus.enabled
-    repository: file://charts/prometheus
+
+
 
 
 # A chart can be either an 'application' or a 'debug' chart.
@@ -48,13 +29,13 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: "5.1.0-rc.9"
+version: 1.0.0
 #
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion:  "5.1.0"
+appVersion:  4.6.0
 maintainers:
    - name: NMR Nasir Mehmood Rajput
      email: nasir.mehmood@expertflow.com

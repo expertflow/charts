@@ -5,11 +5,14 @@ dependencies:
 - name: campaign-studio
   repository: file://charts/campaign-studio
   version: 5.0-alpha
+- name: qm-connector
+  repository: file://charts/qm-connector
+  version: 1.0.0
 - name: qm-backend
   repository: file://charts/qm-backend
   version: 5.0-alpha
 - name: prometheus
   repository: file://charts/prometheus
   version: 5.0-alpha
-digest: sha256:b2f9fc587984f1d8a4ba19d113a4233ff8574f11e98fa814f3546d7488f0c725
-generated: "2026-04-15T19:28:47.204526+05:00"
+digest: sha256:cf927b06df24809dd5a620306eec87bb8dff1aff09f67211423fe8f7ad586631
+generated: "2026-04-16T15:32:49.024731+05:00"
