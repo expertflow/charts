@@ -15,4 +15,4 @@ dependencies:
   repository: file://charts/prometheus
   version: 5.0-alpha
 digest: sha256:cf927b06df24809dd5a620306eec87bb8dff1aff09f67211423fe8f7ad586631
-generated: "2026-04-16T15:32:49.024731+05:00"
+generated: "2026-04-16T18:40:23.195487+05:00"
