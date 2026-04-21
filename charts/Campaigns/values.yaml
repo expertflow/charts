@@ -69,7 +69,7 @@ campaigns-backend:
    enabled: true
    image:       
       repository: cim/campaigns
-      tag: "5.0_f-CIM-32066"
+      tag: "5.1.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -98,6 +98,10 @@ campaigns-backend:
         value: http://{{ .Release.Name }}-scheduled-activities-svc.{{ .Release.Namespace }}.svc:8894
       - name: IS_NODERED_AUTH_REQUIRED
         value: "true"
+      - name: CX_CUSTOMER_URL
+        value: http://{{ .Values.global.efCxReleaseName }}-cim-customer-svc.{{ .Release.Namespace }}.svc:8080
+      - name: CX_CUSTOMER_SYNC_INTERVAL_IN_MINUTES
+        value: "60"
    siteEnvVars: []
    configKeys: []
    service:
@@ -120,8 +124,8 @@ campaigns-backend:
 campaign-studio:
    enabled: true
    image:       
-      repository: cim/conversation-studio/build
-      tag: "5.0_f-CIM-32066"
+      repository: cim/conversation-studio
+      tag: "5.1.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -160,6 +164,12 @@ campaign-studio:
         value: 'https://{{ .Values.global.ingressRouter }}/campaign-studio'
       - name: CCM_URL
         value: http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081
+      - name: ROUTING_ENGINE_URL
+        value: http://{{ .Values.global.efCxReleaseName }}-routing-engine-svc.{{ .Release.Namespace }}.svc:8081
+      - name: CONVERSATION_MANAGER_URL
+        value: http://{{ .Values.global.efCxReleaseName }}-conversation-manager-svc.{{ .Release.Namespace }}.svc:8080
+      - name: UNIFIED_ADMIN_SERVICE_URL
+        value: http://{{ .Values.global.efCxReleaseName }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000
       - name: EFCX_PROXY
         value: 'https://{{ .Values.global.ingressRouter }}/campaign-studio'
       - name: BATCH_PULL_INTERVAL
@@ -174,6 +184,10 @@ campaign-studio:
         value: expertflow
       - name: DOMAIN_NAME
         value: expertflow.com
+      - name: CX_CUSTOMER_URL
+        value: http://{{ .Values.global.efCxReleaseName }}-cim-customer-svc.{{ .Release.Namespace }}.svc:8080
+      - name: PROMETHEUS_URL
+        value: http://{{ .Release.Name }}-prometheus-svc.{{ .Release.Namespace }}.svc:9090
    siteEnvVars: []
    configKeys: []
    service:
@@ -189,6 +203,9 @@ campaign-studio:
       - name: mongo-mongodb-ca
         secret:
           secretName: mongo-mongodb-ca
+      - name: redis-crt
+        secret:
+          secretName: redis-crt
    extraVolumeMounts:
       - name: ef-logback
         mountPath: /logback
@@ -196,6 +213,8 @@ campaign-studio:
         mountPath: /flows
       - name: mongo-mongodb-ca
         mountPath: /mongo
+      - name: redis-crt
+        mountPath: /redis
 
 
 
@@ -205,7 +224,7 @@ scheduled-activities:
   replicaCount: 1
   image:
     repository: campaign-manager/campaign-scheduler
-    tag: "5.1_f-CIM-13375"
+    tag: "5.2_f-CIM-13375"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -276,3 +295,76 @@ scheduled-activities:
       mountPath: /tls-ca
     - name: tls-server-client
       mountPath: /tls-server-client
+
+
+##############################prometheus##############################
+prometheus:
+   enabled: true
+   image:
+      registry: "docker.io"
+      repository: prom/prometheus
+      tag: "v3.7.3"
+   efConnectionVars: true
+   efEnvironmentVars: false
+   containerPorts:
+      - name: "http-cm-pr-9090"
+        containerPort: 9090
+   siteEnvVars: []
+   configKeys: []
+   service:
+      enabled: true
+      port: 9090
+      portName: "http-cm-pr-9090"
+      targetPort: "http-cm-pr-9090"
+   ingress: { enabled: false } # Using APISIX
+   extraVolumeMounts:
+      - name: cx-campaigns-prometheus-vol
+        mountPath: /prometheus
+      - name: prometheus-config
+        mountPath: /etc/prometheus/prometheus.yml
+        subPath: prometheus.yml
+   config:
+      global:
+         scrape_interval: 15s
+         scrape_timeout: 10s
+         evaluation_interval: 15s
+         scrape_protocols:
+            - OpenMetricsText1.0.0
+            - OpenMetricsText0.0.1
+            - PrometheusText1.0.0
+            - PrometheusText0.0.4
+
+      runtime:
+         gogc: 75
+
+      alerting:
+         alertmanagers:
+            - follow_redirects: true
+              enable_http2: true
+              scheme: http
+              timeout: 10s
+              api_version: v2
+              static_configs:
+                 - targets: []
+      scrape_configs:
+         - job_name: campaign-studio
+           metrics_path: red/metrics
+           scheme: http
+           enable_compression: true
+           follow_redirects: true
+           static_configs:
+              - targets:
+                   - "{{ .Release.Name }}-campaign-studio-svc.{{ .Release.Namespace }}.svc:1880"
+                labels:
+                   app: campaign-studio
+
+         - job_name: campaign-backend
+           metrics_path: /metrics
+           scheme: http
+           enable_compression: true
+           follow_redirects: true
+           static_configs:
+              - targets:
+                   - "{{ .Release.Name }}-campaigns-backend-svc.{{ .Release.Namespace }}.svc:3000"
+                labels:
+                   app: campaign-backend
