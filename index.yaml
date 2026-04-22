@@ -3,6 +3,45 @@ entries:
   MTT-single:
   - apiVersion: v2
     appVersion: 5.1.0
+    created: "2026-04-22T08:28:32.97174555Z"
+    dependencies:
+    - condition: conversation-studio.enabled
+      name: conversation-studio
+      repository: file://charts/conversation-studio
+      version: 5.0-alpha
+    - condition: campaign-studio.enabled
+      name: campaign-studio
+      repository: file://charts/campaign-studio
+      version: 5.0-alpha
+    - condition: qm-connector.enabled
+      name: qm-connector
+      repository: file://charts/qm-connector
+      version: 1.0.0
+    - condition: qm-backend.enabled
+      name: qm-backend
+      repository: file://charts/qm-backend
+      version: 5.0-alpha
+    - condition: prometheus.enabled
+      name: prometheus
+      repository: file://charts/prometheus
+      version: 5.0-alpha
+    description: Expertflow CX Solution
+    digest: 2740920b44951f12947210819aaab31b7cdc004a6d444e85ca67d597a01225fd
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: MTT-single
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/MTT-single-5.2.0-rc.3/MTT-single-5.2.0-rc.3.tgz
+    version: 5.2.0-rc.3
+  - apiVersion: v2
+    appVersion: 5.1.0
     created: "2026-04-21T12:58:22.337886259Z"
     dependencies:
     - condition: conversation-studio.enabled
@@ -17336,6 +17375,33 @@ entries:
   qm:
   - apiVersion: v2
     appVersion: 5.1.0
+    created: "2026-04-22T08:28:33.365569437Z"
+    dependencies:
+    - condition: qm-backend.enabled
+      name: qm-backend
+      repository: file://charts/qm-backend
+      version: 1.0.0
+    - condition: qm-connector.enabled
+      name: qm-connector
+      repository: file://charts/qm-connector
+      version: 1.0.0
+    description: Expertflow CX Solution
+    digest: 2021ef12bbadfc0c9c062c266d53264015c7a4d4c6853411bea981b400972868
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: qm
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/qm-5.2.0-rc.3/qm-5.2.0-rc.3.tgz
+    version: 5.2.0-rc.3
+  - apiVersion: v2
+    appVersion: 5.1.0
     created: "2026-04-21T12:58:23.391411477Z"
     dependencies:
     - condition: qm-backend.enabled
@@ -17525,7 +17591,7 @@ entries:
     version: 5.1.0-rc.1
   - apiVersion: v2
     appVersion: "5.0"
-    created: "2026-01-29T12:16:49.554361604Z"
+    created: "2026-02-19T09:37:19.078414251Z"
     dependencies:
     - condition: qm-backend.enabled
       name: qm-backend
@@ -17536,7 +17602,7 @@ entries:
       repository: file://charts/qm-connector
       version: 1.0.0
     description: Expertflow CX Solution
-    digest: 865137fc6f86269bdd619f35d2de1632b6e2194719c9ec386c0fbea6aa54933c
+    digest: c5409e544e1789b6e0d874eb142a4ed026b991565cf25772ee7bf948d7c51f4b
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -17552,7 +17618,7 @@ entries:
     version: 5.1.0-rc.1
   - apiVersion: v2
     appVersion: "5.0"
-    created: "2026-02-19T09:37:19.078414251Z"
+    created: "2026-01-29T12:16:49.554361604Z"
     dependencies:
     - condition: qm-backend.enabled
       name: qm-backend
@@ -17563,7 +17629,7 @@ entries:
       repository: file://charts/qm-connector
       version: 1.0.0
     description: Expertflow CX Solution
-    digest: c5409e544e1789b6e0d874eb142a4ed026b991565cf25772ee7bf948d7c51f4b
+    digest: 865137fc6f86269bdd619f35d2de1632b6e2194719c9ec386c0fbea6aa54933c
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -20521,4 +20587,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2026-04-21T12:58:23.57151951Z"
+generated: "2026-04-22T08:28:33.366540739Z"
