@@ -141,7 +141,7 @@ qm-connector:
   enabled: false
   image:
     repository: voice-recording-solution/qm-connector
-    tag: "5.1.0"
+    tag: "5.2_f-CIM-33272"
   containerPorts: []
   extraEnvVars:
     - name: RECORDING_SERVER_FQDN
