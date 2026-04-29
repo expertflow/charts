@@ -547,7 +547,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: "5.2_f-CIM-13375"
+        tag: "5.1_f-CIM-26118"
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -688,7 +688,7 @@ conversation-monitor:
     replicaCount: 1
     image:
         repository: cim/conversation-monitor
-        tag: "5.2_f-CIM-13375"
+        tag: "5.1_f-CIM-26118"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -783,7 +783,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: "5.2_f-CIM-13375"
+        tag: "5.1_f-CIM-26118"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:

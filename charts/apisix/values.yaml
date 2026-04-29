@@ -1230,6 +1230,14 @@ apisixStandalone: |
          scheme: http
          type: roundrobin
          timeout: { connect: 5, send: 10, read: 10 }
+     - id: secure-link-generation
+       name: secure-link-generation
+       upstream:
+         discovery_type: kubernetes
+         service_name: "expertflow/secure-link-generation:http-s-l-g-8080"
+         scheme: http
+         type: roundrobin
+         timeout: { connect: 5, send: 10, read: 10 }
 
    # =================================================================
    # ROUTES
@@ -1311,6 +1319,39 @@ apisixStandalone: |
          proxy-rewrite:
            enable: true
            regex_uri: ["^/agent-manager/agent/refresh-token$", "/agent/refresh-token"]
+     - id: agent-manager-register-2FA-unsecured
+       uris: ["/agent-manager/agent/register-2FA*"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       methods: ["POST"]
+       priority: 100
+       service_id: svc-agent-manager
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/agent-manager/agent/register-2FA$", "/agent/register-2FA"]
+     - id: agent-manager-reset-pswd-unsecured
+       uris: ["/agent-manager/agent/reset-pswd*"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       methods: ["POST"]
+       priority: 100
+       service_id: svc-agent-manager
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/agent-manager/agent/reset-pswd$", "/agent/reset-pswd"]
+     - id: agent-manager-pswd-policies-unsecured
+       uris: ["/agent-manager/agent/pswd-policies*"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       methods: ["GET"]
+       priority: 100
+       service_id: svc-agent-manager
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/agent-manager/agent/pswd-policies$", "/agent/pswd-policies"]
      - id: ef-cx-agent-manager-login-unsecured
        uris: ["/agent-manager/agent/login"]
        hosts: ["{{ .Values.global.ingressRouter }}"]
@@ -1665,6 +1706,25 @@ apisixStandalone: |
            enable: true
            allow_origins: "*"
            allow_methods: "GET, OPTIONS"
+           allow_credentials: true
+         response-rewrite:
+           enable: true
+           config:
+             headers: { set: { "X-XSS-Protection": "1; mode=block" } }
+     - id: ef-cx-file-engine-getTenantLogo
+       uris: ["/file-engine/api/getTenantLogo"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       priority: 10
+       service_id: svc-file-engine
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/file-engine/?(.*)", "/$1"]
+         cors:
+           enable: true
+           allow_origins: "*"
+           allow_methods: "GET, POST, OPTIONS"
            allow_credentials: true
          response-rewrite:
            enable: true
@@ -2149,7 +2209,7 @@ apisixStandalone: |
        status: 1
        plugins:
          proxy-rewrite:
-         #enable: true
+           enable: true
          regex_uri:
            - "^/grafana(/|$)(.*)"
            - "/$2"
@@ -2587,3 +2647,15 @@ apisixStandalone: |
          proxy-rewrite:
            enable: true
            regex_uri: ["^/cx-tenant/?(.*)", "/$1"]
+     
+     # Secure-Link Apis Path
+    - id: secure-link-generation
+      uris: ["/secure-link/*"]
+      hosts: ["{{ .Values.global.ingressRouter }}"]
+      priority: 0
+      service_id: secure-link-generation
+      status: 1
+      plugins:
+        proxy-rewrite:
+          enable: true
+          regex_uri: ["^/secure-link/?(.*)", "/$1"]

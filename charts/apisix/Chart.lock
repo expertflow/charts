@@ -1,0 +1,12 @@
+dependencies:
+- name: etcd
+  repository: file://charts/etcd
+  version: 9.7.3
+- name: apisix-dashboard
+  repository: https://apache.github.io/apisix-helm-chart
+  version: 0.8.2
+- name: apisix-ingress-controller
+  repository: https://apache.github.io/apisix-helm-chart
+  version: 0.14.0
+digest: sha256:40bb96b18c2b0a72d06698cb78d00bd1ab3a80d0a7e16734f67e7e96733dc244
+generated: "2026-04-29T12:27:13.788658+05:00"
