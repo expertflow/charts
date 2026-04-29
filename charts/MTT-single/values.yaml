@@ -160,7 +160,7 @@ conversation-studio:
     - name: KEYCLOAK_GRANT_TYPE_PAT
       value: "client_credentials"
     - name: KEYCLOAK_HOST
-      value: "https://{{ .Values.global.ingressRouter  }}/auth/"
+      value: "http://keycloak.ef-external.svc/auth/"
     - name: KEYCLOAK_PASSWORD_ADMIN
       value: admin
     - name: KEYCLOAK_POLICY_ENFORCER

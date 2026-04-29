@@ -1463,7 +1463,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: "5.2_f-CIM-13375"
+        tag: "5.2_f-CIM-13375-V2"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1928,7 +1928,7 @@ otp-manager:
     replicaCount: 1
     image:
         repository: cim/otp-manager
-        tag: "5.0.3"
+        tag: "5.2_f-CIM-13375"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
