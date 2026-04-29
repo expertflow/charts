@@ -25,4 +25,4 @@ maintainers:
 name: fluent-bit
 sources:
 - https://github.com/fluent/fluent-bit/
-version: 5.1.0-rc.1
+version: 5.1.0

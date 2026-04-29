@@ -1,6 +1,6 @@
 apiVersion: v2
-name: activemq
-description: Expertflow CX Solution ActiveMQ
+name: cisco-connector
+description: Expertflow CX Solution
 home: https://expertflow.com
 icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
 keywords:
@@ -12,6 +12,8 @@ keywords:
 #    version: 1.0.0
 #    condition: web-channel-manager.enabled
 #    repository: file://charts/web-channel-manager
+
+
 
 
 # A chart can be either an 'application' or a 'debug' chart.

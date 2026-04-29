@@ -396,7 +396,7 @@ config:
   inputs: |
     [INPUT]
       Name tail
-      Path /var/log/containers/*.log
+      Path /var/log/containers/*cx*.log
       multiline.parser docker
       Tag kube.audit
       Mem_Buf_Limit 100MB
@@ -427,20 +427,11 @@ config:
       Rule   type ^audit_logging$ audit.admin true
   ## https://docs.fluentbit.io/manual/pipeline/outputs
   outputs: |
-
+ 
     [OUTPUT]
-      Name  opensearch
-      Match audit.admin
-      Host  10.192.9.89
-      Port  9200
-      Index audit_log_index
-      HTTP_User admin
-      HTTP_Passwd Z8iCUwMHJl1a9qLr
-      Logstash_Format Off
-      Replace_Dots On
-      Suppress_Type_Name On
-      tls On
-      tls.verify Off
+      Name   stdout
+      Match  audit.admin
+      Format json_lines
 
   ## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/classic-mode/upstream-servers
   ## This configuration is deprecated, please use `extraFiles` instead.

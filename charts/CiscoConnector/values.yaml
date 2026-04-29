@@ -21,7 +21,7 @@ global:
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
-  imagePullSecrets: 
+  imagePullSecrets:
     - ef-gitlab-secret
   ## Compatibility adaptations for Kubernetes platforms
   ##
@@ -34,10 +34,10 @@ global:
       adaptSecurityContext: auto
 ## @section Common parameters
 
-## @param nameOverride String to partially override qm-cisco-sync-service.fullname template (will maintain the release name)
+## @param nameOverride String to partially override cisco-connector.fullname template (will maintain the release name)
 ##
 nameOverride: ""
-## @param fullnameOverride String to fully override qm-cisco-sync-service.fullname template
+## @param fullnameOverride String to fully override cisco-connector.fullname template
 ##
 fullnameOverride: ""
 ## @param namespaceOverride String to fully override common.names.namespace
@@ -72,18 +72,18 @@ diagnosticMode:
   ##
   args:
     - infinity
-## @section qm-cisco-sync-service parameters
+## @section cisco-connector parameters
 
-## @param image.registry [default: REGISTRY_NAME] qm-cisco-sync-service image registry
-## @param image.repository [default: REPOSITORY_NAME/qm-cisco-sync-service] qm-cisco-sync-service image repository
-## @skip image.tag qm-cisco-sync-service image tag (immutable tags are recommended)
-## @param image.digest qm-cisco-sync-service image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-## @param image.pullPolicy qm-cisco-sync-service image pull policy
+## @param image.registry [default: REGISTRY_NAME] cisco-connector image registry
+## @param image.repository [default: REPOSITORY_NAME/cisco-connector] cisco-connector image repository
+## @skip image.tag cisco-connector image tag (immutable tags are recommended)
+## @param image.digest cisco-connector image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy cisco-connector image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ##
 image:
   registry: gitimages.expertflow.com
-  repository: "cim/qm-cisco-sync-service"
+  repository: "voice-recording-solution/cisco-connector"
   tag: "5.1.0"
   digest: ""
   ## Specify a imagePullPolicy
@@ -105,71 +105,89 @@ automountServiceAccountToken: false
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
-hostAliases: 
-- ip: "192.168.1.33"
-  hostnames:
-    - "uccx12-5p.ucce.ipcc"
+hostAliases: []
 ## Command and args for running the container (set to default if not set). Use array form
 ## @param command Override default container command (useful when using custom images)
 ## @param args Override default container args (useful when using custom images)
 ##
 command: []
 args: []
-## @param extraEnvVars Extra environment variables to be set on qm-cisco-sync-service containers
+## @param extraEnvVars Extra environment variables to be set on cisco-connector containers
 ## E.g:
 ## extraEnvVars:
 ##   - name: FOO
 ##     value: BAR
 ##
-extraEnvVars: 
-    - name: REALM
-      value: expertflow
-    - name: AUTH_SERVER_URL
-      value:  "http://keycloak.ef-external.svc/auth/"
-    - name: LOG_LEVEL
-      value: "debug"
-    - name: SSL_REQUIRED
-      value: external
-    - name: RESOURCE
-      value: cim
-    - name: VERIFY_TOKEN_AUDIENCE
-      value: "false"
-    - name: SECRET
-      value: ef61df80-061c-4c29-b9ac-387e6bf67052
-    - name: USE_RESOURCE_ROLE_MAPPINGS
-      value: "true"
-    - name: CONFIDETIAL_PORT
-      value: "0"
-    - name: CLIENT_ID
-      value: cim
-    - name: CLIENT_DB_ID
-      value: ef61df80-061c-4c29-b9ac-387e6bf67052
-    - name: GRANT_TYPE
-      value: password
-    - name: GRANT_TYPE_PAT
-      value: client_credentials
-    - name: USERNAME_ADMIN
-      value: admin
-    - name: PASSWORD_ADMIN
-      value: admin
-    - name: SCOPE_NAME
-      value: Any default scope
-    - name: BEARER_ONLY
-      value: "true"
-    - name: GROUP
-      value: default
-    - name: EF_SERVER_URL
-      value: "http://{{ .Values.global.efCxReleaseName }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000/"
-    - name: FINESSE_USERNAME
-      value: administrator
-    - name: FINESSE_PASSWORD
-      value: "Expertflow464"
-    - name: FINESSE_URL
-      value: "https://uccx12-5p.ucce.ipcc:8445"
-    - name: SYNC_AGENT_PASSWORD
-      value: "Expertflow464"
-    - name: PORT
-      value: "3004"
+extraEnvVars:
+  - name: DB_URL
+    value: jdbc:postgresql://ef-postgresql.ef-external.svc:5432/cisco_connector?sslmode=verify-ca&sslrootcert=/postgresql/ca.crt
+  - name: POSTGRES_ROLE_PATH
+    value: "database/creds/postgres-cisco-connector-role"
+  - name: CUCM_APPLICATION_USER_NAME
+    value: "rafay"
+  - name: CUCM_APPLICATION_USER_PASSWORD
+    value: "Expertflow123"
+  - name: CUCM_IP
+    value: "192.168.1.212"
+  - name: CC_TYPE
+    value: "CCX"
+  - name: CC_ENGINE
+    value: "informix-sqli"
+  - name: CC_IP
+    value: "192.168.1.96"
+  - name: CC_PORT
+    value: "1504"
+  - name: CC_DATABASE
+    value: "db_cra"
+  - name: CC_SERVER
+    value: "uccx15_uccx"
+  - name: CC_USERNAME
+    value: "uccxhruser"
+  - name: CC_PASSWORD
+    value: "Expertflow123"
+  - name: EFCX_FQDN
+    value: "https://chatsolution.expertflow.com"
+  - name: CONVERSATION_BATCH_SIZE
+    value: "50"
+  - name: CONVERSATION_BATCH_INTERVAL_MS
+    value: 40000
+  - name: OB_SERVICE_IDENTIFIER
+    value: "8899"
+  - name: ROUTING_ENGINE_URL
+    value: "https://chatsolution.expertflow.com/routing-engine"
+  - name: KEYCLOAK_REALM_NAME
+    value: "expertflow"
+  - name: KEYCLOAK_CLIENT_ID
+    value: "cim"
+  - name: KEYCLOAK_CLIENT_SECRET
+    value: "ef61df80-061c-4c29-b9ac-387e6bf67052"
+  - name: KEYCLOAK_AGENT_ROLE_NAME
+    value: "agent"
+  - name: KEYCLOAK_AGENT_ROLE_ID
+    value: "a0cedb21-bc4f-4f4d-955f-45f8d54747b2"
+  - name: KEYCLOAK_USERNAME
+    value: "admin"
+  - name: KEYCLOAK_PASSWORD
+    value: "admin"
+  - name: CORRELATION_BATCH_SIZE
+    value: "1000"
+  - name: CORRELATION_BATCH_INTERVAL_MS
+    value: "30000"
+  - name: DB_USER
+    value: "sa"
+  - name: DB_PASSWORD
+    value: "Expertflow@464"
+  - name: CUSTOMER_COUNTRY_CODE
+    value: "92"
+  - name: CUSTOMER_LOCAL_PREFIX
+    value: "0"
+  - name: TRIGGER_SURVEY
+    value: "true"
+  - name: TENANT_ID
+    value: "expertflow"
+  - name: CALL_LEG_EXPIRY_MINUTES
+    value: "30"
+
 
 siteEnvVars: []
 configKeys: []
@@ -178,33 +196,33 @@ configKeys: []
 extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
-extraEnvVarsSecret: ""
+extraEnvVarsSecret: "cisco-connector-approle-secret"
 ## @param efConnectionVars Configmap true false
 ##
-efConnectionVars: false
+efConnectionVars: true
 ## @param efEnvironmentVars ConfigMap true false
 ##
 efEnvironmentVars: false
-## @section qm-cisco-sync-service deployment parameters
+## @section cisco-connector deployment parameters
 
-## @param replicaCount Number of qm-cisco-sync-service replicas to deploy
+## @param replicaCount Number of cisco-connector replicas to deploy
 ##
 replicaCount: 1
 ## @param revisionHistoryLimit The number of old history to retain to allow rollback
 ##
 revisionHistoryLimit: 10
-## @param updateStrategy.type qm-cisco-sync-service deployment strategy type
-## @param updateStrategy.rollingUpdate qm-cisco-sync-service deployment rolling update configuration parameters
+## @param updateStrategy.type cisco-connector deployment strategy type
+## @param updateStrategy.rollingUpdate cisco-connector deployment rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ##
 updateStrategy:
   type: RollingUpdate
   rollingUpdate: {}
-## @param podLabels Additional labels for qm-cisco-sync-service pods
+## @param podLabels Additional labels for cisco-connector pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-## @param podAnnotations Annotations for qm-cisco-sync-service pods
+## @param podAnnotations Annotations for cisco-connector pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
@@ -240,15 +258,15 @@ nodeAffinityPreset:
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-## @param hostNetwork Specify if host network should be enabled for qm-cisco-sync-service pod
+## @param hostNetwork Specify if host network should be enabled for cisco-connector pod
 ##
 hostNetwork: false
-## @param hostIPC Specify if host IPC should be enabled for qm-cisco-sync-service pod
+## @param hostIPC Specify if host IPC should be enabled for cisco-connector pod
 ##
 hostIPC: false
 ## DNS-Pod services
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
-## @param dnsPolicy Specifies the DNS policy for the qm-cisco-sync-service pod
+## @param dnsPolicy Specifies the DNS policy for the cisco-connector pod
 ## DNS policies can be set on a per-Pod basis. Currently Kubernetes supports the following Pod-specific DNS policies.
 ## Available options: Default, ClusterFirst, ClusterFirstWithHostNet, None
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
@@ -276,14 +294,14 @@ nodeSelector: {}
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-## @param priorityClassName qm-cisco-sync-service pods' priorityClassName
+## @param priorityClassName cisco-connector pods' priorityClassName
 ##
 priorityClassName: ""
 ## @param schedulerName Name of the k8s scheduler (other than default)
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
-## @param terminationGracePeriodSeconds In seconds, time the given to the qm-cisco-sync-service pod needs to terminate gracefully
+## @param terminationGracePeriodSeconds In seconds, time the given to the cisco-connector pod needs to terminate gracefully
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
 ##
 terminationGracePeriodSeconds: ""
@@ -292,13 +310,13 @@ terminationGracePeriodSeconds: ""
 ## The value is evaluated as a template
 ##
 topologySpreadConstraints: []
-## qm-cisco-sync-service pods' Security Context.
+## cisco-connector pods' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enabled qm-cisco-sync-service pods' Security Context
+## @param podSecurityContext.enabled Enabled cisco-connector pods' Security Context
 ## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
 ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
-## @param podSecurityContext.fsGroup Set qm-cisco-sync-service pod's Security Context fsGroup
-## @param podSecurityContext.sysctls sysctl settings of the qm-cisco-sync-service pods
+## @param podSecurityContext.fsGroup Set cisco-connector pod's Security Context fsGroup
+## @param podSecurityContext.sysctls sysctl settings of the cisco-connector pods
 ##
 podSecurityContext:
   enabled: false
@@ -312,7 +330,7 @@ podSecurityContext:
   ##   value: "10000"
   ##
   sysctls: []
-## qm-cisco-sync-service containers' Security Context.
+## cisco-connector containers' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
@@ -338,9 +356,9 @@ containerSecurityContext:
     drop: ["ALL"]
   seccompProfile:
     type: "RuntimeDefault"
-## Configures the ports qm-cisco-sync-service listens on
+## Configures the ports cisco-connector listens on
 ##
-## containerPort: "qm-cisco-sync-servicePORT_NUMBER"
+## containerPort: "cisco-connectorPORT_NUMBER"
 ## containerPortName: "_COMPONENT_PORT_NAME"
 
 ## @param containerPorts Array of additional container ports for the Nginx container
@@ -349,12 +367,12 @@ containerSecurityContext:
 ##   - name: grpc # Generic Name of the ContainerPORT Max-10 Chars
 ##     containerPort: 4317 # Digit
 ##
-containerPorts: 
-      - name: "http-q-c-s-3004"
-        containerPort: 3004 
+containerPorts:
+  - name: "http-re-rp-8080"
+    containerPort: 8080
 ##  - name: _COMPONENT_CONTAINER_PORT_NAME_
 ##    containerPort: _COMPONENT_CONTAINER_PORT_NUMBER_
-## qm-cisco-sync-service containers' resource requests and limits
+## cisco-connector containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
@@ -375,12 +393,12 @@ resourcesPreset: "none"
 ##     memory: 1024Mi
 ##
 resources: {}
-## qm-cisco-sync-service containers' lifecycleHooks
+## cisco-connector containers' lifecycleHooks
 ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
 ## If you do want to specify lifecycleHooks, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces on 'lifecycle:{}'.
-## @param lifecycleHooks Optional lifecycleHooks for the qm-cisco-sync-service container
+## @param lifecycleHooks Optional lifecycleHooks for the cisco-connector container
 lifecycleHooks: {}
 ## Example:
 ## postStart:
@@ -392,7 +410,7 @@ lifecycleHooks: {}
 ##     command: ["/bin/sleep", "20"]
 ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
 
-## qm-cisco-sync-service containers' startup probe.
+## cisco-connector containers' startup probe.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param startupProbe.enabled Enable startupProbe
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
@@ -408,7 +426,7 @@ startupProbe:
   periodSeconds: 10
   failureThreshold: 6
   successThreshold: 1
-## qm-cisco-sync-service containers' liveness probe.
+## cisco-connector containers' liveness probe.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -424,7 +442,7 @@ livenessProbe:
   periodSeconds: 10
   failureThreshold: 6
   successThreshold: 1
-## qm-cisco-sync-service containers' readiness probe.
+## cisco-connector containers' readiness probe.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param readinessProbe.enabled Enable readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -441,7 +459,7 @@ readinessProbe:
   failureThreshold: 3
   successThreshold: 1
 ## Autoscaling parameters
-## @param autoscaling.enabled Enable autoscaling for qm-cisco-sync-service deployment
+## @param autoscaling.enabled Enable autoscaling for cisco-connector deployment
 ## @param autoscaling.minReplicas Minimum number of replicas to scale back
 ## @param autoscaling.maxReplicas Maximum number of replicas to scale out
 ## @param autoscaling.targetCPU Target CPU utilization percentage
@@ -455,15 +473,30 @@ autoscaling:
   targetMemory: ""
 ## @param extraVolumes Array to add extra volumes
 ##
-extraVolumes: []
+extraVolumes:
+  - name: ef-postgresql-crt-vol
+    secret:
+      secretName: ef-postgresql-crt
+  - name: tls-ca
+    secret:
+      secretName: tls-ca
+  - name: tls-server-client
+    secret:
+      secretName: tls-server-client
 ## @param extraVolumeMounts Array to add extra mount
 ##
-extraVolumeMounts: []
+extraVolumeMounts:
+  - name: ef-postgresql-crt-vol
+    mountPath: /postgresql
+  - name: tls-ca
+    mountPath: /tls-ca
+  - name: tls-server-client
+    mountPath: /tls-server-client
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
 serviceAccount:
-  ## @param serviceAccount.create Enable creation of ServiceAccount for qm-cisco-sync-service pod
+  ## @param serviceAccount.create Enable creation of ServiceAccount for cisco-connector pod
   ##
   create: false
   ## @param serviceAccount.name The name of the ServiceAccount to use.
@@ -511,7 +544,7 @@ pdb:
   maxUnavailable: ""
 ## @section Traffic Exposure parameters
 
-## qm-cisco-sync-service Service properties
+## cisco-connector Service properties
 ##
 ## @param service.type Service type
 ## 
@@ -525,14 +558,14 @@ pdb:
 service:
   enabled: true
   type: ClusterIP
-  port: 3004
-  targetPort: "http-q-c-s-3004"
-  portName: "http-q-c-s-3004"
+  port: 8080
+  targetPort: "http-re-rp-8080"
+  portName: "http-re-rp-8080"
   protocol: TCP
   ## @param service.nodePort Valid if the type is set to NodePort -- range 30000 to 32676
   ## NOTE: if 
   nodePort: ""
-  ## @param service.clusterIP qm-cisco-sync-service service Cluster IP
+  ## @param service.clusterIP cisco-connector service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
@@ -640,7 +673,7 @@ ingress:
   apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
-  hostname: '{{ .Values.global.ingressRouter  }}' 
+  hostname: '{{ .Values.global.ingressRouter  }}'
   ## @param ingress.path The Path to Nginx. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: "/cisco-sync-service(/|$)(.*)"
@@ -653,9 +686,9 @@ ingress:
   ##   kubernetes.io/ingress.class: nginx
   ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
-  annotations: 
-       nginx.ingress.kubernetes.io/rewrite-target: /$2
-       nginx.ingress.kubernetes.io/use-regex: "true"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
   ##      nginx.ingress.kubernetes.io/rewrite-target: /$2
   ##      nginx.ingress.kubernetes.io/use-regex: "true"
   ## @param ingress.ingressClassName Set the ingerssClassName on the ingress record for k8s 1.18+
@@ -678,7 +711,7 @@ ingress:
   ##     serviceName: ssl-redirect
   ##     servicePort: use-annotation
   ##
-  extraPaths: 
+  extraPaths:
   ##   - path: /_COMPONENT_INGRESS_PATH_EXTRA
   ##     pathType: ImplementationSpecific
   ##     backend:
