@@ -2649,13 +2649,13 @@ apisixStandalone: |
            regex_uri: ["^/cx-tenant/?(.*)", "/$1"]
      
      # Secure-Link Apis Path
-    - id: secure-link-generation
-      uris: ["/secure-link/*"]
-      hosts: ["{{ .Values.global.ingressRouter }}"]
-      priority: 0
-      service_id: secure-link-generation
-      status: 1
-      plugins:
-        proxy-rewrite:
-          enable: true
-          regex_uri: ["^/secure-link/?(.*)", "/$1"]
+     - id: secure-link-generation
+       uris: ["/secure-link/*"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       priority: 0
+       service_id: secure-link-generation
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/secure-link/?(.*)", "/$1"]
