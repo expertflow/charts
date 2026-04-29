@@ -19500,6 +19500,24 @@ entries:
   secure-link-generation:
   - apiVersion: v2
     appVersion: 5.2.0
+    created: "2026-04-29T11:48:57.783372341Z"
+    description: Expertflow CX Solution
+    digest: 0b5ab2da76f7e065e889545cb885433092bdb5b4c77f6af97f6ec5b973c5b456
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: secure-link-generation
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/secure-link-generation-5.2.0-rc.5/secure-link-generation-5.2.0-rc.5.tgz
+    version: 5.2.0-rc.5
+  - apiVersion: v2
+    appVersion: 5.2.0
     created: "2026-04-29T09:58:57.897339733Z"
     description: Expertflow CX Solution
     digest: 06e11bb7ebfc9f3f15efa895c5bdeda145e51768f21a17363260b90bac1597ae
@@ -21263,4 +21281,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2026-04-29T11:08:48.800319513Z"
+generated: "2026-04-29T11:48:57.784408957Z"
