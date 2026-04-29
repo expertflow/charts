@@ -2724,6 +2724,38 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 3.11.0
+    created: "2026-04-29T11:08:48.799394693Z"
+    dependencies:
+    - condition: etcd.enabled
+      name: etcd
+      repository: file://charts/etcd
+      version: 9.7.3
+    - alias: dashboard
+      condition: dashboard.enabled
+      name: apisix-dashboard
+      repository: https://apache.github.io/apisix-helm-chart
+      version: 0.8.2
+    - alias: ingress-controller
+      condition: ingress-controller.enabled
+      name: apisix-ingress-controller
+      repository: https://apache.github.io/apisix-helm-chart
+      version: 0.14.0
+    description: A Helm chart for Apache APISIX v3
+    digest: 762b32e223806158751c0ed76670ee3c9c84d197caa182a2b018846a04437d22
+    icon: https://apache.org/logos/res/apisix/apisix.png
+    maintainers:
+    - name: tao12345666333
+    name: apisix
+    sources:
+    - https://github.com/apache/apisix-helm-chart
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/apisix-5.2.0-rc.3/apisix-5.2.0-rc.3.tgz
+    version: 5.2.0-rc.3
+  - annotations:
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
+    appVersion: 3.11.0
     created: "2026-04-29T08:34:01.001188927Z"
     dependencies:
     - condition: etcd.enabled
@@ -2884,38 +2916,6 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 3.11.0
-    created: "2026-01-30T13:55:06.244996901Z"
-    dependencies:
-    - condition: etcd.enabled
-      name: etcd
-      repository: file://charts/etcd
-      version: 9.7.3
-    - alias: dashboard
-      condition: dashboard.enabled
-      name: apisix-dashboard
-      repository: https://charts.apiseven.com
-      version: 0.8.2
-    - alias: ingress-controller
-      condition: ingress-controller.enabled
-      name: apisix-ingress-controller
-      repository: https://charts.apiseven.com
-      version: 0.14.0
-    description: A Helm chart for Apache APISIX v3
-    digest: 3cab7c2e008b25d72b04ec60f4cc700b95a246a958552b2748198f5aea5f8239
-    icon: https://apache.org/logos/res/apisix/apisix.png
-    maintainers:
-    - name: tao12345666333
-    name: apisix
-    sources:
-    - https://github.com/apache/apisix-helm-chart
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/apisix-5.1.0-rc.1/apisix-5.1.0-rc.1.tgz
-    version: 5.1.0-rc.1
-  - annotations:
-      artifacthub.io/prerelease: "false"
-    apiVersion: v2
-    appVersion: 3.11.0
     created: "2026-02-10T08:50:01.331694629Z"
     dependencies:
     - condition: etcd.enabled
@@ -3062,6 +3062,38 @@ entries:
       version: 0.14.0
     description: A Helm chart for Apache APISIX v3
     digest: af2ea500d39b0287564a585f10e24b76094fbfd93ddb9e0a9dd04ce7b6479406
+    icon: https://apache.org/logos/res/apisix/apisix.png
+    maintainers:
+    - name: tao12345666333
+    name: apisix
+    sources:
+    - https://github.com/apache/apisix-helm-chart
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/apisix-5.1.0-rc.1/apisix-5.1.0-rc.1.tgz
+    version: 5.1.0-rc.1
+  - annotations:
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
+    appVersion: 3.11.0
+    created: "2026-01-30T13:55:06.244996901Z"
+    dependencies:
+    - condition: etcd.enabled
+      name: etcd
+      repository: file://charts/etcd
+      version: 9.7.3
+    - alias: dashboard
+      condition: dashboard.enabled
+      name: apisix-dashboard
+      repository: https://charts.apiseven.com
+      version: 0.8.2
+    - alias: ingress-controller
+      condition: ingress-controller.enabled
+      name: apisix-ingress-controller
+      repository: https://charts.apiseven.com
+      version: 0.14.0
+    description: A Helm chart for Apache APISIX v3
+    digest: 3cab7c2e008b25d72b04ec60f4cc700b95a246a958552b2748198f5aea5f8239
     icon: https://apache.org/logos/res/apisix/apisix.png
     maintainers:
     - name: tao12345666333
@@ -21231,4 +21263,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2026-04-29T09:58:57.898094306Z"
+generated: "2026-04-29T11:08:48.800319513Z"
