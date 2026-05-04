@@ -69,7 +69,7 @@ campaigns-backend:
    enabled: true
    image:       
       repository: cim/campaigns
-      tag: "5.2_f-CIM-13375"
+      tag: "5.2.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -124,8 +124,8 @@ campaigns-backend:
 campaign-studio:
    enabled: true
    image:       
-      repository: cim/conversation-studio/build
-      tag: "5.2_f-CIM-13375"
+      repository: cim/conversation-studio
+      tag: "5.2.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -224,7 +224,7 @@ scheduled-activities:
   replicaCount: 1
   image:
     repository: campaign-manager/campaign-scheduler
-    tag: "5.2_f-CIM-13375"
+    tag: "5.2.0"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
