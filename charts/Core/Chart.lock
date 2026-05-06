@@ -57,4 +57,4 @@ dependencies:
   repository: file://charts/conversation-studio
   version: 1.0.0
 digest: sha256:5543770ad78275edbcab09c5400f1210618542fff737254830322f721e2e2d4c
-generated: "2026-03-12T10:50:32.794159+05:00"
+generated: "2026-05-06T16:00:12.746837+05:00"
