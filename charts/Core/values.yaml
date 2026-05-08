@@ -160,7 +160,7 @@ agent-manager:
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: "4.10.7_b-CIM-33072"
+        tag: "4.10.8"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -293,7 +293,7 @@ bot-framework:
     replicaCount: 1
     image:
         repository: cim/bot-framework
-        tag: "4.10.7_b-CIM-33277"
+        tag: "4.10.8"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -386,7 +386,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: "4.10.7_b-CIM-33277"
+        tag: "4.10.8"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -535,7 +535,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: "4.10.7_b-CIM-33277"
+        tag: "4.10.8"
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -673,7 +673,7 @@ conversation-monitor:
     replicaCount: 1
     image:
         repository: cim/conversation-monitor
-        tag: "4.10.7_b-CIM-33277"
+        tag: "4.10.8"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -768,7 +768,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: "4.10.5_b-ABALGO-333"
+        tag: "4.10.8"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -939,7 +939,7 @@ historical-reports:
     replicaCount: 1
     image:
         repository: cim/historical-reports-manager
-        tag: "4.10.7_b-CIM-33282"
+        tag: "4.10.8"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1056,7 +1056,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: "4.10.7_b-CIM-33280"
+        tag: "4.10.8"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1148,7 +1148,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: "4.10.7_b-CIM-33277"
+        tag: "4.10.8"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1242,7 +1242,7 @@ state-events-logger:
     replicaCount: 1
     image:
         repository: cim/state-events-logger
-        tag: "4.10.7_b-CIM-33277"
+        tag: "4.10.8"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts: []
