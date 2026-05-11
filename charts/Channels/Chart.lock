@@ -41,5 +41,8 @@ dependencies:
 - name: google-playstore-connector
   repository: file://charts/google-playstore-connector
   version: 1.0.0
-digest: sha256:7bbbe2bff84c80607e9a148379f8b7929992737925ce3d235a3be1a0d7c03b54
-generated: "2026-05-04T15:09:56.845877+05:00"
+- name: apple-store-connector
+  repository: file://charts/apple-store-connector
+  version: 1.0.0
+digest: sha256:c5805dbe2dc5661296dd72bfefa7431e89d958665c931515a4c7000099734ab6
+generated: "2026-05-11T18:49:39.423027+05:00"

@@ -1143,14 +1143,23 @@ apisixStandalone: |
          scheme: http
          type: roundrobin
          timeout: { connect: 5, send: 10, read: 10 }
-     - id: Google-PlayStore-Connector
-       name: Google-PlayStore-Connector
+     - id: svc-google-playstore-connector
+       name: svc-google-playstore-connector
        upstream:
          discovery_type: kubernetes
-         service_name: "expertflow/google-playstore-connector-svc:http-yt-co-8080"
+         service_name: "expertflow/cx-channels-google-playstore-connector-svc:http-gpc-8080"
          scheme: http
          type: roundrobin
          timeout: { connect: 5, send: 10, read: 10 }
+     - id: svc-apple-store-connector
+       name: svc-apple-store-connector
+       upstream:
+         discovery_type: kubernetes
+         service_name: "expertflow/cx-channels-apple-store-connector-svc:http-asc-8080"
+         scheme: http
+         type: roundrobin
+         timeout: { connect: 5, send: 10, read: 10 }
+
      # From Eleveo Chart (Release: cx-eleveo, Namespace: expertflow)
      - id: svc-eleveo-api
        name: svc-eleveo-api
@@ -2454,6 +2463,17 @@ apisixStandalone: |
          proxy-rewrite:
            enable: true
            regex_uri: ["^/google-playstore-connector/?(.*)", "/$1"]
+     - id: apple-store-connector-main
+       uris: ["/apple-store-connector/*"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       priority: 0
+       service_id: svc-apple-store-connector
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/apple-store-connector/?(.*)", "/$1"]
+
      # --- Eleveo ---
      - id: cx-eleveo-eleveo-api-main
        uris: ["/eleveo-connector-api/*"]

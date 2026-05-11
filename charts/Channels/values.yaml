@@ -622,3 +622,31 @@ google-playstore-connector:
       portName: "http-gpc-8080"
       targetPort: "http-gpc-8080"
    ingress: { enabled: false }
+
+##############################Apple-Store-Connector##############################
+apple-store-connector:
+   enabled: false
+   replicaCount: 1
+   image:
+      repository: cim/apple-store-connector
+      tag: "5.2.0_f-CIM-32356"
+   efConnectionVars: true
+   efEnvironmentVars: false
+   containerPorts:
+      - name: "http-asc-8080"
+        containerPort: 8080
+   extraEnvVars:
+     - name: TZ
+       value: '{{ .Values.global.efCommonVars_TZ }}'
+     - name: CCM_URL
+       value: "http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
+     - name: FILE_ENGINE_URL
+       value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
+     - name: SCHEDULER_FIXED_RATE_IN_MS
+       value: "60000"
+   service:
+      enabled: true
+      port: 8080
+      portName: "http-asc-8080"
+      targetPort: "http-asc-8080"
+   ingress: { enabled: false }
