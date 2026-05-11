@@ -2853,6 +2853,38 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 3.11.0
+    created: "2026-05-11T13:57:42.216123863Z"
+    dependencies:
+    - condition: etcd.enabled
+      name: etcd
+      repository: file://charts/etcd
+      version: 9.7.3
+    - alias: dashboard
+      condition: dashboard.enabled
+      name: apisix-dashboard
+      repository: https://apache.github.io/apisix-helm-chart
+      version: 0.8.2
+    - alias: ingress-controller
+      condition: ingress-controller.enabled
+      name: apisix-ingress-controller
+      repository: https://apache.github.io/apisix-helm-chart
+      version: 0.14.0
+    description: A Helm chart for Apache APISIX v3
+    digest: 7bca7b7fbec90bc580e0dd13cc9b694e0ec1fbd8d58162d80b13ab2f866b6f91
+    icon: https://apache.org/logos/res/apisix/apisix.png
+    maintainers:
+    - name: tao12345666333
+    name: apisix
+    sources:
+    - https://github.com/apache/apisix-helm-chart
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/apisix-5.3.0-rc.1/apisix-5.3.0-rc.1.tgz
+    version: 5.3.0-rc.1
+  - annotations:
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
+    appVersion: 3.11.0
     created: "2026-05-04T10:34:31.224993531Z"
     dependencies:
     - condition: etcd.enabled
@@ -3077,6 +3109,38 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 3.11.0
+    created: "2026-02-10T13:05:43.876441475Z"
+    dependencies:
+    - condition: etcd.enabled
+      name: etcd
+      repository: file://charts/etcd
+      version: 9.7.3
+    - alias: dashboard
+      condition: dashboard.enabled
+      name: apisix-dashboard
+      repository: https://charts.apiseven.com
+      version: 0.8.2
+    - alias: ingress-controller
+      condition: ingress-controller.enabled
+      name: apisix-ingress-controller
+      repository: https://charts.apiseven.com
+      version: 0.14.0
+    description: A Helm chart for Apache APISIX v3
+    digest: e3d50e4440bf2bf9a9fc640f19696b72ab8ff886a21be9d37ae0388d62aa8d8c
+    icon: https://apache.org/logos/res/apisix/apisix.png
+    maintainers:
+    - name: tao12345666333
+    name: apisix
+    sources:
+    - https://github.com/apache/apisix-helm-chart
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/apisix-5.1.0-rc.1/apisix-5.1.0-rc.1.tgz
+    version: 5.1.0-rc.1
+  - annotations:
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
+    appVersion: 3.11.0
     created: "2026-02-10T08:50:01.331694629Z"
     dependencies:
     - condition: etcd.enabled
@@ -3095,70 +3159,6 @@ entries:
       version: 0.14.0
     description: A Helm chart for Apache APISIX v3
     digest: 899acff13fd9a94578d7d2b4b84740face9eeedcc2231f530e648494ec95925b
-    icon: https://apache.org/logos/res/apisix/apisix.png
-    maintainers:
-    - name: tao12345666333
-    name: apisix
-    sources:
-    - https://github.com/apache/apisix-helm-chart
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/apisix-5.1.0-rc.1/apisix-5.1.0-rc.1.tgz
-    version: 5.1.0-rc.1
-  - annotations:
-      artifacthub.io/prerelease: "false"
-    apiVersion: v2
-    appVersion: 3.11.0
-    created: "2026-02-11T08:02:28.734706659Z"
-    dependencies:
-    - condition: etcd.enabled
-      name: etcd
-      repository: file://charts/etcd
-      version: 9.7.3
-    - alias: dashboard
-      condition: dashboard.enabled
-      name: apisix-dashboard
-      repository: https://charts.apiseven.com
-      version: 0.8.2
-    - alias: ingress-controller
-      condition: ingress-controller.enabled
-      name: apisix-ingress-controller
-      repository: https://charts.apiseven.com
-      version: 0.14.0
-    description: A Helm chart for Apache APISIX v3
-    digest: b3d17c0c8a45fb51191bb05728894808aef347d045298ebeb21d6c5f967142b6
-    icon: https://apache.org/logos/res/apisix/apisix.png
-    maintainers:
-    - name: tao12345666333
-    name: apisix
-    sources:
-    - https://github.com/apache/apisix-helm-chart
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/apisix-5.1.0-rc.1/apisix-5.1.0-rc.1.tgz
-    version: 5.1.0-rc.1
-  - annotations:
-      artifacthub.io/prerelease: "false"
-    apiVersion: v2
-    appVersion: 3.11.0
-    created: "2026-02-23T11:44:40.209296703Z"
-    dependencies:
-    - condition: etcd.enabled
-      name: etcd
-      repository: file://charts/etcd
-      version: 9.7.3
-    - alias: dashboard
-      condition: dashboard.enabled
-      name: apisix-dashboard
-      repository: https://charts.apiseven.com
-      version: 0.8.2
-    - alias: ingress-controller
-      condition: ingress-controller.enabled
-      name: apisix-ingress-controller
-      repository: https://charts.apiseven.com
-      version: 0.14.0
-    description: A Helm chart for Apache APISIX v3
-    digest: 5656b4f67c45bd21721c9d2aed9ac4634075e91ae8e805182caa0dc1327a1185
     icon: https://apache.org/logos/res/apisix/apisix.png
     maintainers:
     - name: tao12345666333
@@ -3237,7 +3237,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 3.11.0
-    created: "2026-02-10T13:05:43.876441475Z"
+    created: "2026-02-11T08:02:28.734706659Z"
     dependencies:
     - condition: etcd.enabled
       name: etcd
@@ -3254,7 +3254,39 @@ entries:
       repository: https://charts.apiseven.com
       version: 0.14.0
     description: A Helm chart for Apache APISIX v3
-    digest: e3d50e4440bf2bf9a9fc640f19696b72ab8ff886a21be9d37ae0388d62aa8d8c
+    digest: b3d17c0c8a45fb51191bb05728894808aef347d045298ebeb21d6c5f967142b6
+    icon: https://apache.org/logos/res/apisix/apisix.png
+    maintainers:
+    - name: tao12345666333
+    name: apisix
+    sources:
+    - https://github.com/apache/apisix-helm-chart
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/apisix-5.1.0-rc.1/apisix-5.1.0-rc.1.tgz
+    version: 5.1.0-rc.1
+  - annotations:
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
+    appVersion: 3.11.0
+    created: "2026-02-23T11:44:40.209296703Z"
+    dependencies:
+    - condition: etcd.enabled
+      name: etcd
+      repository: file://charts/etcd
+      version: 9.7.3
+    - alias: dashboard
+      condition: dashboard.enabled
+      name: apisix-dashboard
+      repository: https://charts.apiseven.com
+      version: 0.8.2
+    - alias: ingress-controller
+      condition: ingress-controller.enabled
+      name: apisix-ingress-controller
+      repository: https://charts.apiseven.com
+      version: 0.14.0
+    description: A Helm chart for Apache APISIX v3
+    digest: 5656b4f67c45bd21721c9d2aed9ac4634075e91ae8e805182caa0dc1327a1185
     icon: https://apache.org/logos/res/apisix/apisix.png
     maintainers:
     - name: tao12345666333
@@ -5340,6 +5372,85 @@ entries:
     version: 1.0.15
   channels:
   - apiVersion: v2
+    appVersion: 5.3.0
+    created: "2026-05-11T13:57:42.497924994Z"
+    dependencies:
+    - condition: connect360.enabled
+      name: connect360
+      repository: file://charts/connect360
+      version: 1.0.0
+    - condition: facebook-connector.enabled
+      name: facebook-connector
+      repository: file://charts/facebook-connector
+      version: 1.0.0
+    - condition: instagram-connector.enabled
+      name: instagram-connector
+      repository: file://charts/instagram-connector
+      version: 1.0.0
+    - condition: smpp-connector.enabled
+      name: smpp-connector
+      repository: file://charts/smpp-connector
+      version: 1.0.0
+    - condition: telegram-connector.enabled
+      name: telegram-connector
+      repository: file://charts/telegram-connector
+      version: 1.0.0
+    - condition: twilio-connector.enabled
+      name: twilio-connector
+      repository: file://charts/twilio-connector
+      version: 1.0.0
+    - condition: twitter-connector.enabled
+      name: twitter-connector
+      repository: file://charts/twitter-connector
+      version: 1.0.0
+    - condition: viber-connector.enabled
+      name: viber-connector
+      repository: file://charts/viber-connector
+      version: 1.0.0
+    - condition: youtube-connector.enabled
+      name: youtube-connector
+      repository: file://charts/youtube-connector
+      version: 1.0.0
+    - condition: email-connector.enabled
+      name: email-connector
+      repository: file://charts/email-connector
+      version: 1.0.0
+    - condition: ms-email-connector.enabled
+      name: ms-email-connector
+      repository: file://charts/ms-email-connector
+      version: 1.0.0
+    - condition: whatsapp-connector.enabled
+      name: whatsapp-connector
+      repository: file://charts/whatsapp-connector
+      version: 1.0.0
+    - condition: linkedin-connector.enabled
+      name: linkedin-connector
+      repository: file://charts/linkedin-connector
+      version: 1.0.14
+    - condition: google-playstore-connector.enabled
+      name: google-playstore-connector
+      repository: file://charts/google-playstore-connector
+      version: 1.0.0
+    - condition: apple-store-connector.enabled
+      name: apple-store-connector
+      repository: file://charts/apple-store-connector
+      version: 1.0.0
+    description: Expertflow CX Solution Channels
+    digest: 64fc0b764ec23fd3b79e1225b985756db5b5cf9a17fb74a6b57f6c5d65dbf281
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: channels
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/channels-5.3.0-rc.1/channels-5.3.0-rc.1.tgz
+    version: 5.3.0-rc.1
+  - apiVersion: v2
     appVersion: 5.2.0
     created: "2026-05-04T10:34:31.707149341Z"
     dependencies:
@@ -5866,81 +5977,6 @@ entries:
     version: 5.1.0-rc.2
   - apiVersion: v2
     appVersion: "5.0"
-    created: "2026-02-04T13:28:21.618385541Z"
-    dependencies:
-    - condition: connect360.enabled
-      name: connect360
-      repository: file://charts/connect360
-      version: 1.0.0
-    - condition: facebook-connector.enabled
-      name: facebook-connector
-      repository: file://charts/facebook-connector
-      version: 1.0.0
-    - condition: instagram-connector.enabled
-      name: instagram-connector
-      repository: file://charts/instagram-connector
-      version: 1.0.0
-    - condition: smpp-connector.enabled
-      name: smpp-connector
-      repository: file://charts/smpp-connector
-      version: 1.0.0
-    - condition: telegram-connector.enabled
-      name: telegram-connector
-      repository: file://charts/telegram-connector
-      version: 1.0.0
-    - condition: twilio-connector.enabled
-      name: twilio-connector
-      repository: file://charts/twilio-connector
-      version: 1.0.0
-    - condition: twitter-connector.enabled
-      name: twitter-connector
-      repository: file://charts/twitter-connector
-      version: 1.0.0
-    - condition: viber-connector.enabled
-      name: viber-connector
-      repository: file://charts/viber-connector
-      version: 1.0.0
-    - condition: youtube-connector.enabled
-      name: youtube-connector
-      repository: file://charts/youtube-connector
-      version: 1.0.0
-    - condition: email-connector.enabled
-      name: email-connector
-      repository: file://charts/email-connector
-      version: 1.0.0
-    - condition: ms-email-connector.enabled
-      name: ms-email-connector
-      repository: file://charts/ms-email-connector
-      version: 1.0.0
-    - condition: whatsapp-connector.enabled
-      name: whatsapp-connector
-      repository: file://charts/whatsapp-connector
-      version: 1.0.0
-    - condition: linkedin-connector.enabled
-      name: linkedin-connector
-      repository: file://charts/linkedin-connector
-      version: 1.0.14
-    - condition: google-playstore-connector.enabled
-      name: google-playstore-connector
-      repository: file://charts/google-playstore-connector
-      version: 1.0.0
-    description: Expertflow CX Solution Channels
-    digest: 7478f412fee974adc9e25756fc252f98a68c60743f86e5a46469f9e2f3a6378b
-    home: https://expertflow.com
-    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
-    keywords:
-    - Expertflow
-    - C2C Communications
-    maintainers:
-    - email: nasir.mehmood@expertflow.com
-      name: NMR Nasir Mehmood Rajput
-    name: channels
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/channels-5.1.0-rc.1/channels-5.1.0-rc.1.tgz
-    version: 5.1.0-rc.1
-  - apiVersion: v2
-    appVersion: "5.0"
     created: "2026-01-29T12:16:48.953338849Z"
     dependencies:
     - condition: connect360.enabled
@@ -6001,6 +6037,81 @@ entries:
       version: 1.0.0
     description: Expertflow CX Solution Channels
     digest: 1e607adf13407b295053a1dae4b21b35572c7878890505d3798be98bb7c136cb
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: channels
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/channels-5.1.0-rc.1/channels-5.1.0-rc.1.tgz
+    version: 5.1.0-rc.1
+  - apiVersion: v2
+    appVersion: "5.0"
+    created: "2026-02-04T13:28:21.618385541Z"
+    dependencies:
+    - condition: connect360.enabled
+      name: connect360
+      repository: file://charts/connect360
+      version: 1.0.0
+    - condition: facebook-connector.enabled
+      name: facebook-connector
+      repository: file://charts/facebook-connector
+      version: 1.0.0
+    - condition: instagram-connector.enabled
+      name: instagram-connector
+      repository: file://charts/instagram-connector
+      version: 1.0.0
+    - condition: smpp-connector.enabled
+      name: smpp-connector
+      repository: file://charts/smpp-connector
+      version: 1.0.0
+    - condition: telegram-connector.enabled
+      name: telegram-connector
+      repository: file://charts/telegram-connector
+      version: 1.0.0
+    - condition: twilio-connector.enabled
+      name: twilio-connector
+      repository: file://charts/twilio-connector
+      version: 1.0.0
+    - condition: twitter-connector.enabled
+      name: twitter-connector
+      repository: file://charts/twitter-connector
+      version: 1.0.0
+    - condition: viber-connector.enabled
+      name: viber-connector
+      repository: file://charts/viber-connector
+      version: 1.0.0
+    - condition: youtube-connector.enabled
+      name: youtube-connector
+      repository: file://charts/youtube-connector
+      version: 1.0.0
+    - condition: email-connector.enabled
+      name: email-connector
+      repository: file://charts/email-connector
+      version: 1.0.0
+    - condition: ms-email-connector.enabled
+      name: ms-email-connector
+      repository: file://charts/ms-email-connector
+      version: 1.0.0
+    - condition: whatsapp-connector.enabled
+      name: whatsapp-connector
+      repository: file://charts/whatsapp-connector
+      version: 1.0.0
+    - condition: linkedin-connector.enabled
+      name: linkedin-connector
+      repository: file://charts/linkedin-connector
+      version: 1.0.14
+    - condition: google-playstore-connector.enabled
+      name: google-playstore-connector
+      repository: file://charts/google-playstore-connector
+      version: 1.0.0
+    description: Expertflow CX Solution Channels
+    digest: 7478f412fee974adc9e25756fc252f98a68c60743f86e5a46469f9e2f3a6378b
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -22149,4 +22260,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2026-05-08T12:00:17.561424836Z"
+generated: "2026-05-11T13:57:42.50043206Z"
