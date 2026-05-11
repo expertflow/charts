@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-      - CX-5.2.0-rc
+      - CX-5.3.0-rc
     paths:
       - 'charts/**'
 jobs:
