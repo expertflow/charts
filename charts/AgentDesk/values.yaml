@@ -73,7 +73,7 @@ unified-agent:
    replicaCount: 1
    image:
       repository: cim/unified-agent
-      tag: "5.2.0"
+      tag: "5.2.0_f-CIM-32997"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -218,6 +218,10 @@ unified-agent:
         value: "true"
       - name: isKnowledgeBaseEnabled
         value: false
+      - name: isDefaultHomePageEnabled
+        value: true
+      - name: isQuickLinksEnabled
+        value: true
       - name: KNOWLEDGE_BASE_URL
         value: ""
       - name: QM_URL

@@ -493,7 +493,7 @@ cim-customer:
     replicaCount: 1
     image:
        repository: cim/cim-backend
-       tag: "5.2.0"
+       tag: "5.2_f-CIM-32997"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -783,7 +783,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: "5.2.0"
+        tag: "5.2-CIM-32238"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1463,7 +1463,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: "5.2.0"
+        tag: "5.2_f-CIM-32482"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
