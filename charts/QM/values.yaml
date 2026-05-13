@@ -51,7 +51,7 @@ qm-backend:
   enabled: true
   image:
     repository: cim/qm-backend
-    tag: "5.2.0"
+    tag: "5.3.0"
   efConnectionVars: false
   efEnvironmentVars: false
   containerPorts:

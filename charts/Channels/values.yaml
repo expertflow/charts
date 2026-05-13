@@ -629,7 +629,7 @@ apple-store-connector:
    replicaCount: 1
    image:
       repository: cim/apple-store-connector
-      tag: "5.2.0_f-CIM-32356"
+      tag: "5.3.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
