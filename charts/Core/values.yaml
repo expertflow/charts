@@ -1752,7 +1752,7 @@ cx-tenant:
   replicaCount: 1
   image:
     repository: cim/cx-tenant
-    tag: "5.2.0"
+    tag: "5.3.0"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
