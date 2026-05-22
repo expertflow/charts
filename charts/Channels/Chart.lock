@@ -45,4 +45,4 @@ dependencies:
   repository: file://charts/apple-store-connector
   version: 1.0.0
 digest: sha256:c5805dbe2dc5661296dd72bfefa7431e89d958665c931515a4c7000099734ab6
-generated: "2026-05-13T12:23:12.184424+05:00"
+generated: "2026-05-22T18:27:02.172486+05:00"

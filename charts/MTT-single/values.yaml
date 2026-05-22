@@ -110,7 +110,7 @@ conversation-studio:
   replicaCount: 1
   image:
     repository: cim/workflow-builder/conversation-controller
-    tag: "5.2.0"
+    tag: "5.4.0"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -223,7 +223,7 @@ campaign-studio:
    enabled: true
    image:       
       repository: cim/conversation-studio
-      tag: "5.2.0"
+      tag: "5.4.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -447,7 +447,7 @@ qm-connector:
   enabled: false
   image:
     repository: voice-recording-solution/qm-connector
-    tag: "5.2.0"
+    tag: "5.4.0"
   containerPorts: []
   extraEnvVars:
     - name: RECORDING_SERVER_FQDN
