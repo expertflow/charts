@@ -1,28 +1,28 @@
 annotations:
   artifacthub.io/prerelease: "false"
 apiVersion: v2
-appVersion: 3.11.0
+appVersion: 5.5.0
 dependencies:
-- condition: etcd.enabled
-  name: etcd
-  repository: file://charts/etcd
-  version: 9.7.3
-- alias: dashboard
-  condition: dashboard.enabled
-  name: apisix-dashboard
-  repository: https://apache.github.io/apisix-helm-chart
-  version: 0.8.2
-- alias: ingress-controller
-  condition: ingress-controller.enabled
-  name: apisix-ingress-controller
-  repository: https://apache.github.io/apisix-helm-chart
-  version: 0.14.0
+  - condition: etcd.enabled
+    name: etcd
+    repository: file://charts/etcd
+    version: 9.7.3
+  - alias: dashboard
+    condition: dashboard.enabled
+    name: apisix-dashboard
+    repository: https://apache.github.io/apisix-helm-chart
+    version: 0.8.2
+  - alias: ingress-controller
+    condition: ingress-controller.enabled
+    name: apisix-ingress-controller
+    repository: https://apache.github.io/apisix-helm-chart
+    version: 0.14.0
 description: A Helm chart for Apache APISIX v3
 icon: https://apache.org/logos/res/apisix/apisix.png
 maintainers:
-- name: tao12345666333
+  - name: tao12345666333
 name: apisix
 sources:
-- https://github.com/apache/apisix-helm-chart
+  - https://github.com/apache/apisix-helm-chart
 type: application
-version: "5.3.0"
+version: "5.5.0"

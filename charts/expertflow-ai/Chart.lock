@@ -1,0 +1,9 @@
+dependencies:
+- name: llm-connector
+  repository: file://charts/llm-connector
+  version: 1.0.14
+- name: ai-analyzer
+  repository: file://charts/ai-analyzer
+  version: 1.0.14
+digest: sha256:dea7778e8a317eb9cc4c5f6600cbef72e0d6c5472c078adfe523b591961c9e05
+generated: "2026-07-02T14:41:44.070883+05:00"

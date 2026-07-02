@@ -33,6 +33,14 @@ dependencies:
     version: 5.0-alpha
     condition: prometheus.enabled
     repository: file://charts/prometheus
+  - name: ai-evaluator-fetcher
+    version: 1.0.14
+    condition: ai-evaluator-fetcher.enabled
+    repository: file://charts/ai-evaluator-fetcher
+  - name: ai-evaluator-processor
+    version: 1.0.14
+    condition: ai-evaluator-processor.enabled
+    repository: file://charts/ai-evaluator-processor
 # A chart can be either an 'application' or a 'debug' chart.
 
 # Application charts are a collection of templates that can be packaged into versioned archives
@@ -45,13 +53,13 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: "5.4.0"
+version: "5.5.0"
 #
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "5.4.0"
+appVersion: "5.5.0"
 maintainers:
   - name: NMR Nasir Mehmood Rajput
     email: nasir.mehmood@expertflow.com

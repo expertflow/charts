@@ -14,5 +14,11 @@ dependencies:
 - name: prometheus
   repository: file://charts/prometheus
   version: 5.0-alpha
-digest: sha256:cf927b06df24809dd5a620306eec87bb8dff1aff09f67211423fe8f7ad586631
-generated: "2026-05-22T18:27:56.88792+05:00"
+- name: ai-evaluator-fetcher
+  repository: file://charts/ai-evaluator-fetcher
+  version: 1.0.14
+- name: ai-evaluator-processor
+  repository: file://charts/ai-evaluator-processor
+  version: 1.0.14
+digest: sha256:862064cdc027a7697673cbdfa0e6e3e86d9d8c230630700e99894d85e8e464f3
+generated: "2026-07-02T14:40:54.859193+05:00"

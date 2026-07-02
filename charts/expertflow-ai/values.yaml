@@ -1,0 +1,289 @@
+global:
+  ingressRouter: "ai.expertflow.com"
+  ingressCertName: "ef-ingress-tls-secret"
+  ingressClassName: "nginx"
+  efCxReleaseName: "ef-cx"
+  efConnectionsConfigMapName: ""
+  imagePullSecrets:
+   - expertflow-reg-cred
+   
+  efCommonVars_MASK_ATTRIBUTES_PATH: /sensitive.js
+  efCommonVars_LOGGING_CONFIG: /logback/logback-spring.xml
+  
+  ACTIVEMQ_KEY_STORE_PASSWORD: "Expertflow123"
+  ACTIVEMQ_KEY_STORE_PATH: "activemq_keystore.p12"
+  ACTIVEMQ_MAX_RECONNECT_ATTEMPTS: "-1"
+  ACTIVEMQ_OPEN_WIRE_PORT: "61616"
+  ACTIVEMQ_PRIMARY_URL: "activemq-artemis-svc.ef-external.svc"
+  ACTIVEMQ_PRIORITY_BACKUP: "true"
+  ACTIVEMQ_RANDOMIZE: "false"
+  ACTIVEMQ_SECONDARY_URL: "activemq-artemis-svc.ef-external.svc"
+  ACTIVEMQ_STOMP_PORT: "61616"
+  ACTIVEMQ_REJECT_UNAUTHORIZED: "true"
+  ACTIVEMQ_RETRY_INTERVAL: "30000"
+  ACTIVEMQ_HA: "true"
+  ACTIVEMQ_TIMEOUT: "30000"
+  ACTIVEMQ_TRANSPORT: "tcp"
+  ACTIVEMQ_TRUST_STORE_PASSWORD: "Expertflow123"
+  ACTIVEMQ_TRUST_STORE_PATH: "activemq_truststore.p12"
+  ACTIVEMQ_CLIENT_CERT: /activemq/tls.crt
+  ACTIVEMQ_CLIENT_KEY: /activemq/tls.key
+  ACTIVEMQ_CA_CERT: /activemq/ca.crt
+  ACTIVEMQ_SSL_VERIFY_HOST: "false"
+  ACTIVEMQ_SSL_TRUST_ALL: "true"
+  TOPIC_CONCURRENCY_MIN: "2"
+  TOPIC_CONCURRENCY_MAX: "6"
+
+  REDIS_HOST: redis-thirdparty-master.ef-external.svc
+  REDIS_USER: "superuser"
+  REDIS_DB: "0"
+  REDIS_PORT: "6379"
+  REDIS_MAX_ACTIVE: "50"
+  REDIS_MAX_IDLE: "50"
+  REDIS_MAX_WAIT: "-1"
+  REDIS_MIN_IDLE: "25"
+  REDIS_SSL_ENABLED: "true"
+  REDIS_CLIENT_CERT: /redis/tls.crt
+  REDIS_CLIENT_KEY: /redis/tls.key
+  REDIS_CA_CERT: /redis/ca.crt
+  REDIS_TIMEOUT: "5000"
+  REDIS_CONNECT_TIMEOUT: "300"
+  REDIS_SENTINEL_ENABLE: "false"
+  REDIS_SENTINEL_MASTER: expertflow
+  REDIS_SENTINEL_NODES: redis-ha-node-0.redis-ha-headless.ef-external.svc.cluster.local:26379,redis-ha-node-1.redis-ha-headless.ef-external.svc.cluster.local:26379,redis-ha-node-2.redis-ha-headless.ef-external.svc.cluster.local:26379
+  REDIS_SENTINEL_PASSWORD: Expertflow123
+  TRUST_STORE_PASSWORD: "Expertflow123"
+  KEY_STORE_PASSWORD: "Expertflow123"
+  ENABLE_CLOUD_MANAGED_CONNECTIONS: "false"
+  
+
+##############################llm-connector##############################
+llm-connector:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: bot/ai/ef_llm_connector
+    tag: "5.5.0"
+  efConnectionVars: true
+  efEnvironmentVars: false
+  extraEnvVarsSecret: "expertflow-ai-env"
+  containerPorts:
+    - name: "http-l-c-8000"
+      containerPort: 8000
+
+ 
+  extraEnvVars:
+    - name: REDIS_HOST
+      value: '{{ .Values.global.REDIS_HOST }}'
+    - name: REDIS_USER
+      value: '{{ .Values.global.REDIS_USER }}'
+    - name: REDIS_DB
+      value: '{{ .Values.global.REDIS_DB }}'
+    - name: REDIS_PORT
+      value: '{{ .Values.global.REDIS_PORT }}'
+    - name: REDIS_SENTINEL_ENABLE
+      value: '{{ .Values.global.REDIS_SENTINEL_ENABLE }}'
+    - name: REDIS_SENTINEL_MASTER
+      value: '{{ .Values.global.REDIS_SENTINEL_MASTER }}'
+    - name: REDIS_SENTINEL_NODES
+      value: '{{ .Values.global.REDIS_SENTINEL_NODES }}'
+    - name: REDIS_SENTINEL_PASSWORD
+      value: '{{ .Values.global.REDIS_SENTINEL_PASSWORD }}'
+    - name: REDIS_TIMEOUT
+      value: '{{ .Values.global.REDIS_TIMEOUT }}'
+    - name: REDIS_SSL_ENABLED
+      value: '{{ .Values.global.REDIS_SSL_ENABLED }}'
+    - name: REDIS_MAX_ACTIVE
+      value: '{{ .Values.global.REDIS_MAX_ACTIVE }}'
+    - name: REDIS_MAX_IDLE
+      value: '{{ .Values.global.REDIS_MAX_IDLE }}'
+    - name: REDIS_MIN_IDLE
+      value: '{{ .Values.global.REDIS_MIN_IDLE }}'
+    - name: REDIS_MAX_WAIT
+      value: '{{ .Values.global.REDIS_MAX_WAIT }}'
+    - name: REDIS_CLIENT_CERT
+      value: '{{ .Values.global.REDIS_CLIENT_CERT }}'
+    - name: REDIS_CLIENT_KEY
+      value: '{{ .Values.global.REDIS_CLIENT_KEY }}'
+    - name: REDIS_CA_CERT
+      value: '{{ .Values.global.REDIS_CA_CERT }}'
+    - name: TENANT_SERVICE_URL
+      value: "http://ef-cx-cx-tenant-svc:3000"
+    - name: LOG_LEVEL
+      value: "INFO"
+
+  service:
+    type: ClusterIP          
+    enabled: true
+    port: 8000
+    portName: "http-l-c-8000"
+    targetPort: "http-l-c-8000"
+    
+
+  extraVolumes:
+    - name: llm-config
+      configMap:
+        name: ef-llm-api-config
+    - name: redis-thirdparty-crt
+      secret:
+        secretName: redis-thirdparty-crt
+    - name: expertflow-ai-secrets
+      csi:
+        driver: secrets-store.csi.k8s.io
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: "expertflow-ai-vault"
+  
+  extraVolumeMounts:
+    - name: llm-config
+      mountPath: /app/config
+    - name: redis-thirdparty-crt
+      mountPath: /redis
+      readOnly: true
+    - name: expertflow-ai-secrets
+      mountPath: /mnt/secrets-store
+      readOnly: true
+
+  ingress:
+    enabled: false
+
+##############################AI-ANALYZER##############################
+ai-analyzer:
+  enabled: true
+  nameOverride: "analyzer"
+  image:
+    repository: bot/ai/ai_analyzer
+    tag: "5.5.0"
+  efConnectionVars: true
+  efEnvironmentVars: false
+  extraEnvVarsSecret: "expertflow-ai-env"
+  containerPorts:
+    - name: "http-a-c-5052"
+      containerPort: 5052
+  extraEnvVars:
+    - name: TOPIC_CONCURRENCY_MIN
+      value: '{{ .Values.global.TOPIC_CONCURRENCY_MIN }}'
+    - name: TOPIC_CONCURRENCY_MAX
+      value: '{{ .Values.global.TOPIC_CONCURRENCY_MAX }}'
+    - name: REDIS_HOST
+      value: '{{ .Values.global.REDIS_HOST }}'
+    - name: REDIS_USER
+      value: '{{ .Values.global.REDIS_USER }}'
+    - name: REDIS_PORT
+      value: '{{ .Values.global.REDIS_PORT }}'
+    - name: REDIS_SENTINEL_ENABLE
+      value: '{{ .Values.global.REDIS_SENTINEL_ENABLE }}'
+    - name: REDIS_SENTINEL_MASTER
+      value: '{{ .Values.global.REDIS_SENTINEL_MASTER }}'
+    - name: REDIS_SENTINEL_NODES
+      value: '{{ .Values.global.REDIS_SENTINEL_NODES }}'
+    - name: REDIS_SENTINEL_PASSWORD
+      value: '{{ .Values.global.REDIS_SENTINEL_PASSWORD }}'
+    - name: REDIS_TIMEOUT
+      value: '{{ .Values.global.REDIS_TIMEOUT }}'
+    - name: REDIS_SSL_ENABLED
+      value: '{{ .Values.global.REDIS_SSL_ENABLED }}'
+    - name: REDIS_MAX_ACTIVE
+      value: '{{ .Values.global.REDIS_MAX_ACTIVE }}'
+    - name: REDIS_MAX_IDLE
+      value: '{{ .Values.global.REDIS_MAX_IDLE }}'
+    - name: REDIS_MIN_IDLE
+      value: '{{ .Values.global.REDIS_MIN_IDLE }}'
+    - name: REDIS_MAX_WAIT
+      value: '{{ .Values.global.REDIS_MAX_WAIT }}'
+    - name: REDIS_CLIENT_CERT
+      value: '{{ .Values.global.REDIS_CLIENT_CERT }}'
+    - name: REDIS_CLIENT_KEY
+      value: '{{ .Values.global.REDIS_CLIENT_KEY }}'
+    - name: REDIS_CA_CERT
+      value: '{{ .Values.global.REDIS_CA_CERT }}'
+    - name: ACTIVEMQ_KEY_STORE_PASSWORD
+      value: '{{ .Values.global.ACTIVEMQ_KEY_STORE_PASSWORD }}'
+    - name: ACTIVEMQ_KEY_STORE_PATH
+      value: '{{ .Values.global.ACTIVEMQ_KEY_STORE_PATH }}'
+    - name: ACTIVEMQ_MAX_RECONNECT_ATTEMPTS
+      value: '{{ .Values.global.ACTIVEMQ_MAX_RECONNECT_ATTEMPTS }}'
+    - name: ACTIVEMQ_OPEN_WIRE_PORT
+      value: '{{ .Values.global.ACTIVEMQ_OPEN_WIRE_PORT }}'
+    - name: ACTIVEMQ_PRIMARY_URL
+      value: '{{ .Values.global.ACTIVEMQ_PRIMARY_URL }}'
+    - name: ACTIVEMQ_PRIORITY_BACKUP
+      value: '{{ .Values.global.ACTIVEMQ_PRIORITY_BACKUP }}'
+    - name: ACTIVEMQ_RANDOMIZE
+      value: '{{ .Values.global.ACTIVEMQ_RANDOMIZE }}'
+    - name: ACTIVEMQ_SECONDARY_URL
+      value: '{{ .Values.global.ACTIVEMQ_SECONDARY_URL }}'
+    - name: ACTIVEMQ_STOMP_PORT
+      value: '{{ .Values.global.ACTIVEMQ_STOMP_PORT }}'
+    - name: ACTIVEMQ_TIMEOUT
+      value: '{{ .Values.global.ACTIVEMQ_TIMEOUT }}'
+    - name: ACTIVEMQ_TRANSPORT
+      value: '{{ .Values.global.ACTIVEMQ_TRANSPORT }}'
+    - name: ACTIVEMQ_TRUST_STORE_PASSWORD
+      value: '{{ .Values.global.ACTIVEMQ_TRUST_STORE_PASSWORD }}'
+    - name: ACTIVEMQ_TRUST_STORE_PATH
+      value: '{{ .Values.global.ACTIVEMQ_TRUST_STORE_PATH }}'
+    - name: ACTIVEMQ_CLIENT_CERT
+      value: '{{ .Values.global.ACTIVEMQ_CLIENT_CERT }}'
+    - name: ACTIVEMQ_CLIENT_KEY
+      value: '{{ .Values.global.ACTIVEMQ_CLIENT_KEY }}'
+    - name: ACTIVEMQ_CA_CERT
+      value: '{{ .Values.global.ACTIVEMQ_CA_CERT }}'
+    - name: ACTIVEMQ_HA
+      value: '{{ .Values.global.ACTIVEMQ_HA }}'
+    - name: ACTIVEMQ_RETRY_INTERVAL
+      value: '{{ .Values.global.ACTIVEMQ_RETRY_INTERVAL }}'
+    - name: ACTIVEMQ_SSL_VERIFY_HOST
+      value: '{{ .Values.global.ACTIVEMQ_SSL_VERIFY_HOST }}'
+    - name: ACTIVEMQ_SSL_TRUST_ALL
+      value: '{{ .Values.global.ACTIVEMQ_SSL_TRUST_ALL }}'
+    - name: TRUST_STORE_PASSWORD
+      value: '{{ .Values.global.TRUST_STORE_PASSWORD }}'
+    - name: KEY_STORE_PASSWORD
+      value: '{{ .Values.global.KEY_STORE_PASSWORD }}'
+    - name: LLM_API
+      value: "http://expertflow-ai-llm-connector-svc.expertflow:8000/ef-llm-connector/conversation-summary"
+    - name: SCHEDULER_FIXED_RATE
+      value: "5000"
+    - name: ASYNC_EXECUTOR_CORE
+      value: "5"
+    - name: ASYNC_EXECUTOR_MAX
+      value: "50"
+    - name: ASYNC_EXECUTOR_QUEUE
+      value: "1000"
+    - name: TZ
+      value: '{{ .Values.global.efCommonVars_TZ }}'
+    - name: LOGGING_CONFIG
+      value: "classpath:logback.xml"
+    - name: MASKING_LAYOUT_CLASS
+      value: "com.java.analyzer.logging.MaskingPatternLayout"
+  service:
+    enabled: true
+    port: 5052
+    portName: "http-a-c-5052"
+    targetPort: "http-a-c-5052"
+  ingress:
+    enabled: false
+    
+  extraVolumes:
+    - name: redis-thirdparty-crt
+      secret:
+        secretName: redis-thirdparty-crt
+    - name: activemq-tls
+      secret:
+        secretName: activemq-tls
+    - name: expertflow-ai-secrets
+      csi:
+        driver: secrets-store.csi.k8s.io
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: "expertflow-ai-vault"
+  extraVolumeMounts:
+    - name: redis-thirdparty-crt
+      mountPath: /redis
+    - name: activemq-tls
+      mountPath: /activemq
+    - name: expertflow-ai-secrets
+      mountPath: /mnt/secrets-store
+      readOnly: true
+      

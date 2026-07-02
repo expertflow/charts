@@ -199,7 +199,7 @@ smpp-connector:
    replicaCount: 1
    image:       
       repository: cti/hc_smpp_connector
-      tag: "5.4.0"
+      tag: "5.5.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -320,7 +320,7 @@ twitter-connector:
    replicaCount: 1
    image:       
       repository: cim/twitter-connector
-      tag: "5.4.0"
+      tag: "5.5.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -333,6 +333,14 @@ twitter-connector:
         value: "http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
       - name: FILE_ENGINE_URL
         value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
+      - name: TWITTER_API_BASE_URL
+        value: "https://api.twitter.com"
+      - name: SCHEDULER_FIXED_RATE_IN_MS
+        value: 180000
+      - name: TWITTER_SM_BATCH_SIZE
+        value: 20
+      - name: TWITTER_DM_BATCH_SIZE
+        value: 20
    siteEnvVars: []
    configKeys: []
    service:
@@ -501,7 +509,7 @@ youtube-connector:
   replicaCount: 1
   image:
     repository: cim/youtube-connector
-    tag: "5.4.0"
+    tag: "5.5.0"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -534,7 +542,7 @@ linkedin-connector:
    replicaCount: 1
    image:
       repository: project_dev/linkedinconnector
-      tag: "5.4.0"
+      tag: "5.5.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -549,30 +557,14 @@ linkedin-connector:
         value: "10000000"
       - name: enable.ssl.env
         value: "false"
-      - name: linkedin.scheduler.fixed-rate
-        value: "150"
-      - name: LINKEDIN_CIM_SERVICE_ID
-        value: "2001"
-      - name: AUTO_SCHEDULER_STARTUP
-        value: "true"
       - name: TZ
         value: '{{ .Values.global.efCommonVars_TZ }}'
-      - name: LOGGING_CONFIG
-        value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
       - name: LINKEDIN_CIM_SERVICE_URL
         value: "http://{{ .Values.global.efCxReleaseName }}-ccm-svc.{{ .Release.Namespace }}.svc:8081"
       - name: LINKEDIN_CIM_FILE_ENGINE_URL
         value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
-      - name: FILE_ENGINE_BASE_FQDN        
+      - name: FILE_ENGINE_BASE_FQDN
         value: "http://{{ .Values.global.efCxReleaseName }}-file-engine-svc.{{ .Release.Namespace }}.svc:8080"
-      - name: MASKING_LAYOUT_CLASS
-        value: "com.linkedin.connector.logging.MaskingPatternLayout"
-      - name: DATABASE_URL
-        value: jdbc:postgresql://ef-postgresql.ef-external.svc:5432/linkedinmetadata?sslmode=verify-ca&sslrootcert=/postgresql/ca.crt
-      - name: DATABASE_USERNAME
-        value: "sa"
-      - name: DATABASE_PASSWORD
-        value: "Expertflow123"
    siteEnvVars: []
    configKeys: []
    service:
@@ -585,14 +577,9 @@ linkedin-connector:
       - name: ef-logback
         configMap:
           name: ef-logback-cm
-      - name: ef-postgresql-crt-vol
-        secret:
-          secretName: ef-postgresql-crt
    extraVolumeMounts:
       - name: ef-logback
         mountPath: /logback
-      - name: ef-postgresql-crt-vol
-        mountPath: /postgresql
 
 
 ##############################Google-PlayStore-Connector##############################

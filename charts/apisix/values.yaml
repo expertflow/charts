@@ -1195,6 +1195,15 @@ apisixStandalone: |
          scheme: http
          type: roundrobin
          timeout: { connect: 5, send: 10, read: 10 }
+     # From expertflow-ai Chart (Release: expertflow-ai, Namespace: expertflow)
+     - id: svc-llm-connector
+       name: svc-llm-connector
+       upstream:
+         discovery_type: kubernetes
+         service_name: "expertflow/expertflow-ai-llm-connector-svc:http-l-c-8000"
+         scheme: http
+         type: roundrobin
+         timeout: { connect: 5, send: 120, read: 120 }
      # Dummy service for the 404 handler route to satisfy schema requirements
      - id: dummy-service-for-404
        name: dummy-service-for-404
@@ -2079,6 +2088,52 @@ apisixStandalone: |
          client-control:
            enable: true
            config: { max_body_size: 6291456 }
+
+     # --- llm-connector public API ---
+     - id: expertflow-ai-llm-connector-refine-text-public
+       uris: ["/llm/refine-text"]
+       methods: ["POST", "OPTIONS"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       priority: 200
+       service_id: svc-llm-connector
+       status: 1
+       plugins:
+         {{- if .Values.global.oidc.enabled }}
+         openid-connect:
+           discovery: "{{ $oidcDiscovery }}"
+           realm: "{{ $oidcRealm }}"
+           client_id: "{{ $oidcClientId }}"
+           client_secret: "{{ $oidcClientSecret }}"
+           bearer_only: true
+           token_signing_alg_values_expected: "RS256"
+           set_access_token_header: false
+           set_userinfo_header: false
+           audience: ["cim", "account", "realm-management"]
+           required_scopes: ["email", "profile"]
+         authz-keycloak:
+           lazy_load_paths: true
+           http_method_as_scope: true
+           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
+           discovery: "{{ $oidcAuthzDiscovery }}"
+           client_id: "{{ $oidcClientId }}"
+           client_secret: "{{ $oidcClientSecret }}"
+         {{- end }}
+         cors:
+           enable: true
+           allow_origins: "*"
+           allow_methods: "POST,OPTIONS"
+           allow_headers: "*"
+           expose_headers: "*"
+           allow_credential: false
+           max_age: 3600
+         limit-count:
+           enable: true
+           count: 60
+           time_window: 60
+           key_type: "var"
+           key: "remote_addr"
+           rejected_code: 429
+           policy: local
      
      # GLOBAL CATCH-ALL
      # Priority: -10

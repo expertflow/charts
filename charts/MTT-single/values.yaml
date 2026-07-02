@@ -52,6 +52,26 @@ global:
   efCommonVars_TOPIC_CONCURRENCY_MIN: "2"
   efCommonVars_TOPIC_CONCURRENCY_MAX: "6"
   efCommonVars_MEMORY_THRESHOLD_MBS: 1000
+  TRUST_STORE_PASSWORD: "Expertflow123"
+  KEY_STORE_PASSWORD: "Expertflow123"
+  THIRDPARTY_REDIS_HOST: redis-thirdparty-master.ef-external.svc
+  THIRDPARTY_REDIS_USER: "superuser"
+  THIRDPARTY_REDIS_DB: "0"
+  THIRDPARTY_REDIS_PORT: "6379"
+  THIRDPARTY_REDIS_MAX_ACTIVE: "50"
+  THIRDPARTY_REDIS_MAX_IDLE: "50"
+  THIRDPARTY_REDIS_MAX_WAIT: "-1"
+  THIRDPARTY_REDIS_MIN_IDLE: "25"
+  THIRDPARTY_REDIS_SSL_ENABLED: "true"
+  THIRDPARTY_REDIS_CLIENT_CERT: /redis/tls.crt
+  THIRDPARTY_REDIS_CLIENT_KEY: /redis/tls.key
+  THIRDPARTY_REDIS_CA_CERT: /redis/ca.crt
+  THIRDPARTY_REDIS_TIMEOUT: "5000"
+  THIRDPARTY_REDIS_CONNECT_TIMEOUT: "300"
+  THIRDPARTY_REDIS_SENTINEL_ENABLE: "false"
+  THIRDPARTY_REDIS_SENTINEL_MASTER: expertflow
+  THIRDPARTY_REDIS_SENTINEL_NODES: redis-ha-node-0.redis-ha-headless.ef-external.svc.cluster.local:26379,redis-ha-node-1.redis-ha-headless.ef-external.svc.cluster.local:26379,redis-ha-node-2.redis-ha-headless.ef-external.svc.cluster.local:26379
+  THIRDPARTY_REDIS_SENTINEL_PASSWORD: Expertflow123
   apisixInternalServiceHostname: "apisix-data-plane.ef-external.svc.cluster.local" # From your 'kubectl get svc -n ef-external'
   apisixInternalServicePort: 80 # Default HTTP port for APISIX gateway service
   apisix:
@@ -185,6 +205,10 @@ conversation-studio:
       value: "admin"
     - name: VAULT_ENABLED
       value: "true"
+    - name: EF_ANALYZER_URL
+      value: "http://expertflow-ai-analyzer-svc.expertflow:5052"
+    - name: EF_LLM_CONNECTOR_URL
+      value: "http://expertflow-ai-llm-connector-svc.expertflow:8000/ef-llm-connector"
   siteEnvVars: []
   configKeys: []
   service:
@@ -223,7 +247,7 @@ campaign-studio:
    enabled: true
    image:       
       repository: cim/conversation-studio
-      tag: "5.4.0"
+      tag: "5.5.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -324,6 +348,8 @@ campaign-studio:
         value: http://{{ .Values.global.efCxReleaseName }}-cim-customer-svc.expertflow.svc:8080
       - name: PROMETHEUS_URL
         value: http://{{ .Release.Name }}-prometheus-svc.{{ .Release.Namespace }}.svc:9090
+      - name: CACHE_TTL_MINS
+        value: 60
    siteEnvVars: []
    configKeys: []
    service:
@@ -593,3 +619,230 @@ prometheus:
                    - cx-campaigns-campaigns-backend-svc.expertflow.svc:3000
                 labels:
                    app: campaign-backend
+
+##############################ai_evaluator_processor##############################
+ai-evaluator-processor:
+  enabled: false
+  image:
+    repository: project_dev/qualitymanager/ai_evaluator_processor
+    tag: "5.5.0"
+  efConnectionVars: true
+  efEnvironmentVars: false
+  extraEnvVarsSecret: "expertflow-ai-env"
+  containerPorts:
+    - name: "http-ep-9001"
+      containerPort: 9001
+  extraEnvVars:
+    - name: http.connect.timeout.sec
+      value: "500000"
+    - name: http.read.timeout.sec
+      value: "1000000"
+    - name: http.request.timeout.sec
+      value: "10000000"
+    - name: enable.ssl.env
+      value: "false"
+    - name: TENANT_ID
+      value: '{{ .Values.global.tenantId }}'
+    - name: REVIEWER_NAME
+      value: "AI Evaluator"
+    - name: CX_FQDN
+      value: '{{ .Values.global.ingressRouter }}'
+    - name: LLM_API
+      value: "http://expertflow-ai-llm-connector-svc.expertflow:8000/EFLLM/generate_response"
+    - name: REDIS_QUEUE_WAIT
+      value: "5"
+    - name: SCHEDULER_FIXED_RATE
+      value: "5000"
+    - name: ASYNC_EXECUTOR_CORE
+      value: "5"
+    - name: ASYNC_EXECUTOR_MAX
+      value: "50"
+    - name: ASYNC_EXECUTOR_QUEUE
+      value: "1000"
+    - name: REDIS_HOST
+      value: '{{ .Values.global.THIRDPARTY_REDIS_HOST }}'
+    - name: REDIS_USER
+      value: '{{ .Values.global.THIRDPARTY_REDIS_USER }}'
+    - name: REDIS_PORT
+      value: '{{ .Values.global.THIRDPARTY_REDIS_PORT }}'
+    - name: REDIS_SENTINEL_ENABLE
+      value: '{{ .Values.global.THIRDPARTY_REDIS_SENTINEL_ENABLE }}'
+    - name: REDIS_SENTINEL_MASTER
+      value: '{{ .Values.global.THIRDPARTY_REDIS_SENTINEL_MASTER }}'
+    - name: REDIS_SENTINEL_NODES
+      value: '{{ .Values.global.THIRDPARTY_REDIS_SENTINEL_NODES }}'
+    - name: REDIS_SENTINEL_PASSWORD
+      value: '{{ .Values.global.THIRDPARTY_REDIS_SENTINEL_PASSWORD }}'
+    - name: REDIS_TIMEOUT
+      value: '{{ .Values.global.THIRDPARTY_REDIS_TIMEOUT }}'
+    - name: REDIS_SSL_ENABLED
+      value: '{{ .Values.global.THIRDPARTY_REDIS_SSL_ENABLED }}'
+    - name: REDIS_MAX_ACTIVE
+      value: '{{ .Values.global.THIRDPARTY_REDIS_MAX_ACTIVE }}'
+    - name: REDIS_MAX_IDLE
+      value: '{{ .Values.global.THIRDPARTY_REDIS_MAX_IDLE }}'
+    - name: REDIS_MIN_IDLE
+      value: '{{ .Values.global.THIRDPARTY_REDIS_MIN_IDLE }}'
+    - name: REDIS_MAX_WAIT
+      value: '{{ .Values.global.THIRDPARTY_REDIS_MAX_WAIT }}'
+    - name: REDIS_CLIENT_CERT
+      value: '{{ .Values.global.THIRDPARTY_REDIS_CLIENT_CERT }}'
+    - name: REDIS_CLIENT_KEY
+      value: '{{ .Values.global.THIRDPARTY_REDIS_CLIENT_KEY }}'
+    - name: REDIS_CA_CERT
+      value: '{{ .Values.global.THIRDPARTY_REDIS_CA_CERT }}'
+    - name: TRUST_STORE_PASSWORD
+      value: '{{ .Values.global.TRUST_STORE_PASSWORD }}'
+    - name: KEY_STORE_PASSWORD
+      value: '{{ .Values.global.KEY_STORE_PASSWORD }}'
+    - name: TZ
+      value: '{{ .Values.global.efCommonVars_TZ }}'
+    - name: LOGGING_CONFIG
+      value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
+    - name: MASKING_LAYOUT_CLASS
+      value: "com.java.processor.logging.MaskingPatternLayout"
+    - name: AZURE_CONNECTIONS_ENABLE
+      value: "false"
+    - name: LOGGING_LEVEL
+      value: "DEBUG"
+
+  service:
+      enabled: true
+      port: 9001
+      portName: "http-ep-9001"
+      targetPort: "http-ep-9001"
+  ingress:
+    enabled: false
+    
+  extraVolumes:
+    - name: ef-logback
+      configMap:
+        name: ef-logback-cm
+    - name: redis-thirdparty-crt
+      secret:
+        secretName: redis-thirdparty-crt
+    - name: expertflow-ai-secrets
+      csi:
+        driver: secrets-store.csi.k8s.io
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: "expertflow-ai-vault"
+  extraVolumeMounts:
+    - name: ef-logback
+      mountPath: /logback
+    - name: redis-thirdparty-crt
+      mountPath: /redis
+    - name: expertflow-ai-secrets
+      mountPath: /mnt/secrets-store
+      readOnly: true
+
+##############################ai_evaluator_fetcher##############################
+ai-evaluator-fetcher:
+  enabled: false
+  image:
+    repository: project_dev/qualitymanager/ai_evaluator_fetcher
+    tag: "5.5.0"
+  efConnectionVars: true
+  efEnvironmentVars: false
+  extraEnvVarsSecret: "expertflow-ai-env"
+  containerPorts:
+    - name: "http-ef-9002"
+      containerPort: 9002
+  extraEnvVars:
+    - name: http.connect.timeout.sec
+      value: "500000"
+    - name: http.read.timeout.sec
+      value: "1000000"
+    - name: http.request.timeout.sec
+      value: "10000000"
+    - name: enable.ssl.env
+      value: "false"
+    - name: TENANT_ID
+      value: '{{ .Values.global.tenantId }}'
+    - name: CX_FQDN
+      value: '{{ .Values.global.ingressRouter }}'
+    - name: REVIEW_LIMIT
+      value: "5"
+    - name: SCHEDULER_FIXED_RATE
+      value: "5000"
+    - name: ASYNC_EXECUTOR_CORE
+      value: "5"
+    - name: ASYNC_EXECUTOR_MAX
+      value: "50"
+    - name: ASYNC_EXECUTOR_QUEUE
+      value: "1000"
+    - name: REDIS_HOST
+      value: '{{ .Values.global.THIRDPARTY_REDIS_HOST }}'
+    - name: REDIS_USER
+      value: '{{ .Values.global.THIRDPARTY_REDIS_USER }}'
+    - name: REDIS_PORT
+      value: '{{ .Values.global.THIRDPARTY_REDIS_PORT }}'
+    - name: REDIS_SENTINEL_ENABLE
+      value: '{{ .Values.global.THIRDPARTY_REDIS_SENTINEL_ENABLE }}'
+    - name: REDIS_SENTINEL_MASTER
+      value: '{{ .Values.global.THIRDPARTY_REDIS_SENTINEL_MASTER }}'
+    - name: REDIS_SENTINEL_NODES
+      value: '{{ .Values.global.THIRDPARTY_REDIS_SENTINEL_NODES }}'
+    - name: REDIS_SENTINEL_PASSWORD
+      value: '{{ .Values.global.THIRDPARTY_REDIS_SENTINEL_PASSWORD }}'
+    - name: REDIS_TIMEOUT
+      value: '{{ .Values.global.THIRDPARTY_REDIS_TIMEOUT }}'
+    - name: REDIS_SSL_ENABLED
+      value: '{{ .Values.global.THIRDPARTY_REDIS_SSL_ENABLED }}'
+    - name: REDIS_MAX_ACTIVE
+      value: '{{ .Values.global.THIRDPARTY_REDIS_MAX_ACTIVE }}'
+    - name: REDIS_MAX_IDLE
+      value: '{{ .Values.global.THIRDPARTY_REDIS_MAX_IDLE }}'
+    - name: REDIS_MIN_IDLE
+      value: '{{ .Values.global.THIRDPARTY_REDIS_MIN_IDLE }}'
+    - name: REDIS_MAX_WAIT
+      value: '{{ .Values.global.THIRDPARTY_REDIS_MAX_WAIT }}'
+    - name: REDIS_CLIENT_CERT
+      value: '{{ .Values.global.THIRDPARTY_REDIS_CLIENT_CERT }}'
+    - name: REDIS_CLIENT_KEY
+      value: '{{ .Values.global.THIRDPARTY_REDIS_CLIENT_KEY }}'
+    - name: REDIS_CA_CERT
+      value: '{{ .Values.global.THIRDPARTY_REDIS_CA_CERT }}'
+    - name: TRUST_STORE_PASSWORD
+      value: '{{ .Values.global.TRUST_STORE_PASSWORD }}'
+    - name: KEY_STORE_PASSWORD
+      value: '{{ .Values.global.KEY_STORE_PASSWORD }}'
+    - name: TZ
+      value: '{{ .Values.global.efCommonVars_TZ }}'
+    - name: LOGGING_CONFIG
+      value: '{{ .Values.global.efCommonVars_LOGGING_CONFIG  }}'
+    - name: MASKING_LAYOUT_CLASS
+      value: "com.java.fetch.logging.MaskingPatternLayout"
+    - name: AZURE_CONNECTIONS_ENABLE
+      value: "false"
+    - name: LOGGING_LEVEL
+      value: "DEBUG"
+  service:
+      enabled: true
+      port: 9001
+      portName: "http-ef-9001"
+      targetPort: "http-ef-9001"
+  ingress:
+    enabled: false
+    
+  extraVolumes:
+    - name: ef-logback
+      configMap:
+        name: ef-logback-cm
+    - name: redis-thirdparty-crt
+      secret:
+        secretName: redis-thirdparty-crt
+    - name: expertflow-ai-secrets
+      csi:
+        driver: secrets-store.csi.k8s.io
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: "expertflow-ai-vault"
+  extraVolumeMounts:
+    - name: ef-logback
+      mountPath: /logback
+    - name: redis-thirdparty-crt
+      mountPath: /redis
+    - name: expertflow-ai-secrets
+      mountPath: /mnt/secrets-store
+      readOnly: true

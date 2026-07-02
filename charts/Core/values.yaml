@@ -170,7 +170,7 @@ agent-manager:
     replicaCount: 1
     image:
         repository: cim/agent-manager
-        tag: "5.2.0"
+        tag: "5.5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -493,7 +493,7 @@ cim-customer:
     replicaCount: 1
     image:
        repository: cim/cim-backend
-       tag: "5.3.0"
+       tag: "5.5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -514,6 +514,8 @@ cim-customer:
          value: "database/creds/mongodb-role"
        - name: MONGODB_AUTHENTICATION_DATABASE
          value: "admin"
+       - name: CHECK_TIMEZONE
+         value: false
     siteEnvVars: []
     configKeys: []
     service:
@@ -783,7 +785,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: "5.4.0"
+        tag: "5.5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -858,7 +860,7 @@ file-engine:
     replicaCount: 1
     image:
         repository: chat-solution/file-engine
-        tag: "5.2.0"
+        tag: "5.5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1071,7 +1073,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: "5.4.0"
+        tag: "5.5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1350,7 +1352,7 @@ team-announcement:
     replicaCount: 1
     image:
         repository: cim/team-announcement
-        tag: "5.2.0"
+        tag: "5.5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1463,7 +1465,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: "5.3.0"
+        tag: "5.5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1534,12 +1536,8 @@ unified-admin:
           value: 'https://{{ .Values.global.ingressRouter  }}/qm-backend'
         - name: WRAPUP_FORM_ID
           value: '62d07f4f0980a50a91210bef'
-        - name: REVIEWING_AGENT_CHAT
-          value: 'false'
         - name: LICENSE_EXPIRY_WARNING_DAYS
           value: '170'
-        - name: AI_EVALUATOR_ID
-          value: ''
         - name: RSA_SERVER_URL
           value: '{{ .Values.global.efCommonVars_RSA_SERVER_URL }}'
         - name: RSA_CLIENT_KEY
@@ -1550,6 +1548,8 @@ unified-admin:
           value: "database/creds/mongodb-role"
         - name: MONGODB_AUTHENTICATION_DATABASE
           value: "admin"
+        - name: LLM_CONNECTOR_URL
+          value: "http://expertflow-ai-llm-connector-svc:8000"
     siteEnvVars: []
     configKeys: []
     service:
@@ -1593,7 +1593,7 @@ web-channel-manager:
     replicaCount: 1
     image:
         repository: cim/web-channel-manager
-        tag: "5.2.0"
+        tag: "5.5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1695,7 +1695,7 @@ cx-load-hub:
     replicaCount: 1
     image:
         repository: cim/cx-load-hub
-        tag: "5.2.0"
+        tag: "5.5.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1752,7 +1752,7 @@ cx-tenant:
   replicaCount: 1
   image:
     repository: cim/cx-tenant
-    tag: "5.3.0"
+    tag: "5.5.0"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -1928,7 +1928,7 @@ otp-manager:
     replicaCount: 1
     image:
         repository: cim/otp-manager
-        tag: "5.2.0"
+        tag: "5.5.0"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
