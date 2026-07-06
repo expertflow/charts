@@ -1,0 +1,383 @@
+---
+# Source: artemis/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: activemq-artemis-svc
+  namespace: "ef-external"
+  labels:
+    app.kubernetes.io/instance: activemq
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: artemis
+    app.kubernetes.io/version: 2.42.0
+    helm.sh/chart: artemis-2.42.0
+spec:
+  type: ClusterIP
+  ports:
+    - name: amqp
+      port: 5672
+      targetPort: amqp
+      protocol: TCP
+    - name: amqp-ssl
+      port: 5671
+      targetPort: amqp-ssl
+      protocol: TCP
+    - name: artemis
+      port: 61616
+      targetPort: artemis
+      protocol: TCP
+    - name: artemis-ssl
+      port: 61617
+      targetPort: artemis-ssl
+      protocol: TCP
+    - name: hornetq
+      port: 5445
+      targetPort: hornetq
+      protocol: TCP
+    - name: mqtt
+      port: 1883
+      targetPort: mqtt
+      protocol: TCP
+    - name: mqtt-ssl
+      port: 8883
+      targetPort: mqtt-ssl
+      protocol: TCP
+    - name: stomp
+      port: 61613
+      targetPort: stomp
+      protocol: TCP
+    - name: stomp-ssl
+      port: 61612
+      targetPort: stomp-ssl
+      protocol: TCP
+    - name: web
+      port: 8161
+      targetPort: web
+      protocol: TCP
+  selector:
+    app.kubernetes.io/instance: activemq
+    app.kubernetes.io/name: artemis
+---
+# Source: artemis/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: activemq-artemis-headless
+  namespace: "ef-external"
+  labels:
+    app.kubernetes.io/instance: activemq
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: artemis
+    app.kubernetes.io/version: 2.42.0
+    helm.sh/chart: artemis-2.42.0
+spec:
+  clusterIP: None
+  ports:
+    - name: amqp
+      port: 5672
+      targetPort: amqp
+      protocol: TCP
+    - name: amqp-ssl
+      port: 5671
+      targetPort: amqp-ssl
+      protocol: TCP
+    - name: artemis
+      port: 61616
+      targetPort: artemis
+      protocol: TCP
+    - name: artemis-ssl
+      port: 61617
+      targetPort: artemis-ssl
+      protocol: TCP
+    - name: hornetq
+      port: 5445
+      targetPort: hornetq
+      protocol: TCP
+    - name: mqtt
+      port: 1883
+      targetPort: mqtt
+      protocol: TCP
+    - name: mqtt-ssl
+      port: 8883
+      targetPort: mqtt-ssl
+      protocol: TCP
+    - name: stomp
+      port: 61613
+      targetPort: stomp
+      protocol: TCP
+    - name: stomp-ssl
+      port: 61612
+      targetPort: stomp-ssl
+      protocol: TCP
+    - name: web
+      port: 8161
+      targetPort: web
+      protocol: TCP
+  selector:
+    app.kubernetes.io/instance: activemq
+    app.kubernetes.io/name: artemis
+---
+# Source: artemis/templates/deployment.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: activemq-artemis
+  namespace: "ef-external"
+  labels:
+    app.kubernetes.io/instance: activemq
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: artemis
+    app.kubernetes.io/version: 2.42.0
+    helm.sh/chart: artemis-2.42.0
+spec:
+  serviceName: activemq-artemis-svc
+  replicas: 1
+  revisionHistoryLimit: 10
+  strategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: activemq
+      app.kubernetes.io/name: artemis
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: activemq
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: artemis
+        app.kubernetes.io/version: 2.42.0
+        helm.sh/chart: artemis-2.42.0
+      annotations:
+    spec:
+      imagePullSecrets:
+        - name: expertflow-reg-cred
+      shareProcessNamespace: false
+      serviceAccountName: default
+      automountServiceAccountToken: false
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          
+        nodeAffinity:
+          
+      hostNetwork: false
+      hostIPC: false
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      containers:
+        - name: artemis
+          image: "gitimages.expertflow.com/general/activemq-artemis:2.42.0-activemq-artemis-5-2-f-cim-13375-11"
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
+            seLinuxOptions: null
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            
+              - name: "ACTIVEMQ_KEYSTORE"
+                value: "/activemq/broker.ks"
+              - name: "ACTIVEMQ_KEYSTORE_PASSWORD"
+                value: "password"
+              - name: "ACTIVEMQ_TRUSTSTORE"
+                value: "/activemq/broker.ts"
+              - name: "ACTIVEMQ_TRUSTSTORE_PASSWORD"
+                value: "password"
+              - name: "ARTEMIS_OPTS_MEMORY"
+                value: "-Xms512M -Xmx4G"
+              - name: "DB_DATASOURCE"
+                value: "postgres"
+              - name: "DB_NAME"
+                value: "artemis"
+              - name: "DB_PASSWORD"
+                value: "Expertflow123"
+              - name: "DB_PORT"
+                value: "5432"
+              - name: "DB_URL"
+                value: "ef-postgresql-postgresql-ha-pgpool.ef-external.svc"
+              - name: "DB_USER"
+                value: "sa"
+              - name: "ENABLE_CLOUD_MANAGED_CONNECTIONS"
+                value: "false"
+              - name: "KEY_STORE_PASSWORD"
+                value: "Expertflow123"
+              - name: "REDIS_HOST"
+                value: "redis-master.ef-external.svc.cluster.local"
+              - name: "REDIS_MAX_ACTIVE"
+                value: "200"
+              - name: "REDIS_MAX_IDLE"
+                value: "200"
+              - name: "REDIS_MAX_WAIT"
+                value: "-1"
+              - name: "REDIS_MIN_IDLE"
+                value: "100"
+              - name: "REDIS_PASSWORD"
+                value: "Expertflow123"
+              - name: "REDIS_PORT"
+                value: "6379"
+              - name: "REDIS_SENTINEL_ENABLE"
+                value: "false"
+              - name: "REDIS_SENTINEL_MASTER"
+                value: "expertflow"
+              - name: "REDIS_SENTINEL_NODES"
+                value: "nikka-redis-node-0.nikka-redis-headless.ef-external.svc.cluster.local:26379,nikka-redis-node-1.nikka-redis-headless.ef-external.svc.cluster.local:26379,nikka-redis-node-2.nikka-redis-headless.ef-external.svc.cluster.local:26379"
+              - name: "REDIS_SENTINEL_PASSWORD"
+                value: "Expertflow123"
+              - name: "REDIS_SSL_ENABLED"
+                value: "true"
+              - name: "REDIS_TIMEOUT"
+                value: "2000"
+              - name: "REDIS_USERNAME"
+                value: "superuser"
+              - name: "TRUST_STORE_PASSWORD"
+                value: "Expertflow123"
+          envFrom:
+          ports:
+            - containerPort: 61616
+              name: artemis
+            - containerPort: 5672
+              name: amqp
+            - containerPort: 61613
+              name: stomp
+            - containerPort: 5445
+              name: hornetq
+            - containerPort: 1883
+              name: mqtt
+            - containerPort: 8161
+              name: web
+            - containerPort: 61617
+              name: artemis-ssl
+            - containerPort: 5671
+              name: amqp-ssl
+            - containerPort: 61612
+              name: stomp-ssl
+            - containerPort: 8883
+              name: mqtt-ssl
+          volumeMounts:
+            - name: activemq-artemis
+              mountPath: "/var/lib/artemis-instance/data"
+            - name: config
+              mountPath: /var/lib/artemis-instance/etc/broker.xml
+              subPath: broker.xml
+            - mountPath: /redis
+              name: redis-crt
+            - mountPath: /activemq
+              name: activemq-tls
+            - mountPath: /vault/secrets
+              name: vault-secrets
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: activemq-artemis-config
+        - name: redis-crt
+          secret:
+            secretName: redis-crt
+        - name: activemq-tls
+          secret:
+            secretName: activemq-tls
+        - csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: activemq-vault-kv
+          name: vault-secrets
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: activemq-artemis
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: "openebs-hostpath"
+        resources:
+          requests:
+            storage: "10Gi"
+        volumeMode: Filesystem
+---
+# Source: artemis/templates/configmap.yaml
+broker.xml: |
+  <?xml version="1.0" encoding="UTF-8"?>
+
+  <broker xmlns="http://activemq.apache.org/schema">
+
+    <name>${HOSTNAME}</name>
+
+    <persistence-enabled>true</persistence-enabled>
+
+    <security-enabled>true</security-enabled>
+
+    <journal-type>ASYNCIO</journal-type>
+
+    <paging-directory>data/paging</paging-directory>
+    <bindings-directory>data/bindings</bindings-directory>
+    <journal-directory>data/journal</journal-directory>
+    <large-messages-directory>data/large-messages</large-messages-directory>
+
+    <acceptors>
+      <acceptor name="artemis">
+        tcp://0.0.0.0:61616?protocols=CORE,AMQP,STOMP,MQTT,HORNETQ,OPENWIRE
+      </acceptor>
+
+      <acceptor name="amqp">
+        tcp://0.0.0.0:5672?protocols=AMQP
+      </acceptor>
+
+      <acceptor name="stomp">
+        tcp://0.0.0.0:61613?protocols=STOMP
+      </acceptor>
+
+      <acceptor name="mqtt">
+        tcp://0.0.0.0:1883?protocols=MQTT
+      </acceptor>
+    </acceptors>
+
+    <addresses>
+      <address name="DLQ">
+        <anycast>
+          <queue name="DLQ"/>
+        </anycast>
+      </address>
+
+      <address name="ExpiryQueue">
+        <anycast>
+          <queue name="ExpiryQueue"/>
+        </anycast>
+      </address>
+    </addresses>
+
+    <address-settings>
+      <address-setting match="#">
+        <dead-letter-address>DLQ</dead-letter-address>
+        <expiry-address>ExpiryQueue</expiry-address>
+        <address-full-policy>PAGE</address-full-policy>
+        <auto-create-queues>true</auto-create-queues>
+        <auto-create-addresses>true</auto-create-addresses>
+      </address-setting>
+    </address-settings>
+
+    <security-settings>
+      <security-setting match="#">
+        <permission type="createAddress" roles="amq"/>
+        <permission type="deleteAddress" roles="amq"/>
+        <permission type="createDurableQueue" roles="amq"/>
+        <permission type="deleteDurableQueue" roles="amq"/>
+        <permission type="send" roles="amq"/>
+        <permission type="consume" roles="amq"/>
+      </security-setting>
+    </security-settings>
+
+  </broker>

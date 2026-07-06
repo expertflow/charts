@@ -1,0 +1,145 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: {{ include "common.names.fullname" . }}-config
+    labels:
+        {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+data:
+    broker.xml: |
+      <?xml version='1.0'?>
+      <configuration xmlns="urn:activemq"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="urn:activemq schema/artemis-server.xsd">
+          
+          <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core schema/artemis-core.xsd">
+              <security-enabled>true</security-enabled>
+              <name>${HOSTNAME}</name>
+              
+              <persistence-enabled>true</persistence-enabled>
+              
+              <journal-sync-non-transactional>true</journal-sync-non-transactional>
+              <journal-sync-transactional>true</journal-sync-transactional>
+              
+              <acceptors>
+                  <acceptor name="artemis">
+                      tcp://0.0.0.0:61616?protocols=CORE,AMQP,STOMP,MQTT,HORNETQ,OPENWIRE
+                  </acceptor>
+                  
+                  <acceptor name="amqp">
+                      tcp://0.0.0.0:5672?protocols=AMQP
+                  </acceptor>
+                  
+                  <acceptor name="stomp">
+                      tcp://0.0.0.0:61613?protocols=STOMP
+                  </acceptor>
+                  
+                  <acceptor name="mqtt">
+                      tcp://0.0.0.0:1883?protocols=MQTT
+                  </acceptor>
+                  
+                  <acceptor name="artemis-ssl">
+                      tcp://0.0.0.0:61617?sslEnabled=true;keyStorePath=${ACTIVEMQ_KEYSTORE};keyStorePassword=${ACTIVEMQ_KEYSTORE_PASSWORD};trustStorePath=${ACTIVEMQ_TRUSTSTORE};trustStorePassword=${ACTIVEMQ_TRUSTSTORE_PASSWORD};needClientAuth=true;protocols=CORE,AMQP,STOMP,MQTT,HORNETQ,OPENWIRE
+                  </acceptor>
+                  
+                  <acceptor name="amqp-ssl">
+                      tcp://0.0.0.0:5671?sslEnabled=true;keyStorePath=${ACTIVEMQ_KEYSTORE};keyStorePassword=${ACTIVEMQ_KEYSTORE_PASSWORD};trustStorePath=${ACTIVEMQ_TRUSTSTORE};trustStorePassword=${ACTIVEMQ_TRUSTSTORE_PASSWORD};protocols=AMQP;amqpSaslMechanisms=PLAIN,SCRAM-SHA-256
+                  </acceptor>
+                  
+                  <acceptor name="stomp-ssl">
+                      tcp://0.0.0.0:61612?sslEnabled=true;keyStorePath=${ACTIVEMQ_KEYSTORE};keyStorePassword=${ACTIVEMQ_KEYSTORE_PASSWORD};trustStorePath=${ACTIVEMQ_TRUSTSTORE};trustStorePassword=${ACTIVEMQ_TRUSTSTORE_PASSWORD};protocols=STOMP
+                  </acceptor>
+                  
+                  <acceptor name="mqtt-ssl">
+                      tcp://0.0.0.0:8883?sslEnabled=true;keyStorePath=${ACTIVEMQ_KEYSTORE};keyStorePassword=${ACTIVEMQ_KEYSTORE_PASSWORD};trustStorePath=${ACTIVEMQ_TRUSTSTORE};trustStorePassword=${ACTIVEMQ_TRUSTSTORE_PASSWORD};protocols=MQTT
+                  </acceptor>
+              </acceptors>
+              
+              <broker-plugins>
+                  <broker-plugin class-name="com.ef.apps.amq.plugin.TopicAuthorizationPlugin">
+                      <property key="redis.host" value="${REDIS_HOST}"/>
+                      <property key="redis.password" value="${REDIS_PASSWORD}"/>
+                      <property key="redis.username" value="${REDIS_USERNAME}"/>
+                      <property key="redis.port" value="${REDIS_PORT}"/>
+                      <property key="redis.ssl" value="${REDIS_SSL_ENABLED}"/>
+                      <property key="redis.truststorepassword" value="${TRUST_STORE_PASSWORD}"/>
+                      <property key="redis.keystorepassword" value="${KEY_STORE_PASSWORD}"/>
+                      <property key="redis.maxactive" value="${REDIS_MAX_ACTIVE}"/>
+                      <property key="redis.maxidle" value="${REDIS_MAX_IDLE}"/>
+                      <property key="redis.maxwait" value="${REDIS_MAX_WAIT}"/>
+                      <property key="redis.minidle" value="${REDIS_MIN_IDLE}"/>
+                      <property key="redis.timeout" value="${REDIS_TIMEOUT}"/>
+                      <property key="redis.enablesentinel" value="${REDIS_SENTINEL_ENABLE}"/>
+                      <property key="azureenable" value="${ENABLE_CLOUD_MANAGED_CONNECTIONS}"/>
+                      <property key="redis.sentinelmaster" value="${REDIS_SENTINEL_MASTER}"/>
+                      <property key="redis.sentinelnodes" value="${REDIS_SENTINEL_NODES}"/>
+                      <property key="redis.sentinelpassword" value="${REDIS_SENTINEL_PASSWORD}"/>
+                  </broker-plugin>
+              </broker-plugins>
+              
+              <security-settings>
+                  <security-setting match="#">
+                      <permission type="createAddress" roles="amq,admin"/>
+                      <permission type="deleteAddress" roles="amq,admin"/>
+                      <permission type="createNonDurableQueue" roles="amq,admin"/>
+                      <permission type="deleteNonDurableQueue" roles="amq,admin"/>
+                      <permission type="createDurableQueue" roles="amq,admin"/>
+                      <permission type="deleteDurableQueue" roles="amq,admin"/>
+                      <permission type="createAddress" roles="amq,admin"/>
+                      <permission type="send" roles="amq,admin"/>
+                      <permission type="consume" roles="amq,admin"/>
+                      <permission type="browse" roles="amq,admin"/>
+                      <permission type="manage" roles="amq,admin"/>
+                  </security-setting>
+                  
+                  <security-setting match="activemq.management.#">
+                      <permission type="manage" roles="amq,admin"/>
+                      <permission type="consume" roles="amq,admin"/>
+                      <permission type="send" roles="amq,admin"/>
+                      <permission type="createNonDurableQueue" roles="amq,admin"/>
+                      <permission type="deleteNonDurableQueue" roles="amq,admin"/>
+                  </security-setting>
+              </security-settings>
+              
+              <address-settings>
+                  <address-setting match="#">
+                      <dead-letter-address>DLQ</dead-letter-address>
+                      <expiry-address>ExpiryQueue</expiry-address>
+                      <redelivery-delay>0</redelivery-delay>
+                      <max-size-bytes>-1</max-size-bytes>
+                      <message-counter-history-day-limit>10</message-counter-history-day-limit>
+                      <address-full-policy>PAGE</address-full-policy>
+                      <auto-create-queues>true</auto-create-queues>
+                      <auto-create-addresses>true</auto-create-addresses>
+                      <auto-create-jms-queues>true</auto-create-jms-queues>
+                      <auto-create-jms-topics>true</auto-create-jms-topics>
+                  </address-setting>
+              </address-settings>
+              
+              <addresses>
+                  <address name="DLQ">
+                      <anycast>
+                          <queue name="DLQ"/>
+                      </anycast>
+                  </address>
+                  
+                  <address name="ExpiryQueue">
+                      <anycast>
+                          <queue name="ExpiryQueue"/>
+                      </anycast>
+                  </address>
+              </addresses>
+          
+          </core>
+      </configuration>
+
+    bootstrap.xml: |
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <broker xmlns="http://activemq.apache.org/schema">
+          <jaas-security domain="activemq"/>
+          <server configuration="file:/var/lib/artemis-instance/etc/broker.xml"/>
+          <web path="web" rootRedirectLocation="console">
+              <binding name="artemis" uri="http://0.0.0.0:8161">
+                  <app name="console" url="console" war="console.war"/>
+              </binding>
+          </web>
+      </broker>

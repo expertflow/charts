@@ -1,0 +1,15 @@
+apiVersion: v2
+name: artemis
+description: Expertflow CX Solution ActiveMQ Artemis
+home: https://expertflow.com
+icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+keywords:
+  - Expertflow
+  - C2C Communications
+  - Artemis
+type: application
+version: "5.5.0"
+appVersion: "5.5.0"
+maintainers:
+  - name: NMR Nasir Mehmood Rajput
+    email: nasir.mehmood@expertflow.com

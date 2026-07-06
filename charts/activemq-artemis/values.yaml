@@ -1,0 +1,302 @@
+## @section Global parameters
+global:
+  ingressRouter: ""
+  ingressCertName: ""
+  ingressClassName: ""
+  commonIngressAnnotations: {}
+  imageRegistry: "gitimages.expertflow.com"
+  imagePullSecrets:
+    - expertflow-reg-cred
+  efCxReleaseName: "ef-cx"
+  compatibility:
+    openshift:
+      adaptSecurityContext: auto
+
+## @section Common parameters
+nameOverride: ""
+fullnameOverride: ""
+namespaceOverride: ""
+kubeVersion: ""
+clusterDomain: cluster.local
+extraDeploy: []
+commonLabels: {}
+commonAnnotations: {}
+diagnosticMode:
+  enabled: false
+  command: [sleep]
+  args: [infinity]
+
+## @section activemq parameters (Artemis)
+image:
+  registry: gitimages.expertflow.com
+  repository: general/activemq-artemis
+  tag: "2.42.0-activemq-artemis-5-3-0-f-cim-33466-27"
+  digest: ""
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+automountServiceAccountToken: false
+hostAliases: []
+command: []
+args: []
+
+extraEnvVars:
+  - name: ARTEMIS_OPTS_MEMORY
+    value: "-Xms512M -Xmx4G"
+  - name: REDIS_HOST
+    value: redis-master.ef-external.svc.cluster.local
+  - name: REDIS_PORT
+    value: "6379"
+  - name: REDIS_PASSWORD
+    value: "Expertflow464"
+  - name: REDIS_USERNAME
+    value: "superuser"
+  - name: REDIS_SSL_ENABLED
+    value: "true"
+  - name: TRUST_STORE_PASSWORD
+    value: "Expertflow123"
+  - name: KEY_STORE_PASSWORD
+    value: "Expertflow123"
+  - name: REDIS_MAX_ACTIVE
+    value: "200"
+  - name: REDIS_MAX_IDLE
+    value: "200"
+  - name: REDIS_MAX_WAIT
+    value: "-1"
+  - name: REDIS_MIN_IDLE
+    value: "100"
+  - name: REDIS_TIMEOUT
+    value: "2000"
+  - name: REDIS_SENTINEL_ENABLE
+    value: "false"
+  - name: REDIS_SENTINEL_MASTER
+    value: "expertflow"
+  - name: REDIS_SENTINEL_NODES
+    value: "nikka-redis-node-0.nikka-redis-headless.ef-external.svc.cluster.local:26379,nikka-redis-node-1.nikka-redis-headless.ef-external.svc.cluster.local:26379,nikka-redis-node-2.nikka-redis-headless.ef-external.svc.cluster.local:26379"
+  - name: REDIS_SENTINEL_PASSWORD
+    value: "Expertflow123"
+  - name: DB_URL
+    value: ef-postgresql-postgresql-ha-pgpool.ef-external.svc
+  - name: DB_USER
+    value: sa
+  - name: DB_PASSWORD
+    value: Expertflow123
+  - name: DB_DATASOURCE
+    value: postgres
+  - name: DB_NAME
+    value: artemis
+  - name: DB_PORT
+    value: "5432"
+  - name: ACTIVEMQ_KEYSTORE
+    value: "/activemq/broker.ks"
+  - name: ACTIVEMQ_KEYSTORE_PASSWORD
+    value: "password"
+  - name: ACTIVEMQ_TRUSTSTORE
+    value: "/activemq/broker.ts"
+  - name: ACTIVEMQ_TRUSTSTORE_PASSWORD
+    value: "password"
+  - name: ENABLE_CLOUD_MANAGED_CONNECTIONS
+    value: "false"
+
+siteEnvVars: []
+configKeys: []
+extraEnvVarsCM: ""
+#extraEnvVarsSecret: "artemis-env"
+efConnectionVars: false
+efEnvironmentVars: false
+
+replicaCount: 1
+revisionHistoryLimit: 10
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate: {}
+
+podLabels: {}
+podAnnotations: {}
+podAffinityPreset: ""
+podAntiAffinityPreset: ""
+nodeAffinityPreset:
+  type: ""
+  key: ""
+  values: []
+affinity: {}
+hostNetwork: false
+hostIPC: false
+dnsPolicy: ""
+dnsConfig: {}
+nodeSelector: {}
+tolerations: []
+priorityClassName: ""
+schedulerName: ""
+terminationGracePeriodSeconds: ""
+topologySpreadConstraints: []
+
+podSecurityContext:
+  enabled: true
+  fsGroupChangePolicy: Always
+  supplementalGroups: []
+  fsGroup: 1001
+  sysctls: []
+
+containerSecurityContext:
+  enabled: true
+  seLinuxOptions: null
+  runAsUser: 1001
+  runAsGroup: 1001
+  runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
+
+containerPorts:
+  - name: artemis
+    containerPort: 61616
+  - name: amqp
+    containerPort: 5672
+  - name: stomp
+    containerPort: 61613
+  - name: hornetq
+    containerPort: 5445
+  - name: mqtt
+    containerPort: 1883
+  - name: web
+    containerPort: 8161
+  - name: artemis-ssl
+    containerPort: 61617
+  - name: amqp-ssl
+    containerPort: 5671
+  - name: stomp-ssl
+    containerPort: 61612
+  - name: mqtt-ssl
+    containerPort: 8883
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: "8161"
+  targetPort: "web"
+  portName: "web"
+  protocol: TCP
+  nodePort: ""
+  clusterIP: ""
+  extraPorts: []
+  ports:
+    artemis: 61616
+    amqp: 5672
+    stomp: 61613
+    hornetq: 5445
+    mqtt: 1883
+    web: 8161
+    artemis_ssl: 61617
+    amqp_ssl: 5671
+    stomp_ssl: 61612
+    mqtt_ssl: 8883
+  sessionAffinity: None
+  sessionAffinityConfig: {}
+  annotations: {}
+  externalTrafficPolicy: Cluster
+
+persistence:
+  enabled: true
+  storageClass: "openebs-hostpath"
+  accessMode: ReadWriteOnce
+  size: 10Gi
+
+resourcesPreset: "none"
+resources: {}
+lifecycleHooks: {}
+
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 30
+  timeoutSeconds: 5
+  periodSeconds: 10
+  failureThreshold: 6
+  successThreshold: 1
+livenessProbe:
+  enabled: false
+  initialDelaySeconds: 30
+  timeoutSeconds: 5
+  periodSeconds: 10
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  enabled: false
+  initialDelaySeconds: 5
+  timeoutSeconds: 3
+  periodSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: ""
+  maxReplicas: ""
+  targetCPU: ""
+  targetMemory: ""
+
+extraVolumes:
+  - name: redis-crt
+    secret:
+      secretName: redis-crt
+  - name: activemq-tls
+    secret:
+      secretName: activemq-tls
+  - name: vault-secrets
+    csi:
+      driver: secrets-store.csi.k8s.io
+      readOnly: true
+      volumeAttributes:
+        secretProviderClass: activemq-vault-kv
+
+extraVolumeMounts:
+  - name: redis-crt
+    mountPath: "/redis"
+  - name: activemq-tls
+    mountPath: "/activemq"
+  - name: vault-secrets
+    mountPath: "/vault/secrets"
+    readOnly: true
+
+serviceAccount:
+  create: false
+  name: ""
+  annotations: {}
+  automountServiceAccountToken: false
+
+sidecars: []
+sidecarSingleProcessNamespace: false
+initContainers: []
+
+pdb:
+  create: false
+  minAvailable: ""
+  maxUnavailable: ""
+
+networkPolicy:
+  enabled: false
+  allowExternal: true
+  allowExternalEgress: true
+  extraIngress: []
+  extraEgress: []
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
+
+ingress:
+  enabled: false
+  pathType: ImplementationSpecific
+  apiVersion: ""
+  hostname: fqdn.com
+  path: "/"
+  annotations: {}
+  ingressClassName: "nginx"
+  extraHosts: []
+  extraPaths: []
+  tlsSecretName: ""
+  extraRules: []
+  extraTls: []
+  tls: true
