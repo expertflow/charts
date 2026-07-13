@@ -892,6 +892,34 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/MTT-single-5.0-alpha/MTT-single-5.0-alpha.tgz
     version: 5.0-alpha
+  WFM:
+  - apiVersion: v2
+    appVersion: 5.6.0
+    created: "2026-07-13T10:14:37.988452443Z"
+    dependencies:
+    - condition: wfm-core.enabled
+      name: wfm-core
+      repository: file://charts/wfm-core
+      version: 1.0.0
+    - condition: wfm-frontend.enabled
+      name: wfm-frontend
+      repository: file://charts/wfm-frontend
+      version: 1.0.0
+    description: Expertflow CX Solution
+    digest: 52442254de4c2181a5f460830e3d972555d925406ab5bebd394384c115a0bb0f
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: WFM
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/WFM-5.6.0/WFM-5.6.0.tgz
+    version: 5.6.0
   activemq:
   - apiVersion: v2
     appVersion: 5.1.0
@@ -1380,6 +1408,33 @@ entries:
     - https://github.com/expertflow/charts/releases/download/activemq-1.0.18/activemq-1.0.18.tgz
     version: 1.0.18
   agent-desk:
+  - apiVersion: v2
+    appVersion: 5.6.0
+    created: "2026-07-13T10:14:38.241829962Z"
+    dependencies:
+    - condition: unified-agent.enabled
+      name: unified-agent
+      repository: file://charts/unified-agent
+      version: 1.0.0
+    - condition: grafana.enabled
+      name: grafana
+      repository: file://charts/grafana
+      version: 12.0.8
+    description: Expertflow CX Solution AgentDesk
+    digest: 5834917c9a034b530a5e09799472f864ee00299ee99975950e3590c278280ca4
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: agent-desk
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/agent-desk-5.6.0/agent-desk-5.6.0.tgz
+    version: 5.6.0
   - apiVersion: v2
     appVersion: 5.5.0
     created: "2026-07-02T09:51:51.556686256Z"
@@ -3085,6 +3140,38 @@ entries:
   - annotations:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
+    appVersion: 5.6.0
+    created: "2026-07-13T10:14:38.481575211Z"
+    dependencies:
+    - condition: etcd.enabled
+      name: etcd
+      repository: file://charts/etcd
+      version: 9.7.3
+    - alias: dashboard
+      condition: dashboard.enabled
+      name: apisix-dashboard
+      repository: https://apache.github.io/apisix-helm-chart
+      version: 0.8.2
+    - alias: ingress-controller
+      condition: ingress-controller.enabled
+      name: apisix-ingress-controller
+      repository: https://apache.github.io/apisix-helm-chart
+      version: 0.14.0
+    description: A Helm chart for Apache APISIX v3
+    digest: fb888c7526b3a07bf223581c6a750e0bc8a71a8f27d0d1bc496f856e1ca82873
+    icon: https://apache.org/logos/res/apisix/apisix.png
+    maintainers:
+    - name: tao12345666333
+    name: apisix
+    sources:
+    - https://github.com/apache/apisix-helm-chart
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/apisix-5.6.0/apisix-5.6.0.tgz
+    version: 5.6.0
+  - annotations:
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
     appVersion: 5.5.0
     created: "2026-07-02T09:51:51.751362438Z"
     dependencies:
@@ -3406,6 +3493,38 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 3.11.0
+    created: "2026-02-10T13:05:43.876441475Z"
+    dependencies:
+    - condition: etcd.enabled
+      name: etcd
+      repository: file://charts/etcd
+      version: 9.7.3
+    - alias: dashboard
+      condition: dashboard.enabled
+      name: apisix-dashboard
+      repository: https://charts.apiseven.com
+      version: 0.8.2
+    - alias: ingress-controller
+      condition: ingress-controller.enabled
+      name: apisix-ingress-controller
+      repository: https://charts.apiseven.com
+      version: 0.14.0
+    description: A Helm chart for Apache APISIX v3
+    digest: e3d50e4440bf2bf9a9fc640f19696b72ab8ff886a21be9d37ae0388d62aa8d8c
+    icon: https://apache.org/logos/res/apisix/apisix.png
+    maintainers:
+    - name: tao12345666333
+    name: apisix
+    sources:
+    - https://github.com/apache/apisix-helm-chart
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/apisix-5.1.0-rc.1/apisix-5.1.0-rc.1.tgz
+    version: 5.1.0-rc.1
+  - annotations:
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
+    appVersion: 3.11.0
     created: "2026-03-11T11:02:12.411752079Z"
     dependencies:
     - condition: etcd.enabled
@@ -3424,70 +3543,6 @@ entries:
       version: 0.14.0
     description: A Helm chart for Apache APISIX v3
     digest: af2ea500d39b0287564a585f10e24b76094fbfd93ddb9e0a9dd04ce7b6479406
-    icon: https://apache.org/logos/res/apisix/apisix.png
-    maintainers:
-    - name: tao12345666333
-    name: apisix
-    sources:
-    - https://github.com/apache/apisix-helm-chart
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/apisix-5.1.0-rc.1/apisix-5.1.0-rc.1.tgz
-    version: 5.1.0-rc.1
-  - annotations:
-      artifacthub.io/prerelease: "false"
-    apiVersion: v2
-    appVersion: 3.11.0
-    created: "2026-02-11T08:02:28.734706659Z"
-    dependencies:
-    - condition: etcd.enabled
-      name: etcd
-      repository: file://charts/etcd
-      version: 9.7.3
-    - alias: dashboard
-      condition: dashboard.enabled
-      name: apisix-dashboard
-      repository: https://charts.apiseven.com
-      version: 0.8.2
-    - alias: ingress-controller
-      condition: ingress-controller.enabled
-      name: apisix-ingress-controller
-      repository: https://charts.apiseven.com
-      version: 0.14.0
-    description: A Helm chart for Apache APISIX v3
-    digest: b3d17c0c8a45fb51191bb05728894808aef347d045298ebeb21d6c5f967142b6
-    icon: https://apache.org/logos/res/apisix/apisix.png
-    maintainers:
-    - name: tao12345666333
-    name: apisix
-    sources:
-    - https://github.com/apache/apisix-helm-chart
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/apisix-5.1.0-rc.1/apisix-5.1.0-rc.1.tgz
-    version: 5.1.0-rc.1
-  - annotations:
-      artifacthub.io/prerelease: "false"
-    apiVersion: v2
-    appVersion: 3.11.0
-    created: "2026-02-10T08:50:01.331694629Z"
-    dependencies:
-    - condition: etcd.enabled
-      name: etcd
-      repository: file://charts/etcd
-      version: 9.7.3
-    - alias: dashboard
-      condition: dashboard.enabled
-      name: apisix-dashboard
-      repository: https://charts.apiseven.com
-      version: 0.8.2
-    - alias: ingress-controller
-      condition: ingress-controller.enabled
-      name: apisix-ingress-controller
-      repository: https://charts.apiseven.com
-      version: 0.14.0
-    description: A Helm chart for Apache APISIX v3
-    digest: 899acff13fd9a94578d7d2b4b84740face9eeedcc2231f530e648494ec95925b
     icon: https://apache.org/logos/res/apisix/apisix.png
     maintainers:
     - name: tao12345666333
@@ -3534,7 +3589,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: 3.11.0
-    created: "2026-02-10T13:05:43.876441475Z"
+    created: "2026-02-11T08:02:28.734706659Z"
     dependencies:
     - condition: etcd.enabled
       name: etcd
@@ -3551,7 +3606,7 @@ entries:
       repository: https://charts.apiseven.com
       version: 0.14.0
     description: A Helm chart for Apache APISIX v3
-    digest: e3d50e4440bf2bf9a9fc640f19696b72ab8ff886a21be9d37ae0388d62aa8d8c
+    digest: b3d17c0c8a45fb51191bb05728894808aef347d045298ebeb21d6c5f967142b6
     icon: https://apache.org/logos/res/apisix/apisix.png
     maintainers:
     - name: tao12345666333
@@ -3584,6 +3639,38 @@ entries:
       version: 0.14.0
     description: A Helm chart for Apache APISIX v3
     digest: 3cab7c2e008b25d72b04ec60f4cc700b95a246a958552b2748198f5aea5f8239
+    icon: https://apache.org/logos/res/apisix/apisix.png
+    maintainers:
+    - name: tao12345666333
+    name: apisix
+    sources:
+    - https://github.com/apache/apisix-helm-chart
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/apisix-5.1.0-rc.1/apisix-5.1.0-rc.1.tgz
+    version: 5.1.0-rc.1
+  - annotations:
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
+    appVersion: 3.11.0
+    created: "2026-02-10T08:50:01.331694629Z"
+    dependencies:
+    - condition: etcd.enabled
+      name: etcd
+      repository: file://charts/etcd
+      version: 9.7.3
+    - alias: dashboard
+      condition: dashboard.enabled
+      name: apisix-dashboard
+      repository: https://charts.apiseven.com
+      version: 0.8.2
+    - alias: ingress-controller
+      condition: ingress-controller.enabled
+      name: apisix-ingress-controller
+      repository: https://charts.apiseven.com
+      version: 0.14.0
+    description: A Helm chart for Apache APISIX v3
+    digest: 899acff13fd9a94578d7d2b4b84740face9eeedcc2231f530e648494ec95925b
     icon: https://apache.org/logos/res/apisix/apisix.png
     maintainers:
     - name: tao12345666333
@@ -5758,6 +5845,85 @@ entries:
     - https://github.com/expertflow/charts/releases/download/campaigns-1.0.15/campaigns-1.0.15.tgz
     version: 1.0.15
   channels:
+  - apiVersion: v2
+    appVersion: 5.6.0
+    created: "2026-07-13T10:14:38.905648738Z"
+    dependencies:
+    - condition: connect360.enabled
+      name: connect360
+      repository: file://charts/connect360
+      version: 1.0.0
+    - condition: facebook-connector.enabled
+      name: facebook-connector
+      repository: file://charts/facebook-connector
+      version: 1.0.0
+    - condition: instagram-connector.enabled
+      name: instagram-connector
+      repository: file://charts/instagram-connector
+      version: 1.0.0
+    - condition: smpp-connector.enabled
+      name: smpp-connector
+      repository: file://charts/smpp-connector
+      version: 1.0.0
+    - condition: telegram-connector.enabled
+      name: telegram-connector
+      repository: file://charts/telegram-connector
+      version: 1.0.0
+    - condition: twilio-connector.enabled
+      name: twilio-connector
+      repository: file://charts/twilio-connector
+      version: 1.0.0
+    - condition: twitter-connector.enabled
+      name: twitter-connector
+      repository: file://charts/twitter-connector
+      version: 1.0.0
+    - condition: viber-connector.enabled
+      name: viber-connector
+      repository: file://charts/viber-connector
+      version: 1.0.0
+    - condition: youtube-connector.enabled
+      name: youtube-connector
+      repository: file://charts/youtube-connector
+      version: 1.0.0
+    - condition: email-connector.enabled
+      name: email-connector
+      repository: file://charts/email-connector
+      version: 1.0.0
+    - condition: ms-email-connector.enabled
+      name: ms-email-connector
+      repository: file://charts/ms-email-connector
+      version: 1.0.0
+    - condition: whatsapp-connector.enabled
+      name: whatsapp-connector
+      repository: file://charts/whatsapp-connector
+      version: 1.0.0
+    - condition: linkedin-connector.enabled
+      name: linkedin-connector
+      repository: file://charts/linkedin-connector
+      version: 1.0.14
+    - condition: google-playstore-connector.enabled
+      name: google-playstore-connector
+      repository: file://charts/google-playstore-connector
+      version: 1.0.0
+    - condition: apple-store-connector.enabled
+      name: apple-store-connector
+      repository: file://charts/apple-store-connector
+      version: 1.0.0
+    description: Expertflow CX Solution Channels
+    digest: 82285ae88e57d59d342b9a5456556f9228cce7e0fb6ea920fe60572d1fba84fd
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: channels
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/channels-5.6.0/channels-5.6.0.tgz
+    version: 5.6.0
   - apiVersion: v2
     appVersion: 5.5.0
     created: "2026-07-02T09:51:52.202307801Z"
@@ -9297,6 +9463,24 @@ entries:
     version: 4.6.0
   cisco-connector:
   - apiVersion: v2
+    appVersion: 5.6.0
+    created: "2026-07-13T10:14:39.12533369Z"
+    description: Expertflow CX Solution
+    digest: 673b38a2f2a6c52d8eefdb73192c0db0557ad3666f0621675f1f7ceca84b0846
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: cisco-connector
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/cisco-connector-5.6.0/cisco-connector-5.6.0.tgz
+    version: 5.6.0
+  - apiVersion: v2
     appVersion: 5.1.0
     created: "2026-04-07T09:19:30.013778591Z"
     description: Expertflow CX Solution
@@ -9624,6 +9808,109 @@ entries:
     - https://github.com/expertflow/charts/releases/download/clamav-4.9.0/clamav-4.9.0.tgz
     version: 4.9.0
   cx:
+  - apiVersion: v2
+    appVersion: 5.6.0
+    created: "2026-07-13T10:14:39.478318923Z"
+    dependencies:
+    - condition: agent-manager.enabled
+      name: agent-manager
+      repository: file://charts/agent-manager
+      version: 1.0.0
+    - condition: bot-framework.enabled
+      name: bot-framework
+      repository: file://charts/bot-framework
+      version: 1.0.0
+    - condition: ccm.enabled
+      name: ccm
+      repository: file://charts/ccm
+      version: 1.0.0
+    - condition: cim-customer.enabled
+      name: cim-customer
+      repository: file://charts/cim-customer
+      version: 1.0.0
+    - condition: conversation-manager.enabled
+      name: conversation-manager
+      repository: file://charts/conversation-manager
+      version: 1.0.0
+    - condition: conversation-monitor.enabled
+      name: conversation-monitor
+      repository: file://charts/conversation-monitor
+      version: 1.0.0
+    - condition: customer-widget.enabled
+      name: customer-widget
+      repository: file://charts/customer-widget
+      version: 1.0.0
+    - condition: file-engine.enabled
+      name: file-engine
+      repository: file://charts/file-engine
+      version: 1.0.0
+    - condition: historical-reports.enabled
+      name: historical-reports
+      repository: file://charts/historical-reports
+      version: 1.0.0
+    - condition: license-manager.enabled
+      name: license-manager
+      repository: file://charts/license-manager
+      version: 1.0.0
+    - condition: realtime-reports.enabled
+      name: realtime-reports
+      repository: file://charts/realtime-reports
+      version: 1.0.0
+    - condition: routing-engine.enabled
+      name: routing-engine
+      repository: file://charts/routing-engine
+      version: 1.0.0
+    - condition: state-events-logger.enabled
+      name: state-events-logger
+      repository: file://charts/state-events-logger
+      version: 1.0.0
+    - condition: team-announcement.enabled
+      name: team-announcement
+      repository: file://charts/team-announcement
+      version: 1.0.0
+    - condition: unified-admin.enabled
+      name: unified-admin
+      repository: file://charts/unified-admin
+      version: 1.0.0
+    - condition: web-channel-manager.enabled
+      name: web-channel-manager
+      repository: file://charts/web-channel-manager
+      version: 1.0.0
+    - condition: business-calendar.enabled
+      name: business-calendar
+      repository: file://charts/business-calendar
+      version: 1.0.14
+    - condition: cx-load-hub.enabled
+      name: cx-load-hub
+      repository: file://charts/cx-load-hub
+      version: 1.0.14
+    - condition: cx-tenant.enabled
+      name: cx-tenant
+      repository: file://charts/cx-tenant
+      version: 1.0.14
+    - condition: conversation-studio.enabled
+      name: conversation-studio
+      repository: file://charts/conversation-studio
+      version: 1.0.0
+    - condition: otp-manager.enabled
+      name: otp-manager
+      repository: file://charts/otp-manager
+      version: 1.0.0
+    description: Expertflow CX Solution
+    digest: 3edf5fe6abb01999a3a2bba87ed4bb6a9af9184117cec7f8d5297ff833e22b6b
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: cx
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/cx-5.6.0/cx-5.6.0.tgz
+    version: 5.6.0
   - apiVersion: v2
     appVersion: 5.5.0
     created: "2026-07-02T09:51:52.532827086Z"
@@ -22443,6 +22730,24 @@ entries:
     version: 16.0.0-v1
   transflux:
   - apiVersion: v2
+    appVersion: 5.6.0
+    created: "2026-07-13T10:14:39.684976014Z"
+    description: CX Data Platform
+    digest: c9727898b16f4d4c03cb4d352a97f3baa28d79815e6d3b928c0a4f586650b39d
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: transflux
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/transflux-5.6.0/transflux-5.6.0.tgz
+    version: 5.6.0
+  - apiVersion: v2
     appVersion: 5.4.0
     created: "2026-05-22T13:45:27.273950498Z"
     description: CX Data Platform
@@ -22678,24 +22983,6 @@ entries:
     version: 4.10.0
   - apiVersion: v2
     appVersion: 4.10.0
-    created: "2025-07-17T11:10:10.100524067Z"
-    description: CX Data Platform
-    digest: d46abf08cd09ca9d6a976a6625e946d6a169601778a29083f5489933eb189cf0
-    home: https://expertflow.com
-    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
-    keywords:
-    - Expertflow
-    - C2C Communications
-    maintainers:
-    - email: nasir.mehmood@expertflow.com
-      name: NMR Nasir Mehmood Rajput
-    name: transflux
-    type: application
-    urls:
-    - https://github.com/expertflow/charts/releases/download/transflux-4.10.0-rc.1/transflux-4.10.0-rc.1.tgz
-    version: 4.10.0-rc.1
-  - apiVersion: v2
-    appVersion: 4.10.0
     created: "2025-07-15T06:47:43.231488743Z"
     description: CX Data Platform
     digest: fc9826730b8e5f502a76a52d8080c59cdff85b23778ca7c933b599e1855a4bc2
@@ -22714,9 +23001,9 @@ entries:
     version: 4.10.0-rc.1
   - apiVersion: v2
     appVersion: 4.10.0
-    created: "2025-08-07T11:01:54.05845207Z"
+    created: "2025-07-17T11:10:10.100524067Z"
     description: CX Data Platform
-    digest: bfd0327c599db248e8502cea761acc22fb74713550c9360e2c93678b5467593c
+    digest: d46abf08cd09ca9d6a976a6625e946d6a169601778a29083f5489933eb189cf0
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -22735,6 +23022,24 @@ entries:
     created: "2025-08-07T08:47:25.420815432Z"
     description: CX Data Platform
     digest: 9f3fd2335935bb902962ec4cf368045a04657942da4cafedeb607f496a0c500f
+    home: https://expertflow.com
+    icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
+    keywords:
+    - Expertflow
+    - C2C Communications
+    maintainers:
+    - email: nasir.mehmood@expertflow.com
+      name: NMR Nasir Mehmood Rajput
+    name: transflux
+    type: application
+    urls:
+    - https://github.com/expertflow/charts/releases/download/transflux-4.10.0-rc.1/transflux-4.10.0-rc.1.tgz
+    version: 4.10.0-rc.1
+  - apiVersion: v2
+    appVersion: 4.10.0
+    created: "2025-08-07T11:01:54.05845207Z"
+    description: CX Data Platform
+    digest: bfd0327c599db248e8502cea761acc22fb74713550c9360e2c93678b5467593c
     home: https://expertflow.com
     icon: https://www.expertflow.com/wp-content/uploads/cropped-favicon-expertflow-32x32.png
     keywords:
@@ -23477,4 +23782,4 @@ entries:
     urls:
     - https://github.com/expertflow/charts/releases/download/web-channels-1.0.15/web-channels-1.0.15.tgz
     version: 1.0.15
-generated: "2026-07-06T06:12:13.95181603Z"
+generated: "2026-07-13T10:14:39.686655963Z"
