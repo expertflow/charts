@@ -63,4 +63,4 @@ dependencies:
   repository: file://charts/otp-manager
   version: 1.0.0
 digest: sha256:e4b8d2469813040697d01ccefac811b1beb91789406cb713cca28af4c572a403
-generated: "2026-07-02T14:40:00.212528+05:00"
+generated: "2026-07-13T14:55:43.748658+05:00"

@@ -9,4 +9,4 @@ dependencies:
   repository: https://apache.github.io/apisix-helm-chart
   version: 0.14.0
 digest: sha256:40bb96b18c2b0a72d06698cb78d00bd1ab3a80d0a7e16734f67e7e96733dc244
-generated: "2026-07-02T14:44:26.945864+05:00"
+generated: "2026-07-13T14:52:56.23021+05:00"

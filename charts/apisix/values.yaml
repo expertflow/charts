@@ -1257,6 +1257,25 @@ apisixStandalone: |
          type: roundrobin
          timeout: { connect: 5, send: 10, read: 10 }
 
+     - id: svc-wfm-core
+       name: svc-wfm-core
+       upstream:
+         discovery_type: kubernetes
+         service_name: "expertflow/wfm-wfm-core-svc:http-wfc-8000"
+         scheme: http
+         type: roundrobin
+         timeout: { connect: 5, send: 10, read: 10 }
+     - id: svc-wfm-frontend
+       name: svc-wfm-frontend
+       upstream:
+         discovery_type: kubernetes
+         service_name: "expertflow/wfm-wfm-frontend-svc:http"
+         scheme: http
+         type: roundrobin
+         timeout:
+           connect: 5
+           send: 60
+           read: 3600
    # =================================================================
    # ROUTES
    # =================================================================
@@ -2722,8 +2741,89 @@ apisixStandalone: |
          proxy-rewrite:
            enable: true
            regex_uri: ["^/cx-tenant/?(.*)", "/$1"]
-     
-     # Secure-Link Apis Path
+
+     - id: wfm-core
+       uris: ["/wfm-core/*"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       priority: 0
+       service_id: svc-wfm-core
+       status: 1
+       plugins:
+         {{- if .Values.global.oidc.enabled }}
+         openid-connect:
+           discovery: "{{ $oidcDiscovery }}"
+           realm: "{{ $oidcRealm }}"
+           client_id: "{{ $oidcClientId }}"
+           client_secret: "{{ $oidcClientSecret }}"
+           bearer_only: true
+           token_signing_alg_values_expected: "RS256"
+           set_access_token_header: false
+           set_userinfo_header: false
+           audience: ["cim", "account", "realm-management"]
+           required_scopes: ["email", "profile"]
+         authz-keycloak:
+           lazy_load_paths: true
+           http_method_as_scope: true
+           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
+           discovery: "{{ $oidcAuthzDiscovery }}"
+           client_id: "{{ $oidcClientId }}"
+           client_secret: "{{ $oidcClientSecret }}"
+         {{- end }}
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/wfm-core/?(.*)", "/$1"]
+           
+     - id: wfm-frontend-assets
+       uris:
+         - "/wfm-assets/*"
+       hosts:
+         - "{{ .Values.global.ingressRouter }}"
+       priority: 1003         
+       service_id: svc-wfm-frontend
+       status: 1
+       plugins:
+         cors:
+           enable: true
+           allow_origins: "*"
+           allow_methods: "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+           allow_credentials: true
+
+    #  - id: wfm-frontend-redirect
+    #    uris:
+    #      - "/wfm-frontend"
+    #    hosts:
+    #      - "{{ .Values.global.ingressRouter }}"
+    #    methods:
+    #      - "GET"
+    #    priority: 1001
+    #    service_id: svc-wfm-frontend
+    #    status: 1
+    #    plugins:
+    #      redirect:
+    #        enable: true
+    #        uri: "/wfm-frontend/"
+    #        ret_code: 301
+
+     - id: wfm-frontend
+       uris:
+         - "/wfm-frontend"
+         - "/wfm-frontend/*"
+       hosts:
+         - "{{ .Values.global.ingressRouter }}"
+       priority: 1000
+       service_id: svc-wfm-frontend
+       enable_websocket: true
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/wfm-frontend/?(.*)", "/$1"]
+         cors:
+           enable: true
+           allow_origins: "*"
+           allow_methods: "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+           allow_credentials: true
+    # Secure-Link Apis Path
      - id: secure-link-generation
        uris: ["/secure-link/*"]
        hosts: ["{{ .Values.global.ingressRouter }}"]

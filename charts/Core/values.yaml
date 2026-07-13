@@ -201,7 +201,7 @@ agent-manager:
         - name: MEMORY_THRESHOLD_MBS
           value: '{{ .Values.global.efCommonVars_MEMORY_THRESHOLD_MBS }}'
         - name: SOCKET_DISCONNECT_TIME
-          value:  "10000"
+          value:  "90000"
         - name: IS_WRAP_UP_ENABLED
           value: '{{ .Values.global.efCommonVars_IS_WRAP_UP_ENABLED }}'
         - name: WRAPUP_TIME
@@ -860,7 +860,7 @@ file-engine:
     replicaCount: 1
     image:
         repository: chat-solution/file-engine
-        tag: "5.5.0"
+        tag: "5.6.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1465,7 +1465,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: "5.5.0"
+        tag: "5.6.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:

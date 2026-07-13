@@ -1,0 +1,9 @@
+dependencies:
+- name: wfm-core
+  repository: file://charts/wfm-core
+  version: 1.0.0
+- name: wfm-frontend
+  repository: file://charts/wfm-frontend
+  version: 1.0.0
+digest: sha256:686416dea2ecb7f1c226691132ee2415f713e264a29d6754b8f92453cc389ada
+generated: "2026-07-13T14:59:17.688136+05:00"

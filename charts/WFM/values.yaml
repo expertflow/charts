@@ -1,0 +1,148 @@
+# Default values for wfm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+#
+# ██     ██ ███████ ███    ███ 
+# ██     ██ ██      ████  ████ 
+# ██  █  ██ █████   ██ ████ ██ 
+# ██ ███ ██ ██      ██  ██  ██ 
+#  ███ ███  ██      ██      ██ 
+#
+# Globals Section:
+#
+# global.ingressRouter: Provides a central location for the FQDN that will be used \
+#                       across the EF WFM solution
+# global.registry: when deploying solution with limited access to internet, \
+#                  changing this will cause all subsequent image pulls from this registry. \
+#                  Used as Variable in all sub-charts
+#
+
+global:
+  ingressRouter: "*.expertflow.com"
+  ingressCertName: "ef-ingress-tls-secret"
+  ingressClassName: "nginx"
+  efCxReleaseName: "ef-wfm"
+  commonIngressAnnotations: {}
+  ##    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  ##    nginx.ingress.kubernetes.io/use-regex: "true"
+  imageRegistry: "gitimages.expertflow.com"
+  imagePullSecrets:
+  # --- Added APISIX Global Config ---
+    - ef-gitlab-secret
+#  -- Local Repo running inside the Kubernetes Engine
+#  -- Customer's own Repo requiring all images to be sorted locally
+#
+# imageCredentials:
+# imageCredentials.registry: provides the registry URL
+# imageCredentials.username: username to use
+# imageCredentials.password: Password for the user
+# imageCredentials.email: an email address for the user
+#
+clusterDomain: cluster.local
+
+imageCredentials:
+  registry: gitimages.expertflow.com
+  username: efcx
+  password: RecRpsuH34yqp56YRFUb
+  email: devops@expertflow.com
+
+##############################wfm-frontend##############################
+wfm-frontend:
+  enabled: true
+  image:
+    repository: wfm/ef-wfm-fe
+    tag: "5.6.0"
+  efConnectionVars: []
+  efEnvironmentVars: []
+  containerPorts:
+    - name: "http"
+      containerPort: 80
+  extraEnvVars:
+    - name: ORG_Name
+      value: "Expertflow"
+    - name: EFCX_URL
+      value: "https://{{ .Values.global.ingressRouter }}"
+    - name: BASE_HREF
+      value: "/wfm-frontend/"
+    - name: WFM_URL
+      value: "https://{{ .Values.global.ingressRouter }}"      
+  siteEnvVars: []
+  configKeys: []
+  service:
+    enabled: true
+    port: 80
+    portName: "http"
+    targetPort: "80"
+  ingress: { enabled: false }
+
+##############################wfm-core##############################
+wfm-core:
+  enabled: true
+  image:
+    repository: wfm/wfm-core
+    tag: "5.6.0"
+  containerPorts:
+    - name: "http-wfc-8000"
+      containerPort: 8000
+  extraEnvVars:
+    - name: PORT
+      value: "8000"
+    - name: INTERNAL_AUTH
+      value: "ALKSDHNASU8893RE4J2DNAO8ABA32"
+    - name: TIME_ZONE
+      value: "Asia/Karachi"
+    - name: DB_USER
+      value: "sa"
+    - name: DB_PASSWORD
+      value: "Expertflow123"
+    - name: DB_HOST
+      value: "ef-postgresql.ef-external.svc"
+    - name: DB_PORT
+      value: "5432"
+    - name: DB_SSL
+      value: True
+    - name: DB_SSL_MODE
+      value: require
+    - name: SECRET_KEY
+      value: "django-insecure-@n3w12_-=xa@qit&95_xxzzszs$83^lsi0(2nuzw@ng+tk7dj7"
+    - name: DEBUG
+      value: "True"
+    - name: ALLOWED_HOSTS
+      value: "*"
+    - name: SUPERUSER_NAME
+      value: "admin"
+    - name: SUPERUSER_EMAIL
+      value: "admin@example.com"
+    - name: SUPERUSER_PASSWORD
+      value: "admin"
+    - name: KEYCLOAK_CLIENT_ID
+      value: cim
+    - name: KEYCLOAK_CLIENT_SECRET
+      value: ef61df80-061c-4c29-b9ac-387e6bf67052
+    - name: KEYCLOAK_AUTH_SERVER_URL
+      value: "http://keycloak.ef-external.svc/auth"
+    - name: REALTIME_REPORTS_BASE_URI
+      value: "http://ef-cx-realtime-reports-svc.expertflow.svc:8080"
+    - name: CX_TENANT_URL
+      value: "http://ef-cx-cx-tenant-svc:3000"
+    - name: EFCX_URL
+      value: "https://{{ .Values.global.ingressRouter }}"
+    - name: ROOT_DOMAIN
+      value: "expertflow.com"
+
+  siteEnvVars: []
+  configKeys: []
+  service:
+    enabled: true
+    port: 8000
+    portName: "http-wfc-8000"
+    targetPort: "http-wfc-8000"
+  ingress: { enabled: false }
+  extraVolumes:
+      - name: ef-postgresql-crt-vol
+        secret:
+          secretName: ef-postgresql-crt
+  extraVolumeMounts:
+      - name: ef-postgresql-crt-vol
+        mountPath: /postgresql
+
