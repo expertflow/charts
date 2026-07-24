@@ -303,7 +303,7 @@ bot-framework:
     replicaCount: 1
     image:
         repository: cim/bot-framework
-        tag: "5.4.0"
+        tag: "5.4.0_f-CCC-2249"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -395,8 +395,8 @@ ccm:
     enabled: true
     replicaCount: 1
     image:
-        repository: cim/customer-channel-manager
-        tag: "5.4.0"
+        repository: cim/customer-channel-manager/build
+        tag: "5.4.0_f-CCC-2249-d34ac97ba68e3380378148533ea94e5e6d2cb8d3"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -548,8 +548,8 @@ conversation-manager:
     enabled: true
     replicaCount: 1
     image:
-        repository: cim/conversation-manager
-        tag: "5.4.0"
+        repository: cim/conversation-manager/build
+        tag: "5.4.0_f-CCC-2249-069f1962b8c42e0159d4614d61e5fb57aa59801c"
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -689,8 +689,8 @@ conversation-monitor:
     enabled: true
     replicaCount: 1
     image:
-        repository: cim/conversation-monitor
-        tag: "5.4.0"
+        repository: cim/conversation-monitor/build
+        tag: "5.4.0_f-CCC-2249-165c279a78a9397cff658b843370b3b694a5df70"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -785,7 +785,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: "5.5.0"
+        tag: "5.6_f-CIM-2026"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -955,8 +955,8 @@ historical-reports:
     enabled: true
     replicaCount: 1
     image:
-        repository: cim/historical-reports-manager
-        tag: "5.4.0"
+        repository: cim/historical-reports-manager/build
+        tag: "5.4.0_f-CCC-2249-1fc8a171c7b12fbf0f8ecec9b6fd16ba98182697"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1072,8 +1072,8 @@ realtime-reports:
     enabled: true
     replicaCount: 1
     image:
-        repository: cim/realtime-reports-manager
-        tag: "5.5.0"
+        repository: cim/realtime-reports-manager/build
+        tag: "5.4.0_f-CCC-2249-45db26d45a0153105222e076edf9eb967636cc34"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1167,7 +1167,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: "5.4.0"
+        tag: "5.6.0_f-NCRI-20"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1294,8 +1294,8 @@ state-events-logger:
     enabled: true
     replicaCount: 1
     image:
-        repository: cim/state-events-logger
-        tag: "5.4.0"
+        repository: cim/state-events-logger/build
+        tag: "5.4.0_f-CCC-2249-f81e98a4e3c0a9a6e2293306cb58cbf4ba92f6eb"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts: []
@@ -1465,7 +1465,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: "5.6.0"
+        tag: "5.6.0_f-NCRI-20"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1752,7 +1752,7 @@ cx-tenant:
   replicaCount: 1
   image:
     repository: cim/cx-tenant
-    tag: "5.5.0"
+    tag: "5.6.0_f-NCRI-20"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -1849,8 +1849,8 @@ conversation-studio:
   enabled: true
   replicaCount: 1
   image:
-    repository: cim/workflow-builder/conversation-controller
-    tag: "5.4.0"
+    repository: cim/workflow-builder/conversation-controller/build
+    tag: "5.2.0_f-CCC-2250-bcb37bfdc50cd6e5dbf7425c41a407fa0b2c2420"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:

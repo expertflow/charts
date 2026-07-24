@@ -385,7 +385,7 @@ server:
 
   image:
     repository: "hashicorp/vault"
-    tag: "1.13.3"
+    tag: "1.19"
     # Overrides the default Image Pull Policy
     pullPolicy: IfNotPresent
 
@@ -606,6 +606,11 @@ server:
 
   # extraSecretEnvironmentVars is a list of extra environment variables to set with the stateful set.
   # These variables take value from existing Secret objects.
+  # extraSecretEnvironmentVars:
+  #   - envName: VAULT_UNSEAL_TOKEN
+  #     secretName: vault-unseal-token
+  #     secretKey: token
+
   extraSecretEnvironmentVars: []
     # - envName: AWS_SECRET_ACCESS_KEY
     #   secretName: vault
@@ -651,6 +656,11 @@ server:
     # This is the temporary, writable volume
     - name: redis-crt-vol-writable
       emptyDir: {}
+    
+    # GCP KMS VOLUME
+    # - name: gcp-creds
+    #   secret:
+    #     secretName: gcp-kms-creds
 
   # volumeMounts is a list of volumeMounts for the main server container. These are rendered
   # via toYaml rather than pre-processed like the extraVolumes value.
@@ -671,6 +681,11 @@ server:
     - name: mongodb-crt-vol
       mountPath: /vault/userconfig/mongo-mongodb-ca
       readOnly: false
+
+    # GCM KMS VOLUME MOUNT
+    # - name: gcp-creds
+    #   mountPath: /vault/gcp
+    #   readOnly: true
 
   # Affinity Settings
   # Commenting out or setting as empty the affinity variable, will allow
@@ -965,6 +980,28 @@ server:
         ui = true
         plugin_directory = "/vault/plugins"
         cluster_name = "vault-integrated-storage"
+
+
+        # AUTO-UNSEAL CONFIG FOR ON-PREM VAULT (TRANSIT)
+        # seal "transit" {
+        #   address            = "https://vault-unsealer.vault-unsealer.svc:8200"
+        #   key_name           = "vault-unseal-key"
+        #   mount_path         = "transit/"
+        #   token              = "env://VAULT_UNSEAL_TOKEN"
+        #   disable_renewal    = "false"
+        #   tls_skip_verify    = "true"
+        # }
+
+
+        # AUTO-UNSEAL CONFIG FOR CLOUD KMS (GCP)
+        # seal "gcpckms" {
+        #   project     = "<YOUR_GCP_PROJECT_ID>"
+        #   region      = "global"
+        #   key_ring    = "<YOUR_GCP_KEY_RING>"
+        #   crypto_key  = "<YOUR_GCP_KEY>"
+        #   credentials = "/vault/gcp/credentials.json"
+        # }
+
         listener "tcp" {
           address = "[::]:8200"
           cluster_address = "[::]:8201"

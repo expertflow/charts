@@ -69,13 +69,15 @@ campaigns-backend:
    enabled: true
    image:       
       repository: cim/campaigns
-      tag: "5.5.0"
+      tag: "5.5.0_f-NCRI-20"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
       - name: "http-cp-3000"
         containerPort: 3000
    extraEnvVars:
+      - name: TZ
+        value: Asia/Karachi
       - name: PORT
         value: "3000"
       - name: LOG_LEVEL
@@ -102,6 +104,12 @@ campaigns-backend:
         value: http://{{ .Values.global.efCxReleaseName }}-cim-customer-svc.{{ .Release.Namespace }}.svc:8080
       - name: CX_CUSTOMER_SYNC_INTERVAL_IN_MINUTES
         value: "60"
+      - name: GOVERNOR_EARLY_COOLDOWN_IN_SECONDS
+        value: "15"
+      - name: GOVERNOR_EARLY_TRIGGER_AVAILABLE_LINES
+        value: "5"
+      - name: GOVERNOR_INTERVAL_IN_SECONDS
+        value: "60"
    siteEnvVars: []
    configKeys: []
    service:
@@ -114,18 +122,21 @@ campaigns-backend:
       - name: mongo-mongodb-ca
         secret:
           secretName: mongo-mongodb-ca
+      - name: redis-crt
+        secret:
+          secretName: redis-crt
    extraVolumeMounts:
       - name: mongo-mongodb-ca
         mountPath: /mongo
-
-
+      - name: redis-crt
+        mountPath: /redis
 
 ##############################conversation-studio##############################
 campaign-studio:
    enabled: true
    image:       
-      repository: cim/conversation-studio
-      tag: "5.5.0"
+      repository: cim/conversation-studio/build
+      tag: "5.5.0_f-NCRI-20"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -225,8 +236,8 @@ scheduled-activities:
   enabled: true
   replicaCount: 1
   image:
-    repository: campaign-manager/campaign-scheduler
-    tag: "5.4.0"
+    repository: campaign-manager/campaign-scheduler/build
+    tag: "5.4.0_f-CCC-2249-1f112c497ddc0acf91c6c711a132e73c3358b1e9"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:

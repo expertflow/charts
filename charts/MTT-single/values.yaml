@@ -129,8 +129,8 @@ conversation-studio:
   enabled: true
   replicaCount: 1
   image:
-    repository: cim/workflow-builder/conversation-controller
-    tag: "5.4.0"
+    repository: cim/workflow-builder/conversation-controller/build
+    tag: "5.2.0_f-CCC-2250-bcb37bfdc50cd6e5dbf7425c41a407fa0b2c2420"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
@@ -246,8 +246,8 @@ conversation-studio:
 campaign-studio:
    enabled: true
    image:       
-      repository: cim/conversation-studio
-      tag: "5.5.0"
+      repository: cim/conversation-studio/build
+      tag: "5.5.0_f-NCRI-20"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
