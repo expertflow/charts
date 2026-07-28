@@ -69,7 +69,7 @@ campaigns-backend:
    enabled: true
    image:       
       repository: cim/campaigns
-      tag: "5.5.0_f-NCRI-20"
+      tag: "5.7.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -135,8 +135,8 @@ campaigns-backend:
 campaign-studio:
    enabled: true
    image:       
-      repository: cim/conversation-studio/build
-      tag: "5.5.0_f-NCRI-20"
+      repository: cim/conversation-studio
+      tag: "5.7.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -236,8 +236,8 @@ scheduled-activities:
   enabled: true
   replicaCount: 1
   image:
-    repository: campaign-manager/campaign-scheduler/build
-    tag: "5.4.0_f-CCC-2249-1f112c497ddc0acf91c6c711a132e73c3358b1e9"
+    repository: campaign-manager/campaign-scheduler
+    tag: "5.7.0"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
