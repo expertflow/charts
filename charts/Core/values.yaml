@@ -1465,7 +1465,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: "5.8.0"
+        tag: "5.8.0_f-CIM-34080"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:

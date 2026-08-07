@@ -84,7 +84,7 @@ diagnosticMode:
 image:
   registry: gitimages.expertflow.com
   repository: "voice-recording-solution/cisco-connector"
-  tag: "5.6.0"
+  tag: "5.8.0_f-CIM-34068"
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -145,8 +145,10 @@ extraEnvVars:
     value: "uccxhruser"
   - name: CC_PASSWORD
     value: "Expertflow123"
-  - name: EFCX_FQDN
-    value: "https://chatsolution.expertflow.com"
+  - name: CONVERSATION_MANAGER_URL
+    value: "http://ef-cx-conversation-manager-svc:8080"
+  - name: KEYCLOAK_URL
+    value: "http://keycloak.ef-external.svc"
   - name: CONVERSATION_BATCH_SIZE
     value: "50"
   - name: CONVERSATION_BATCH_INTERVAL_MS
@@ -154,7 +156,7 @@ extraEnvVars:
   - name: OB_SERVICE_IDENTIFIER
     value: "8899"
   - name: ROUTING_ENGINE_URL
-    value: "https://chatsolution.expertflow.com/routing-engine"
+    value: "http://ef-cx-routing-engine-svc.expertflow.svc:8081"
   - name: KEYCLOAK_REALM_NAME
     value: "expertflow"
   - name: KEYCLOAK_CLIENT_ID

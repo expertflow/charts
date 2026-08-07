@@ -21,7 +21,7 @@ global:
   ingressRouter: "*.expertflow.com"
   ingressCertName: "ef-ingress-tls-secret"
   ingressClassName: "nginx"
-  efCxReleaseName: "ef-wfm"
+  efCxReleaseName: "ef-cx"
   commonIngressAnnotations: {}
   ##    nginx.ingress.kubernetes.io/rewrite-target: /$2
   ##    nginx.ingress.kubernetes.io/use-regex: "true"
@@ -51,7 +51,7 @@ wfm-frontend:
   enabled: true
   image:
     repository: wfm/ef-wfm-fe
-    tag: "5.6.0"
+    tag: "CX-5.8.0_f-EFWFM-357"
   efConnectionVars: []
   efEnvironmentVars: []
   containerPorts:
@@ -80,7 +80,7 @@ wfm-core:
   enabled: true
   image:
     repository: wfm/wfm-core
-    tag: "5.6.0"
+    tag: "CX-5.8.0_f-EFWFM-357"
   containerPorts:
     - name: "http-wfc-8000"
       containerPort: 8000
@@ -91,6 +91,8 @@ wfm-core:
       value: "ALKSDHNASU8893RE4J2DNAO8ABA32"
     - name: TIME_ZONE
       value: "Asia/Karachi"
+    - name: DB_NAME
+      value: "postgres"
     - name: DB_USER
       value: "sa"
     - name: DB_PASSWORD
@@ -121,14 +123,20 @@ wfm-core:
       value: ef61df80-061c-4c29-b9ac-387e6bf67052
     - name: KEYCLOAK_AUTH_SERVER_URL
       value: "http://keycloak.ef-external.svc/auth"
+    - name: UNIFIED_ADMIN_URL
+      value: "http://ef-cx-unified-admin-svc.expertflow.svc:3000"
+    - name: REALTIME_REPORTS_URL
+      value: "http://ef-cx-realtime-reports-svc.expertflow.svc:8080"
+    - name: ROUTING_ENGINE_URL
+      value: "http://ef-cx-routing-engine-svc.expertflow.svc:8081"
+    - name: CX_TENANT_URL
+      value: "http://ef-cx-cx-tenant-svc.expertflow.svc:3000"
     - name: REALTIME_REPORTS_BASE_URI
       value: "http://ef-cx-realtime-reports-svc.expertflow.svc:8080"
-    - name: CX_TENANT_URL
-      value: "http://ef-cx-cx-tenant-svc:3000"
     - name: EFCX_URL
       value: "https://{{ .Values.global.ingressRouter }}"
     - name: ROOT_DOMAIN
-      value: "expertflow.com"
+      value: "expertflow.com"      
 
   siteEnvVars: []
   configKeys: []
