@@ -72,8 +72,8 @@ unified-agent:
    enabled: true
    replicaCount: 1
    image:
-      repository: cim/unified-agent/build
-      tag: "5.8_f-CIM-34061-5e228ca9c330c8f5d873039f5e5dcab5998841be"
+      repository: cim/unified-agent
+      tag: "5.9.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -323,7 +323,7 @@ grafana:
       - name: GF_AUTH_ANONYMOUS_ENABLED
         value: "true"
       - name: GF_INSTALL_PLUGINS
-        value: "marcusolsson-json-datasource,yesoreyeram-infinity-datasource"
+        value: "marcusolsson-json-datasource:1.4.0,yesoreyeram-infinity-datasource:3.10.1"
       - name: GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS
         value: "true"
       - name: GF_LIVE_ENABLED

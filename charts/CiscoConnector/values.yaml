@@ -84,7 +84,7 @@ diagnosticMode:
 image:
   registry: gitimages.expertflow.com
   repository: "voice-recording-solution/cisco-connector"
-  tag: "5.8.0_f-CIM-34068"
+  tag: "5.9.0"
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

@@ -246,8 +246,8 @@ conversation-studio:
 campaign-studio:
    enabled: true
    image:       
-      repository: cim/conversation-studio/build
-      tag: "5.8.0_f-CIM-34080"
+      repository: cim/conversation-studio
+      tag: "5.9.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:

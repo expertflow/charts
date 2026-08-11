@@ -433,7 +433,7 @@ whatsapp-connector:
    replicaCount: 1
    image:
      repository: cim/whatsapp-connector
-     tag: "5.7.0_f-CIM-34073"
+     tag: "5.9.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -473,7 +473,7 @@ ms-email-connector:
    replicaCount: 1
    image:
      repository: cim/ms-exchange-email-connector
-     tag: "5.7.0_f-CIM-34073"
+     tag: "5.9.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
