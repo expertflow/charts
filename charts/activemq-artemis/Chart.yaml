@@ -8,8 +8,8 @@ keywords:
   - C2C Communications
   - Artemis
 type: application
-version: "5.7.0"
-appVersion: "5.7.0"
+version: "5.10.0"
+appVersion: "5.10.0"
 maintainers:
   - name: NMR Nasir Mehmood Rajput
     email: nasir.mehmood@expertflow.com

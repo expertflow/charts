@@ -21,4 +21,4 @@ dependencies:
   repository: file://charts/ai-evaluator-processor
   version: 1.0.14
 digest: sha256:862064cdc027a7697673cbdfa0e6e3e86d9d8c230630700e99894d85e8e464f3
-generated: "2026-08-11T13:59:16.602304+05:00"
+generated: "2026-08-21T17:12:58.298205+05:00"

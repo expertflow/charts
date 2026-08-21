@@ -30,7 +30,7 @@ diagnosticMode:
 image:
   registry: gitimages.expertflow.com
   repository: general/activemq-artemis
-  tag: "2.42.0-activemq-artemis-5-7-0"
+  tag: "2.42.0-activemq-artemis-5-10-0"
   digest: ""
   pullPolicy: IfNotPresent
   pullSecrets: []

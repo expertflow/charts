@@ -286,4 +286,95 @@ ai-analyzer:
     - name: expertflow-ai-secrets
       mountPath: /mnt/secrets-store
       readOnly: true
-      
+
+
+##############################PII-MASKER##############################
+pii-masker:
+  enabled: true
+  replicaCount: 1
+  image:
+    registry: gitimages.expertflow.com
+    repository: bot/ai/ncri-pii-masker
+    tag: "5.10.0"
+  efConnectionVars: false
+  efEnvironmentVars: false
+  containerPorts:
+    - name: "http-pm-8080"
+      containerPort: 8080
+
+  resources:
+    requests:
+      cpu: "4"
+      memory: 6Gi
+    limits:
+      cpu: "4"
+      memory: 8Gi
+
+  extraEnvVars:
+    - name: WEB_CONCURRENCY
+      value: "1"
+    - name: ONNX_THREADS
+      value: "4"
+    - name: PII_APP_LOG_LEVEL
+      value: "INFO"
+    - name: PII_APP_REQUIRE_ML_MODEL
+      value: "true"
+    - name: PII_APP_STRICT_MODE
+      value: "true"
+    - name: PII_APP_ENABLE_LEAKAGE_SCAN
+      value: "true"
+    - name: PII_MODEL_USE_ONNX
+      value: "true"
+    - name: PII_MODEL_ENABLE_ML_GATE
+      value: "true"
+    - name: PII_MODEL_BATCH_SIZE
+      value: "16"
+    - name: PII_MODEL_ENABLE_DYNAMIC_BATCH
+      value: "true"
+    - name: PII_MODEL_ONNX_BATCH_WAIT_MS
+      value: "8"
+    - name: PII_MODEL_ONNX_TIMEOUT_S
+      value: "10"
+    - name: PII_INTENT_ONNX_TIMEOUT_S
+      value: "5"
+    - name: PII_DETECTION_ENABLE_LAYER_2
+      value: "true"
+    - name: PII_DETECTION_ENABLE_PRESIDIO_GENERIC
+      value: "false"
+    - name: PII_CONVERSATION_DOB_GATE
+      value: "balanced"
+    - name: PII_CONVERSATION_INTENT_LOOKBACK_MESSAGES
+      value: "3"
+    - name: PII_CONVERSATION_PARALLEL_MODEL_BATCHES
+      value: "false"
+    - name: PII_INTENT_ENABLED
+      value: "true"
+    - name: PII_INTENT_REQUIRE_MODEL
+      value: "true"
+    - name: PII_VALIDATION_MODE
+      value: "ml_trust"
+    - name: TLDEXTRACT_CACHE
+      value: "/tmp/tldextract"
+    - name: XDG_CACHE_HOME
+      value: "/tmp"
+    - name: HF_HOME
+      value: "/tmp/huggingface"
+
+  service:
+    type: ClusterIP
+    enabled: true
+    port: 8080
+    portName: "http-pm-8080"
+    targetPort: "http-pm-8080"
+
+  extraVolumes:
+    - name: tmp
+      emptyDir:
+        sizeLimit: 512Mi
+  extraVolumeMounts:
+    - name: tmp
+      mountPath: /tmp
+
+  ingress:
+    enabled: false
+

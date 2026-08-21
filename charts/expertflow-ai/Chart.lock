@@ -5,5 +5,8 @@ dependencies:
 - name: ai-analyzer
   repository: file://charts/ai-analyzer
   version: 1.0.14
-digest: sha256:dea7778e8a317eb9cc4c5f6600cbef72e0d6c5472c078adfe523b591961c9e05
-generated: "2026-07-02T14:41:44.070883+05:00"
+- name: pii-masker
+  repository: file://charts/pii-masker
+  version: 1.0.0
+digest: sha256:f751d0f1a78ba53b42d72ccc2c00654e8474027679e82c6933792b650cef009f
+generated: "2026-08-21T17:12:25.599327+05:00"

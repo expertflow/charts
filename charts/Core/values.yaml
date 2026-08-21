@@ -303,7 +303,7 @@ bot-framework:
     replicaCount: 1
     image:
         repository: cim/bot-framework
-        tag: "5.7.0"
+        tag: "5.10.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -396,7 +396,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: "5.8.0"
+        tag: "5.10.0"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -443,6 +443,10 @@ ccm:
           value: "true"
         - name: PASSWORD_MASKING_ENABLED_FIELDS
           value: "client-id,client_id,client-secret,client_secret,refresh-token,refresh_token,username,password,whatsapp-api-key,facebook-api-key,instagram-api-key,imap-username,imap-password,smtp-username,smtp-password,exchange-uri,consumer-key,consumer-secret,token-key,token-secret,bearer-token"
+        - name: CAMPAIGN_UNSUBSCRIBE_ENABLED
+          value: "true"
+        - name: CAMPAIGN_UNSUBSCRIBE_KEYWORDS
+          value: "STOP,UNSUB,UNSUBSCRIBE,CANCEL,END,QUIT,OPTOUT,OPT-OUT"
 
     siteEnvVars: []
     configKeys: []
@@ -493,7 +497,7 @@ cim-customer:
     replicaCount: 1
     image:
        repository: cim/cim-backend
-       tag: "5.5.0"
+       tag: "5.10.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -516,6 +520,8 @@ cim-customer:
          value: "admin"
        - name: CHECK_TIMEZONE
          value: false
+       - name: UNIFIED_ADMIN_URL
+         value: "http://{{ .Release.Name }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
     siteEnvVars: []
     configKeys: []
     service:
@@ -549,7 +555,7 @@ conversation-manager:
     replicaCount: 1
     image:
         repository: cim/conversation-manager
-        tag: "5.7.0"
+        tag: "5.10.0"
     efConnectionVars: true
     efEnvironmentVars: false
     extraEnvVars:
@@ -615,6 +621,10 @@ conversation-manager:
           value: "database/creds/mongodb-role"
         - name: MONGODB_AUTHENTICATION_DATABASE
           value: "admin"
+        - name: MASK_CONVERSATION_URL
+          value: "http://expertflow-ai-pii-masker-svc.expertflow:8080/mask/conversation"
+        - name: MASK_TIMEOUT_SECONDS
+          value: 30
     siteEnvVars: []
     configKeys: []
     extraEnvVarsSecret: "conversation-manager-approle-secret"
@@ -690,7 +700,7 @@ conversation-monitor:
     replicaCount: 1
     image:
         repository: cim/conversation-monitor
-        tag: "5.7.0"
+        tag: "5.10.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -785,7 +795,7 @@ customer-widget:
     replicaCount: 1
     image:
         repository: efpublic/customer-widget
-        tag: "5.5.0"
+        tag: "5.10.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -956,7 +966,7 @@ historical-reports:
     replicaCount: 1
     image:
         repository: cim/historical-reports-manager
-        tag: "5.7.0"
+        tag: "5.10.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1073,7 +1083,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: "5.7.0"
+        tag: "5.10.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1167,7 +1177,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: "5.7.0"
+        tag: "5.10.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1295,7 +1305,7 @@ state-events-logger:
     replicaCount: 1
     image:
         repository: cim/state-events-logger
-        tag: "5.7.0"
+        tag: "5.10.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts: []
@@ -1465,7 +1475,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: "5.9.0"
+        tag: "5.10.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1850,7 +1860,7 @@ conversation-studio:
   replicaCount: 1
   image:
     repository: cim/workflow-builder/conversation-controller
-    tag: "5.7.0"
+    tag: "5.10.0"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:
