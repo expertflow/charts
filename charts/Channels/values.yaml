@@ -401,7 +401,7 @@ email-connector:
    replicaCount: 1
    image:
      repository: cim/email-connector
-     tag: "5.10.0"
+     tag: "5.11.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:

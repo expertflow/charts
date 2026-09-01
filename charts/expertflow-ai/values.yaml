@@ -10,30 +10,6 @@ global:
   efCommonVars_MASK_ATTRIBUTES_PATH: /sensitive.js
   efCommonVars_LOGGING_CONFIG: /logback/logback-spring.xml
   
-  ACTIVEMQ_KEY_STORE_PASSWORD: "Expertflow123"
-  ACTIVEMQ_KEY_STORE_PATH: "activemq_keystore.p12"
-  ACTIVEMQ_MAX_RECONNECT_ATTEMPTS: "-1"
-  ACTIVEMQ_OPEN_WIRE_PORT: "61616"
-  ACTIVEMQ_PRIMARY_URL: "activemq-artemis-svc.ef-external.svc"
-  ACTIVEMQ_PRIORITY_BACKUP: "true"
-  ACTIVEMQ_RANDOMIZE: "false"
-  ACTIVEMQ_SECONDARY_URL: "activemq-artemis-svc.ef-external.svc"
-  ACTIVEMQ_STOMP_PORT: "61616"
-  ACTIVEMQ_REJECT_UNAUTHORIZED: "true"
-  ACTIVEMQ_RETRY_INTERVAL: "30000"
-  ACTIVEMQ_HA: "true"
-  ACTIVEMQ_TIMEOUT: "30000"
-  ACTIVEMQ_TRANSPORT: "tcp"
-  ACTIVEMQ_TRUST_STORE_PASSWORD: "Expertflow123"
-  ACTIVEMQ_TRUST_STORE_PATH: "activemq_truststore.p12"
-  ACTIVEMQ_CLIENT_CERT: /activemq/tls.crt
-  ACTIVEMQ_CLIENT_KEY: /activemq/tls.key
-  ACTIVEMQ_CA_CERT: /activemq/ca.crt
-  ACTIVEMQ_SSL_VERIFY_HOST: "false"
-  ACTIVEMQ_SSL_TRUST_ALL: "true"
-  TOPIC_CONCURRENCY_MIN: "2"
-  TOPIC_CONCURRENCY_MAX: "6"
-
   REDIS_HOST: redis-thirdparty-master.ef-external.svc
   REDIS_USER: "superuser"
   REDIS_DB: "0"
@@ -54,6 +30,8 @@ global:
   REDIS_SENTINEL_PASSWORD: Expertflow123
   TRUST_STORE_PASSWORD: "Expertflow123"
   KEY_STORE_PASSWORD: "Expertflow123"
+  TOPIC_CONCURRENCY_MIN: "2"
+  TOPIC_CONCURRENCY_MAX: "6"
   ENABLE_CLOUD_MANAGED_CONNECTIONS: "false"
   
 
@@ -153,7 +131,7 @@ ai-analyzer:
   nameOverride: "analyzer"
   image:
     repository: bot/ai/ai_analyzer
-    tag: "5.5.0"
+    tag: "5.11.0"
   efConnectionVars: true
   efEnvironmentVars: false
   extraEnvVarsSecret: "expertflow-ai-env"
@@ -161,10 +139,6 @@ ai-analyzer:
     - name: "http-a-c-5052"
       containerPort: 5052
   extraEnvVars:
-    - name: TOPIC_CONCURRENCY_MIN
-      value: '{{ .Values.global.TOPIC_CONCURRENCY_MIN }}'
-    - name: TOPIC_CONCURRENCY_MAX
-      value: '{{ .Values.global.TOPIC_CONCURRENCY_MAX }}'
     - name: REDIS_HOST
       value: '{{ .Values.global.REDIS_HOST }}'
     - name: REDIS_USER
@@ -197,46 +171,20 @@ ai-analyzer:
       value: '{{ .Values.global.REDIS_CLIENT_KEY }}'
     - name: REDIS_CA_CERT
       value: '{{ .Values.global.REDIS_CA_CERT }}'
-    - name: ACTIVEMQ_KEY_STORE_PASSWORD
-      value: '{{ .Values.global.ACTIVEMQ_KEY_STORE_PASSWORD }}'
-    - name: ACTIVEMQ_KEY_STORE_PATH
-      value: '{{ .Values.global.ACTIVEMQ_KEY_STORE_PATH }}'
-    - name: ACTIVEMQ_MAX_RECONNECT_ATTEMPTS
-      value: '{{ .Values.global.ACTIVEMQ_MAX_RECONNECT_ATTEMPTS }}'
-    - name: ACTIVEMQ_OPEN_WIRE_PORT
-      value: '{{ .Values.global.ACTIVEMQ_OPEN_WIRE_PORT }}'
-    - name: ACTIVEMQ_PRIMARY_URL
-      value: '{{ .Values.global.ACTIVEMQ_PRIMARY_URL }}'
-    - name: ACTIVEMQ_PRIORITY_BACKUP
-      value: '{{ .Values.global.ACTIVEMQ_PRIORITY_BACKUP }}'
-    - name: ACTIVEMQ_RANDOMIZE
-      value: '{{ .Values.global.ACTIVEMQ_RANDOMIZE }}'
-    - name: ACTIVEMQ_SECONDARY_URL
-      value: '{{ .Values.global.ACTIVEMQ_SECONDARY_URL }}'
-    - name: ACTIVEMQ_STOMP_PORT
-      value: '{{ .Values.global.ACTIVEMQ_STOMP_PORT }}'
-    - name: ACTIVEMQ_TIMEOUT
-      value: '{{ .Values.global.ACTIVEMQ_TIMEOUT }}'
-    - name: ACTIVEMQ_TRANSPORT
-      value: '{{ .Values.global.ACTIVEMQ_TRANSPORT }}'
-    - name: ACTIVEMQ_TRUST_STORE_PASSWORD
-      value: '{{ .Values.global.ACTIVEMQ_TRUST_STORE_PASSWORD }}'
-    - name: ACTIVEMQ_TRUST_STORE_PATH
-      value: '{{ .Values.global.ACTIVEMQ_TRUST_STORE_PATH }}'
-    - name: ACTIVEMQ_CLIENT_CERT
-      value: '{{ .Values.global.ACTIVEMQ_CLIENT_CERT }}'
-    - name: ACTIVEMQ_CLIENT_KEY
-      value: '{{ .Values.global.ACTIVEMQ_CLIENT_KEY }}'
-    - name: ACTIVEMQ_CA_CERT
-      value: '{{ .Values.global.ACTIVEMQ_CA_CERT }}'
-    - name: ACTIVEMQ_HA
-      value: '{{ .Values.global.ACTIVEMQ_HA }}'
-    - name: ACTIVEMQ_RETRY_INTERVAL
-      value: '{{ .Values.global.ACTIVEMQ_RETRY_INTERVAL }}'
-    - name: ACTIVEMQ_SSL_VERIFY_HOST
-      value: '{{ .Values.global.ACTIVEMQ_SSL_VERIFY_HOST }}'
-    - name: ACTIVEMQ_SSL_TRUST_ALL
-      value: '{{ .Values.global.ACTIVEMQ_SSL_TRUST_ALL }}'
+    - name: ACTIVEMQ_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: expertflow-ai-env
+          key: ACTIVEMQ_USERNAME
+    - name: ACTIVEMQ_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: expertflow-ai-env
+          key: ACTIVEMQ_PASSWORD
+    - name: TOPIC_CONCURRENCY_MIN
+      value: '{{ .Values.global.TOPIC_CONCURRENCY_MIN }}'
+    - name: TOPIC_CONCURRENCY_MAX
+      value: '{{ .Values.global.TOPIC_CONCURRENCY_MAX }}'
     - name: TRUST_STORE_PASSWORD
       value: '{{ .Values.global.TRUST_STORE_PASSWORD }}'
     - name: KEY_STORE_PASSWORD
@@ -257,6 +205,8 @@ ai-analyzer:
       value: "classpath:logback.xml"
     - name: MASKING_LAYOUT_CLASS
       value: "com.java.analyzer.logging.MaskingPatternLayout"
+    - name: LOG_LEVEL
+      value: "INFO"
   service:
     enabled: true
     port: 5052
@@ -377,4 +327,3 @@ pii-masker:
 
   ingress:
     enabled: false
-

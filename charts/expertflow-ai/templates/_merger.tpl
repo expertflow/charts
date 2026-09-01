@@ -42,7 +42,8 @@ Expected input via 'dict':
     {{- /* Render value OR valueFrom, prioritizing value if both somehow exist */}}
     {{- $value := get $envVar "value" }}
     {{- $valueFrom := get $envVar "valueFrom" }}
-    {{- if not (eq $value nil) }}
+    {{- /* 'get' returns "" (not nil) for a missing key, so test presence with hasKey */}}
+    {{- if hasKey $envVar "value" }}
     value: {{ include "common.tplvalues.render" (dict "value" $value "context" $context) | quote }}
     {{- else if $valueFrom }}
     valueFrom: {{- toYaml $valueFrom | nindent 6 }}

@@ -51,7 +51,7 @@ wfm-frontend:
   enabled: true
   image:
     repository: wfm/ef-wfm-fe
-    tag: "5.9.0"
+    tag: "5.11.0"
   efConnectionVars: []
   efEnvironmentVars: []
   containerPorts:
@@ -80,7 +80,7 @@ wfm-core:
   enabled: true
   image:
     repository: wfm/wfm-core
-    tag: "5.9.0"
+    tag: "5.11.0"
   containerPorts:
     - name: "http-wfc-8000"
       containerPort: 8000
