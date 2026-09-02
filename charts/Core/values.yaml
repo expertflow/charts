@@ -690,7 +690,7 @@ conversation-monitor:
     replicaCount: 1
     image:
         repository: cim/conversation-monitor
-        tag: "5.7.0"
+        tag: "5.9.1"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:

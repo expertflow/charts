@@ -73,7 +73,7 @@ unified-agent:
    replicaCount: 1
    image:
       repository: cim/unified-agent
-      tag: "5.9.0"
+      tag: "5.9.1"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -100,6 +100,8 @@ unified-agent:
         value: "https://{{ .Values.global.ingressRouter  }}/team-announcement"
       - name: getQueuesDelay
         value: "15"
+      - name: isCallingComplianceEnabled
+        value: false
       - name: bargeInType
         value: "BARGE_IN_CONSULT"
       - name: ssoBackendUrl
@@ -238,6 +240,10 @@ unified-agent:
         value: "https://ai.expertflow.com/llm"
       - name: isVoicemailEnabled
         value: "true"
+      - name: ENABLE_FILE_ENGINE_EXTERNAL_FQDN
+        value: "false"
+      - name: FILE_ENGINE_FQDN_MAPPING
+        value: "pvtfqdn.com:pubfqdn.com"
    siteEnvVars: []
    configKeys: []
    service:

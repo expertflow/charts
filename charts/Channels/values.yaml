@@ -473,7 +473,7 @@ ms-email-connector:
    replicaCount: 1
    image:
      repository: cim/ms-exchange-email-connector
-     tag: "5.9.0"
+     tag: "5.9.1"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
