@@ -1,0 +1,16 @@
+{{- if and .Values.apisix.customPlugins.enabled }}
+{{- range $plugin := .Values.apisix.customPlugins.plugins }}
+{{- if eq $plugin.name "dynamic-keycloak-auth" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $plugin.configMap.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "apisix.labels" $ | nindent 4 }}
+data:
+  dynamic-keycloak-auth.lua: |
+{{ $.Files.Get "plugins/dynamic-keycloak-auth.lua" | indent 4 }}
+{{- end }}
+{{- end }}
+{{- end }}

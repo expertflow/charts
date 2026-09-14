@@ -247,7 +247,7 @@ campaign-studio:
    enabled: true
    image:       
       repository: cim/conversation-studio
-      tag: "5.10.0"
+      tag: "5.12.0"
    efConnectionVars: true
    efEnvironmentVars: false
    containerPorts:
@@ -405,7 +405,7 @@ qm-backend:
     - name: PG_HOST
       value: ef-postgresql.ef-external.svc.cluster.local
     - name: UNIFIED_ADMIN_URL
-      value: "https://{{ .Values.global.ingressRouter  }}/unified-admin/"
+      value: "http://{{ .Values.global.efCxReleaseName }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
     - name: KEYCLOAK_TEAM_TYPE
       value: CX
     - name: KEYCLOAK_BEARER_ONLY
@@ -473,13 +473,11 @@ qm-connector:
   enabled: false
   image:
     repository: voice-recording-solution/qm-connector
-    tag: "5.4.0"
+    tag: "5.12.0"
   containerPorts: []
   extraEnvVars:
     - name: RECORDING_SERVER_FQDN
       value: https://192.168.1.126
-    - name: EFCX_FQDN
-      value: "https://{{ .Values.global.ingressRouter}}"
     - name: CALL_BACK_URL
       value: http://webhook.site/5ba1c6f9-d086-48cb-8341-c76cd13e4a80
     - name: UCCE_ENGINE
@@ -529,7 +527,7 @@ qm-connector:
     - name: MAX_BATCH_SIZE
       value: 30000
     - name: CONVERSATION_MANAGER_FQDN
-      value: http://ef-cx-conversation-manager-svc:8080
+      value: http://{{ .Values.global.efCxReleaseName }}-conversation-manager-svc.expertflow.svc:8080
     - name: KEYCLOAK_FQDN
       value: http://keycloak.ef-external.svc
     - name: TZ
@@ -625,7 +623,7 @@ ai-evaluator-processor:
   enabled: false
   image:
     repository: project_dev/qualitymanager/ai_evaluator_processor
-    tag: "5.5.0"
+    tag: "5.12.0"
   efConnectionVars: true
   efEnvironmentVars: false
   extraEnvVarsSecret: "expertflow-ai-env"
@@ -705,6 +703,12 @@ ai-evaluator-processor:
       value: "false"
     - name: LOGGING_LEVEL
       value: "DEBUG"
+    - name: CONVERSATION_MANAGER_URL
+      value: http://{{ .Values.global.efCxReleaseName }}-conversation-manager-svc.expertflow.svc:8080
+    - name: UNIFIED_ADMIN_URL
+      value: http://{{ .Values.global.efCxReleaseName }}-unified-admin-svc.expertflow.svc:3000
+    - name: QM_BACKEND_URL
+      value: https://{{ .Values.global.tenantId }}-qm-backend-svc.{{ .Values.global.tenantId }}.svc:3000
 
   service:
       enabled: true
@@ -741,7 +745,7 @@ ai-evaluator-fetcher:
   enabled: false
   image:
     repository: project_dev/qualitymanager/ai_evaluator_fetcher
-    tag: "5.5.0"
+    tag: "5.12.0"
   efConnectionVars: true
   efEnvironmentVars: false
   extraEnvVarsSecret: "expertflow-ai-env"
@@ -817,6 +821,10 @@ ai-evaluator-fetcher:
       value: "false"
     - name: LOGGING_LEVEL
       value: "DEBUG"
+    - name: UNIFIED_ADMIN_URL
+      value: http://{{ .Values.global.efCxReleaseName }}-unified-admin-svc.expertflow.svc:3000
+    - name: QM_BACKEND_URL
+      value: https://{{ .Values.global.tenantId }}-qm-backend-svc.{{ .Values.global.tenantId }}.svc:3000
   service:
       enabled: true
       port: 9001

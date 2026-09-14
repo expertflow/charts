@@ -73,7 +73,7 @@ qm-backend:
     - name: PG_HOST
       value: ef-postgresql.ef-external.svc.cluster.local
     - name: UNIFIED_ADMIN_URL
-      value: "https://{{ .Values.global.ingressRouter  }}/unified-admin/"
+      value: "http://{{ .Values.global.efCxReleaseName }}-unified-admin-svc.{{ .Release.Namespace }}.svc:3000"
     - name: KEYCLOAK_TEAM_TYPE
       value: CX
     - name: KEYCLOAK_BEARER_ONLY
@@ -141,13 +141,11 @@ qm-connector:
   enabled: false
   image:
     repository: voice-recording-solution/qm-connector
-    tag: "5.4.0"
+    tag: "5.12.0"
   containerPorts: []
   extraEnvVars:
     - name: RECORDING_SERVER_FQDN
       value: https://192.168.1.126
-    - name: EFCX_FQDN
-      value: "https://{{ .Values.global.ingressRouter}}"
     - name: CALL_BACK_URL
       value: http://webhook.site/5ba1c6f9-d086-48cb-8341-c76cd13e4a80
     - name: UCCE_ENGINE
@@ -197,7 +195,7 @@ qm-connector:
     - name: MAX_BATCH_SIZE
       value: 30000
     - name: CONVERSATION_MANAGER_FQDN
-      value: http://ef-cx-conversation-manager-svc:8080
+      value: http://{{ .Values.global.efCxReleaseName }}-conversation-manager-svc.expertflow.svc:8080
     - name: KEYCLOAK_FQDN
       value: http://keycloak.ef-external.svc
     - name: TZ

@@ -396,7 +396,7 @@ ccm:
     replicaCount: 1
     image:
         repository: cim/customer-channel-manager
-        tag: "5.10.0"
+        tag: "5.12.0"
     efConnectionVars: true
     efEnvironmentVars: true
     containerPorts:
@@ -497,7 +497,7 @@ cim-customer:
     replicaCount: 1
     image:
        repository: cim/cim-backend
-       tag: "5.11.0"
+       tag: "5.12.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -700,7 +700,7 @@ conversation-monitor:
     replicaCount: 1
     image:
         repository: cim/conversation-monitor
-        tag: "5.10.0"
+        tag: "5.12.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1083,7 +1083,7 @@ realtime-reports:
     replicaCount: 1
     image:
         repository: cim/realtime-reports-manager
-        tag: "5.10.0"
+        tag: "5.12.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1177,7 +1177,7 @@ routing-engine:
     replicaCount: 1
     image:
         repository: cim/media-routing-engine
-        tag: "5.10.0"
+        tag: "5.12.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1475,7 +1475,7 @@ unified-admin:
     replicaCount: 1
     image:
         repository: cim/unified-admin
-        tag: "5.10.0"
+        tag: "5.12.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1603,7 +1603,7 @@ web-channel-manager:
     replicaCount: 1
     image:
         repository: cim/web-channel-manager
-        tag: "5.5.0"
+        tag: "5.12.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1705,7 +1705,7 @@ cx-load-hub:
     replicaCount: 1
     image:
         repository: cim/cx-load-hub
-        tag: "5.5.0"
+        tag: "5.12.0"
     efConnectionVars: true
     efEnvironmentVars: false
     containerPorts:
@@ -1762,7 +1762,7 @@ cx-tenant:
   replicaCount: 1
   image:
     repository: cim/cx-tenant
-    tag: "5.8.0"
+    tag: "5.12.0"
   efConnectionVars: true
   efEnvironmentVars: false
   containerPorts:

@@ -79,6 +79,33 @@ Usage:
     {{- end }}
 {{- end -}}
 
+{{/*
+Dynamic Keycloak OIDC/AuthZ plugin config for standalone routes.
+Resolves realm from Host subdomain: {tenant}.{rootDomain}
+*/}}
+{{- define "apisix.dynamicKeycloakAuthPlugin" -}}
+dynamic-keycloak-auth:
+  root_domain: {{ .Values.global.oidc.rootDomain | quote }}
+  keycloak_base_url: {{ .Values.global.oidc.keycloakBaseUrl | quote }}
+  use_request_host: false
+  keycloak_path: "/auth"
+  public_scheme: "https"
+  client_id: {{ tpl .Values.global.oidc.clientId . | quote }}
+  client_secret: {{ tpl .Values.global.oidc.clientSecret . | quote }}
+  bearer_only: true
+  token_signing_alg_values_expected: "RS256"
+  set_access_token_header: false
+  set_userinfo_header: false
+  use_jwks: true
+  audience: ["cim", "account", "realm-management"]
+  required_scopes: ["email", "profile"]
+  authz:
+    enabled: true
+    lazy_load_paths: true
+    http_method_as_scope: true
+    ssl_verify: false
+{{- end -}}
+
 {{- define "apisix.basePluginAttrs" -}}
 {{- if .Values.apisix.prometheus.enabled }}
 prometheus:

@@ -20,12 +20,17 @@ global:
   ingressTlsCertName: "ef-ingress-tls-secret"
 
   # Open ID Connect and Authz Configuraiton - Enabling or Disabling AUTH
+  # Multi-tenant: realm is resolved at request time from Host subdomain
+  # e.g. tenant1.expertflow.com -> Keycloak realm "tenant1"
   keycloak:
-    realm: "expertflow"
     clientId: "cim"
     clientSecret: "ef61df80-061c-4c29-b9ac-387e6bf67052"
   oidc:
-    enabled: false
+    enabled: true
+    # Host must be {tenant}.{rootDomain}; tenant becomes the Keycloak realm
+    rootDomain: "expertflow.com"
+    keycloakBaseUrl: "http://keycloak.ef-external.svc/auth"
+    # Legacy static discovery (unused by standalone dynamic-keycloak-auth plugin)
     discovery: "http://keycloak.ef-external.svc/auth/realms/{{ .Values.global.keycloak.realm }}/.well-known/openid-configuration"
     realm: "{{ .Values.global.keycloak.realm }}"
     clientId: "{{ .Values.global.keycloak.clientId }}"
@@ -423,6 +428,8 @@ apisix:
         enable_ipv6: true
         enable_http2: true
         enable_server_tokens: false  # hide version for slight perf gain
+        # Required for customPlugins (dynamic-keycloak-auth)
+        extra_lua_path: "/opts/custom_plugins/?.lua"
         proxy_cache:
           cache_ttl: 60s
           zones:
@@ -436,6 +443,23 @@ apisix:
         resolver_timeout: 5
         router:
           http: radixtree_host_uri
+      # fullCustomConfig ignores apisix.plugins; keep the active plugin list here
+      plugins:
+        - prometheus
+        - proxy-rewrite
+        - cors
+        - openid-connect
+        - authz-keycloak
+        - dynamic-keycloak-auth
+        - limit-count
+        - ip-restriction
+        - response-rewrite
+        - client-control
+        - redirect
+        - real-ip
+        - mocking
+        - error-page-rewrite
+        - opa
       nginx_config:
         error_log: "/dev/stderr"
         error_log_level: "warn"
@@ -679,6 +703,7 @@ apisix:
     - proxy-rewrite
     - cors
     - openid-connect
+    - authz-keycloak
     - limit-count
     - ip-restriction
     - response-rewrite
@@ -709,24 +734,20 @@ apisix:
   # -- customPlugins allows you to mount your own HTTP plugins.
   customPlugins:
     # -- Whether to configure some custom plugins
-    enabled: false
+    enabled: true
     # -- the lua_path that tells APISIX where it can find plugins,
     # note the last ';' is required.
     luaPath: "/opts/custom_plugins/?.lua"
     plugins:
-      # -- plugin name.
-      - name: "plugin-name"
-        # -- plugin attrs
+      # Resolves Keycloak realm from Host subdomain and runs OIDC + AuthZ
+      - name: "dynamic-keycloak-auth"
         attrs: {}
-        # -- plugin codes can be saved inside configmap object.
         configMap:
-          # -- name of configmap.
-          name: "configmap-name"
-          # -- since keys in configmap is flat, mountPath allows to define the mount
-          # path, so that plugin codes can be mounted hierarchically.
+          name: "apisix-dynamic-keycloak-auth"
           mounts:
-            - key: "the-file-name"
-              path: "mount-path"
+            # APISIX loads custom plugins as apisix.plugins.<name>
+            - key: "dynamic-keycloak-auth.lua"
+              path: "/opts/custom_plugins/apisix/plugins/dynamic-keycloak-auth.lua"
 
 # -- external etcd configuration. If etcd.enabled is false, these configuration will be used.
 externalEtcd:
@@ -827,12 +848,8 @@ ingress-controller:
 
 
 apisixStandalone: |
-   {{- $oidcDiscovery := tpl .Values.global.oidc.discovery . }}
-   {{- $oidcRealm := tpl .Values.global.oidc.realm . }}
-   {{- $oidcClientId := tpl .Values.global.oidc.clientId . }}
-   {{- $oidcClientSecret := tpl .Values.global.oidc.clientSecret . }}
-   {{- $oidcAuthzDiscovery := tpl .Values.global.oidc.authz.discovery . }}
-   {{- $oidcAuthzEndpoint := tpl .Values.global.oidc.authz.resourceRegistrationEndpoint . }}
+   # OIDC/AuthZ: dynamic-keycloak-auth resolves realm from Host subdomain
+   # ({tenant}.{{ .Values.global.oidc.rootDomain }} -> Keycloak realm {tenant})
    # =================================================================
    # SERVICES (UPSTREAMS)
    # =================================================================
@@ -1452,24 +1469,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -1484,24 +1484,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -1556,24 +1539,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -1611,24 +1577,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -1643,24 +1592,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -1675,24 +1607,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -1767,6 +1682,25 @@ apisixStandalone: |
            enable: true
            config:
              headers: { set: { "X-XSS-Protection": "1; mode=block" } }
+     - id: ef-cx-file-engine-download-unsecured
+       uris: ["/file-engine/api/download*"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       priority: 10
+       service_id: svc-file-engine
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/file-engine/?(.*)", "/$1"]
+         cors:
+           enable: true
+           allow_origins: "*"
+           allow_methods: "GET, POST, OPTIONS"
+           allow_credentials: true
+         response-rewrite:
+           enable: true
+           config:
+             headers: { set: { "X-XSS-Protection": "1; mode=block" } }
      - id: ef-cx-file-engine-main
        uris: ["/file-engine/*"]
        hosts: ["{{ .Values.global.ingressRouter }}"]
@@ -1775,24 +1709,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -1805,6 +1722,22 @@ apisixStandalone: |
            config:
              headers: { set: { X-XSS-Protection: "1; mode=block" } }
 
+     - id: ef-cx-file-engine-translations-unsecured
+       uris:
+         - /file-engine/api/i18n/translations
+       methods: ["GET"]
+       hosts:
+         - "{{ .Values.global.ingressRouter }}"
+       priority: 170
+       service_id: svc-file-engine
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri:
+             - "^/file-engine/(.*)"
+             - "/$1"
+
      # --- historical-reports ---
      - id: ef-cx-historical-reports-main
        uris: ["/historical-reports/*"]
@@ -1814,24 +1747,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -1846,24 +1762,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -1903,24 +1802,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -1935,24 +1817,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -2011,24 +1876,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -2118,24 +1966,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          cors:
            enable: true
@@ -2209,6 +2040,17 @@ apisixStandalone: |
            regex_uri: ["^/web-channel-manager/?(.*)", "/$1"]
 
      # --- business-calendar ---
+     - id: ef-cx-business-calendar-events-unsecured
+       uris: ["/business-calendar/calendars/events", "/business-calendar/calendars/events/*"]
+       methods: ["GET"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       priority: 10
+       service_id: svc-business-calendar
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/business-calendar/(.*)", "/$1"]
      - id: ef-cx-business-calendar-main
        uris: ["/business-calendar/*"]
        hosts: ["{{ .Values.global.ingressRouter }}"]
@@ -2217,24 +2059,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -2311,24 +2136,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -2373,24 +2181,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -2579,24 +2370,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -2651,24 +2425,7 @@ apisixStandalone: |
        plugins:
          # strip /qm-backend prefix  →  /$2
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
 
          proxy-rewrite:
@@ -2698,24 +2455,7 @@ apisixStandalone: |
          read: 43200
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
@@ -2742,6 +2482,21 @@ apisixStandalone: |
            enable: true
            regex_uri: ["^/cx-tenant/?(.*)", "/$1"]
 
+     - id: ef-cx-wfm-core-auth-unsecured
+       uris:
+         - /wfm-core/auth/refresh/
+         - /wfm-core/auth/refresh
+         - /wfm-core/auth/login/
+         - /wfm-core/auth/login
+       methods: ["POST"]
+       hosts: ["{{ .Values.global.ingressRouter }}"]
+       priority: 170
+       service_id: svc-wfm-core
+       status: 1
+       plugins:
+         proxy-rewrite:
+           enable: true
+           regex_uri: ["^/wfm-core/(.*)", "/$1"]
      - id: wfm-core
        uris: ["/wfm-core/*"]
        hosts: ["{{ .Values.global.ingressRouter }}"]
@@ -2750,24 +2505,7 @@ apisixStandalone: |
        status: 1
        plugins:
          {{- if .Values.global.oidc.enabled }}
-         openid-connect:
-           discovery: "{{ $oidcDiscovery }}"
-           realm: "{{ $oidcRealm }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
-           bearer_only: true
-           token_signing_alg_values_expected: "RS256"
-           set_access_token_header: false
-           set_userinfo_header: false
-           audience: ["cim", "account", "realm-management"]
-           required_scopes: ["email", "profile"]
-         authz-keycloak:
-           lazy_load_paths: true
-           http_method_as_scope: true
-           resource_registration_endpoint: "{{ $oidcAuthzEndpoint }}"
-           discovery: "{{ $oidcAuthzDiscovery }}"
-           client_id: "{{ $oidcClientId }}"
-           client_secret: "{{ $oidcClientSecret }}"
+         {{- include "apisix.dynamicKeycloakAuthPlugin" . | nindent 6 }}
          {{- end }}
          proxy-rewrite:
            enable: true
